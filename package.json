@@ -1,0 +1,33 @@
+{
+  "name": "base-domain",
+  "version": "0.0.0",
+  "description": "simple module to help build Domain-Driven Design",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CureApp/base-domain.git"
+  },
+
+  "bugs": {
+    "url": "https://github.com/CureApp/base-domain/issues"
+  },
+
+  "homepage": "https://github.com/CureApp/base-domain",
+
+
+  "keywords": [
+    "Domain",
+    "DDD",
+    "LoopBack"
+  ],
+
+  "author": "CureApp, Inc.",
+  "license": "MIT",
+  "dependencies": {
+    "es6-promise": "^2.0.1"
+  }
+}

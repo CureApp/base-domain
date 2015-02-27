@@ -1,10 +1,18 @@
 
+
+facade = null
+
 ###*
+parent class of model, factory and repository.
+
+gives them @getFacade() method.
+
+@class Base
+@module base-domain
 ###
 class Base
 
-    constructor: ->
-        @facade = require('./base-facade').getInstance()
+    getFacade : -> facade ?= require('./facade').getInstance()
 
 
 module.exports = Base

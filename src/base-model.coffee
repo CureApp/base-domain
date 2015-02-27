@@ -7,7 +7,8 @@ Base  = require './base'
 ###*
 Base model class of DDD pattern.
 
-the parent "Base" class just simply gives a @facade property.
+the parent "Base" class just simply gives a @getFacade() method.
+
 
 @class BaseModel
 @extends Base

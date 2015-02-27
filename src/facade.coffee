@@ -8,8 +8,6 @@ Singleton. Use createInstance()/getInstance() to create/get instance
 - create instance of factories
 - create instance of repositories
 
-the parent "Base" class just simply gives a @facade property.
-
 @class BaseFactory
 @extends Base
 @module base-domain

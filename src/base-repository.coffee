@@ -8,7 +8,7 @@ Base repository class of DDD pattern.
 Responsible for perpetuation of models.
 BaseRepository has a client, which access to data resource (RDB, NoSQL, memory, etc...)
 
-the parent "Base" class just simply gives a @facade property.
+the parent "Base" class just simply gives a @getFacade() method.
 
 @class BaseRepository
 @extends Base
@@ -50,7 +50,7 @@ class BaseRepository extends Base
     constructor: ->
         super()
         modelName = @constructor.modelName
-        @factory = @facade.createFactory(modelName)
+        @factory = @getFacade().createFactory(modelName)
 
 
     ###*

@@ -8,7 +8,7 @@ Base factory class of DDD pattern.
 
 create instance of model
 
-the parent "Base" class just simply gives a @facade property.
+the parent "Base" class just simply gives a @getFacade() method.
 
 @class BaseFactory
 @extends Base
@@ -35,7 +35,7 @@ class BaseFactory extends Base
     ###
     getModelClass: ->
         modelName = @constructor.modelName
-        @facade.getModel(modelName)
+        @getFacade().getModel(modelName)
 
 
     ###*
@@ -91,13 +91,13 @@ class BaseFactory extends Base
     ###
     modifyValueByPropName: (prop, value) ->
 
-        propertyInfo = @constructor.ModelClass.properties
+        propertyInfo = @getModelClass().properties
 
         typeInfo = TYPES.info(propertyInfo[prop])
 
         if typeInfo.model?
 
-            subModelFactory = @facade.createFactory(typeInfo.model)
+            subModelFactory = @getFacade().createFactory(typeInfo.model)
 
             # if prop is array of models
             if typeInfo.name is 'MODELS' and Array.isArray value

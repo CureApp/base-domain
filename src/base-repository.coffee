@@ -17,26 +17,15 @@ the parent "Base" class just simply gives a @facade property.
 class BaseRepository extends Base
 
     ###*
-    model class to handle
+    model name to handle
 
-    @property ModelClass
+    @property modelName
     @static
     @protected
-    @type Entity
+    @type String
     ###
-    @ModelClass: null
+    @modelName: null
 
-
-
-    ###*
-    factory class
-
-    @property FactoryClass
-    @static
-    @protected
-    @type BaseFactory
-    ###
-    @FactoryClass: null
 
 
     ###*
@@ -59,9 +48,9 @@ class BaseRepository extends Base
     @constructor
     ###
     constructor: ->
-        FactoryClass = @constructor.FactoryClass
-        @factory = new FactoryClass()
-
+        super()
+        modelName = @constructor.modelName
+        @factory = @facade.createFactory(modelName)
 
 
     ###*

@@ -17,34 +17,56 @@ the parent "Base" class just simply gives a @facade property.
 class BaseFactory extends Base
 
     ###*
-    model class to create
+    model name to handle
 
-    @property ModelClass
+    @property modelName
     @static
     @protected
-    @type Model
+    @type String
     ###
-    @ModelClass: null
+    @modelName: null
 
 
     ###*
-    create instance of ModelClass by plain object
+    get model class this factory handles
+
+    @method getModelClass
+    @return {Class}
+    ###
+    getModelClass: ->
+        modelName = @constructor.modelName
+        @facade.getModel(modelName)
+
+
+    ###*
+    create empty model instance
+
+    @method createEmptyModel
+    @return {BaseModel}
+    ###
+    createEmptyModel: ->
+        ModelClass = @getModelClass()
+        return new ModelClass()
+
+
+
+    ###*
+    create instance of model class by plain object
 
     for each prop, values are modified by @modifyValueByPropName()
 
     @method createFromObject
     @public
     @param {Object} obj
-    @return {Model} model
+    @return {BaseModel} model
     ###
     createFromObject: (obj) ->
 
         if not obj? or typeof obj isnt 'object'
             return null
 
-        ModelClass = @constructor.ModelClass
-        model = new ModelClass()
 
+        model = @createEmptyModel()
 
         for own prop, value of obj
 

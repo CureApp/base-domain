@@ -1,5 +1,5 @@
 
-Entity = require('../../src/facade').Entity
+Entity = require('../../src/lib/facade').Entity
 
 
 class Hobby extends Entity

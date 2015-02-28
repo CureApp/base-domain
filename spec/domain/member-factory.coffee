@@ -1,5 +1,5 @@
 
-BaseFactory = require('../../src/facade').BaseFactory
+BaseFactory = require('../../src/lib/facade').BaseFactory
 
 
 class MemberFactory extends BaseFactory

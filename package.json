@@ -6,32 +6,26 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/CureApp/base-domain.git"
   },
-
   "bugs": {
     "url": "https://github.com/CureApp/base-domain/issues"
   },
-
   "homepage": "https://github.com/CureApp/base-domain",
-
-
   "keywords": [
     "Domain",
     "DDD",
     "LoopBack"
   ],
-
   "author": "CureApp, Inc.",
   "license": "MIT",
   "dependencies": {
-    "es6-promise": "^2.0.1",
-    "coffee-script": "^1.8.0"
+    "coffee-script": "^1.8.0",
+    "ect": "^0.5.9",
+    "es6-promise": "^2.0.1"
   },
-
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-yuidoc": "^0.7.0",

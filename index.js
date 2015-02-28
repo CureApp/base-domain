@@ -1,1 +1,1 @@
-module.exports = require('src/facade');
+module.exports = require('src/lib/facade');

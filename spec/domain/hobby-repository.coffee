@@ -1,5 +1,5 @@
 
-BaseRepository = require('../../src/facade').BaseRepository
+BaseRepository = require('../../src/lib/facade').BaseRepository
 
 
 class HobbyRepository extends BaseRepository

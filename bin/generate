@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+require('coffee-script/register');
+
+var createScript = require('../src/generate')
+
+var model = process.argv[2];
+var dirname = process.argv[3];
+
+createScript(model, dirname)

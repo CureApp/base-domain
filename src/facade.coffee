@@ -8,7 +8,7 @@ Singleton. Use createInstance()/getInstance() to create/get instance
 - create instance of factories
 - create instance of repositories
 
-@class BaseFactory
+@class Facade
 @extends Base
 @module base-domain
 ###
@@ -119,6 +119,7 @@ class Facade
     read a file and returns class
 
     @method require
+    @private
     @param {String} name
     @return {Class}
     ###
@@ -132,8 +133,8 @@ class Facade
     read a file and returns the instance of the file's class
 
     @method create
+    @private
     @param {String} name
-    @param {Object} params コンストラクタの第一引数に渡す値
     @return {DomainFactory}
     ###
     create: (name)->
@@ -143,7 +144,6 @@ class Facade
 
     ###*
     create instance of DomainError
-
 
     @method error
     @param {String} reason reason of the error

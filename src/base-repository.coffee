@@ -75,7 +75,7 @@ class BaseRepository extends Base
     @return {Promise<Entity>} entity
     ###
     get: (id) ->
-        @client.findById(entity).then (obj) =>
+        @client.findById(id).then (obj) =>
             return @factory.createFromObject(obj)
 
 

@@ -63,7 +63,7 @@ class ResourceClientInterface
     @return {Promise<Array>}
     ###
     find: (filter) ->
-        @mock()
+        return Promise.resolve([{id: 'dummy', mock: true}])
 
     ###*
     Find one model instance that matches filter specification. Same as find, but limited to one result
@@ -86,7 +86,7 @@ class ResourceClientInterface
     @return {Promise}
     ###
     destroyById: (id) ->
-        @mock()
+        Promise.resolve({})
 
 
     ###*
@@ -109,7 +109,7 @@ class ResourceClientInterface
     @private
     ###
     mock: ->
-        return Promise.resolve(mock: true)
+        return Promise.resolve(id: 'dummy', mock: true)
 
 
 module.exports = ResourceClientInterface

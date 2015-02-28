@@ -70,7 +70,7 @@ get information object by type
 ###
 TYPES.info = (type) ->
 
-    if match = type.match /([am])<([^>]+)>/
+    if match = type?.match /([am])<([^>]+)>/
         [all, m_or_a, modelName] = match
 
         typeName = if m_or_a is 'm' then 'MODEL' else 'MODELS'

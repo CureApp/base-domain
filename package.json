@@ -28,6 +28,13 @@
   "author": "CureApp, Inc.",
   "license": "MIT",
   "dependencies": {
-    "es6-promise": "^2.0.1"
+    "es6-promise": "^2.0.1",
+    "coffee-script": "^1.8.0"
+  },
+
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-yuidoc": "^0.7.0",
+    "grunt-mocha-chai-sinon": "^0.0.8"
   }
 }

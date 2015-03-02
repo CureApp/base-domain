@@ -9,8 +9,8 @@ BaseModel = require('base-domain').BaseModel
 class <%=@Model%> extends BaseModel
 
     @properties:
-    ### examples
         name      : @TYPES.STRING
+    ### examples
         age       : @TYPES.NUMBER
         confirmed : @TYPES.BOOLEAN
         createdAt : @TYPES.DATE

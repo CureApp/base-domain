@@ -9,8 +9,8 @@ Entity = require('base-domain').Entity
 class <%=@Model%> extends Entity
 
     @properties:
-    ### examples
         name      : @TYPES.STRING
+    ### examples
         age       : @TYPES.NUMBER
         confirmed : @TYPES.BOOLEAN
         createdAt : @TYPES.DATE

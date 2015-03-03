@@ -1,25 +1,20 @@
 
+copy = require('copy-class').copy
 
 ###*
 Facade class of DDD pattern.
-
-Singleton. Use createInstance()/getInstance() to create/get instance
 
 - create instance of factories
 - create instance of repositories
 
 @class Facade
-@extends Base
 @module base-domain
 ###
 class Facade
 
-    @instance: null
-
 
     ###*
-    create instance of Facade if not created yet
-    singleton.
+    create instance of Facade
 
     @method createInstance
     @static
@@ -27,11 +22,7 @@ class Facade
     @return {Facade}
     ###
     @createInstance: (options= {}) ->
-        if @instance?
-            throw new Error("""instance of Facade is already created.
-                               Call DomainFacade::getInstance() instead.""")
-        @instance = new Facade(options) 
-
+        return new Facade(options) 
 
 
     ###*
@@ -42,21 +33,8 @@ class Facade
     @param {String} [options.dirname="."] path where domain definition files are included
     ###
     constructor: (options) ->
-
+        @classes = {}
         @dirname = options.dirname ? '.'
-
-
-
-    ###*
-    get instance of Facade if already created
-
-    @method getInstance
-    @static
-    @return {Facade}
-    ###
-    @getInstance: ->
-        @instance ? throw new Error("""instance of Facade is not created yet.
-                                       Call DomainFacade::createInstance() instead.""")
 
 
 
@@ -117,6 +95,7 @@ class Facade
 
     ###*
     read a file and returns class
+    Attaches getFacade() method
 
     @method require
     @private
@@ -124,10 +103,16 @@ class Facade
     @return {Class}
     ###
     require: (name)->
+        return @classes[name] if @classes[name]?
 
         path = "#{@dirname}/#{name}"
-        require path
+        facade = @
 
+        klass = require path
+        Class = copy(klass)
+        Class::getFacade = -> facade
+
+        @classes[name] = Class
 
     ###*
     read a file and returns the instance of the file's class

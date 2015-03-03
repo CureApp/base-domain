@@ -26,6 +26,7 @@
   "license": "MIT",
   "dependencies": {
     "coffee-script": "^1.8.0",
+    "copy-class": "^0.0.1",
     "ect": "^0.5.9",
     "es6-promise": "^2.0.1"
   },

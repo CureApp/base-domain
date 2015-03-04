@@ -50,6 +50,15 @@ class BaseModel extends Base
     @properties: {}
 
 
+    ###*
+    cast to plain object (deep copied)
+
+    @method toObject
+    ###
+    toObject: ->
+        JSON.parse JSON.stringify @
+
+
 
 
 

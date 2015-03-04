@@ -107,13 +107,17 @@ class Facade
         return @classes[name] if @classes[name]?
 
         path = "#{@dirname}/#{name}"
-        facade = @
-
         klass = require path
-        Class = copy(klass)
-        Class::getFacade = -> facade
 
-        @classes[name] = Class
+
+        if klass::getFacade is @constructor.Base::getFacade
+            facade = @
+            Class = copy(klass)
+            Class::getFacade = -> facade
+            @classes[name] = Class
+        else
+            @classes[name] = klass
+
 
     ###*
     read a file and returns the instance of the file's class

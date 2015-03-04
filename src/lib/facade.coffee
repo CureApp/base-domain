@@ -22,7 +22,8 @@ class Facade
     @return {Facade}
     ###
     @createInstance: (options= {}) ->
-        return new Facade(options) 
+        Constructor = @
+        return new Constructor(options) 
 
 
     ###*

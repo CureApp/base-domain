@@ -2,7 +2,6 @@
 facade = require './init'
 
 Hobby  = facade.getModel 'hobby'
-Hobby2 = require './domain/hobby'
 
 describe 'Entity', ->
 
@@ -10,9 +9,15 @@ describe 'Entity', ->
 
 
         hobby = new Hobby()
-        hobby2 = new Hobby2()
         hobby.name = 'alto sax'
 
         expect(hobby.getName()).to.equal 'alto sax'
 
 
+
+    it 'is available from loading file by require', ->
+        Hobby2 = require './domain/hobby'
+
+        hobby2 = new Hobby2()
+        hobby2.name = 'alto sax'
+        expect(hobby2.getName()).to.equal 'alto sax'

@@ -18,3 +18,12 @@ describe 'Facade', ->
             expect(f).to.be.instanceof Facade
             expect(f).to.be.instanceof ChildFacade
 
+    describe 'error', ->
+
+        it 'throw DomainError with reason', ->
+
+            f = Facade.createInstance()
+            err = f.error('notANumber')
+
+            expect(err).to.have.property 'reason', 'notANumber'
+            expect(f.isDomainError(err)).to.be.true

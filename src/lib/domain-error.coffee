@@ -46,4 +46,4 @@ DomainError = (reason, message)->
 
 DomainError.prototype.__proto__= Error.prototype
 
-return DomainError
+module.exports = DomainError

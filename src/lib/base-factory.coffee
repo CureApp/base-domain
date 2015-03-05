@@ -28,6 +28,26 @@ class BaseFactory extends Base
 
 
     ###*
+    key-value pair of prop name -> type info  when prop is model/models
+
+    @property modelProperties
+    @protected
+    @type Object
+    ###
+    constructor: ->
+        @modelProperties = {}
+
+        propertyInfo = @getModelClass().properties
+
+        for prop, type of propertyInfo
+            typeInfo = TYPES.info(type)
+            if typeInfo.model
+                @modelProperties[prop] = typeInfo
+
+
+
+
+    ###*
     get model class this factory handles
 
     @method getModelClass
@@ -109,9 +129,7 @@ class BaseFactory extends Base
 
         propertyInfo = @getModelClass().properties
 
-        typeInfo = TYPES.info(propertyInfo[prop])
-
-        if typeInfo.model?
+        if typeInfo = @modelProperties[prop]
 
             subModelFactory = @getFacade().createFactory(typeInfo.model)
 

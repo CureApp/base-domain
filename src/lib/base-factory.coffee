@@ -62,6 +62,8 @@ class BaseFactory extends Base
     ###
     createFromObject: (obj) ->
 
+        obj = @beforeCreateFromObject obj
+
         if not obj? or typeof obj isnt 'object'
             return null
 
@@ -77,6 +79,20 @@ class BaseFactory extends Base
                 model[prop] = @modifyValueByPropName(prop, value)
 
         return model
+
+
+    ###*
+    modify plain object before @createFromObject(obj)
+
+    @method beforeCreateFromObject
+    @protected
+    @abstract
+    @param {Object} obj
+    @return {Object} obj
+    ###
+    beforeCreateFromObject: (obj) ->
+
+        return obj
 
 
 

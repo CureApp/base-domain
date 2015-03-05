@@ -42,6 +42,7 @@ class BaseFactory extends Base
         for prop, type of propertyInfo
             typeInfo = TYPES.info(type)
             if typeInfo.model
+                typeInfo.modelClass = @getFacade().getModel(typeInfo.model)
                 @modelProperties[prop] = typeInfo
 
 

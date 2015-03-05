@@ -53,4 +53,8 @@ describe 'BaseFactory', ->
                 expect(hobby).to.be.instanceof Hobby
                 expect(hobby).to.have.property 'name'
 
+                # testing "beforeCreateFromObject", "afterCreateModel"
+                expect(hobby).to.have.property 'isUnique', true
+                expect(hobby).to.have.property 'isAwesomeHobby', true
+
 

@@ -65,7 +65,8 @@ class BaseFactory extends Base
     ###
     createEmptyModel: ->
         ModelClass = @getModelClass()
-        return new ModelClass()
+        model = new ModelClass()
+        return @afterCreateModel model
 
 
 
@@ -97,7 +98,7 @@ class BaseFactory extends Base
             else
                 model[prop] = @modifyValueByPropName(prop, value)
 
-        return model
+        return @afterCreateModel model
 
 
     ###*
@@ -112,6 +113,19 @@ class BaseFactory extends Base
     beforeCreateFromObject: (obj) ->
 
         return obj
+
+    ###*
+    modify model after createFromObject(obj), createEmptyModel()
+
+    @method afterCreateModel
+    @protected
+    @abstract
+    @param {BaseModel} model
+    @return {BaseModel} model
+    ###
+    afterCreateModel: (model) ->
+
+        return model
 
 
 

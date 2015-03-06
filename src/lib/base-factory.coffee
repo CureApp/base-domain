@@ -34,7 +34,15 @@ class BaseFactory extends Base
     @protected
     @type Object
     ###
-    constructor: ->
+
+    ###*
+    constructor
+
+    @constructor
+    @param {Object} [options]
+    @return
+    ###
+    constructor: (options)->
         @modelProperties = {}
 
         propertyInfo = @getModelClass().properties

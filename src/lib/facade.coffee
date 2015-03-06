@@ -77,10 +77,11 @@ class Facade
 
     @method createFactory
     @param {String} name
+    @param {Object} [options]
     @return {DomainFactory}
     ###
-    createFactory: (name)->
-        @create("#{name}-factory")
+    createFactory: (name, options)->
+        @create("#{name}-factory", options)
 
 
     ###*
@@ -88,10 +89,11 @@ class Facade
 
     @method createRepository
     @param {String} name
+    @param {Object} [options]
     @return {DomainRepository}
     ###
-    createRepository: (name)->
-        @create("#{name}-repository")
+    createRepository: (name, options)->
+        @create("#{name}-repository", options)
 
 
     ###*
@@ -125,11 +127,12 @@ class Facade
     @method create
     @private
     @param {String} name
+    @param {Object} [options]
     @return {DomainFactory}
     ###
-    create: (name)->
+    create: (name, options)->
         DomainClass = @require(name)
-        return new DomainClass()
+        return new DomainClass(options)
 
 
     ###*

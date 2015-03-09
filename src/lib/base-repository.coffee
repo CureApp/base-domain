@@ -65,9 +65,11 @@ class BaseRepository extends Base
     ###
     save: (entity, client) ->
         client ?= @client
-        client.upsert(entity).then (obj) =>
-            return @factory.createFromObject(obj)
 
+        dataForSave = @createDataForSave(entity)
+
+        client.upsert(dataForSave).then (obj) =>
+            return @factory.createFromObject(obj, entity)
 
     ###*
     get object by ID.
@@ -143,8 +145,31 @@ class BaseRepository extends Base
     ###
     update: (id, data, client) ->
         client ?= @client
-        client.updateAttributes(id, data).then (obj) =>
+        dataForSave = @createDataForSave(data)
+
+        client.updateAttributes(id, dataForSave).then (obj) =>
             return @factory.createFromObject(obj)
 
+
+    ###*
+    create object for save: relational models excluded
+
+    @method createDataForSave
+    @protected
+    @param {Entity|Object} data
+    @return {Object} data data for save
+    ###
+    createDataForSave: (data) ->
+
+        modelProperties = @factory.modelProperties
+
+        dataForSave = {}
+
+        for own key, value of data
+            # exclude model properties
+            if modelProperties[key]?
+                continue
+
+        return data
 
 module.exports = BaseRepository

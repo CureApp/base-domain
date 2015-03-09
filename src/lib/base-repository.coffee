@@ -169,7 +169,8 @@ class BaseRepository extends Base
             # exclude model properties
             if modelProperties[key]?
                 continue
+            dataForSave[key] = value
 
-        return data
+        return dataForSave
 
 module.exports = BaseRepository

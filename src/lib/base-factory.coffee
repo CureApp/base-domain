@@ -96,7 +96,8 @@ class BaseFactory extends Base
             return null
 
 
-        model = @createEmptyModel()
+        ModelClass = @getModelClass()
+        model = new ModelClass()
 
         for own prop, value of obj
 

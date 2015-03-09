@@ -161,16 +161,7 @@ class BaseRepository extends Base
     ###
     createDataForSave: (data) ->
 
-        modelProperties = @factory.modelProperties
+        return @factory.stripRelations(data)
 
-        dataForSave = {}
-
-        for own key, value of data
-            # exclude model properties
-            if modelProperties[key]?
-                continue
-            dataForSave[key] = value
-
-        return dataForSave
 
 module.exports = BaseRepository

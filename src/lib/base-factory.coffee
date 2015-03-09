@@ -200,4 +200,28 @@ class BaseFactory extends Base
 
 
 
+    ###*
+    create plain object without relational models
+
+    FIXME: this method should not be in "factory"
+
+    @method stripRelations
+    @param {Entity|Object} data
+    @return {Object} strippedData data without relational models
+    ###
+    stripRelations: (data) ->
+
+        strippedData = {}
+
+        for own key, value of data
+            # exclude model properties
+            if @modelProperties[key]?
+                continue
+            strippedData[key] = value
+
+        return strippedData
+
+
+
+
 module.exports = BaseFactory

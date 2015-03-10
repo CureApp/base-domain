@@ -1,6 +1,7 @@
 
 
 Base  = require './base'
+TYPES = require './types'
 ResourceClientInterface = require './resource-client-interface'
 
 ###*
@@ -51,7 +52,19 @@ class BaseRepository extends Base
     ###
     constructor: (options) ->
         modelName = @constructor.modelName
-        @factory = @getFacade().createFactory(modelName)
+        facade = @getFacade()
+        @factory = facade.createFactory(modelName)
+        properties = facade.getModel(modelName).properties
+
+        @propCreatedAt = null
+        @propUpdatedAt = null
+
+        for prop, type of properties
+            if type is TYPES.UPDATED_AT
+                @propUpdatedAt = prop
+            else if type is TYPES.CREATED_AT
+                @propCreatedAt = prop
+
 
 
     ###*
@@ -66,7 +79,11 @@ class BaseRepository extends Base
     save: (entity, client) ->
         client ?= @client
 
-        dataForSave = @createDataForSave(entity)
+        # set "createdAt-compatible column when id is not set
+        # FIXME createdAt is not set when creating with id (#1)
+        isCreate = not entity.id?
+
+        dataForSave = @createDataForSave(entity, isCreate)
 
         client.upsert(dataForSave).then (obj) =>
             return @factory.createFromObject(obj, entity)
@@ -145,23 +162,34 @@ class BaseRepository extends Base
     ###
     update: (id, data, client) ->
         client ?= @client
-        dataForSave = @createDataForSave(data)
+        isCreate = false
+        dataForSave = @createDataForSave(data, isCreate)
 
         client.updateAttributes(id, dataForSave).then (obj) =>
             return @factory.createFromObject(obj)
 
 
     ###*
-    create object for save: relational models excluded
+    create object for save
+    1. relational models excluded
+    2. createdAt, updatedAt (or compatibles) are set
 
     @method createDataForSave
     @protected
     @param {Entity|Object} data
-    @return {Object} data data for save
+    @param {Boolean} [isCreate=false]
+    @return {Object} dataForSave data for save
     ###
-    createDataForSave: (data) ->
+    createDataForSave: (data, isCreate = false) ->
+        dataForSave = @factory.stripRelations(data)
 
-        return @factory.stripRelations(data)
+        if isCreate and @propCreatedAt?
+            dataForSave[@propCreatedAt] = new Date().toISOString()
+
+        if @propUpdatedAt?
+            dataForSave[@propUpdatedAt] = new Date().toISOString()
+
+        return dataForSave
 
 
 module.exports = BaseRepository

@@ -25,7 +25,7 @@ class ResourceClientInterface
     @return {Promise<Object>}
     ###
     create: (data = {}) ->
-        @mock()
+        @mock(data)
 
 
     ###*
@@ -38,7 +38,7 @@ class ResourceClientInterface
     @return {Promise<Object>}
     ###
     upsert: (data = {}) ->
-        @mock()
+        @mock(data)
 
 
     ###*
@@ -50,7 +50,7 @@ class ResourceClientInterface
     @return {Promise<Object>}
     ###
     findById: (id) ->
-        @mock()
+        @mock(id)
 
 
 
@@ -74,7 +74,7 @@ class ResourceClientInterface
     @return {Promise<Object>}
     ###
     findOne: (filter) ->
-        @mock()
+        @mock(filter)
 
 
     ###*
@@ -98,7 +98,7 @@ class ResourceClientInterface
     @return {Promise<Object>}
     ###
     updateAttributes: (id, data) ->
-        @mock()
+        @mock(id, data)
 
 
 
@@ -108,8 +108,8 @@ class ResourceClientInterface
     @method mock
     @private
     ###
-    mock: ->
-        return Promise.resolve(id: 'dummy', mock: true)
+    mock: (arg1, arg2) ->
+        return Promise.resolve(id: 'dummy', mock: true, arg1: arg1, arg2: arg2)
 
 
 module.exports = ResourceClientInterface

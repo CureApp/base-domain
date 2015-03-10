@@ -23,6 +23,19 @@ describe 'BaseRepository', ->
                 done()
 
 
+        it 'returns instance of Model with createdAt, updatedAt when configured as such', (done) ->
+
+            memberRepo = facade.createRepository('member')
+
+            memberRepo.save(firstName: 'Shin').then (model) =>
+                arg1 = model.arg1 # mock prop
+                expect(arg1).to.have.property('mCreatedAt')
+                expect(arg1).to.have.property('mUpdatedAt')
+                expect(new Date(arg1.mCreatedAt)).to.be.instanceof Date
+                expect(new Date(arg1.mUpdatedAt)).to.be.instanceof Date
+                done()
+
+
 
      describe 'get', ->
         repo = facade.createRepository('hobby')
@@ -73,6 +86,16 @@ describe 'BaseRepository', ->
 
             repo.update('123', name: 'tennis').then (model) =>
                 expect(model).to.be.instanceof Hobby
+
                 done()
 
+        it 'returns instance of Model with updatedAt when configured as such', (done) ->
 
+            memberRepo = facade.createRepository('member')
+
+            memberRepo.update('123', firstName: 'Shin').then (model) =>
+                arg2 = model.arg2 # mock prop
+                expect(arg2).not.to.have.property('mCreatedAt')
+                expect(arg2).to.have.property('mUpdatedAt')
+                expect(new Date(arg2.mUpdatedAt)).to.be.instanceof Date
+                done()

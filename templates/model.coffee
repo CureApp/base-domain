@@ -27,11 +27,12 @@ class <%=@Model%> extends BaseModel
     @properties:
         name      : @TYPES.STRING
     ### examples
-        age       : @TYPES.NUMBER
-        confirmed : @TYPES.BOOLEAN
-        createdAt : @TYPES.DATE
-        team      : @TYPES.MODEL 'team'
-        hobbies   : @TYPES.MODELS 'hobby'
+        age         : @TYPES.NUMBER
+        confirmed   : @TYPES.BOOLEAN
+        confirmedAt : @TYPES.DATE
+        team        : @TYPES.MODEL 'team'
+        hobbies     : @TYPES.MODELS 'hobby'
+        createdAt   : @TYPES.CREATED_AT
+        updatedAt   : @TYPES.UPDATED_AT
     ###
-
 module.exports = <%=@Model %>

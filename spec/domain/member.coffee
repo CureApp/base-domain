@@ -9,5 +9,8 @@ class Member extends Entity
         age          : @TYPES.NUMBER
         registeredAt : @TYPES.DATE
         hobbies      : @TYPES.MODELS 'hobby'
+        mCreatedAt   : @TYPES.CREATED_AT
+        mUpdatedAt   : @TYPES.UPDATED_AT
+
 
 module.exports = Member

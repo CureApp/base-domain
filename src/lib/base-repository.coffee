@@ -47,10 +47,9 @@ class BaseRepository extends Base
     constructor
 
     @constructor
-    @param {Object} [options]
     @return
     ###
-    constructor: (options) ->
+    constructor: ->
         modelName = @constructor.modelName
         facade = @getFacade()
         @factory = facade.createFactory(modelName)

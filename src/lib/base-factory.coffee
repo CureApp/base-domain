@@ -154,14 +154,23 @@ class BaseFactory extends Base
         if typeInfo = @modelProperties[prop]
 
             subModelFactory = @getFacade().createFactory(typeInfo.model)
+            SubModel = subModelFactory.getModelClass()
 
             # if prop is array of models
             if typeInfo.name is 'MODELS' and Array.isArray value
-                return (subModelFactory.createFromObject(subObj) for subObj in value)
+                return (for subObj in value
+                    if subObj instanceof SubModel
+                        subObj
+                    else
+                        subModelFactory.createFromObject(subObj)
+                )
 
             # if prop is model
             else if typeInfo.name is 'MODEL'
-                return subModelFactory.createFromObject(value)
+                if value instanceof SubModel
+                    return value
+                else
+                    return subModelFactory.createFromObject(value)
 
         return @modifyValueByNonModelPropName(prop, value)
 

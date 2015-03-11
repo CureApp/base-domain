@@ -38,9 +38,9 @@ describe 'BaseFactory', ->
                 age: 28
                 registeredAt: now
                 hobbies: [
-                    { name: 'keyboard' }
-                    { name: 'ingress' }
-                    { name: 'Shogi' }
+                    { id: 1, name: 'keyboard' }
+                    { id: 2, name: 'ingress' }
+                    { id: 3, name: 'Shogi' }
                 ]
 
             expect(model).to.be.instanceof Member
@@ -58,3 +58,30 @@ describe 'BaseFactory', ->
                 expect(hobby).to.have.property 'isAwesomeHobby', true
 
 
+            expect(model.hobbyIds).to.have.length 3
+            expect(model.hobbyIds).to.eql [1,2,3]
+
+        it 'returns instance of model with relational model', ->
+
+            mFactory = facade.createFactory('member')
+
+            member = mFactory.createFromObject
+                id: 12
+                firstName: 'Shin'
+                age: 29
+                registeredAt: new Date()
+                hobbies: [
+                    { id: 1, name: 'keyboard' }
+                    { id: 2, name: 'ingress' }
+                    { id: 3, name: 'Shogi' }
+                ]
+
+            dFactory = facade.createFactory('diary')
+
+            diary = dFactory.createFromObject
+                title : 'crazy about room335'
+                comment: 'progression of room335 is wonderful'
+                author: member
+                date  : new Date()
+
+            expect(diary).to.have.property 'memberId', 12 # not "authorId"

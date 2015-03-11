@@ -35,6 +35,35 @@ describe 'BaseRepository', ->
                 expect(new Date(arg1.mUpdatedAt)).to.be.instanceof Date
                 done()
 
+        it 'returns instance of Model with relation ids', (done) ->
+
+            memberFactory = facade.createFactory('member')
+
+            member = memberFactory.createFromObject
+                id: 12
+                firstName: 'Shin'
+                age: 29
+                registeredAt: new Date()
+                hobbies: [
+                    { id: 1, name: 'keyboard' }
+                    { id: 2, name: 'ingress' }
+                    { id: 3, name: 'Shogi' }
+                ]
+
+            dFactory = facade.createFactory('diary')
+
+            diary = dFactory.createFromObject
+                title : 'crazy about room335'
+                comment: 'progression of room335 is wonderful'
+                author: member
+                date  : new Date()
+
+
+            dRepo = facade.createRepository('diary')
+            dRepo.save(diary).then (model) =>
+                arg1 = model.arg1 # mock prop
+                expect(arg1).to.have.property('memberId', 12)
+                done()
 
 
      describe 'get', ->

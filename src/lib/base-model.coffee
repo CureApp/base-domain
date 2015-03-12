@@ -213,22 +213,23 @@ class BaseModel extends Base
 
         typeInfo = @constructor.getPropertyInfo(prop)
         modelName = typeInfo.model
+        idPropName = typeInfo.idPropName
+
+        # when idProp is set and no submodel given, do nothing
+        # call "unsetRelatedModel" to unset idProp
+        if @[idPropName]? and not submodel?
+            return @
+
+        @[prop] = submodel
 
         if typeInfo.name is 'MODEL'
-            idPropName = @constructor.camelize(modelName) + 'Id'  # e.g.  mister-donut => misterDonutId
-
-            if not @[idPropName]? or submodel?
-                @[prop] = submodel
-                @[idPropName] = submodel?.id
+            @[idPropName] = submodel?.id
         else
-            idsPropName = @constructor.camelize(modelName) + 'Ids'  # e.g.  mister-donut => misterDonutIds
-            if not @[idsPropName]? or submodel?
-                @[prop] = submodel
-                @[idsPropName] = 
-                    if submodel
-                        (sub.id for sub in submodel)
-                    else
-                        []
+            @[idPropName] = 
+                if submodel
+                    (sub.id for sub in submodel)
+                else
+                    []
 
         return @
 
@@ -254,16 +255,14 @@ class BaseModel extends Base
 
         typeInfo = @constructor.getPropertyInfo(prop)
         modelName = typeInfo.model
+        idPropName = typeInfo.idPropName
+
+        @[prop] = undefined
 
         if typeInfo.name is 'MODEL'
-            idPropName = @constructor.camelize(modelName) + 'Id'
-            @[prop] = undefined
             @[idPropName] = undefined
-
         else
-            idsPropName = @constructor.camelize(modelName) + 'Ids'
-            @[prop] = undefined
-            @[idsPropName] = []
+            @[idPropName] = []
 
         return @
 
@@ -281,7 +280,7 @@ class BaseModel extends Base
 
     @param {String} prop property name of the related models
     @return {BaseModel} this
-    @method setRelatedModels
+    @method addRelatedModels
     ###
     addRelatedModels: (prop, submodels...) ->
         @assertEntityProp(prop, 'addRelatedModels')
@@ -294,12 +293,11 @@ class BaseModel extends Base
                 #{@constructor.name}.addRelatedModels(#{prop})
                 #{prop} is not a prop for models.
             """
-
-        idsPropName = @constructor.camelize(modelName) + 'Ids'
+        idPropName = typeInfo.idPropName
         @[prop] ?= []
         @[prop].push submodel for submodel in submodels
-        @[idsPropName] ?= []
-        @[idsPropName].push submodel.id for submodel in submodels
+        @[idPropName] ?= []
+        @[idPropName].push submodel.id for submodel in submodels
 
         return @
 
@@ -344,15 +342,6 @@ class BaseModel extends Base
         ModelClass = @getFacade().getModel modelName
         return ModelClass.isEntity
 
-
-
-    @camelize: (str) ->
-        (for substr, i in str.split('-')
-            if i is 0
-                substr
-            else
-                substr.charAt(0).toUpperCase() + substr.slice(1)
-        ).join('')
 
 
 

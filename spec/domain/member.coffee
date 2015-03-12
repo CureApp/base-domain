@@ -9,6 +9,7 @@ class Member extends Entity
         age          : @TYPES.NUMBER
         registeredAt : @TYPES.DATE
         hobbies      : @TYPES.MODELS 'hobby'
+        newHobbies   : @TYPES.MODELS 'hobby', 'newHobbyIds'
         mCreatedAt   : @TYPES.CREATED_AT
         mUpdatedAt   : @TYPES.UPDATED_AT
 

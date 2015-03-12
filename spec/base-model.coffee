@@ -32,6 +32,11 @@ describe 'BaseModel', ->
             expect(info.comment.name).to.equal 'STRING'
             expect(info.author.name).to.equal 'MODEL'
             expect(info.author.model).to.equal 'member'
+            expect(info.author.idPropName).to.equal 'memberId'
+
+            expect(info.coauthor.model).to.equal 'member'
+            expect(info.coauthor.idPropName).to.equal 'coauthorId'
+
             expect(info.date.name).to.equal 'DATE'
             expect(info.upd.name).to.equal 'UPDATED_AT'
             expect(info.upd.name).to.equal 'UPDATED_AT'
@@ -40,6 +45,7 @@ describe 'BaseModel', ->
             typeInfo = Diary.getPropertyInfo('author')
             expect(typeInfo.name).to.equal 'MODEL'
             expect(typeInfo.model).to.equal 'member'
+            expect(typeInfo.idPropName).to.equal 'memberId'
 
 
         it 'returns undefined when invalid prop is given', ->
@@ -62,11 +68,6 @@ describe 'BaseModel', ->
 
         it 'returns prop name of updatedAt', ->
             expect(Hobby.getPropOfUpdatedAt()).not.to.exist
-
-
-    describe '@camelize', ->
-        it 'shinout-no-macbook-pro => shinoutNoMacbookPro', ->
-            expect(Hobby.camelize('shinout-no-macbook-pro')).to.equal 'shinoutNoMacbookPro'
 
 
     describe 'isSubClassOfEntity', ->
@@ -142,10 +143,10 @@ describe 'BaseModel', ->
                 comment: 'progression of room335 is wonderful'
                 date  : new Date()
 
-            diary.setRelatedModel('author', member)
+            diary.setRelatedModel('coauthor', member)
 
-            expect(diary.author).to.equal member
-            expect(diary.memberId).to.equal 12
+            expect(diary.coauthor).to.equal member
+            expect(diary.coauthorId).to.equal 12
 
         it 'set relation and its ids (has many)', ->
             mem = memberFactory.createEmptyModel()
@@ -181,13 +182,12 @@ describe 'BaseModel', ->
     describe 'addRelatedModels', ->
         it 'add submodels and its ids (has many)', ->
             mem = memberFactory.createEmptyModel()
-            mem.setRelatedModels 'hobbies', member.hobbies
 
             newHobby1 = hobbyFactory.createFromObject { id: 4, name: 'sailing' }
             newHobby2 = hobbyFactory.createFromObject { id: 5, name: 'shopping' }
 
-            mem.addRelatedModels 'hobbies', newHobby1, newHobby2
-            expect(mem.hobbies[3]).to.equal newHobby1
-            expect(mem.hobbies[4]).to.equal newHobby2
-            expect(mem.hobbyIds).to.eql [1,2,3,4,5]
+            mem.addRelatedModels 'newHobbies', newHobby1, newHobby2
+            expect(mem.newHobbies[0]).to.equal newHobby1
+            expect(mem.newHobbies[1]).to.equal newHobby2
+            expect(mem.newHobbyIds).to.eql [4,5]
 

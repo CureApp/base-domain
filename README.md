@@ -7,11 +7,30 @@ simple module to help build Domain-Driven Design"
 ## installation
 
 ```bash
-$ npm install base-domain
+$ npm install -g base-domain
 ```
 
 
 ## usage
+
+### generate base file
+
+```bash
+MODEL_NAME='foo-bar'
+DIR_NAME='.'
+$ base-domain $MODEL_NAME $DIR_NAME
+```
+- ./foo-bar.coffee
+- ./foo-bar-factory.coffee
+- ./foo-bar-repository.coffee
+
+are generated.
+
+- foo-bar.coffee defines and exports class FooBar extends Entity
+- foo-bar-factory.coffee defines and exports class FooBarFactory extends BaseFactory
+- foo-bar-repository.coffee defines and exports class FooBarRepository extends BaseRepository
+
+
 
 ### model definition
 

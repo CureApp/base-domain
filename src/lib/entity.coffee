@@ -11,6 +11,8 @@ Base model class with "id" column
 ###
 class Entity extends BaseModel
 
+    @isEntity: true
+
     ###*
     primary key for the model
 
@@ -18,5 +20,6 @@ class Entity extends BaseModel
     @type any
     ###
     id: null
+
 
 module.exports = Entity

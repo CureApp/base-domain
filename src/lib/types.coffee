@@ -20,8 +20,8 @@ TYPES =
     DATE       : 'date'
     BUFFER     : 'buffer'
     GEOPOINT   : 'geopoint'
-    CREATED_AT : 'date:c'
-    UPDATED_AT : 'date:u'
+    CREATED_AT : 'created'
+    UPDATED_AT : 'updated'
 
 REV_TYPES = {}
 REV_TYPES[v] = k for k, v of TYPES
@@ -68,7 +68,6 @@ get information object by type
 @return {Object} info
 @return {String} [info.name] type name
 @return {String|null} [info.model] if model-related type, the name of the model 
-@return {String|null} [info.subtype] if date-related type, CREATE or UPDATE is in it
 
 ###
 TYPES.info = (type) ->
@@ -84,14 +83,6 @@ TYPES.info = (type) ->
         return {
             name: typeName
             model: match[2]
-        }
-
-    else if match = type.match /date:([UC])/
-        u_or_c = match[1]
-
-        return {
-            name: 'date'
-            subtype: if u_or_c is 'u' then 'UPDATE' else 'CREATE'
         }
 
     else

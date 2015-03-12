@@ -1,8 +1,8 @@
 
 
 Base  = require './base'
-TYPES = require './types'
 ResourceClientInterface = require './resource-client-interface'
+Entity = require './entity'
 
 ###*
 Base repository class of DDD pattern.
@@ -53,16 +53,18 @@ class BaseRepository extends Base
         modelName = @constructor.modelName
         facade = @getFacade()
         @factory = facade.createFactory(modelName)
-        properties = facade.getModel(modelName).properties
 
-        @propCreatedAt = null
-        @propUpdatedAt = null
 
-        for prop, type of properties
-            if type is TYPES.UPDATED_AT
-                @propUpdatedAt = prop
-            else if type is TYPES.CREATED_AT
-                @propCreatedAt = prop
+
+    ###*
+    get model class this factory handles
+
+    @method getModelClass
+    @return {Class}
+    ###
+    getModelClass: ->
+        modelName = @constructor.modelName
+        @getFacade().getModel(modelName)
 
 
 
@@ -71,21 +73,26 @@ class BaseRepository extends Base
 
     @method save
     @public
-    @param {Entity} entity
+    @param {Entity|Object} entity
     @param {ResourceClientInterface} [client=@client]
     @return {Promise<Entity>} entity (different instance from input)
     ###
     save: (entity, client) ->
+        if entity not instanceof Entity
+            entity = @factory.createFromObject entity
+
         client ?= @client
 
-        # set "createdAt-compatible column when id is not set
+        # set "createdAt-compatible property when id is not set
         # FIXME createdAt is not set when creating with id (#1)
         isCreate = not entity.id?
 
-        dataForSave = @createDataForSave(entity, isCreate)
+        data = entity.toPlainObject()
+        @appendTimeStamp(data, isCreate)
 
-        client.upsert(dataForSave).then (obj) =>
+        client.upsert(data).then (obj) =>
             return @factory.createFromObject(obj, entity)
+
 
     ###*
     get object by ID.
@@ -155,40 +162,48 @@ class BaseRepository extends Base
     @method update
     @public
     @param {any} id id of the entity to update
-    @param {Object} data key-value pair to update
+    @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
     @param {ResourceClientInterface} [client=@client]
     @return {Promise<Entity>} updated entity
     ###
     update: (id, data, client) ->
+        if data instanceof Entity
+            throw @getFacade().error """
+                update entity with BaseRepository#update() is not allowed.
+                use BaseRepository#save(entity) instead
+            """
+
         client ?= @client
         isCreate = false
-        dataForSave = @createDataForSave(data, isCreate)
+        @appendTimeStamp(data, isCreate)
 
-        client.updateAttributes(id, dataForSave).then (obj) =>
+        client.updateAttributes(id, data).then (obj) =>
             return @factory.createFromObject(obj)
 
 
     ###*
-    create object for save
-    1. relational models excluded
-    2. createdAt, updatedAt (or compatibles) are set
+    add createdAt, updatedAt to given data
 
-    @method createDataForSave
+    @method appendTimeStamp
     @protected
-    @param {Entity|Object} data
+    @param {Object} data 
     @param {Boolean} [isCreate=false]
-    @return {Object} dataForSave data for save
+    @return {Object} data
     ###
-    createDataForSave: (data, isCreate = false) ->
-        dataForSave = @factory.stripRelations(data)
+    appendTimeStamp: (data, isCreate = false) ->
+        Model = @getModelClass()
 
-        if isCreate and @propCreatedAt?
-            dataForSave[@propCreatedAt] = new Date().toISOString()
+        propCreatedAt = Model.getPropOfCreatedAt()
+        propUpdatedAt = Model.getPropOfUpdatedAt()
 
-        if @propUpdatedAt?
-            dataForSave[@propUpdatedAt] = new Date().toISOString()
 
-        return dataForSave
+        if isCreate and propCreatedAt
+            data[propCreatedAt] = new Date().toISOString()
+
+        if propUpdatedAt
+            data[propUpdatedAt] = new Date().toISOString()
+
+        return data
 
 
 module.exports = BaseRepository

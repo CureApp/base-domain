@@ -29,28 +29,12 @@ class BaseFactory extends Base
 
 
     ###*
-    key-value pair of prop name -> type info  when prop is model/models
-
-    @property modelProperties
-    @protected
-    @type Object
-    ###
-
-    ###*
     constructor
 
     @constructor
     @return
     ###
     constructor: ->
-        @modelProperties = {}
-
-        propertyInfo = @getModelClass().properties
-
-        for prop, type of propertyInfo
-            typeInfo = TYPES.info(type)
-            if typeInfo.model
-                @modelProperties[prop] = typeInfo
 
 
 
@@ -74,8 +58,8 @@ class BaseFactory extends Base
     createEmptyModel: ->
         ModelClass = @getModelClass()
         model = new ModelClass()
+        model[prop] = undefined for prop of ModelClass.properties
         return @afterCreateModel model
-
 
 
     ###*
@@ -98,6 +82,7 @@ class BaseFactory extends Base
 
         ModelClass = @getModelClass()
         model = new ModelClass()
+        model[prop] = undefined for prop of ModelClass.properties
 
         for own prop, value of obj
 
@@ -108,40 +93,11 @@ class BaseFactory extends Base
                 model[prop] = @modifyValueByPropName(prop, value)
 
 
+
+        model = @afterCreateModel model
+
         # add xxxId, xxxIds
-        @addRelationIds(model)
-
-        return @afterCreateModel model
-
-
-
-    ###*
-    add relation ids to the model
-
-    @method addRelationIds
-    @private
-    @param {BaseModel} model
-    ###
-    addRelationIds: (model) ->
-        for modelPropName, typeInfo of @modelProperties
-            propValue = model[modelPropName]
-
-            # id is only in descendants of Entity, not in descendants of BaseModel
-            if not @isSubClassOfEntity typeInfo.model
-                continue
-
-            if typeInfo.name is 'MODEL'
-                idPropName = @constructor.camelize(typeInfo.model) + 'Id'  # e.g.  mister-donut => misterDonutId
-                model[idPropName] ?= propValue?.id
-
-            else # typeInfo.name is 'MODELS'
-                idsPropName = @constructor.camelize(typeInfo.model) + 'Ids'  # e.g.  mister-donut => misterDonutIds
-
-                model[idsPropName] ?= 
-                    if propValue
-                        (subModel.id for subModel in propValue)
-                    else
-                        []
+        model.updateRelationIds()
 
         return model
 
@@ -186,9 +142,11 @@ class BaseFactory extends Base
     ###
     modifyValueByPropName: (prop, value) ->
 
-        propertyInfo = @getModelClass().properties
+        Model = @getModelClass()
 
-        if typeInfo = @modelProperties[prop]
+        typeInfo = Model.getPropertyInfo(prop)
+
+        if typeInfo?.model
 
             subModelFactory = @getFacade().createFactory(typeInfo.model)
             SubModel = subModelFactory.getModelClass()
@@ -245,71 +203,6 @@ class BaseFactory extends Base
 
         return idValue
 
-
-
-    ###*
-    create plain object without relational entities
-    descendants of Entity are removed, but not descendants of BaseModel
-    descendants of Entity in descendants of BaseModel are removed ( = recursive)
-
-    FIXME: this method should not be in "factory"
-
-    @method stripRelations
-    @param {Entity|Object} data
-    @return {Object} strippedData data without relational entities
-    ###
-    stripRelations: (data) ->
-
-        facade = @getFacade()
-        strippedData = {}
-
-        for own key, value of data
-            # set non-model properties
-            if not @modelProperties[key]?
-                strippedData[key] = value
-                continue
-
-            modelTypeInfo = @modelProperties[key]
-
-            # strip model if it is descendant of Entity
-            if @isSubClassOfEntity modelTypeInfo.model
-                continue
-
-
-            # strip submodel's relation
-            subModelFactory = facade.createFactory(modelTypeInfo.model)
-
-            if modelTypeInfo.name is 'MODEL'
-                strippedData[key] = subModelFactory.stripRelations value
-
-            else # typeInfo.name is 'MODELS'
-                strippedData[key] = 
-                    for subData in value
-                        subModelFactory.stripRelations subData
-
-        return strippedData
-
-
-
-    ###*
-    return if Model is subclass of Entity
-
-    @method isSubClassOfEntity
-    @private
-    ###
-    isSubClassOfEntity: (modelName) ->
-        ModelClass = @getFacade().getModel modelName
-        return Entity::.isPrototypeOf ModelClass::
-
-
-
-    @camelize: (str) ->
-        (for substr, i in str.split('-')
-            if i is 0
-                substr
-            else
-                substr.charAt(0).toUpperCase() + substr.slice(1)
-        ).join('')
 
 
 

@@ -9,5 +9,6 @@ class Diary extends Entity
         comment : @TYPES.STRING
         author  : @TYPES.MODEL 'member'
         date    : @TYPES.DATE
+        upd     : @TYPES.UPDATED_AT
 
 module.exports = Diary

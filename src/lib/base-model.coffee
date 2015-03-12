@@ -52,15 +52,13 @@ class BaseModel extends Base
     @properties: {}
 
 
-    @getModelProperties: ->
-
-
     ###
     properties to cache, private.
     ###
     @_propsInfo: undefined
     @_propOfCreatedAt: undefined 
     @_propOfUpdatedAt: undefined
+    @_modelProps: undefined
 
 
     ###*
@@ -132,6 +130,26 @@ class BaseModel extends Base
 
 
     ###*
+    get list of properties which contains relational model
+
+    @method getModelProps
+    @public
+    @static
+    @return {Array}
+    ###
+    @getModelProps: ->
+
+        if not @_modelProps?
+
+            @_modelProps = []
+            for prop, typeInfo of @getPropertyInfo()
+                if typeInfo.model?
+                    @_modelProps.push prop
+
+        return @_modelProps
+
+
+    ###*
     create plain object without relational entities
     descendants of Entity are removed, but not descendants of BaseModel
     descendants of Entity in descendants of BaseModel are removed ( = recursive)
@@ -183,10 +201,11 @@ class BaseModel extends Base
     ###
     updateRelationIds: (options = {})->
 
-        for propName, typeInfo of @constructor.getPropertyInfo()
+        for propName in @constructor.getModelProps()
+
+            typeInfo = @constructor.getPropertyInfo(propName)
 
             modelName = typeInfo.model
-            continue if not modelName
 
             propValue = @[propName]
 

@@ -31,7 +31,10 @@ class <%=@Model%> extends Entity
         confirmed   : @TYPES.BOOLEAN
         confirmedAt : @TYPES.DATE
         team        : @TYPES.MODEL 'team'
+        extraTeam   : @TYPES.MODEL 'team', 'exTeamId'
         hobbies     : @TYPES.MODELS 'hobby'
+        newHobbies  : @TYPES.MODELS 'hobby', 'newHobbyIds'
+        otherInfo   : @TYPES.OBJECT
         createdAt   : @TYPES.CREATED_AT
         updatedAt   : @TYPES.UPDATED_AT
     ###

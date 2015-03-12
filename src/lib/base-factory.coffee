@@ -32,7 +32,6 @@ class BaseFactory extends Base
     constructor
 
     @constructor
-    @return
     ###
     constructor: ->
 
@@ -70,9 +69,10 @@ class BaseFactory extends Base
     @method createFromObject
     @public
     @param {Object} obj
+    @param {BaseModel} baseModel fallback properties
     @return {BaseModel} model
     ###
-    createFromObject: (obj) ->
+    createFromObject: (obj, baseModel) ->
 
         obj = @beforeCreateFromObject obj
 
@@ -82,7 +82,6 @@ class BaseFactory extends Base
 
         ModelClass = @getModelClass()
         model = new ModelClass()
-        model[prop] = undefined for prop of ModelClass.properties
 
         for own prop, value of obj
 
@@ -92,6 +91,12 @@ class BaseFactory extends Base
             else
                 model[prop] = @modifyValueByPropName(prop, value)
 
+        if baseModel
+            for prop of ModelClass.properties
+                if not model[prop]?
+                    model[prop] ?= baseModel[prop]
+        else
+            model[prop] ?= undefined for prop of ModelClass.properties
 
 
         model = @afterCreateModel model

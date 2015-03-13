@@ -4,7 +4,7 @@
 ###*
 error thrown by base-domain module
 
-@class DoctorRegistrationService
+@class DomainError
 @extends Error
 @module base-domain
 

@@ -608,6 +608,8 @@
             "file": "src/lib/base-model.coffee",
             "line": 308,
             "description": "inherit value of anotherModel",
+            "itemtype": "method",
+            "name": "inherit",
             "params": [
                 {
                     "name": "anotherModel",
@@ -624,7 +626,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 321,
+            "line": 323,
             "description": "create plain object without relational entities\ndescendants of Entity are removed, but not descendants of BaseModel\ndescendants of Entity in descendants of BaseModel are removed ( = recursive)",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -637,7 +639,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 364,
+            "line": 366,
             "description": "assert given prop is model prop",
             "itemtype": "method",
             "name": "assertSubModelProp",
@@ -648,7 +650,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 382,
+            "line": 384,
             "description": "return if Model is subclass of Entity",
             "itemtype": "method",
             "name": "isSubClassOfEntity",
@@ -1485,10 +1487,6 @@
         {
             "message": "Missing item type\nset model prop",
             "line": " src/lib/base-model.coffee:172"
-        },
-        {
-            "message": "Missing item type\ninherit value of anotherModel",
-            "line": " src/lib/base-model.coffee:308"
         },
         {
             "message": "Missing item type\nconstructor",

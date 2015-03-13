@@ -2,7 +2,7 @@
 
 simple module to help build Domain-Driven Design"
 
-[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v0.3.4/index.html)
+[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v0.3.5/index.html)
 
 ![concept](https://github.com/CureApp/base-domain/blob/master/base-domain-classes.png "base-domain-classes")
 
@@ -93,6 +93,7 @@ hospitalRepository.find(where: name: 'CureApp Hp.').then (hospitals)->
 ```
 
 ## API documentations
+- [v0.3.5](http://cureapp.github.io/base-domain/doc/v0.3.5/index.html)
 - [v0.3.4](http://cureapp.github.io/base-domain/doc/v0.3.4/index.html)
 - [v0.3.3](http://cureapp.github.io/base-domain/doc/v0.3.3/index.html)
 

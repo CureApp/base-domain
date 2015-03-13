@@ -93,6 +93,7 @@ hospitalRepository.find(where: name: 'CureApp Hp.').then (hospitals)->
 ```
 
 ## API documentations
+- [v0.3.4](http://cureapp.github.io/base-domain/doc/v0.3.4/index.html)
 - [v0.3.3](http://cureapp.github.io/base-domain/doc/v0.3.3/index.html)
 
 

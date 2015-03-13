@@ -91,7 +91,7 @@ class BaseRepository extends Base
         @appendTimeStamp(data, isCreate)
 
         client.upsert(data).then (obj) =>
-            return @factory.createFromObject(obj, entity)
+            return entity.set obj
 
 
     ###*

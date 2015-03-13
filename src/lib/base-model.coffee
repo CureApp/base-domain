@@ -149,12 +149,166 @@ class BaseModel extends Base
         return @_modelProps
 
 
+
+    ###*
+    set value to prop
+    @return {BaseModel} this
+    ###
+    set: (prop, value) ->
+        if typeof prop is 'object'
+            @set(k, v) for k, v of prop
+            return @
+
+        typeInfo = @constructor.getPropertyInfo(prop)
+
+        if typeInfo?.model
+            @setRelatedModel(prop, value)
+        else
+            @setNonModelProp(prop, value)
+
+        return @
+
+
+    ###*
+    set model prop
+    @return {BaseModel} this
+    ###
+    setNonModelProp: (prop, value) ->
+        @[prop] = value
+
+
+
+    ###*
+    synchronize relation columns and relationId columns
+
+    @param {Object} [options]
+    @param {Boolean} [options.force]
+    @method updateRelationIds
+    ###
+    updateRelationIds: (options = {})->
+
+        for propName in @constructor.getModelProps()
+
+            typeInfo = @constructor.getPropertyInfo(propName)
+
+            modelName = typeInfo.model
+
+            propValue = @[propName]
+
+            @setRelatedModel(propName, propValue)
+
+        return @
+
+
+    ###*
+    set related model(s)
+
+    @method setRelatedModel
+    @param {String} prop property name of the related model
+    @param {Entity|Array<Entity>} submodel
+    @return {BaseModel} this
+    ###
+    setRelatedModel: (prop, submodel) ->
+
+        @assertSubModelProp(prop, 'setRelatedModel(s)')
+
+        typeInfo = @constructor.getPropertyInfo(prop)
+        modelName = typeInfo.model
+
+        @[prop] = submodel
+
+        # id(s) are not added if submodel is not subclass of entity
+        if not @isSubClassOfEntity modelName
+            return @
+
+
+        idPropName = typeInfo.idPropName
+
+        if typeInfo.name is 'MODEL'
+            @[idPropName] = submodel?.id
+        else # if typeInfo.name is 'MODELS'
+            @[idPropName] = 
+                if submodel
+                    (sub.id for sub in submodel)
+                else
+                    []
+
+        return @
+
+
+    ###*
+    alias for setRelatedModel
+
+    @method setRelatedModels
+    ###
+    setRelatedModels: (prop, submodels) -> @setRelatedModel(prop, submodels)
+
+
+
+    ###*
+    unset related model(s)
+
+    @param {String} prop property name of the related models
+    @return {BaseModel} this
+    @method setRelatedModels
+    ###
+    unsetRelatedModel: (prop) ->
+        @assertSubModelProp(prop, 'unsetRelatedModel(s)')
+
+        typeInfo = @constructor.getPropertyInfo(prop)
+        modelName = typeInfo.model
+        idPropName = typeInfo.idPropName
+
+        @[prop] = undefined
+
+        if typeInfo.name is 'MODEL'
+            @[idPropName] = undefined
+        else
+            @[idPropName] = []
+
+        return @
+
+
+    ###*
+    alias for unsetRelatedModel
+
+    @method unsetRelatedModels
+    ###
+    unsetRelatedModels: (prop, submodels) -> @unsetRelatedModel(prop, submodels)
+
+
+    ###*
+    add related models
+
+    @param {String} prop property name of the related models
+    @return {BaseModel} this
+    @method addRelatedModels
+    ###
+    addRelatedModels: (prop, submodels...) ->
+        @assertSubModelProp(prop, 'addRelatedModels')
+
+        typeInfo = @constructor.getPropertyInfo(prop)
+        modelName = typeInfo.model
+
+        if typeInfo.name isnt 'MODELS'
+            throw @getFacade().error """
+                #{@constructor.name}.addRelatedModels(#{prop})
+                #{prop} is not a prop for models.
+            """
+        idPropName = typeInfo.idPropName
+        @[prop] ?= []
+        @[prop].push submodel for submodel in submodels
+        @[idPropName] ?= []
+        @[idPropName].push submodel.id for submodel in submodels
+
+        return @
+
+
+
     ###*
     create plain object without relational entities
     descendants of Entity are removed, but not descendants of BaseModel
     descendants of Entity in descendants of BaseModel are removed ( = recursive)
-
-    FIXME: this method should not be in "factory"
 
     @method toPlainObject
     @return {Object} plainObject
@@ -192,143 +346,15 @@ class BaseModel extends Base
         return plainObject
 
 
-    ###*
-    synchronize relation columns and relationId columns
-
-    @param {Object} [options]
-    @param {Boolean} [options.force]
-    @method updateRelationIds
-    ###
-    updateRelationIds: (options = {})->
-
-        for propName in @constructor.getModelProps()
-
-            typeInfo = @constructor.getPropertyInfo(propName)
-
-            modelName = typeInfo.model
-
-            propValue = @[propName]
-
-            # should be subclass of entity
-            if not @isSubClassOfEntity modelName
-                continue
-
-            @setRelatedModel(propName, propValue)
-
-        return @
 
 
     ###*
-    set related model(s)
+    assert given prop is model prop
 
-    @method setRelatedModel
-    @param {String} prop property name of the related model
-    @param {Entity|Array<Entity>} submodel
-    @return {BaseModel} this
-    ###
-    setRelatedModel: (prop, submodel) ->
-
-        @assertEntityProp(prop, 'setRelatedModel(s)')
-
-        typeInfo = @constructor.getPropertyInfo(prop)
-        modelName = typeInfo.model
-        idPropName = typeInfo.idPropName
-
-        # when idProp is set and no submodel given, do nothing
-        # call "unsetRelatedModel" to unset idProp
-        if @[idPropName]? and not submodel?
-            return @
-
-        @[prop] = submodel
-
-        if typeInfo.name is 'MODEL'
-            @[idPropName] = submodel?.id
-        else
-            @[idPropName] = 
-                if submodel
-                    (sub.id for sub in submodel)
-                else
-                    []
-
-        return @
-
-
-    ###*
-    alias for setRelatedModel
-
-    @method setRelatedModels
-    ###
-    setRelatedModels: (prop, submodels) -> @setRelatedModel(prop, submodels)
-
-
-
-    ###*
-    unset related model(s)
-
-    @param {String} prop property name of the related models
-    @return {BaseModel} this
-    @method setRelatedModels
-    ###
-    unsetRelatedModel: (prop) ->
-        @assertEntityProp(prop, 'unsetRelatedModel(s)')
-
-        typeInfo = @constructor.getPropertyInfo(prop)
-        modelName = typeInfo.model
-        idPropName = typeInfo.idPropName
-
-        @[prop] = undefined
-
-        if typeInfo.name is 'MODEL'
-            @[idPropName] = undefined
-        else
-            @[idPropName] = []
-
-        return @
-
-
-    ###*
-    alias for unsetRelatedModel
-
-    @method unsetRelatedModels
-    ###
-    unsetRelatedModels: (prop, submodels) -> @unsetRelatedModel(prop, submodels)
-
-
-    ###*
-    add related models
-
-    @param {String} prop property name of the related models
-    @return {BaseModel} this
-    @method addRelatedModels
-    ###
-    addRelatedModels: (prop, submodels...) ->
-        @assertEntityProp(prop, 'addRelatedModels')
-
-        typeInfo = @constructor.getPropertyInfo(prop)
-        modelName = typeInfo.model
-
-        if typeInfo.name isnt 'MODELS'
-            throw @getFacade().error """
-                #{@constructor.name}.addRelatedModels(#{prop})
-                #{prop} is not a prop for models.
-            """
-        idPropName = typeInfo.idPropName
-        @[prop] ?= []
-        @[prop].push submodel for submodel in submodels
-        @[idPropName] ?= []
-        @[idPropName].push submodel.id for submodel in submodels
-
-        return @
-
-
-
-    ###*
-    assert given prop is entity prop
-
-    @method assertEntityProp
+    @method assertSubModelProp
     @private
     ###
-    assertEntityProp: (prop, method) ->
+    assertSubModelProp: (prop, method) ->
 
         typeInfo = @constructor.getPropertyInfo(prop)
 
@@ -337,17 +363,6 @@ class BaseModel extends Base
                 #{@constructor.name}.#{method}(#{prop})
                 #{prop} is not a prop for model.
             """
-
-        modelName = typeInfo.model
-
-        # should be subclass of entity
-        if not @isSubClassOfEntity modelName
-            throw @getFacade().error """
-                #{@constructor.name}.#{method}(#{prop})
-                #{prop} is a prop for model, but not subclass of Entity.
-            """
-        return
-
 
 
 

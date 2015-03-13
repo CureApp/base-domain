@@ -112,6 +112,20 @@ class BaseRepository extends Base
 
 
     ###*
+    alias for get()
+
+    @method getById
+    @public
+    @param {any} id
+    @param {ResourceClientInterface} [client=@client]
+    @return {Promise(Entity)} entity
+    ###
+    getById: (id, client) ->
+        @get(id, client)
+
+
+
+    ###*
     Find all model instances that match params
 
     @method query

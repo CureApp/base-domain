@@ -2,5 +2,5 @@
 version: 0.3.3
 files:
   package.json: '"version": "%.%.%",'
-  Gruntfile.coffee: "currentVersion = 'v%.%.%'"
-  README.md: "[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v%.%.%/index.html)"
+  Gruntfile.coffee: currentVersion = 'v%.%.%'
+  README.md: '[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v%.%.%/index.html)'

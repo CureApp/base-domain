@@ -35,6 +35,31 @@ describe 'BaseRepository', ->
                 expect(new Date(arg1.mUpdatedAt)).to.be.instanceof Date
                 done()
 
+        it 'createdAt stays original', (done) ->
+
+            memberRepo = facade.createRepository('member')
+            now = new Date()
+
+            memberRepo.save(firstName: 'Shin', mCreatedAt: now).then (model) =>
+                arg1 = model.arg1 # mock prop
+                expect(arg1).to.have.property('mCreatedAt')
+                expect(arg1.mCreatedAt).to.equal now
+                done()
+
+
+        it 'updatedAt changes for each saving', (done) ->
+
+            memberRepo = facade.createRepository('member')
+            now = new Date()
+
+            memberRepo.save(firstName: 'Shin', mUpdatedAt: now).then (model) =>
+                arg1 = model.arg1 # mock prop
+                expect(arg1).to.have.property('mCreatedAt')
+                expect(arg1.mUpdatedAt).not.to.equal now
+                done()
+
+
+
         it 'returns instance of Model with relation ids', (done) ->
 
             memberFactory = facade.createFactory('member')

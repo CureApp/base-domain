@@ -922,7 +922,7 @@
         {
             "file": "src/lib/base-repository.coffee",
             "line": 199,
-            "description": "add createdAt, updatedAt to given data",
+            "description": "add createdAt, updatedAt to given data\n- _createdAt_ will not be overriden if already set.\n- _updatedAt_ will be overriden for each time",
             "itemtype": "method",
             "name": "appendTimeStamp",
             "access": "protected",

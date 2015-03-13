@@ -198,6 +198,8 @@ class BaseRepository extends Base
 
     ###*
     add createdAt, updatedAt to given data
+    - createdAt will not be overriden if already set.
+    - updatedAt will be overriden for each time
 
     @method appendTimeStamp
     @protected
@@ -213,7 +215,7 @@ class BaseRepository extends Base
 
 
         if isCreate and propCreatedAt
-            data[propCreatedAt] = new Date().toISOString()
+            data[propCreatedAt] ?= new Date().toISOString()
 
         if propUpdatedAt
             data[propUpdatedAt] = new Date().toISOString()

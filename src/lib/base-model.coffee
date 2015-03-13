@@ -306,6 +306,19 @@ class BaseModel extends Base
 
 
     ###*
+    inherit value of anotherModel
+    @param {BaseModel} anotherModel
+    @return {BaseModel} this
+    ###
+    inherit: (anotherModel) ->
+        for own k, v of anotherModel
+            if v?
+                @[k] = v
+
+        return @
+
+
+    ###*
     create plain object without relational entities
     descendants of Entity are removed, but not descendants of BaseModel
     descendants of Entity in descendants of BaseModel are removed ( = recursive)

@@ -10,6 +10,15 @@ gives them @getFacade() method.
 ###
 class Base
 
+    ###*
+    get facade
+
+    the implementation is in Facade#requre()
+
+
+    @method getFacade
+    @return {Facade}
+    ###
     getFacade : ->
         throw new Error """
             Facade is not created yet, or you required domain classes not from Facade.

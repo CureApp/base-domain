@@ -75,7 +75,7 @@ class BaseRepository extends Base
     @public
     @param {Entity|Object} entity
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise<Entity>} entity (different instance from input)
+    @return {Promise(Entity)} entity (the same instance from input, if entity given,)
     ###
     save: (entity, client) ->
         if entity not instanceof Entity
@@ -101,7 +101,7 @@ class BaseRepository extends Base
     @public
     @param {any} id
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise<Entity>} entity
+    @return {Promise(Entity)} entity
     ###
     get: (id, client) ->
         client ?= @client
@@ -117,7 +117,7 @@ class BaseRepository extends Base
     @public
     @param {Object} [params] query parameters
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise<Array>} array of entities
+    @return {Promise(Array(Entity))} array of entities
     ###
     query: (params, client) ->
         client ?= @client
@@ -132,7 +132,7 @@ class BaseRepository extends Base
     @public
     @param {Object} [params] query parameters
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise<Entity>} entity
+    @return {Promise(Entity)} entity
     ###
     singleQuery: (params, client) ->
         client ?= @client
@@ -148,7 +148,7 @@ class BaseRepository extends Base
     @public
     @param {Entity} entity
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise<Boolean>} isDeleted
+    @return {Promise(Boolean)} isDeleted
     ###
     delete: (entity, client) ->
         client ?= @client
@@ -164,7 +164,7 @@ class BaseRepository extends Base
     @param {any} id id of the entity to update
     @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise<Entity>} updated entity
+    @return {Promise(Entity)} updated entity
     ###
     update: (id, data, client) ->
         if data instanceof Entity

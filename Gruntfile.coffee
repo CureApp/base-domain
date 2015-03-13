@@ -1,4 +1,4 @@
-
+currentVersion = 'v0.3.3'
 module.exports = (grunt) ->
 
     grunt.config.init
@@ -32,7 +32,7 @@ module.exports = (grunt) ->
                 extension: '.coffee'
             master:
                 options:
-                    outdir: 'doc'
+                    outdir: "doc/#{currentVersion}"
 
 
     grunt.loadNpmTasks 'grunt-mocha-chai-sinon'

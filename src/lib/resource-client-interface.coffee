@@ -22,7 +22,7 @@ class ResourceClientInterface
     @method create
     @public
     @param {Object} data
-    @return {Promise<Object>}
+    @return {Promise(Object)}
     ###
     create: (data = {}) ->
         @mock(data)
@@ -35,7 +35,7 @@ class ResourceClientInterface
     @method upsert
     @public
     @param {Object} data
-    @return {Promise<Object>}
+    @return {Promise(Object)}
     ###
     upsert: (data = {}) ->
         @mock(data)
@@ -47,7 +47,7 @@ class ResourceClientInterface
     @method findById
     @public
     @param {String} id
-    @return {Promise<Object>}
+    @return {Promise(Object)}
     ###
     findById: (id) ->
         @mock(id)
@@ -60,7 +60,7 @@ class ResourceClientInterface
     @method find
     @public
     @param {Object} filter
-    @return {Promise<Array>}
+    @return {Promise(Array(Object))}
     ###
     find: (filter) ->
         return Promise.resolve([{id: 'dummy', mock: true}])
@@ -71,7 +71,7 @@ class ResourceClientInterface
     @method findOne
     @public
     @param {Object} filter
-    @return {Promise<Object>}
+    @return {Promise(Object)}
     ###
     findOne: (filter) ->
         @mock(filter)
@@ -95,7 +95,7 @@ class ResourceClientInterface
     @method updateAttributes
     @public
     @param {Object} data
-    @return {Promise<Object>}
+    @return {Promise(Object)}
     ###
     updateAttributes: (id, data) ->
         @mock(id, data)

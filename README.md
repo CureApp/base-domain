@@ -2,6 +2,8 @@
 
 simple module to help build Domain-Driven Design"
 
+[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v0.3.3/index.html)
+
 ![concept](https://github.com/CureApp/base-domain/blob/master/base-domain-classes.png "base-domain-classes")
 
 ## installation
@@ -82,7 +84,16 @@ Hospital = domain.getModel('hospital')
 hospitalFactory = domain.createFactory('hospital')
 hospitalRepository = domain.createRepository('hospital')
 
+hosp = hospitalFactory.createFromObject(name: 'Suzuki Clinic')
+
+
 hospitalRepository.find(where: name: 'CureApp Hp.').then (hospitals)->
     console.log hospitals
+
 ```
+
+## API documentations
+- [v0.3.3](http://cureapp.github.io/base-domain/doc/v0.3.3/index.html)
+
+
 

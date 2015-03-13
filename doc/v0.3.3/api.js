@@ -5,7 +5,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "BaseFactory",
         "BaseModel",
         "BaseRepository",
-        "DoctorRegistrationService",
+        "DomainError",
         "Entity",
         "Facade",
         "ResourceClientInterface",

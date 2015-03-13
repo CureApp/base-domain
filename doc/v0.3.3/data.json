@@ -43,7 +43,7 @@
                 "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set": 1
             },
             "classes": {
-                "DoctorRegistrationService": 1
+                "DomainError": 1
             },
             "fors": {},
             "namespaces": {}
@@ -114,7 +114,7 @@
             "name": "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set",
             "submodules": {},
             "classes": {
-                "DoctorRegistrationService": 1
+                "DomainError": 1
             },
             "fors": {},
             "namespaces": {},
@@ -183,9 +183,9 @@
             "line": 3,
             "description": "parent class of model, factory and repository.\n\ngives them @getFacade() method."
         },
-        "DoctorRegistrationService": {
-            "name": "DoctorRegistrationService",
-            "shortname": "DoctorRegistrationService",
+        "DomainError": {
+            "name": "DomainError",
+            "shortname": "DomainError",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -920,7 +920,7 @@
             "name": "reason",
             "type": "{String}",
             "reason": "",
-            "class": "DoctorRegistrationService",
+            "class": "DomainError",
             "module": "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set"
         },
         {

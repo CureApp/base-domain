@@ -351,12 +351,19 @@ class BaseModel extends Base
 
             # strip submodel's relation
             if typeInfo.name is 'MODEL'
-                plainObject[prop] = value.toPlainObject()
+                if value instanceof BaseModel
+                    plainObject[prop] = value.toPlainObject()
+                else
+                    plainObject[prop] = value
 
             else # typeInfo.name is 'MODELS'
                 plainObject[prop] = 
                     for subData in value
-                        subData.toPlainObject()
+                        if subData instanceof BaseModel
+                            subData.toPlainObject()
+                        else
+                            subData
+
 
         return plainObject
 

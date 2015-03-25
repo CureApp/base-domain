@@ -1,5 +1,5 @@
 
-Facade = require('../src/lib/facade')
+Facade = require('./base-domain')
 
 describe 'Facade', ->
 

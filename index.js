@@ -1,1 +1,1 @@
-module.exports = require('./src/lib/facade');
+module.exports = require('./dist/lib/facade');

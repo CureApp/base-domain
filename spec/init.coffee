@@ -1,3 +1,3 @@
 
-module.exports = require('../src/lib/facade').createInstance
+module.exports = require('./base-domain').createInstance
     dirname: __dirname + '/domain'

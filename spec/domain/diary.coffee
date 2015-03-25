@@ -1,5 +1,5 @@
 
-Entity = require('../../src/lib/facade').Entity
+Entity = require('../base-domain').Entity
 
 
 class Diary extends Entity

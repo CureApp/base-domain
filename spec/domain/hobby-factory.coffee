@@ -1,5 +1,5 @@
 
-BaseFactory = require('../../src/lib/facade').BaseFactory
+BaseFactory = require('../base-domain').BaseFactory
 
 
 class HobbyFactory extends BaseFactory

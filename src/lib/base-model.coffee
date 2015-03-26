@@ -374,10 +374,21 @@ class BaseModel extends Base
     include all relational models if not set
 
     @method includeAll
-    @return {Object} plainObject
+    @param {Object} [options]
+    @param {Boolean|Object} [options.recursive] recursively include models or not. unstable.
+    @return {Promise}
     ###
-    include: ->
+    include: (options = {}) ->
         facade = @getFacade()
+
+        if options.recursive
+            modelName = @constructor.getModelName()
+
+            modelPool = options.modelPool ? {}
+
+            modelPool[modelName] = {}
+            modelPool[modelName][@id] = @ if @id?
+
 
         promises =
             for m in @constructor.getModelProps()
@@ -386,20 +397,58 @@ class BaseModel extends Base
 
                     if not @[modelProp]? and (relId = @[propInfo.idPropName])? and @isSubClassOfEntity propInfo.model
 
-
                         repo = facade.createRepository(propInfo.model)
 
                         promise =
                             if Array.isArray relId
-                                repo.query(where: id: inq: relId)
+                                relIds = relId
+                                objs = []
+                                novelRelIds = []
+
+                                for relId in relIds
+                                    if modelPool[propInfo.model]?[relId]?
+                                        objs.push modelPool[propInfo.model][relId]
+                                    else
+                                        novelRelIds.push relId
+
+                                if objs.length is relIds.length
+                                    Promise.resolve(objs)
+                                else
+                                    repo.query(where: id: inq: novelRelIds).then (results) ->
+                                        objs = objs.concat results
+
                             else
+                                if modelPool[propInfo.model]?[relId]?
+                                    Promise.resolve(modelPool[propInfo.model][relId])
                                 repo.get(relId)
 
                         promise.then (val) =>
                             @set modelProp, val
                         .catch (e) ->
 
-        Promise.all promises
+
+        Promise.all(promises).then =>
+            unless options.recursive
+                return true
+
+
+            for modelProp in @constructor.getModelProps()
+                propInfo = @constructor.getPropertyInfo(modelProp)
+
+                if propInfo.name is 'MODELS' and Array.isArray @[modelProp]
+                    for model in @[modelProp]
+                        console.log model
+                        if model instanceof BaseModel
+                            model.include(recursive: true, modelPool: modelPool)
+
+                else
+                    model = @[modelProp]
+                    if model instanceof BaseModel
+                        model.include(recursive: true, modelPool: modelPool)
+
+
+
+
 
 
     ###*
@@ -418,6 +467,8 @@ class BaseModel extends Base
                 #{prop} is not a prop for model.
             """
 
+    @getModelName: ->
+        @name.replace(/([A-Z])/g, (st)-> '-' + st.charAt(0).toLowerCase()).slice(1)
 
 
     ###*
@@ -429,6 +480,7 @@ class BaseModel extends Base
     isSubClassOfEntity: (modelName) ->
         ModelClass = @getFacade().getModel modelName
         return ModelClass.isEntity
+
 
 
 

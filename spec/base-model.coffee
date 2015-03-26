@@ -193,12 +193,15 @@ describe 'BaseModel', ->
 
     describe 'include', ->
 
-        it 'includes all submodels', ->
+        it 'includes all submodels', (done) ->
             mem = memberFactory.createFromObject
+                id: 11
                 hobbyIds: [1,2,3]
 
-            mem.include().then ->
+            mem.include(recursive: true).then ->
                 expect(mem).to.have.property('hobbies')
                 expect(mem.hobbies[0]).to.be.instanceof Hobby
                 done()
+            .catch (e) ->
+                done e
 

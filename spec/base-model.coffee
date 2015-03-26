@@ -191,3 +191,14 @@ describe 'BaseModel', ->
             expect(mem.newHobbies[1]).to.equal newHobby2
             expect(mem.newHobbyIds).to.eql [4,5]
 
+    describe 'include', ->
+
+        it 'includes all submodels', ->
+            mem = memberFactory.createFromObject
+                hobbyIds: [1,2,3]
+
+            mem.include().then ->
+                expect(mem).to.have.property('hobbies')
+                expect(mem.hobbies[0]).to.be.instanceof Hobby
+                done()
+

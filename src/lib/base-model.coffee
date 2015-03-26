@@ -3,6 +3,8 @@
 TYPES = require './types'
 Base  = require './base'
 
+Promise = require('es6-promise').Promise
+
 
 ###*
 Base model class of DDD pattern.
@@ -368,6 +370,36 @@ class BaseModel extends Base
         return plainObject
 
 
+    ###*
+    include all relational models if not set
+
+    @method includeAll
+    @return {Object} plainObject
+    ###
+    include: ->
+        facade = @getFacade()
+
+        promises =
+            for m in @constructor.getModelProps()
+                do (modelProp = m) =>
+                    propInfo = @constructor.getPropertyInfo(modelProp)
+
+                    if not @[modelProp]? and (relId = @[propInfo.idPropName])? and @isSubClassOfEntity propInfo.model
+
+
+                        repo = facade.createRepository(propInfo.model)
+
+                        promise =
+                            if Array.isArray relId
+                                repo.query(where: id: inq: relId)
+                            else
+                                repo.get(relId)
+
+                        promise.then (val) =>
+                            @set modelProp, val
+                        .catch (e) ->
+
+        Promise.all promises
 
 
     ###*

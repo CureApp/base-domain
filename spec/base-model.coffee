@@ -198,7 +198,8 @@ describe 'BaseModel', ->
                 id: 11
                 hobbyIds: [1,2,3]
 
-            mem.include(recursive: true).then ->
+            mem.include(recursive: true).then (model) ->
+                expect(mem).to.equal model
                 expect(mem).to.have.property('hobbies')
                 expect(mem.hobbies[0]).to.be.instanceof Hobby
                 done()

@@ -376,7 +376,7 @@ class BaseModel extends Base
     @method includeAll
     @param {Object} [options]
     @param {Boolean|Object} [options.recursive] recursively include models or not. unstable.
-    @return {Promise}
+    @return {Promise(BaseModel)} self
     ###
     include: (options = {}) ->
         facade = @getFacade()
@@ -429,25 +429,29 @@ class BaseModel extends Base
 
         Promise.all(promises).then =>
             unless options.recursive
-                return true
+                return @
 
+            subPromises = []
 
             for modelProp in @constructor.getModelProps()
                 propInfo = @constructor.getPropertyInfo(modelProp)
 
                 if propInfo.name is 'MODELS' and Array.isArray @[modelProp]
                     for model in @[modelProp]
-                        console.log model
                         if model instanceof BaseModel
-                            model.include(recursive: true, modelPool: modelPool)
+                            promise = model.include(recursive: true, modelPool: modelPool)
+                            subPromises.push promise
 
                 else
                     model = @[modelProp]
                     if model instanceof BaseModel
-                        model.include(recursive: true, modelPool: modelPool)
+                        promise = model.include(recursive: true, modelPool: modelPool)
+                        subPromises.push promise
 
+            return Promise.all subPromises
 
-
+        .then =>
+            return @
 
 
 

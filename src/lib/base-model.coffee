@@ -381,10 +381,10 @@ class BaseModel extends Base
     include: (options = {}) ->
         facade = @getFacade()
 
+        modelPool = options.modelPool ? {}
+
         if options.recursive
             modelName = @constructor.getModelName()
-
-            modelPool = options.modelPool ? {}
 
             modelPool[modelName] = {}
             modelPool[modelName][@id] = @ if @id?

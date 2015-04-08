@@ -2,7 +2,7 @@
 
 simple module to help build Domain-Driven Design"
 
-[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v0.3.10/index.html)
+[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v0.4.0/index.html)
 
 ![concept](https://github.com/CureApp/base-domain/blob/master/base-domain-classes.png "base-domain-classes")
 

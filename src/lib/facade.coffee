@@ -171,7 +171,7 @@ class Facade
     @param {String} [options.dataDir='./data'] directory to have fixture data files
     @param {String} [options.tsvDir='./tsv'] directory to have TSV files
     @param {Array(String)} [options.models=null] model names to insert. default: all models
-    @return {Promise}
+    @return {Promise(Object)} dataPool inserted data
     ###
     insertFixtures: (options = {}) ->
 

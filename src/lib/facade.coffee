@@ -177,7 +177,8 @@ class Facade
 
         Fixture = require './fixture'
         fixture = new Fixture(@, options)
-        fixture.insert(options.models)
+        fixture.insert(options.models).then ->
+            return fixture.dataPool
 
 
 

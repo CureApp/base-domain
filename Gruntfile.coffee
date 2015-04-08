@@ -8,8 +8,9 @@ module.exports = (grunt) ->
                 src: [
                     'spec/**/*.coffee'
                     '!spec/domain/**/*'
-                    '!spec/base-domain.coffeee'
-                    '!spec/init.coffeee'
+                    '!spec/base-domain.coffee'
+                    '!spec/init.coffee'
+                    '!spec/fixtures/**/*'
                 ]
                 options:
                     ui: 'bdd'

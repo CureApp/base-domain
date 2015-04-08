@@ -162,6 +162,25 @@ class Facade
         return e instanceof DomainError
 
 
+    ###*
+    insert fixture data
+    (Node.js only)
+
+    @method insertFixtures
+    @param {Object} [options]
+    @param {String} [options.dataDir='./data'] directory to have fixture data files
+    @param {String} [options.tsvDir='./tsv'] directory to have TSV files
+    @param {Array(String)} [options.models=null] model names to insert. default: all models
+    @return {Promise}
+    ###
+    insertFixtures: (options = {}) ->
+
+        Fixture = require './fixture'
+        fixture = new Fixture(@, options)
+        fixture.insert(options.models)
+
+
+
 
     @Base           : require './base'
     @BaseModel      : require './base-model'

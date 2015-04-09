@@ -78,6 +78,18 @@ class ResourceClientInterface
 
 
     ###*
+    Destroy model instance
+
+    @method destroyById
+    @public
+    @param {Object} data
+    @return {Promise}
+    ###
+    destroy: (data) ->
+        Promise.resolve({})
+
+
+    ###*
     Destroy model instance with the specified ID.
 
     @method destroyById

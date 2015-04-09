@@ -167,7 +167,7 @@ class BaseRepository extends Base
     ###
     delete: (entity, client) ->
         client ?= @client
-        client.destroyById(entity.id).then =>
+        client.destroy(entity).then =>
             return true
 
 

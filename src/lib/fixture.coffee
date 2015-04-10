@@ -15,6 +15,7 @@ class Fixture
     @constructor
     @param {Object} [options]
     @param {String} [options.dirname='./fixtures'] directory to have fixture files. /data, /tsvs should be included in the directory.
+    @param {Object} [options.data={}] default data, merged to dataPool
     @param {String} [options.debug] if true, shows debug log
     ###
     constructor: (@facade, options = {}) ->
@@ -36,8 +37,13 @@ class Fixture
 
 
         # initial data pool
-        @dataPool = {}
-        @dataPool[modelName] = {} for modelName of @fxModelMap
+        @dataPool =
+            if options.data? and typeof options.data is 'object'
+                JSON.parse JSON.stringify options.data
+            else
+                {}
+
+        @dataPool[modelName] ?= {} for modelName of @fxModelMap
 
 
     ###*

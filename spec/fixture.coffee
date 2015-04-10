@@ -14,7 +14,7 @@ describe 'Fixture', ->
         it 'inserts data', (done) ->
             facade = Facade.createInstance(dirname: __dirname + '/domain')
 
-            facade.insertFixtures(dirname: __dirname + '/fixtures/sample', debug: true).then (dataPool) ->
+            facade.insertFixtures(dirname: __dirname + '/fixtures/sample', debug: true, data: abc: 1).then (dataPool) ->
                 expect(dataPool).to.have.property 'hobby'
                 expect(dataPool).to.have.property 'member'
                 expect(dataPool.member).to.have.property 'shinout'

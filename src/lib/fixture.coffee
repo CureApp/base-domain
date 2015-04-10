@@ -14,7 +14,7 @@ class Fixture
     ###*
     @constructor
     @param {Object} [options]
-    @param {String} [options.dirname='./fixtures'] directory to have fixture files. /data, /tsvs should be included in the directory.
+    @param {String|Array} [options.dirname='./fixtures'] director(y|ies) to have fixture files. /data, /tsvs should be included in the directory.
     @param {Object} [options.data={}] default data, merged to dataPool
     @param {String} [options.debug] if true, shows debug log
     ###
@@ -25,15 +25,24 @@ class Fixture
         # loading model files
         @fxModelMap = {}
 
-        @dirname = options.dirname ? __dirname + '/fixtures'
+        dirnames =
+            if options.dirname?
+                if Array.isArray options.dirname
+                    options.dirname
+                else
+                    [ options.dirname ]
 
-        files = fs.readdirSync(@dirname + '/data')
+            else
+                [ __dirname + '/fixtures' ]
 
-        for file in files
-            modelName = file.split('.').shift()
-            setting = require(@dirname + '/data/' + file)
+        for dirname in dirnames
+            files = fs.readdirSync(dirname + '/data')
 
-            @fxModelMap[modelName] = new FixtureModel(@, modelName, setting)
+            for file in files
+                modelName = file.split('.').shift()
+                setting = require(dirname + '/data/' + file)
+
+                @fxModelMap[modelName] = new FixtureModel(@, modelName, setting, dirname)
 
 
         # initial data pool
@@ -167,7 +176,7 @@ class FixtureModel
     ###*
     @constructor
     ###
-    constructor: (@fx, @name, setting = {}) ->
+    constructor: (@fx, @name, setting = {}, @dirname) ->
 
         @dependencies = setting.dependencies ? []
         @data = setting.data ? ->
@@ -226,7 +235,7 @@ class FixtureModel
 
         objs = {}
 
-        lines = fs.readFileSync(@fx.dirname + '/tsvs/' + filename, 'utf8').split('\n')
+        lines = fs.readFileSync(@dirname + '/tsvs/' + filename, 'utf8').split('\n')
 
         tsv = (line.split('\t') for line in lines)
 

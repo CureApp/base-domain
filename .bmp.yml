@@ -4,3 +4,4 @@ files:
   package.json: '"version": "%.%.%",'
   Gruntfile.coffee: currentVersion = 'v%.%.%'
   README.md: '[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v%.%.%/index.html)'
+  tools/distribute: VERSION="%.%.%"

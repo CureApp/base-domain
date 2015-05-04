@@ -73,7 +73,7 @@ class Fixture
     @method insert
     @return {Promise}
     ###
-    insert: (names)->
+    insert: (names) ->
 
         names ?= (name for name of @fxModelMap)
 

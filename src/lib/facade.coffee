@@ -46,7 +46,7 @@ class Facade
     @param {String} name
     @return {Class}
     ###
-    getModel: (name)->
+    getModel: (name) ->
         return @require(name)
 
 
@@ -57,7 +57,7 @@ class Facade
     @param {String} name
     @return {Class}
     ###
-    getFactory: (name)->
+    getFactory: (name) ->
         return @require("#{name}-factory")
 
 
@@ -68,7 +68,7 @@ class Facade
     @param {String} name
     @return {Class}
     ###
-    getRepository: (name)->
+    getRepository: (name) ->
         return @require("#{name}-repository")
 
 
@@ -80,7 +80,7 @@ class Facade
     @param {Object} [options]
     @return {DomainFactory}
     ###
-    createFactory: (name, options)->
+    createFactory: (name, options) ->
         @create("#{name}-factory", options)
 
 
@@ -92,7 +92,7 @@ class Facade
     @param {Object} [options]
     @return {DomainRepository}
     ###
-    createRepository: (name, options)->
+    createRepository: (name, options) ->
         @create("#{name}-repository", options)
 
 
@@ -104,7 +104,7 @@ class Facade
     @param {String} name
     @return {Function}
     ###
-    require: (name)->
+    require: (name) ->
         return @classes[name] if @classes[name]?
 
         path = "#{@dirname}/#{name}"
@@ -145,7 +145,7 @@ class Facade
     @param {Object} [options]
     @return {DomainFactory}
     ###
-    create: (name, options)->
+    create: (name, options) ->
         DomainClass = @require(name)
         return new DomainClass(options)
 
@@ -158,7 +158,7 @@ class Facade
     @param {String} [message]
     @return {DomainError}
     ###
-    error: (reason, message)->
+    error: (reason, message) ->
 
         DomainError = @constructor.DomainError
         return new DomainError(reason, message)
@@ -171,7 +171,7 @@ class Facade
     @param {Error} e
     @return {Boolean}
     ###
-    isDomainError: (e)->
+    isDomainError: (e) ->
 
         DomainError = @constructor.DomainError
         return e instanceof DomainError

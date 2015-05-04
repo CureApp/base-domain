@@ -12,7 +12,7 @@ error thrown by base-domain module
 # see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set
 ###
 
-DomainError = (reason, message)->
+DomainError = (reason, message) ->
 
     if message instanceof Error
         self = message

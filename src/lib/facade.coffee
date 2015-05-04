@@ -98,12 +98,11 @@ class Facade
 
     ###*
     read a file and returns class
-    Attaches getFacade() method
 
     @method require
     @private
     @param {String} name
-    @return {Class}
+    @return {Function}
     ###
     require: (name)->
         return @classes[name] if @classes[name]?
@@ -111,6 +110,21 @@ class Facade
         path = "#{@dirname}/#{name}"
         klass = require path
 
+        @addClass name, klass
+
+
+    ###*
+    set klass to dictionary
+    attaches getFacade() method
+
+    @method addClass
+    @private
+    @param {String} name
+    @param {Function} klass
+    @param {Object} [options]
+    @return {Function}
+    ###
+    addClass: (name, klass) ->
 
         if klass::getFacade is @constructor.Base::getFacade
             facade = @
@@ -119,6 +133,7 @@ class Facade
             @classes[name] = Class
         else
             @classes[name] = klass
+
 
 
     ###*

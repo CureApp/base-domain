@@ -67,7 +67,7 @@ class Fixture
 
 
     ###*
-    inserts data in LoopBack
+    inserts data to datasource
 
     @param {Array} names list of fixture models to insert data
     @method insert
@@ -184,7 +184,7 @@ class FixtureModel
 
 
     ###*
-    inserts data in LoopBack
+    inserts data to datasource
 
     @method insert
     @return {Promise}
@@ -246,12 +246,12 @@ class FixtureModel
             obj = {}
             dataName = data.shift()
 
-            break if not dataName # dataNameが空文字列となっている行よりも下の行はみない
+            break if not dataName # omit reading all lines below the line whose dataName is empty
 
             for name, i in names
-                break if not name # titleが空文字列となっているカラムより右のカラムは見ない
+                break if not name # omit reading all columns at right side of the column whose title is empty
                 value = data[i]
-                value = Number(value) if value.match(/^[0-9]+$/) # 数字だけのカラムは数値として扱う
+                value = Number(value) if value.match(/^[0-9]+$/) # regard number-like values as a number
                 obj[name] = value
 
             objs[dataName] = obj

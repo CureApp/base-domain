@@ -34,6 +34,7 @@
     "grunt": "^0.4.5",
     "grunt-contrib-coffee": "^0.13.0",
     "grunt-contrib-yuidoc": "^0.7.0",
-    "grunt-mocha-chai-sinon": "0.0.9"
+    "grunt-mocha-chai-sinon": "0.0.9",
+    "through": "^2.3.7"
   }
 }

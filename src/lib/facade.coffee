@@ -36,7 +36,10 @@ class Facade
     constructor: (options) ->
         @classes = {}
         @dirname = options.dirname ? '.'
+        @init()
 
+
+    init: ->
 
 
     ###*

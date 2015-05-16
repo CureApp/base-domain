@@ -4,7 +4,7 @@
 echo "push to master, gh-pages"
 
 
-git checkout -b master
+git checkout master
 
 git push origin master
 git push origin master:gh-pages

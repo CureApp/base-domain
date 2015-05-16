@@ -2,7 +2,7 @@
 
 simple module to help build Domain-Driven Design"
 
-[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v0.5.4/index.html)
+[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v0.6.0/index.html)
 
 ![concept](https://github.com/CureApp/base-domain/blob/master/base-domain-classes.png "base-domain-classes")
 
@@ -92,7 +92,17 @@ hospitalRepository.find(where: name: 'CureApp Hp.').then (hospitals)->
 
 ```
 
+## use in browser with browserify
+[browserify](http://browserify.org/) is a tool for packing a js project into one file for web browsers
+
+to enable base-domain's requiring system in browsers, use 'base-domain/ify' transformer.
+
+```bash
+browserify -t [ base-domain/ify --dirname /path/to/domain/dir ] <entry-file>
+```
+
 ## API documentations
+- [v0.6.0](http://cureapp.github.io/base-domain/doc/v0.6.0/index.html)
 - [v0.5.2](http://cureapp.github.io/base-domain/doc/v0.5.2/index.html)
 - [v0.5.1](http://cureapp.github.io/base-domain/doc/v0.5.1/index.html)
 - [v0.5.0](http://cureapp.github.io/base-domain/doc/v0.5.0/index.html)

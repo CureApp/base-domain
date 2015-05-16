@@ -1,7 +1,7 @@
 ---
-version: 0.6.0
+version: 0.6.1
 files:
   package.json: '"version": "%.%.%",'
   Gruntfile.coffee: currentVersion = 'v%.%.%'
   README.md: '[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v%.%.%/index.html)'
-  tools/distribute: VERSION="%.%.%"
+  dev-tools/distribute: VERSION="%.%.%"

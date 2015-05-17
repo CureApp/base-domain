@@ -46,7 +46,7 @@ getInitialCode = (dirname) ->
         name = filename.split('.')[0]
 
         coffeeCode += """
-            #{_}@addClass '#{name}', require '#{path}'\n
+            #{_}@addClass '#{name}', require('#{path}'), true\n
         """
 
 

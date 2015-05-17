@@ -124,12 +124,15 @@ class Facade
     @private
     @param {String} name
     @param {Function} klass
-    @param {Object} [options]
+    @param {Boolean} skipCompare skip comparing getFacade() function
     @return {Function}
-    ###
-    addClass: (name, klass) ->
 
-        if klass::getFacade is @constructor.Base::getFacade
+    FIXME: the 3rd arg "skipCompare" is set only by browserified code
+    because browserified classes don't have the same getFacade() method as Base
+    ###
+    addClass: (name, klass, skipCompare = false) ->
+
+        if skipCompare or klass::getFacade is @constructor.Base::getFacade
             facade = @
             Class = copy(klass)
             Class::getFacade = -> facade

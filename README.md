@@ -2,7 +2,7 @@
 
 simple module to help build Domain-Driven Design"
 
-[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v0.6.3/index.html)
+[latest API documentation Page](http://cureapp.github.io/base-domain/doc/v0.7.0/index.html)
 
 ![concept](https://github.com/CureApp/base-domain/blob/master/base-domain-classes.png "base-domain-classes")
 
@@ -102,6 +102,7 @@ browserify -t [ base-domain/ify --dirname /path/to/domain/dir ] <entry-file>
 ```
 
 ## API documentations
+- [v0.7.0](http://cureapp.github.io/base-domain/doc/v0.7.0/index.html)
 - [v0.6.3](http://cureapp.github.io/base-domain/doc/v0.6.3/index.html)
 - [v0.5.2](http://cureapp.github.io/base-domain/doc/v0.5.2/index.html)
 - [v0.5.1](http://cureapp.github.io/base-domain/doc/v0.5.1/index.html)

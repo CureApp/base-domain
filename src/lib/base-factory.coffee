@@ -76,11 +76,9 @@ class BaseFactory extends Base
         if not obj? or typeof obj isnt 'object'
             return null
 
-
         ModelClass = @getModelClass()
 
         propInfo = ModelClass.getPropertyInfo()
-        facade = @getFacade()
 
         model = new ModelClass()
         model[prop] ?= undefined for prop of ModelClass.properties
@@ -89,36 +87,83 @@ class BaseFactory extends Base
 
             typeInfo = propInfo[prop]
 
-            # creates submodels
-            if typeInfo?.model
-
-                subModelFactory = facade.createFactory(typeInfo.model)
-                SubModel = subModelFactory.getModelClass()
-
-                # if prop is array of models
-                if typeInfo.name is 'MODELS' and Array.isArray value
-                    subModels = (for subObj in value
-                        if subObj instanceof SubModel
-                            subObj
-                        else
-                            subModelFactory.createFromObject(subObj)
-                    )
-                    model.setRelatedModels(prop, subModels)
-                    continue
-
-                # if prop is model
-                else if typeInfo.name is 'MODEL'
-                    if value instanceof SubModel
-                        model.setRelatedModel(prop, value)
-
-                    else
-                        subModel = subModelFactory.createFromObject(value)
-                        model.setRelatedModel(prop, subModel)
-                    continue
-            else
-                model.setNonModelProp(prop, value)
+            @setValueToModel model, prop, value, typeInfo
 
         return @afterCreateModel model
+
+
+    ###*
+    set value to model in creation
+
+    @method setValueToModel
+    @private
+    ###
+    setValueToModel: (model, prop, value, typeInfo) ->
+
+        if subModelName = typeInfo?.model
+
+            # creates submodels
+            if typeInfo.name is 'MODELS' and Array.isArray value
+                @setSubModelArrToModel(model, prop, value, subModelName)
+                return
+
+            # creates submodel
+            if typeInfo.name is 'MODEL'
+                @setSubModelToModel(model, prop, value, subModelName)
+                return
+
+
+        # set normal props
+        model.setNonModelProp(prop, value)
+        return
+
+
+
+    ###*
+    set submodels (array) to the prop
+
+    @method setSubModelArrToModel
+    @private
+    ###
+    setSubModelArrToModel: (model, prop, arr, subModelName) ->
+
+        subModelFactory = @getFacade().createFactory(subModelName)
+
+        SubModel = subModelFactory.getModelClass()
+
+        subModels = (for subObj in arr
+            if subObj instanceof SubModel
+                subObj
+            else
+                subModelFactory.createFromObject(subObj)
+        )
+
+        model.setRelatedModels(prop, subModels)
+
+        return
+
+
+
+    ###*
+    set submodel to the prop
+
+    @method setSubModelToModel
+    @private
+    ###
+    setSubModelToModel: (model, prop, value, subModelName) ->
+
+        subModelFactory = @getFacade().createFactory(subModelName)
+        SubModel = subModelFactory.getModelClass()
+
+        if value instanceof SubModel
+            model.setRelatedModel(prop, value)
+
+        else
+            subModel = subModelFactory.createFromObject(value)
+            model.setRelatedModel(prop, subModel)
+
+        return
+
 
 
 

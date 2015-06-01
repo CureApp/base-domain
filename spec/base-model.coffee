@@ -1,12 +1,15 @@
 
 facade = require './init'
 
+BaseModel = facade.constructor.BaseModel
+
 Diary  = facade.getModel 'diary'
 Member = facade.getModel 'member'
 Hobby  = facade.getModel 'hobby'
 memberFactory = facade.createFactory('member')
 diaryFactory = facade.createFactory('diary')
 hobbyFactory = facade.createFactory('hobby')
+
 
 member = memberFactory.createFromObject
     id: 12
@@ -22,6 +25,28 @@ member = memberFactory.createFromObject
 
 
 describe 'BaseModel', ->
+
+
+    describe '@withParentProp', ->
+
+        it 'extends parent\'s properties', ->
+
+            class ParentClass extends BaseModel
+                @properties:
+                    prop1: @TYPES.STRING
+
+            class ChildClass extends ParentClass
+
+                @properties: @withParentProps
+                    prop2: @TYPES.NUMBER
+
+            expect(ChildClass.properties).to.have.property 'prop1', BaseModel.TYPES.STRING
+            expect(ChildClass.properties).to.have.property 'prop2', BaseModel.TYPES.NUMBER
+
+            expect(ParentClass.properties).to.have.property 'prop1', BaseModel.TYPES.STRING
+            expect(ParentClass.properties).not.to.have.property 'prop2'
+
+
 
     describe '@getPropertyInfo', ->
 

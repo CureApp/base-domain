@@ -54,6 +54,33 @@ class BaseModel extends Base
     @properties: {}
 
 
+    ###*
+    extend @properties of Parent class
+
+    @example
+        class Parent extends BaseModel
+            @properties:
+                prop1: @TYPES.STRING
+
+
+        class ChildModel extends ParentModel
+
+            @properties: @withParentProps
+                prop2: @TYPES.NUMBER
+
+        ChildModel.properties # prop1 and prop2
+
+
+    @method withParentProps
+    @protected
+    @static
+    @return {Object}
+    ###
+    @withParentProps: (props = {}) ->
+        props[k] ?= v for k, v of @properties # @properties === parent's properties
+        return props
+
+
     ###
     properties to cache, private.
     ###

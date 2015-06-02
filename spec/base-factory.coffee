@@ -3,6 +3,8 @@ facade = require './init'
 
 Hobby  = facade.getModel 'hobby'
 Member = facade.getModel 'member'
+Diary  = facade.getModel 'diary'
+MasterRepository = facade.constructor.MasterRepository
 
 describe 'BaseFactory', ->
 
@@ -85,3 +87,83 @@ describe 'BaseFactory', ->
                 date  : new Date()
 
             expect(diary).to.have.property 'memberId', 12 # not "authorId"
+
+
+    describe 'fetchSubModel', ->
+
+        before (done) ->
+
+            class MemberRepository extends MasterRepository
+                @modelName: 'member'
+                getFacade: -> facade
+
+            MemberRepository.load().then -> done()
+
+            @originalCreateRepository = facade.createRepository
+
+            facade.createRepository = (name) -> new MemberRepository()
+
+        after ->
+            facade.createRepository = @originalCreateRepository
+
+        it 'set submodel by id', ->
+
+            factory = facade.createFactory('diary')
+
+            diary = new Diary()
+            diary.memberId = 'dummy'
+
+            typeInfo = Diary.getPropertyInfo 'author'
+
+            factory.fetchSubModel(diary, 'author', typeInfo)
+
+            expect(diary.author).to.be.instanceof Member
+            expect(diary.author.id).to.equal 'dummy'
+
+
+    describe 'fetchSubModel', -> # intentionally, appeared twice
+
+        before (done) ->
+
+            class HobbyRepository extends MasterRepository
+                @modelName: 'hobby'
+                getFacade: -> facade
+
+            HobbyRepository.load().then -> done()
+
+            @originalCreateRepository = facade.createRepository
+
+            facade.createRepository = (name) -> new HobbyRepository()
+
+        after ->
+            facade.createRepository = @originalCreateRepository
+
+
+        it 'set submodels by id', ->
+
+            factory = facade.createFactory('member')
+
+            member = new Member()
+            member.newHobbyIds = ['dummy']
+
+            typeInfo = Member.getPropertyInfo 'newHobbies'
+
+            factory.fetchSubModel(member, 'newHobbies', typeInfo)
+
+            expect(member.newHobbies).to.have.length 1
+            expect(member.newHobbies[0]).to.be.instanceof Hobby
+
+        it 'doesn\'t set submodels by id when there is aninvalid id in array', ->
+
+            factory = facade.createFactory('member')
+
+            member = new Member()
+            member.newHobbyIds = ['dummy', 'xxx']
+
+            typeInfo = Member.getPropertyInfo 'newHobbies'
+
+            factory.fetchSubModel(member, 'newHobbies', typeInfo)
+
+            expect(member.newHobbies).not.to.exist
+
+

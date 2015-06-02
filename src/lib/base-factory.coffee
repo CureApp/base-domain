@@ -117,8 +117,12 @@ class BaseFactory extends Base
             repository = @getFacade().createRepository typeInfo.model
             return if not repository.getByIdSync
 
-            subModels = (repository.getByIdSync(id) for id in ids)
-            # TODO: consider when invalid id is in the list and subModels contains 'undefined' item
+            subModels = []
+            for id in ids
+                subModel = repository.getByIdSync(id)
+                return if not subModel # TODO: throws 'invalid id' error?
+                subModels.push subModel
+
             model.setRelatedModels(prop, subModels)
 
         else # if typeInfo.name is 'MODEL'

@@ -39,6 +39,7 @@ class Facade
         @init()
 
 
+    # for base-domainify. keep it empty
     init: ->
 
 

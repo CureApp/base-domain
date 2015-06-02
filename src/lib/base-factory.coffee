@@ -92,7 +92,8 @@ class BaseFactory extends Base
         for relModelProp in ModelClass.getModelProps()
 
             typeInfo = propInfo[relModelProp]
-            @fetchSubModel(model, relModelProp, typeInfo) unless model[relModelProp]?
+            if not model[relModelProp]? and ModelClass.isEntity
+                @fetchSubModel(model, relModelProp, typeInfo)
 
         return @afterCreateModel model
 
@@ -109,13 +110,17 @@ class BaseFactory extends Base
 
         idPropName = typeInfo.idPropName
 
+        try
+            repository = @getFacade().createRepository typeInfo.model
+        catch e
+            return
+
+        return if not repository.getByIdSync
+
         if typeInfo.name is 'MODELS'
 
             ids = model[idPropName]
             return if not Array.isArray ids
-
-            repository = @getFacade().createRepository typeInfo.model
-            return if not repository.getByIdSync
 
             subModels = []
             for id in ids
@@ -128,10 +133,6 @@ class BaseFactory extends Base
         else # if typeInfo.name is 'MODEL'
 
             id = model[idPropName]
-
-            repository = @getFacade().createRepository typeInfo.model
-            return if not repository.getByIdSync
-
             subModel = repository.getByIdSync(id)
             model.setRelatedModel(prop, subModel) if subModel
 

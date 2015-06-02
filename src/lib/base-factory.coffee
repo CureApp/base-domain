@@ -111,11 +111,13 @@ class BaseFactory extends Base
         idPropName = typeInfo.idPropName
 
         try
-            repository = @getFacade().createRepository typeInfo.model
+            Repository = @getFacade().getRepository typeInfo.model
+            return if not Repository.storeMasterTable
+
+            repository = new Repository()
+            return if not repository.getByIdSync
         catch e
             return
-
-        return if not repository.getByIdSync
 
         if typeInfo.name is 'MODELS'
 

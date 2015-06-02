@@ -99,12 +99,12 @@ describe 'BaseFactory', ->
 
             MemberRepository.load().then -> done()
 
-            @originalCreateRepository = facade.createRepository
+            @originalGetRepository = facade.getRepository
 
-            facade.createRepository = (name) -> new MemberRepository()
+            facade.getRepository = (name) -> MemberRepository
 
         after ->
-            facade.createRepository = @originalCreateRepository
+            facade.getRepository = @originalCreateRepository
 
         it 'set submodel by id', ->
 
@@ -131,12 +131,12 @@ describe 'BaseFactory', ->
 
             HobbyRepository.load().then -> done()
 
-            @originalCreateRepository = facade.createRepository
+            @originalGetRepository = facade.getRepository
 
-            facade.createRepository = (name) -> new HobbyRepository()
+            facade.getRepository = (name) -> HobbyRepository
 
         after ->
-            facade.createRepository = @originalCreateRepository
+            facade.getRepository = @originalCreateRepository
 
 
         it 'set submodels by id', ->

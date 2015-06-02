@@ -8,24 +8,50 @@ Hobby = facade.getModel 'hobby'
 
 describe 'MasterRepository', ->
 
+    describe 'storeMasterTable', ->
+
+        it 'is true by default', ->
+
+            expect(MasterRepository.storeMasterTable).to.be.true
+
+        it 'is true by default in extenders', ->
+
+            class Child extends MasterRepository
+
+            expect(Child.storeMasterTable).to.be.true
+
+        it 'is undefined in BaseRepository', ->
+
+            BaseRepository = facade.constructor.BaseRepository
+
+            expect(BaseRepository.storeMasterTable).not.to.be.true
+
+
     describe 'load', ->
-
-        class HobbyRepository extends MasterRepository
-
-            @modelName: 'hobby'
-
-            getFacade: -> facade
 
         it 'loads models to @constructor.modelsById', (done) ->
 
+            class HobbyRepository extends MasterRepository
+                @modelName: 'hobby'
+                getFacade: -> facade
+
             expect(HobbyRepository.modelsById).not.to.exist
 
-            HobbyRepository.load().then ->
+            HobbyRepository.load().then (isSucceed) ->
 
                 expect(HobbyRepository.modelsById).to.be.an 'object'
                 expect(HobbyRepository.modelsById.dummy).to.be.instanceof Hobby
+                expect(isSucceed).to.be.true
                 done()
 
+        it 'fails when @storeMasterTable is off', (done) ->
+
+            class HobbyRepository extends MasterRepository
+                @storeMasterTable: off
+
+            HobbyRepository.load().then (isSucceed) ->
+                expect(isSucceed).to.be.false
+                done()
 
     describe 'getByIdSync', ->
 

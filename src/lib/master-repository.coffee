@@ -1,5 +1,6 @@
 
 BaseRepository  = require './base-repository'
+Promise = require('es6-promise').Promise
 
 ###*
 load master data
@@ -9,6 +10,18 @@ load master data
 @
 ###
 class MasterRepository extends BaseRepository
+
+    ###*
+    a flag to load and store all models with @load() method
+    if set to true, master table is generated after @load() method,
+    and used in BaseFactory#createFromObject()
+
+    @property storeMasterTable
+    @static
+    @type Boolean
+    ###
+    @storeMasterTable: on
+
 
     ###*
     loaded map of id => models
@@ -40,11 +53,15 @@ class MasterRepository extends BaseRepository
 
     ###*
     load whole master data of the model
+    when @storeMasterTable is off, load will fail.
 
     @method load
-    @return {Promise}
+    @return {Promise(Boolean)} is load succeed or not.
     ###
     @load: ->
+
+        return Promise.resolve(false) if not @storeMasterTable
+
         @modelsById = {}
 
         instance = new @()
@@ -52,7 +69,7 @@ class MasterRepository extends BaseRepository
         instance.query({}).then (models) =>
 
             @modelsById[model.id] = model for model in models
-            return
+            return true
 
 
 module.exports = MasterRepository

@@ -86,10 +86,50 @@ class BaseFactory extends Base
         for own prop, value of obj
 
             typeInfo = propInfo[prop]
-
             @setValueToModel model, prop, value, typeInfo
 
+        # check idPropName
+        for relModelProp in ModelClass.getModelProps()
+
+            typeInfo = propInfo[relModelProp]
+            @fetchSubModel(model, relModelProp, typeInfo) unless model[relModelProp]?
+
         return @afterCreateModel model
+
+
+    ###*
+    fetch submodel(s) by id
+    available only when repository of submodel implements 'getByIdSync'
+    (MasterRepository implements one)
+
+    @method fetchSubModel
+    @private
+    ###
+    fetchSubModel: (model, prop, typeInfo) ->
+
+        idPropName = typeInfo.idPropName
+
+        if typeInfo.name is 'MODELS'
+
+            ids = model[idPropName]
+            return if not Array.isArray ids
+
+            repository = @getFacade().createRepository typeInfo.model
+            return if not repository.getByIdSync
+
+            subModels = (repository.getByIdSync(id) for id in ids)
+            # TODO: consider when invalid id is in the list and subModels contains 'undefined' item
+            model.setRelatedModels(prop, subModels)
+
+        else # if typeInfo.name is 'MODEL'
+
+            id = model[idPropName]
+
+            repository = @getFacade().createRepository typeInfo.model
+            return if not repository.getByIdSync
+
+            subModel = repository.getByIdSync(id)
+            model.setRelatedModel(prop, subModel) if subModel
 
 
     ###*

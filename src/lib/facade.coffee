@@ -204,12 +204,13 @@ class Facade
 
 
 
-    @Base           : require './base'
-    @BaseModel      : require './base-model'
-    @Entity         : require './entity'
-    @BaseFactory    : require './base-factory'
-    @BaseRepository : require './base-repository'
-    @DomainError    : require './domain-error'
+    @Base             : require './base'
+    @BaseModel        : require './base-model'
+    @Entity           : require './entity'
+    @BaseFactory      : require './base-factory'
+    @BaseRepository   : require './base-repository'
+    @MasterRepository : require './master-repository'
+    @DomainError      : require './domain-error'
 
 
 module.exports = Facade

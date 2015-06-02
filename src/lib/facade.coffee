@@ -1,4 +1,5 @@
 
+Promise = require('es6-promise').Promise
 copy = require('copy-class').copy
 
 ###*
@@ -41,6 +42,16 @@ class Facade
 
     # for base-domainify. keep it empty
     init: ->
+
+
+    ###*
+    load master tables
+
+    @method loadMasterTables
+    @return {Promise}
+    ###
+    loadMasterTables: (modelNames...) ->
+        Promise.all (@getRepository(modelName).load?() for modelName in modelNames)
 
 
     ###*

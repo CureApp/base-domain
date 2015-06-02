@@ -28,9 +28,6 @@ describe 'Facade', ->
             class MastrRepository extends Facade.MasterRepository
                 @modelName: 'mastr'
 
-            class MastrFactory extends Facade.BaseFactory
-                @modelName: 'mastr'
-
             class Mastr extends Facade.Entity
                 @modelName: 'mastr'
 
@@ -40,7 +37,6 @@ describe 'Facade', ->
             f = ChildFacade.createInstance()
 
             f.addClass 'mastr-repository', MastrRepository
-            f.addClass 'mastr-factory', MastrFactory
             f.addClass 'mastr', Mastr
             f.addClass 'non-mastr-repository', NonMastrRepository
 
@@ -53,6 +49,36 @@ describe 'Facade', ->
                 done()
 
             .catch done
+
+
+    describe 'getFactory', ->
+
+        it 'returns registered Factory', ->
+
+            class Factory extends Facade.BaseFactory
+                @modelName: 'abc'
+                @xxx: 'yyy'
+
+            f = Facade.createInstance()
+            f.addClass('abc-factory', Factory)
+            FactoryClass = f.getFactory('abc')
+            expect(FactoryClass.xxx).to.equal 'yyy'
+            expect(FactoryClass.isAnonymous).not.to.exist
+
+        it 'returns AnonymousFactory when no factory found and second argument is true', ->
+
+            f = Facade.createInstance()
+            FactoryClass = f.getFactory('abc', true)
+
+            expect(FactoryClass.modelName).to.equal 'abc'
+            expect(FactoryClass.isAnonymous).to.be.true
+
+
+        it 'throws error when no factory found and second argument is false', ->
+
+            f = Facade.createInstance()
+            expect(-> f.getFactory('abc')).to.throw Error
+
 
 
     describe 'error', ->

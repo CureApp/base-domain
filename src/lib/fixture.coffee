@@ -200,7 +200,8 @@ class FixtureModel
 
         console.log("inserting #{dataNames.length} data into #{@name}") if @fx.debug
 
-        factory = @fx.facade.createFactory(@name)
+        useAnonymousFactory = on # if no factory is declared, altered one is used 
+        factory = @fx.facade.createFactory(@name, useAnonymousFactory)
         repository = @fx.facade.createRepository(@name, debug: false)
 
         do insert = =>

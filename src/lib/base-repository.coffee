@@ -52,8 +52,9 @@ class BaseRepository extends Base
     constructor: ->
         modelName = @constructor.modelName
         facade = @getFacade()
-        @factory = facade.createFactory(modelName)
 
+        useAnonymousFactory = on
+        @factory = facade.createFactory(modelName, useAnonymousFactory)
 
 
     ###*

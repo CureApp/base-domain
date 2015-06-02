@@ -68,12 +68,24 @@ class Facade
     ###*
     get a factory class
 
+    ISSUE: user will never know load failure
+
     @method getFactory
     @param {String} name
+    @param {Boolean} [useAnonymousWhenFailed=false]
     @return {Class}
     ###
-    getFactory: (name) ->
-        return @require("#{name}-factory")
+    getFactory: (name, useAnonymousWhenFailed = off) ->
+        try
+            return @require("#{name}-factory")
+        catch e
+            throw e if not useAnonymousWhenFailed
+
+            class AnonymousFactory extends Facade.BaseFactory
+                @modelName  : name
+                @isAnonymous: true
+
+            @addClass("#{name}-factory", AnonymousFactory)
 
 
     ###*
@@ -92,11 +104,13 @@ class Facade
 
     @method createFactory
     @param {String} name
-    @param {Object} [options]
+    @param {Boolean} [useAnonymousWhenFailed=false]
     @return {DomainFactory}
     ###
-    createFactory: (name, options) ->
-        @create("#{name}-factory", options)
+    createFactory: (name, useAnonymousWhenFailed = off) ->
+        FactoryClass = @getFactory(name, useAnonymousWhenFailed)
+        return new FactoryClass()
+
 
 
     ###*

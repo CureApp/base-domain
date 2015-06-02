@@ -174,7 +174,8 @@ class BaseFactory extends Base
     ###
     setSubModelArrToModel: (model, prop, arr, subModelName) ->
 
-        subModelFactory = @getFacade().createFactory(subModelName)
+        useAnonymousFactory = on # if no factory is declared, altered one is used 
+        subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)
 
         SubModel = subModelFactory.getModelClass()
 
@@ -199,7 +200,8 @@ class BaseFactory extends Base
     ###
     setSubModelToModel: (model, prop, value, subModelName) ->
 
-        subModelFactory = @getFacade().createFactory(subModelName)
+        useAnonymousFactory = on # if no factory is declared, altered one is used 
+        subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)
         SubModel = subModelFactory.getModelClass()
 
         if value instanceof SubModel

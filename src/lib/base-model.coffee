@@ -3,9 +3,6 @@
 TYPES = require './types'
 Base  = require './base'
 
-Promise = require('es6-promise').Promise
-
-
 ###*
 Base model class of DDD pattern.
 

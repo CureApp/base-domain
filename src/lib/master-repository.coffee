@@ -1,6 +1,5 @@
 
 BaseRepository  = require './base-repository'
-Promise = require('es6-promise').Promise
 
 ###*
 load master data

@@ -1,9 +1,6 @@
 
 fs = require('fs')
 
-Promise = require('es6-promise').Promise
-
-
 ###*
 
 @class Fixture

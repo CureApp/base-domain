@@ -1,7 +1,4 @@
 
-
-Promise = require('es6-promise').Promise
-
 ###*
 interface of client accessing to resource.
 Used in BaseRepository

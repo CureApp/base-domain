@@ -102,7 +102,7 @@ class BaseFactory extends Base
     ###
     fetchSubModel: (model, prop) ->
 
-        typeInfo = model.constructor.properties[prop]
+        typeInfo = model.getTypeInfo(prop)
 
         idPropName = typeInfo.idPropName
 
@@ -143,15 +143,12 @@ class BaseFactory extends Base
     ###
     setValueToModel: (model, prop, value) ->
 
-        typeInfo = model.constructor.properties[prop]
+        typeInfo = model.getTypeInfo(prop)
 
         switch typeInfo?.name
 
             when 'MODELS'
-                if Array.isArray value
-                    @setSubModelArrToModel(model, prop, value)
-                else
-                    model.setNonModelProp(prop, value)
+                @setSubModelArrToModel(model, prop, value)
 
             when 'MODEL'
                 @setSubModelToModel(model, prop, value)
@@ -168,8 +165,11 @@ class BaseFactory extends Base
     @private
     ###
     setSubModelArrToModel: (model, prop, arr) ->
+        if not Array.isArray arr
+            model.setNonModelProp(prop, arr)
+            return
 
-        subModelName = model.constructor.properties[prop].model
+        subModelName = model.getTypeInfo(prop).model
 
         useAnonymousFactory = on # if no factory is declared, altered one is used 
         subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)
@@ -196,7 +196,7 @@ class BaseFactory extends Base
     ###
     setSubModelToModel: (model, prop, value) ->
 
-        subModelName = model.constructor.properties[prop].model
+        subModelName = model.getTypeInfo(prop).model
 
         useAnonymousFactory = on # if no factory is declared, altered one is used 
         subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)

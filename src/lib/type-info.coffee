@@ -67,6 +67,24 @@ class TypeInfo
 
 
     ###*
+    get TypeInfo as MODEL_LIST
+
+    @method createModelsType
+    @private
+    @static
+    @param {String} modelName
+    @param {String} [options.idPropName] by default: xxxYyyIds when modelName is xxx-yyy
+    @param {String} [options.name] name of list model, by default: xxx-yyy-list when modelName is xxx-yyy
+    @return {TypeInfo} type
+    ###
+    @createModelListType: (modelName, options = {}) -> 
+        new TypeInfo 'MODEL_LIST',
+            model      : modelName
+            idPropName : options.idPropName ? TypeInfo.camelize(modelName) + 'Ids'
+            listName   : options.name ? "#{modelName}-list"
+
+
+    ###*
     TYPES defines various data type, including model and array of models
 
     key: typeName (String)
@@ -90,6 +108,7 @@ class TypeInfo
         UPDATED_AT : new TypeInfo 'UPDATED_AT'
         MODEL      : TypeInfo.createModelType
         MODELS     : TypeInfo.createModelsType
+        MODEL_LIST : TypeInfo.createModelListType
 
 
 

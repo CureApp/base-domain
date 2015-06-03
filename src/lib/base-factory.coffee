@@ -118,7 +118,7 @@ class BaseFactory extends Base
         catch e
             return
 
-        if typeInfo.name is 'MODELS'
+        if typeInfo.equals 'MODELS'
 
             ids = model[idPropName]
             return if not Array.isArray ids
@@ -131,7 +131,7 @@ class BaseFactory extends Base
 
             model.setRelatedModels(prop, subModels)
 
-        else # if typeInfo.name is 'MODEL'
+        else # if typeInfo.equals 'MODEL'
 
             id = model[idPropName]
             subModel = repository.getByIdSync(id)
@@ -149,12 +149,12 @@ class BaseFactory extends Base
         if subModelName = typeInfo?.model
 
             # creates submodels
-            if typeInfo.name is 'MODELS' and Array.isArray value
+            if typeInfo.equals('MODELS') and Array.isArray value
                 @setSubModelArrToModel(model, prop, value, subModelName)
                 return
 
             # creates submodel
-            if typeInfo.name is 'MODEL'
+            if typeInfo.equals 'MODEL'
                 @setSubModelToModel(model, prop, value, subModelName)
                 return
 

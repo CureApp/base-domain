@@ -78,15 +78,6 @@ class BaseModel extends Base
         return props
 
 
-    ###
-    properties to cache, private.
-    ###
-    @_propOfCreatedAt: undefined 
-    @_propOfUpdatedAt: undefined
-    @_modelProps: undefined
-
-
-
     ###*
     get prop name whose type is CREATED_AT
     notice: only one prop should be enrolled to CREATED_AT
@@ -96,6 +87,7 @@ class BaseModel extends Base
     @static
     @return {String} propName
     ###
+    @_propOfCreatedAt: undefined 
     @getPropOfCreatedAt: ->
 
         if @_propOfCreatedAt is undefined
@@ -118,6 +110,7 @@ class BaseModel extends Base
     @static
     @return {String} propName
     ###
+    @_propOfUpdatedAt: undefined
     @getPropOfUpdatedAt: ->
 
         if @_propOfUpdatedAt is undefined
@@ -138,6 +131,7 @@ class BaseModel extends Base
     @static
     @return {Array}
     ###
+    @_modelProps: undefined
     @getModelProps: ->
 
         if not @_modelProps?

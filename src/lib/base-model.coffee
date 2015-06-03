@@ -1,6 +1,6 @@
 
 
-TYPES = require './types'
+TypeInfo = require './type-info'
 Base  = require './base'
 
 ###*
@@ -28,7 +28,7 @@ class BaseModel extends Base
     @static
     @type Object
     ###
-    @TYPES: TYPES
+    @TYPES: TypeInfo.TYPES
 
     ###*
     key-value pair representing property's name - type of the model
@@ -41,7 +41,7 @@ class BaseModel extends Base
         hobbies      : @TYPES.MODELS 'hobby'
         info         : @TYPES.ANY
 
-    see types.coffee for full options.
+    see type-info.coffee for full options.
 
     @property properties
     @abstract
@@ -81,7 +81,6 @@ class BaseModel extends Base
     ###
     properties to cache, private.
     ###
-    @_propsInfo: undefined
     @_propOfCreatedAt: undefined 
     @_propOfUpdatedAt: undefined
     @_modelProps: undefined
@@ -99,17 +98,10 @@ class BaseModel extends Base
     ###
     @getPropertyInfo: (prop) ->
 
-        if not @_propsInfo?
-
-            @_propsInfo = {}
-            for _prop, type of @properties
-                typeInfo = @TYPES.info(type)
-                @_propsInfo[_prop] = typeInfo
-
         if prop
-            return @_propsInfo[prop]
+            return @properties[prop]
         else
-            return @_propsInfo 
+            return @properties
 
 
     ###*
@@ -125,8 +117,8 @@ class BaseModel extends Base
 
         if @_propOfCreatedAt is undefined
             @_propOfCreatedAt = null 
-            for prop, type of @properties
-                if type is @TYPES.CREATED_AT
+            for prop, typeInfo of @properties
+                if typeInfo.equals 'CREATED_AT'
                     @_propOfCreatedAt = prop
                     break
 
@@ -147,8 +139,8 @@ class BaseModel extends Base
 
         if @_propOfUpdatedAt is undefined
             @_propOfUpdatedAt = null
-            for prop, type of @properties
-                if type is @TYPES.UPDATED_AT
+            for prop, typeInfo of @properties
+                if typeInfo.equals 'UPDATED_AT'
                     @_propOfUpdatedAt = prop
                     break
 
@@ -250,9 +242,9 @@ class BaseModel extends Base
 
         idPropName = typeInfo.idPropName
 
-        if typeInfo.name is 'MODEL'
+        if typeInfo.equals 'MODEL'
             @[idPropName] = submodel?.id
-        else # if typeInfo.name is 'MODELS'
+        else # if typeInfo.equals 'MODELS'
             @[idPropName] = 
                 if submodel
                     (sub.id for sub in submodel)
@@ -287,7 +279,7 @@ class BaseModel extends Base
 
         @[prop] = undefined
 
-        if typeInfo.name is 'MODEL'
+        if typeInfo.equals 'MODEL'
             @[idPropName] = undefined
         else
             @[idPropName] = []
@@ -316,7 +308,7 @@ class BaseModel extends Base
         typeInfo = @constructor.getPropertyInfo(prop)
         modelName = typeInfo.model
 
-        if typeInfo.name isnt 'MODELS'
+        if typeInfo.notEquals 'MODELS'
             throw @getFacade().error """
                 #{@constructor.name}.addRelatedModels(#{prop})
                 #{prop} is not a prop for models.

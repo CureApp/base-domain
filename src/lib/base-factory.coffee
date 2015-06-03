@@ -1,7 +1,6 @@
 
 
 Base  = require './base'
-TYPES = require './types'
 Entity = require './entity'
 
 ###*

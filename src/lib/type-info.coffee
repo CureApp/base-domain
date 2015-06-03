@@ -33,10 +33,7 @@ class TypeInfo
 
 
     ###*
-    get type of single model name by model name
-
-         model     =>   type
-        "notebook" => "m<notebook>"
+    get TypeInfo as MODEL
 
     @method createModelType
     @private
@@ -53,10 +50,7 @@ class TypeInfo
 
 
     ###*
-    get type of model name (array) by model name
-
-         model     =>   type
-        "notebook" => "a<notebook>"
+    get TypeInfo as MODELS
 
     @method createModelsType
     @private

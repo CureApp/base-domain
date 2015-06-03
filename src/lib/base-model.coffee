@@ -350,13 +350,13 @@ class BaseModel extends Base
 
 
             # strip submodel's relation
-            if typeInfo.name is 'MODEL'
+            if typeInfo.equals 'MODEL'
                 if value instanceof BaseModel
                     plainObject[prop] = value.toPlainObject()
                 else
                     plainObject[prop] = value
 
-            else # typeInfo.name is 'MODELS'
+            else # typeInfo.equals 'MODELS'
                 plainObject[prop] = 
                     for subData in value
                         if subData instanceof BaseModel
@@ -434,7 +434,7 @@ class BaseModel extends Base
             for modelProp in @constructor.getModelProps()
                 propInfo = @constructor.properties[modelProp]
 
-                if propInfo.name is 'MODELS' and Array.isArray @[modelProp]
+                if propInfo.equals('MODELS') and Array.isArray @[modelProp]
                     for model in @[modelProp]
                         if model instanceof BaseModel
                             promise = model.include(recursive: true, modelPool: modelPool)

@@ -211,8 +211,8 @@ class BaseRepository extends Base
     appendTimeStamp: (data, isCreate = false) ->
         Model = @getModelClass()
 
-        propCreatedAt = Model.getPropOfCreatedAt()
-        propUpdatedAt = Model.getPropOfUpdatedAt()
+        propCreatedAt = Model.getPropInfo().createdAt
+        propUpdatedAt = Model.getPropInfo().updatedAt
 
 
         if isCreate and propCreatedAt

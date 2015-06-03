@@ -47,24 +47,6 @@ describe 'BaseModel', ->
             expect(ParentClass.properties).not.to.have.property 'prop2'
 
 
-
-    describe '@getPropOfCreatedAt', ->
-        it 'returns prop name of createdAt', ->
-            expect(Member.getPropOfCreatedAt()).to.equal 'mCreatedAt'
-
-        it 'returns null when no prop name of createdAt', ->
-            expect(Hobby.getPropOfCreatedAt()).not.to.exist
-
-
-    describe '@getPropOfUpdatedAt', ->
-        it 'returns prop name of updatedAt', ->
-            expect(Member.getPropOfUpdatedAt()).to.equal 'mUpdatedAt'
-
-
-        it 'returns prop name of updatedAt', ->
-            expect(Hobby.getPropOfUpdatedAt()).not.to.exist
-
-
     describe 'isSubClassOfEntity', ->
         it 'returns true to descendant of Entity', ->
             hobby = new Hobby()

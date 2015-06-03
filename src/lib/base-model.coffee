@@ -211,8 +211,6 @@ class BaseModel extends Base
     ###
     setRelatedModel: (prop, submodel) ->
 
-        @assertSubModelProp(prop, 'setRelatedModel(s)')
-
         typeInfo = @constructor.properties[prop]
         modelName = typeInfo.model
 
@@ -254,7 +252,6 @@ class BaseModel extends Base
     @method setRelatedModels
     ###
     unsetRelatedModel: (prop) ->
-        @assertSubModelProp(prop, 'unsetRelatedModel(s)')
 
         typeInfo = @constructor.properties[prop]
         modelName = typeInfo.model
@@ -286,7 +283,6 @@ class BaseModel extends Base
     @method addRelatedModels
     ###
     addRelatedModels: (prop, submodels...) ->
-        @assertSubModelProp(prop, 'addRelatedModels')
 
         typeInfo = @constructor.properties[prop]
         modelName = typeInfo.model
@@ -451,23 +447,6 @@ class BaseModel extends Base
         .then =>
             return @
 
-
-
-    ###*
-    assert given prop is model prop
-
-    @method assertSubModelProp
-    @private
-    ###
-    assertSubModelProp: (prop, method) ->
-
-        typeInfo = @constructor.properties[prop]
-
-        if not typeInfo? or not typeInfo.model
-            throw @getFacade().error """
-                #{@constructor.name}.#{method}(#{prop})
-                #{prop} is not a prop for model.
-            """
 
     @getModelName: ->
         @name.replace(/([A-Z])/g, (st)-> '-' + st.charAt(0).toLowerCase()).slice(1)

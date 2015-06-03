@@ -113,9 +113,7 @@ describe 'BaseFactory', ->
             diary = new Diary()
             diary.memberId = 'dummy'
 
-            typeInfo = Diary.properties.author
-
-            factory.fetchSubModel(diary, 'author', typeInfo)
+            factory.fetchSubModel(diary, 'author')
 
             expect(diary.author).to.be.instanceof Member
             expect(diary.author.id).to.equal 'dummy'
@@ -146,9 +144,7 @@ describe 'BaseFactory', ->
             member = new Member()
             member.newHobbyIds = ['dummy']
 
-            typeInfo = Member.properties.newHobbies
-
-            factory.fetchSubModel(member, 'newHobbies', typeInfo)
+            factory.fetchSubModel(member, 'newHobbies')
 
             expect(member.newHobbies).to.have.length 1
             expect(member.newHobbies[0]).to.be.instanceof Hobby
@@ -160,9 +156,7 @@ describe 'BaseFactory', ->
             member = new Member()
             member.newHobbyIds = ['dummy', 'xxx']
 
-            typeInfo = Member.properties.newHobbies
-
-            factory.fetchSubModel(member, 'newHobbies', typeInfo)
+            factory.fetchSubModel(member, 'newHobbies')
 
             expect(member.newHobbies).not.to.exist
 

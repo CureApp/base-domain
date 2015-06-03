@@ -1,7 +1,6 @@
 
 
 Base  = require './base'
-Entity = require './entity'
 
 ###*
 Base factory class of DDD pattern.
@@ -42,9 +41,9 @@ class BaseFactory extends Base
     @method getModelClass
     @return {Class}
     ###
+    @_ModelClass: undefined
     getModelClass: ->
-        modelName = @constructor.modelName
-        @getFacade().getModel(modelName)
+        @_ModelClass ?= @getFacade().getModel(@constructor.modelName)
 
 
     ###*
@@ -77,22 +76,18 @@ class BaseFactory extends Base
 
         ModelClass = @getModelClass()
 
-        propInfo = ModelClass.properties
-
         model = new ModelClass()
         model[prop] ?= undefined for prop of ModelClass.properties
 
         for own prop, value of obj
 
-            typeInfo = propInfo[prop]
-            @setValueToModel model, prop, value, typeInfo
+            @setValueToModel model, prop, value
 
         # check idPropName
         for relModelProp in ModelClass.getModelProps()
 
-            typeInfo = propInfo[relModelProp]
             if not model[relModelProp]? and ModelClass.isEntity
-                @fetchSubModel(model, relModelProp, typeInfo)
+                @fetchSubModel(model, relModelProp)
 
         return @afterCreateModel model
 
@@ -105,7 +100,9 @@ class BaseFactory extends Base
     @method fetchSubModel
     @private
     ###
-    fetchSubModel: (model, prop, typeInfo) ->
+    fetchSubModel: (model, prop) ->
+
+        typeInfo = model.constructor.properties[prop]
 
         idPropName = typeInfo.idPropName
 
@@ -144,25 +141,24 @@ class BaseFactory extends Base
     @method setValueToModel
     @private
     ###
-    setValueToModel: (model, prop, value, typeInfo) ->
+    setValueToModel: (model, prop, value) ->
 
-        if subModelName = typeInfo?.model
+        typeInfo = model.constructor.properties[prop]
 
-            # creates submodels
-            if typeInfo.equals('MODELS') and Array.isArray value
-                @setSubModelArrToModel(model, prop, value, subModelName)
-                return
+        switch typeInfo?.name
 
-            # creates submodel
-            if typeInfo.equals 'MODEL'
-                @setSubModelToModel(model, prop, value, subModelName)
-                return
+            when 'MODELS'
+                if Array.isArray value
+                    @setSubModelArrToModel(model, prop, value)
+                else
+                    model.setNonModelProp(prop, value)
 
+            when 'MODEL'
+                @setSubModelToModel(model, prop, value)
 
-        # set normal props
-        model.setNonModelProp(prop, value)
-        return
-
+            else
+                # set normal props
+                model.setNonModelProp(prop, value)
 
 
     ###*
@@ -171,7 +167,9 @@ class BaseFactory extends Base
     @method setSubModelArrToModel
     @private
     ###
-    setSubModelArrToModel: (model, prop, arr, subModelName) ->
+    setSubModelArrToModel: (model, prop, arr) ->
+
+        subModelName = model.constructor.properties[prop].model
 
         useAnonymousFactory = on # if no factory is declared, altered one is used 
         subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)
@@ -190,14 +188,15 @@ class BaseFactory extends Base
         return
 
 
-
     ###*
     set submodel to the prop
 
     @method setSubModelToModel
     @private
     ###
-    setSubModelToModel: (model, prop, value, subModelName) ->
+    setSubModelToModel: (model, prop, value) ->
+
+        subModelName = model.constructor.properties[prop].model
 
         useAnonymousFactory = on # if no factory is declared, altered one is used 
         subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)
@@ -211,7 +210,6 @@ class BaseFactory extends Base
             model.setRelatedModel(prop, subModel)
 
         return
-
 
 
 

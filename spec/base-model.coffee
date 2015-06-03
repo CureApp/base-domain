@@ -48,36 +48,6 @@ describe 'BaseModel', ->
 
 
 
-    describe '@getPropertyInfo', ->
-
-        it 'returns map of type info', ->
-            info = Diary.getPropertyInfo()
-
-            expect(info.title.name).to.equal 'STRING'
-            expect(info.comment.name).to.equal 'STRING'
-            expect(info.author.name).to.equal 'MODEL'
-            expect(info.author.model).to.equal 'member'
-            expect(info.author.idPropName).to.equal 'memberId'
-
-            expect(info.coauthor.model).to.equal 'member'
-            expect(info.coauthor.idPropName).to.equal 'coauthorId'
-
-            expect(info.date.name).to.equal 'DATE'
-            expect(info.upd.name).to.equal 'UPDATED_AT'
-            expect(info.upd.name).to.equal 'UPDATED_AT'
-
-        it 'returns info of prop when argument given', ->
-            typeInfo = Diary.getPropertyInfo('author')
-            expect(typeInfo.name).to.equal 'MODEL'
-            expect(typeInfo.model).to.equal 'member'
-            expect(typeInfo.idPropName).to.equal 'memberId'
-
-
-        it 'returns undefined when invalid prop is given', ->
-            typeInfo = Diary.getPropertyInfo('xxxx')
-            expect(typeInfo).not.to.exist
-
-
     describe '@getPropOfCreatedAt', ->
         it 'returns prop name of createdAt', ->
             expect(Member.getPropOfCreatedAt()).to.equal 'mCreatedAt'

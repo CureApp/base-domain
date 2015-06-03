@@ -86,23 +86,6 @@ class BaseModel extends Base
     @_modelProps: undefined
 
 
-    ###*
-    get key-value pair representing property's name - type info of the model
-    if prop name is given, returns the info
-
-    @method getPropertyInfo
-    @public
-    @static
-    @param {String} prop
-    @return {Object}
-    ###
-    @getPropertyInfo: (prop) ->
-
-        if prop
-            return @properties[prop]
-        else
-            return @properties
-
 
     ###*
     get prop name whose type is CREATED_AT
@@ -160,7 +143,7 @@ class BaseModel extends Base
         if not @_modelProps?
 
             @_modelProps = []
-            for prop, typeInfo of @getPropertyInfo()
+            for prop, typeInfo of @properties
                 if typeInfo.model?
                     @_modelProps.push prop
 
@@ -177,7 +160,7 @@ class BaseModel extends Base
             @set(k, v) for k, v of prop
             return @
 
-        typeInfo = @constructor.getPropertyInfo(prop)
+        typeInfo = @constructor.properties[prop]
 
         if typeInfo?.model
             @setRelatedModel(prop, value)
@@ -207,7 +190,7 @@ class BaseModel extends Base
 
         for propName in @constructor.getModelProps()
 
-            typeInfo = @constructor.getPropertyInfo(propName)
+            typeInfo = @constructor.properties[propName]
 
             modelName = typeInfo.model
 
@@ -230,7 +213,7 @@ class BaseModel extends Base
 
         @assertSubModelProp(prop, 'setRelatedModel(s)')
 
-        typeInfo = @constructor.getPropertyInfo(prop)
+        typeInfo = @constructor.properties[prop]
         modelName = typeInfo.model
 
         @[prop] = submodel
@@ -273,7 +256,7 @@ class BaseModel extends Base
     unsetRelatedModel: (prop) ->
         @assertSubModelProp(prop, 'unsetRelatedModel(s)')
 
-        typeInfo = @constructor.getPropertyInfo(prop)
+        typeInfo = @constructor.properties[prop]
         modelName = typeInfo.model
         idPropName = typeInfo.idPropName
 
@@ -305,7 +288,7 @@ class BaseModel extends Base
     addRelatedModels: (prop, submodels...) ->
         @assertSubModelProp(prop, 'addRelatedModels')
 
-        typeInfo = @constructor.getPropertyInfo(prop)
+        typeInfo = @constructor.properties[prop]
         modelName = typeInfo.model
 
         if typeInfo.notEquals 'MODELS'
@@ -348,13 +331,12 @@ class BaseModel extends Base
     ###
     toPlainObject: ->
 
-        propInfoMap = @constructor.getPropertyInfo()
         facade = @getFacade()
 
         plainObject = {}
 
         for own prop, value of @
-            typeInfo = propInfoMap[prop]
+            typeInfo = @constructor.properties[prop]
 
             # set non-model properties
             if not typeInfo?.model?
@@ -409,7 +391,7 @@ class BaseModel extends Base
         promises =
             for m in @constructor.getModelProps()
                 do (modelProp = m) =>
-                    propInfo = @constructor.getPropertyInfo(modelProp)
+                    propInfo = @constructor.properties[modelProp]
 
                     if not @[modelProp]? and (relId = @[propInfo.idPropName])? and @isSubClassOfEntity propInfo.model
 
@@ -450,7 +432,7 @@ class BaseModel extends Base
             subPromises = []
 
             for modelProp in @constructor.getModelProps()
-                propInfo = @constructor.getPropertyInfo(modelProp)
+                propInfo = @constructor.properties[modelProp]
 
                 if propInfo.name is 'MODELS' and Array.isArray @[modelProp]
                     for model in @[modelProp]
@@ -479,7 +461,7 @@ class BaseModel extends Base
     ###
     assertSubModelProp: (prop, method) ->
 
-        typeInfo = @constructor.getPropertyInfo(prop)
+        typeInfo = @constructor.properties[prop]
 
         if not typeInfo? or not typeInfo.model
             throw @getFacade().error """

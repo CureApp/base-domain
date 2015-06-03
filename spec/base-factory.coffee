@@ -113,7 +113,7 @@ describe 'BaseFactory', ->
             diary = new Diary()
             diary.memberId = 'dummy'
 
-            typeInfo = Diary.getPropertyInfo 'author'
+            typeInfo = Diary.properties.author
 
             factory.fetchSubModel(diary, 'author', typeInfo)
 
@@ -146,7 +146,7 @@ describe 'BaseFactory', ->
             member = new Member()
             member.newHobbyIds = ['dummy']
 
-            typeInfo = Member.getPropertyInfo 'newHobbies'
+            typeInfo = Member.properties.newHobbies
 
             factory.fetchSubModel(member, 'newHobbies', typeInfo)
 
@@ -160,7 +160,7 @@ describe 'BaseFactory', ->
             member = new Member()
             member.newHobbyIds = ['dummy', 'xxx']
 
-            typeInfo = Member.getPropertyInfo 'newHobbies'
+            typeInfo = Member.properties.newHobbies
 
             factory.fetchSubModel(member, 'newHobbies', typeInfo)
 

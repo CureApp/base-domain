@@ -77,7 +77,7 @@ class BaseFactory extends Base
 
         ModelClass = @getModelClass()
 
-        propInfo = ModelClass.getPropertyInfo()
+        propInfo = ModelClass.properties
 
         model = new ModelClass()
         model[prop] ?= undefined for prop of ModelClass.properties

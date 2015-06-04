@@ -49,15 +49,6 @@ class TypeInfo
             idPropName : idPropName ?  TypeInfo.camelize(modelName) + 'Id'
 
 
-    @createModelsType: (modelName, idPropName) -> 
-
-        throw new Error """
-            @TYPES.MODELS is deprecated.
-            use @TYPES.MODEL_LIST instead.
-            in #{modelName}, #{idPropName}
-        """
-
-
     ###*
     get TypeInfo as MODEL_LIST
 
@@ -99,7 +90,6 @@ class TypeInfo
         CREATED_AT : new TypeInfo 'CREATED_AT'
         UPDATED_AT : new TypeInfo 'UPDATED_AT'
         MODEL      : TypeInfo.createModelType
-        MODELS     : TypeInfo.createModelsType
         MODEL_LIST : TypeInfo.createModelListType
 
 

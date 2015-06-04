@@ -7,14 +7,11 @@ class PropInfo
         @updatedAt = null
         @modelProps  = []
         @entityProps = []
-        @props = {}
-        @list = []
-
+        @dic = {}
 
         for prop, typeInfo of props
 
-            @props[prop] = typeInfo
-            @list.push prop
+            @dic[prop] = typeInfo
 
             switch typeInfo.name
 

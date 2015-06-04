@@ -136,7 +136,7 @@ class BaseModel extends Base
 
 
     getTypeInfo: (prop) ->
-        @constructor.getPropInfo().props[prop]
+        @constructor.getPropInfo().dic[prop]
 
 
     ###*

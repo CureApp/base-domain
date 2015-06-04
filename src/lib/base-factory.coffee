@@ -84,14 +84,11 @@ class BaseFactory extends Base
             @setValueToModel model, prop, value
 
         # check idPropName
-        for relModelProp in ModelClass.getModelProps()
-            continue if model[relModelProp]
+        for entityProp in ModelClass.getEntityProps()
+            continue if model[entityProp]
 
-            typeInfo = model.getTypeInfo(relModelProp)
-
-            if @getFacade().getModel(typeInfo.model).isEntity
-
-                @fetchEntityProp(model, relModelProp)
+            typeInfo = model.getTypeInfo(entityProp)
+            @fetchEntityProp(model, entityProp)
 
         return @afterCreateModel model
 

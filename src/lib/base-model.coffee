@@ -85,6 +85,17 @@ class BaseModel extends Base
 
 
     ###*
+    get list of properties which contains entity
+
+    @method getEntityProps
+    @public
+    @static
+    @return {Array}
+    ###
+    @getEntityProps: ->
+        @getPropInfo().entityProps
+
+    ###*
     get list of properties which contains relational model
 
     @method getModelProps
@@ -137,7 +148,7 @@ class BaseModel extends Base
     ###
     updateRelationIds: (options = {})->
 
-        for propName in @constructor.getModelProps()
+        for propName in @constructor.getEntityProps()
 
             typeInfo = @getTypeInfo propName
 
@@ -329,11 +340,11 @@ class BaseModel extends Base
 
 
         promises =
-            for m in @constructor.getModelProps()
+            for m in @constructor.getEntityProps()
                 do (modelProp = m) =>
                     propInfo = @getTypeInfo modelProp
 
-                    if not @[modelProp]? and (relId = @[propInfo.idPropName])? and @isSubClassOfEntity propInfo.model
+                    if not @[modelProp]? and (relId = @[propInfo.idPropName])?
 
                         repo = facade.createRepository(propInfo.model)
 

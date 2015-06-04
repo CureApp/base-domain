@@ -17,6 +17,24 @@ class Base
 
 
     @method getFacade
+    @static
+    @return {Facade}
+    ###
+    @getFacade : ->
+        throw new Error """
+            Facade is not created yet, or you required domain classes not from Facade.
+            Require domain classes by facade.getModel(), facade.getFactory(), facade.getRepository()
+            to attach them getFacade() method.
+        """
+
+
+    ###*
+    get facade
+
+    the implementation is in Facade#requre()
+
+
+    @method getFacade
     @return {Facade}
     ###
     getFacade : ->

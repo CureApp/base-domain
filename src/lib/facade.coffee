@@ -161,6 +161,7 @@ class Facade
         if skipCompare or klass::getFacade is @constructor.Base::getFacade
             facade = @
             Class = copy(klass)
+            Class.getFacade  = -> facade
             Class::getFacade = -> facade
             @classes[name] = Class
         else

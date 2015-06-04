@@ -31,6 +31,16 @@ class BaseModel extends Base
     ###
     @TYPES: TypeInfo.TYPES
 
+
+    ###*
+    ModelName -> model-name
+
+    @private
+    ###
+    @getModelName: ->
+        @name.replace(/([A-Z])/g, (st)-> '-' + st.charAt(0).toLowerCase()).slice(1)
+
+
     ###*
     key-value pair representing property's name - type of the model
 
@@ -52,6 +62,14 @@ class BaseModel extends Base
     ###
     @properties: {}
 
+
+    ###*
+    get an instance of PropInfo, which summarizes properties of this class
+
+    @method getPropInfo
+    @public
+    @return {PropInfo}
+    ###
     @_pi: null
     @getPropInfo: ->
         @_pi ?= new PropInfo @properties, @getFacade()
@@ -105,6 +123,11 @@ class BaseModel extends Base
     ###
     @getModelProps: ->
         @getPropInfo().modelProps
+
+
+    constructor: ->
+
+
 
 
     getTypeInfo: (prop) ->
@@ -401,10 +424,6 @@ class BaseModel extends Base
 
         .then =>
             return @
-
-
-    @getModelName: ->
-        @name.replace(/([A-Z])/g, (st)-> '-' + st.charAt(0).toLowerCase()).slice(1)
 
 
     ###*

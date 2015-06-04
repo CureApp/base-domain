@@ -17,7 +17,7 @@ class TypeInfo
     @method equals
     @public
     @param {String} typeName
-    @retrun {Boolean}
+    @return {Boolean}
     ###
     equals: (typeName) -> @name is typeName
 
@@ -27,7 +27,7 @@ class TypeInfo
     @method notEquals
     @public
     @param {String} typeName
-    @retrun {Boolean}
+    @return {Boolean}
     ###
     notEquals: (typeName) -> @name isnt typeName
 

@@ -114,7 +114,7 @@ class BaseModel extends Base
         if typeInfo?.model
             @setRelatedModel(prop, value)
         else
-            @setNonModelProp(prop, value)
+            @setNonEntityProp(prop, value)
 
         return @
 
@@ -123,7 +123,7 @@ class BaseModel extends Base
     set model prop
     @return {BaseModel} this
     ###
-    setNonModelProp: (prop, value) ->
+    setNonEntityProp: (prop, value) ->
         @[prop] = value
 
 

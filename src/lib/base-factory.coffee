@@ -155,7 +155,7 @@ class BaseFactory extends Base
 
             else
                 # set normal props
-                model.setNonModelProp(prop, value)
+                model.setNonEntityProp(prop, value)
 
 
     ###*
@@ -166,7 +166,7 @@ class BaseFactory extends Base
     ###
     setSubModelArrToModel: (model, prop, arr) ->
         if not Array.isArray arr
-            model.setNonModelProp(prop, arr)
+            model.setNonEntityProp(prop, arr)
             return
 
         subModelName = model.getTypeInfo(prop).model

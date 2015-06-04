@@ -125,8 +125,13 @@ class BaseModel extends Base
         @getPropInfo().modelProps
 
 
-    constructor: ->
+    ###*
+    @constructor
+    ###
+    constructor: (obj) ->
 
+        @[prop] ?= undefined for prop of @constructor.properties
+        @set obj if obj
 
 
 

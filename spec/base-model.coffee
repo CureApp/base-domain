@@ -26,6 +26,24 @@ member = memberFactory.createFromObject
 
 describe 'BaseModel', ->
 
+    it 'is created with object', ->
+
+        class Hospital extends BaseModel
+
+            @getFacade: -> facade
+            getFacade : -> facade
+
+            @properties:
+                name: @TYPES.STRING
+                beds: @TYPES.NUMBER
+
+        hospital = new Hospital(name: 'shinout clinic')
+        console.log hospital
+
+        expect(hospital).to.have.property 'name', 'shinout clinic'
+        expect(hospital).not.to.have.property 'beds'
+        expect(Object.keys(hospital)).to.contain 'beds'
+
 
     describe '@withParentProp', ->
 

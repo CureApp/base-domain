@@ -1,0 +1,2495 @@
+{
+    "project": {},
+    "files": {
+        "src/lib/base-factory.coffee": {
+            "name": "src/lib/base-factory.coffee",
+            "modules": {},
+            "classes": {
+                "BaseFactory": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/base-list.coffee": {
+            "name": "src/lib/base-list.coffee",
+            "modules": {},
+            "classes": {
+                "BaseList": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/base-model.coffee": {
+            "name": "src/lib/base-model.coffee",
+            "modules": {},
+            "classes": {
+                "BaseModel": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/base-repository.coffee": {
+            "name": "src/lib/base-repository.coffee",
+            "modules": {},
+            "classes": {
+                "BaseRepository": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/base.coffee": {
+            "name": "src/lib/base.coffee",
+            "modules": {},
+            "classes": {
+                "Base": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/domain-error.coffee": {
+            "name": "src/lib/domain-error.coffee",
+            "modules": {
+                "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set": 1
+            },
+            "classes": {
+                "DomainError": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/entity.coffee": {
+            "name": "src/lib/entity.coffee",
+            "modules": {
+                "base-domain": 1
+            },
+            "classes": {
+                "Entity": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/facade.coffee": {
+            "name": "src/lib/facade.coffee",
+            "modules": {},
+            "classes": {
+                "Facade": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/fixture.coffee": {
+            "name": "src/lib/fixture.coffee",
+            "modules": {},
+            "classes": {
+                "Fixture": 1,
+                "FixtureModel": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/list-factory.coffee": {
+            "name": "src/lib/list-factory.coffee",
+            "modules": {},
+            "classes": {
+                "ListFactory": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/master-repository.coffee": {
+            "name": "src/lib/master-repository.coffee",
+            "modules": {},
+            "classes": {
+                "MasterRepository": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/prop-info.coffee": {
+            "name": "src/lib/prop-info.coffee",
+            "modules": {},
+            "classes": {
+                "PropInfo": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/resource-client-interface.coffee": {
+            "name": "src/lib/resource-client-interface.coffee",
+            "modules": {},
+            "classes": {
+                "ResourceClientInterface": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/lib/type-info.coffee": {
+            "name": "src/lib/type-info.coffee",
+            "modules": {},
+            "classes": {
+                "TypeInfo": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "base-domain": {
+            "name": "base-domain",
+            "submodules": {
+                "undefined": 1
+            },
+            "classes": {
+                "Entity": 1,
+                "BaseFactory": 1,
+                "BaseList": 1,
+                "BaseModel": 1,
+                "BaseRepository": 1,
+                "Base": 1,
+                "Facade": 1,
+                "Fixture": 1,
+                "FixtureModel": 1,
+                "ListFactory": 1,
+                "MasterRepository": 1,
+                "PropInfo": 1,
+                "ResourceClientInterface": 1,
+                "TypeInfo": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src/lib/type-info.coffee",
+            "line": 2,
+            "description": "Base model class with \"id\" column"
+        },
+        "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set": {
+            "name": "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set",
+            "submodules": {},
+            "classes": {
+                "DomainError": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src/lib/domain-error.coffee",
+            "line": 4,
+            "description": "error thrown by base-domain module"
+        }
+    },
+    "classes": {
+        "BaseFactory": {
+            "name": "BaseFactory",
+            "shortname": "BaseFactory",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "file": "src/lib/base-factory.coffee",
+            "line": 6,
+            "description": "Base factory class of DDD pattern.\n\ncreate instance of model\n\nthe parent \"Base\" class just simply gives a @getFacade() method.",
+            "extends": "Base"
+        },
+        "BaseList": {
+            "name": "BaseList",
+            "shortname": "BaseList",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/base-list.coffee",
+            "line": 4,
+            "description": "list class of DDD pattern.",
+            "extends": "BaseModel"
+        },
+        "BaseModel": {
+            "name": "BaseModel",
+            "shortname": "BaseModel",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/base-model.coffee",
+            "line": 7,
+            "description": "Base model class of DDD pattern.\n\nthe parent \"Base\" class just simply gives a @getFacade() method.",
+            "extends": "Base"
+        },
+        "BaseRepository": {
+            "name": "BaseRepository",
+            "shortname": "BaseRepository",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/base-repository.coffee",
+            "line": 7,
+            "description": "Base repository class of DDD pattern.\nResponsible for perpetuation of models.\nBaseRepository has a client, which access to data resource (RDB, NoSQL, memory, etc...)\n\nthe parent \"Base\" class just simply gives a @getFacade() method.",
+            "extends": "Base"
+        },
+        "Base": {
+            "name": "Base",
+            "shortname": "Base",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/base.coffee",
+            "line": 3,
+            "description": "parent class of model, factory and repository.\n\ngives them @getFacade() method."
+        },
+        "DomainError": {
+            "name": "DomainError",
+            "shortname": "DomainError",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set",
+            "namespace": "",
+            "file": "src/lib/domain-error.coffee",
+            "line": 4,
+            "description": "error thrown by base-domain module",
+            "extends": "Error"
+        },
+        "Entity": {
+            "name": "Entity",
+            "shortname": "Entity",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/entity.coffee",
+            "line": 5,
+            "description": "Base model class with \"id\" column",
+            "extends": "BaseModel"
+        },
+        "Facade": {
+            "name": "Facade",
+            "shortname": "Facade",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/facade.coffee",
+            "line": 5,
+            "description": "Facade class of DDD pattern.\n\n- create instance of factories\n- create instance of repositories"
+        },
+        "Fixture": {
+            "name": "Fixture",
+            "shortname": "Fixture",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/fixture.coffee",
+            "line": 4
+        },
+        "FixtureModel": {
+            "name": "FixtureModel",
+            "shortname": "FixtureModel",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/fixture.coffee",
+            "line": 167
+        },
+        "ListFactory": {
+            "name": "ListFactory",
+            "shortname": "ListFactory",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/list-factory.coffee",
+            "line": 6,
+            "description": "factory of list",
+            "extends": "Base"
+        },
+        "MasterRepository": {
+            "name": "MasterRepository",
+            "shortname": "MasterRepository",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/master-repository.coffee",
+            "line": 4,
+            "description": "load master data",
+            "abstract": ""
+        },
+        "PropInfo": {
+            "name": "PropInfo",
+            "shortname": "PropInfo",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/prop-info.coffee",
+            "line": 2,
+            "description": "parses model properties and classifies them"
+        },
+        "ResourceClientInterface": {
+            "name": "ResourceClientInterface",
+            "shortname": "ResourceClientInterface",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/resource-client-interface.coffee",
+            "line": 2,
+            "description": "interface of client accessing to resource.\nUsed in BaseRepository\n\nLoopBackClient in loopback-promised package implements this interface.\n\nsee https://github.com/CureApp/loopback-promised"
+        },
+        "TypeInfo": {
+            "name": "TypeInfo",
+            "shortname": "TypeInfo",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/type-info.coffee",
+            "line": 2,
+            "description": "type of model's property"
+        }
+    },
+    "classitems": [
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 19,
+            "description": "model name to handle",
+            "itemtype": "property",
+            "name": "modelName",
+            "static": 1,
+            "access": "protected",
+            "tagname": "",
+            "type": "String",
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 30,
+            "description": "constructor",
+            "is_constructor": 1,
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 39,
+            "description": "get model class this factory handles",
+            "itemtype": "method",
+            "name": "getModelClass",
+            "return": {
+                "description": "",
+                "type": "Class"
+            },
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 50,
+            "description": "create empty model instance",
+            "itemtype": "method",
+            "name": "createEmptyModel",
+            "return": {
+                "description": "",
+                "type": "BaseModel"
+            },
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 60,
+            "description": "create instance of model class by plain object\n\nfor each prop, values are set by Model#set(prop, value)",
+            "itemtype": "method",
+            "name": "createFromObject",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "baseModel",
+                    "description": "fallback properties",
+                    "type": "BaseModel"
+                }
+            ],
+            "return": {
+                "description": "model",
+                "type": "BaseModel"
+            },
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 99,
+            "description": "fetch submodel(s) by id\navailable only when repository of submodel implements 'getByIdSync'\n(MasterRepository implements one)",
+            "itemtype": "method",
+            "name": "fetchEntityProp",
+            "access": "private",
+            "tagname": "",
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 146,
+            "description": "set value to model in creation",
+            "itemtype": "method",
+            "name": "setValueToModel",
+            "access": "private",
+            "tagname": "",
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 169,
+            "description": "creates list and set it to the model",
+            "itemtype": "method",
+            "name": "setSubModelListToModel",
+            "access": "private",
+            "tagname": "",
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 188,
+            "description": "set submodel to the prop",
+            "itemtype": "method",
+            "name": "setSubModelToModel",
+            "access": "private",
+            "tagname": "",
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 213,
+            "description": "modify plain object before @createFromObject(obj)",
+            "itemtype": "method",
+            "name": "beforeCreateFromObject",
+            "access": "protected",
+            "tagname": "",
+            "abstract": "",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "obj",
+                "type": "Object"
+            },
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 226,
+            "description": "modify model after createFromObject(obj), createEmptyModel()",
+            "itemtype": "method",
+            "name": "afterCreateModel",
+            "access": "protected",
+            "tagname": "",
+            "abstract": "",
+            "params": [
+                {
+                    "name": "model",
+                    "description": "",
+                    "type": "BaseModel"
+                }
+            ],
+            "return": {
+                "description": "model",
+                "type": "BaseModel"
+            },
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 13,
+            "description": "model name of the item",
+            "itemtype": "property",
+            "name": "itemModelName",
+            "static": 1,
+            "access": "protected",
+            "tagname": "",
+            "type": "String",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 24,
+            "description": "creates child class of BaseList",
+            "itemtype": "method",
+            "name": "getAnonymousClass",
+            "params": [
+                {
+                    "name": "itemModelName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "child class of BaseList",
+                "type": "Function"
+            },
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 40,
+            "description": "ids: get ids of items",
+            "itemtype": "property",
+            "name": "ids",
+            "type": "Array",
+            "access": "public",
+            "tagname": "",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 51,
+            "description": "items: array of models",
+            "itemtype": "property",
+            "name": "items",
+            "type": "Array",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 62,
+            "description": "returns item is Entity",
+            "itemtype": "method",
+            "name": "containsEntity",
+            "static": 1,
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 74,
+            "description": "sort items in constructor",
+            "itemtype": "method",
+            "name": "sort",
+            "access": "protected",
+            "tagname": "",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 84,
+            "description": "first item",
+            "itemtype": "method",
+            "name": "first",
+            "access": "public",
+            "tagname": "",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 97,
+            "description": "last item",
+            "itemtype": "method",
+            "name": "last",
+            "access": "public",
+            "tagname": "",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 110,
+            "description": "export models to Array",
+            "itemtype": "method",
+            "name": "toArray",
+            "access": "public",
+            "tagname": "",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 120,
+            "description": "create plain list.\nif this list contains entities, returns their ids\nif this list contains non-entity models, returns their plain objects",
+            "itemtype": "method",
+            "name": "toPlainObject",
+            "return": {
+                "description": "plainObject",
+                "type": "Object"
+            },
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 21,
+            "description": "key-value pair representing typeName - type\n\nuse for definition of @properties for each extender",
+            "itemtype": "property",
+            "name": "TYPES",
+            "access": "protected",
+            "tagname": "",
+            "final": 1,
+            "static": 1,
+            "type": "Object",
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 35,
+            "description": "ModelName -> model-name",
+            "access": "private",
+            "tagname": "",
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 44,
+            "description": "key-value pair representing property's name - type of the model\n\n    firstName    : @TYPES.STRING\n    lastName     : @TYPES.STRING\n    age          : @TYPES.NUMBER\n    registeredAt : @TYPES.DATE\n    team         : @TYPES.MODEL 'team'\n    hobbies      : @TYPES.MODEL_LIST 'hobby'\n    info         : @TYPES.ANY\n\nsee type-info.coffee for full options.",
+            "itemtype": "property",
+            "name": "properties",
+            "abstract": "",
+            "static": 1,
+            "access": "protected",
+            "tagname": "",
+            "type": "Object",
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 66,
+            "description": "get an instance of PropInfo, which summarizes properties of this class",
+            "itemtype": "method",
+            "name": "getPropInfo",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "PropInfo"
+            },
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 78,
+            "description": "extend @properties of Parent class",
+            "example": [
+                "\n    class Parent extends BaseModel"
+            ],
+            "properties": ": @withParentProps\n            prop2: @TYPES.NUMBER\n\n    ChildModel.properties # prop1 and prop2",
+            "itemtype": "method",
+            "name": "withParentProps",
+            "access": "protected",
+            "tagname": "",
+            "static": 1,
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 105,
+            "description": "get list of properties which contains entity",
+            "itemtype": "method",
+            "name": "getEntityProps",
+            "access": "public",
+            "tagname": "",
+            "static": 1,
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 116,
+            "description": "get list of properties which contains relational model",
+            "itemtype": "method",
+            "name": "getModelProps",
+            "access": "public",
+            "tagname": "",
+            "static": 1,
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 128,
+            "is_constructor": 1,
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 144,
+            "description": "set value to prop",
+            "return": {
+                "description": "this",
+                "type": "BaseModel"
+            },
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 163,
+            "description": "set model prop",
+            "return": {
+                "description": "this",
+                "type": "BaseModel"
+            },
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 171,
+            "description": "set related model(s)",
+            "itemtype": "method",
+            "name": "setEntityProp",
+            "params": [
+                {
+                    "name": "prop",
+                    "description": "property name of the related model",
+                    "type": "String"
+                },
+                {
+                    "name": "submodel",
+                    "description": "",
+                    "type": "Entity|Array<Entity>"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "BaseModel"
+            },
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 193,
+            "description": "unset related model(s)",
+            "params": [
+                {
+                    "name": "prop",
+                    "description": "property name of the related models",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "BaseModel"
+            },
+            "itemtype": "method",
+            "name": "unsetEntityProp",
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 216,
+            "description": "inherit value of anotherModel",
+            "itemtype": "method",
+            "name": "inherit",
+            "params": [
+                {
+                    "name": "anotherModel",
+                    "description": "",
+                    "type": "BaseModel"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "BaseModel"
+            },
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 231,
+            "description": "create plain object without relational entities\ndescendants of Entity are removed, but not descendants of BaseModel\ndescendants of Entity in descendants of BaseModel are removed ( = recursive)",
+            "itemtype": "method",
+            "name": "toPlainObject",
+            "return": {
+                "description": "plainObject",
+                "type": "Object"
+            },
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-model.coffee",
+            "line": 267,
+            "description": "include all relational models if not set",
+            "itemtype": "method",
+            "name": "includeAll",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "recursive",
+                            "description": "recursively include models or not. unstable.",
+                            "type": "Boolean|Object",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "self",
+                "type": "Promise(BaseModel)"
+            },
+            "class": "BaseModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 20,
+            "description": "model name to handle",
+            "itemtype": "property",
+            "name": "modelName",
+            "static": 1,
+            "access": "protected",
+            "tagname": "",
+            "type": "String",
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 32,
+            "description": "client accessing to data resource (RDB, NoSQL, memory, etc...)\n\nmock object is input by default.\nExtenders must set this property to achieve perpetuation",
+            "itemtype": "property",
+            "name": "client",
+            "abstract": "",
+            "access": "protected",
+            "tagname": "",
+            "type": "ResourceClientInterface",
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 46,
+            "description": "constructor",
+            "is_constructor": 1,
+            "return": {
+                "description": ""
+            },
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 60,
+            "description": "get model class this factory handles",
+            "itemtype": "method",
+            "name": "getModelClass",
+            "return": {
+                "description": "",
+                "type": "Class"
+            },
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 72,
+            "description": "Update or insert a model instance",
+            "itemtype": "method",
+            "name": "save",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "entity",
+                    "description": "",
+                    "type": "Entity|Object"
+                },
+                {
+                    "name": "client",
+                    "description": "",
+                    "type": "ResourceClientInterface",
+                    "optional": true,
+                    "optdefault": "@client"
+                }
+            ],
+            "return": {
+                "description": "entity (the same instance from input, if entity given,)",
+                "type": "Promise(Entity)"
+            },
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 99,
+            "description": "get object by ID.",
+            "itemtype": "method",
+            "name": "get",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "Any"
+                },
+                {
+                    "name": "client",
+                    "description": "",
+                    "type": "ResourceClientInterface",
+                    "optional": true,
+                    "optdefault": "@client"
+                }
+            ],
+            "return": {
+                "description": "entity",
+                "type": "Promise(Entity)"
+            },
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 115,
+            "description": "alias for get()",
+            "itemtype": "method",
+            "name": "getById",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "Any"
+                },
+                {
+                    "name": "client",
+                    "description": "",
+                    "type": "ResourceClientInterface",
+                    "optional": true,
+                    "optdefault": "@client"
+                }
+            ],
+            "return": {
+                "description": "entity",
+                "type": "Promise(Entity)"
+            },
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 129,
+            "description": "Find all model instances that match params",
+            "itemtype": "method",
+            "name": "query",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "query parameters",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "client",
+                    "description": "",
+                    "type": "ResourceClientInterface",
+                    "optional": true,
+                    "optdefault": "@client"
+                }
+            ],
+            "return": {
+                "description": "array of entities",
+                "type": "Promise(Array(Entity))"
+            },
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 144,
+            "description": "Find one model instance that matches params, Same as query, but limited to one result",
+            "itemtype": "method",
+            "name": "singleQuery",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "query parameters",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "client",
+                    "description": "",
+                    "type": "ResourceClientInterface",
+                    "optional": true,
+                    "optdefault": "@client"
+                }
+            ],
+            "return": {
+                "description": "entity",
+                "type": "Promise(Entity)"
+            },
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 160,
+            "description": "Destroy the given entity (which must have \"id\" value)",
+            "itemtype": "method",
+            "name": "delete",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "entity",
+                    "description": "",
+                    "type": "Entity"
+                },
+                {
+                    "name": "client",
+                    "description": "",
+                    "type": "ResourceClientInterface",
+                    "optional": true,
+                    "optdefault": "@client"
+                }
+            ],
+            "return": {
+                "description": "isDeleted",
+                "type": "Promise(Boolean)"
+            },
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 175,
+            "description": "Update set of attributes.",
+            "itemtype": "method",
+            "name": "update",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "id of the entity to update",
+                    "type": "Any"
+                },
+                {
+                    "name": "data",
+                    "description": "key-value pair to update (notice: this must not be instance of Entity)",
+                    "type": "Object"
+                },
+                {
+                    "name": "client",
+                    "description": "",
+                    "type": "ResourceClientInterface",
+                    "optional": true,
+                    "optdefault": "@client"
+                }
+            ],
+            "return": {
+                "description": "updated entity",
+                "type": "Promise(Entity)"
+            },
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-repository.coffee",
+            "line": 200,
+            "description": "add createdAt, updatedAt to given data\n- createdAt will not be overriden if already set.\n- updatedAt will be overriden for each time",
+            "itemtype": "method",
+            "name": "appendTimeStamp",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "isCreate",
+                    "description": "",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ],
+            "return": {
+                "description": "data",
+                "type": "Object"
+            },
+            "class": "BaseRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base.coffee",
+            "line": 13,
+            "description": "get facade\n\nthe implementation is in Facade#requre()",
+            "itemtype": "method",
+            "name": "getFacade",
+            "static": 1,
+            "return": {
+                "description": "",
+                "type": "Facade"
+            },
+            "class": "Base",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base.coffee",
+            "line": 31,
+            "description": "get facade\n\nthe implementation is in Facade#requre()",
+            "itemtype": "method",
+            "name": "getFacade",
+            "return": {
+                "description": "",
+                "type": "Facade"
+            },
+            "class": "Base",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/domain-error.coffee",
+            "line": 32,
+            "description": "reason of the error\nalphanumeric string (without space) is recommended,",
+            "itemtype": "property",
+            "name": "reason",
+            "type": "{String}",
+            "reason": "",
+            "class": "DomainError",
+            "module": "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set"
+        },
+        {
+            "file": "src/lib/entity.coffee",
+            "line": 16,
+            "description": "primary key for the model",
+            "itemtype": "property",
+            "name": "id",
+            "type": "any",
+            "class": "Entity",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 17,
+            "description": "create instance of Facade",
+            "itemtype": "method",
+            "name": "createInstance",
+            "static": 1,
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Facade"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 30,
+            "description": "constructor",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "String",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "dirname",
+                            "description": "path where domain definition files are included",
+                            "type": "String",
+                            "optional": true,
+                            "optdefault": "\".\""
+                        }
+                    ]
+                }
+            ],
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 51,
+            "description": "load master tables",
+            "itemtype": "method",
+            "name": "loadMasterTables",
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 61,
+            "description": "get a model class",
+            "itemtype": "method",
+            "name": "getModel",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Class"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 72,
+            "description": "get a list model class",
+            "itemtype": "method",
+            "name": "getListModel",
+            "params": [
+                {
+                    "name": "listModelName",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "itemModelName",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Class"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 100,
+            "description": "get a factory class\n\nISSUE: user will never know load failure",
+            "itemtype": "method",
+            "name": "getFactory",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "useAnonymousWhenFailed",
+                    "description": "",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Class"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 123,
+            "description": "get a repository class",
+            "itemtype": "method",
+            "name": "getRepository",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Class"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 134,
+            "description": "create a factory instance",
+            "itemtype": "method",
+            "name": "createFactory",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "useAnonymousWhenFailed",
+                    "description": "",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "DomainFactory"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 148,
+            "description": "create a repository instance",
+            "itemtype": "method",
+            "name": "createRepository",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "DomainRepository"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 160,
+            "description": "read a file and returns class",
+            "itemtype": "method",
+            "name": "require",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 177,
+            "description": "check existence of the class of the given name",
+            "itemtype": "method",
+            "name": "hasClass",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 192,
+            "description": "set klass to dictionary\nattaches getFacade() method",
+            "itemtype": "method",
+            "name": "addClass",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "klass",
+                    "description": "",
+                    "type": "Function"
+                },
+                {
+                    "name": "skipCompare",
+                    "description": "skip comparing getFacade() function",
+                    "type": "Boolean"
+                }
+            ],
+            "return": {
+                "description": "FIXME: the 3rd arg \"skipCompare\" is set only by browserified code\nbecause browserified classes don't have the same getFacade() method as Base",
+                "type": "Function"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 219,
+            "description": "read a file and returns the instance of the file's class",
+            "itemtype": "method",
+            "name": "create",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "DomainFactory"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 233,
+            "description": "creates a list factory class",
+            "itemtype": "method",
+            "name": "createListFactory",
+            "params": [
+                {
+                    "name": "listModelName",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "itemModelName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "ListFactory"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 247,
+            "description": "create instance of DomainError",
+            "itemtype": "method",
+            "name": "error",
+            "params": [
+                {
+                    "name": "reason",
+                    "description": "reason of the error",
+                    "type": "String"
+                },
+                {
+                    "name": "message",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "DomainError"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 261,
+            "description": "check if given object is instance of DomainError",
+            "itemtype": "method",
+            "name": "isDomainError",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "",
+                    "type": "Error"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 274,
+            "description": "insert fixture data\n(Node.js only)",
+            "itemtype": "method",
+            "name": "insertFixtures",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "dataDir",
+                            "description": "directory to have fixture data files",
+                            "type": "String",
+                            "optional": true,
+                            "optdefault": "'./data'"
+                        },
+                        {
+                            "name": "tsvDir",
+                            "description": "directory to have TSV files",
+                            "type": "String",
+                            "optional": true,
+                            "optdefault": "'./tsv'"
+                        },
+                        {
+                            "name": "models",
+                            "description": "model names to insert. default: all models",
+                            "type": "Array(String)",
+                            "optional": true,
+                            "optdefault": "null"
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "dataPool inserted data",
+                "type": "Promise(Object)"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/fixture.coffee",
+            "line": 11,
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "dirname",
+                            "description": "director(y|ies) to have fixture files. /data, /tsvs should be included in the directory.",
+                            "type": "String|Array",
+                            "optional": true,
+                            "optdefault": "'./fixtures'"
+                        },
+                        {
+                            "name": "data",
+                            "description": "default data, merged to dataPool",
+                            "type": "Object",
+                            "optional": true,
+                            "optdefault": "{}"
+                        },
+                        {
+                            "name": "debug",
+                            "description": "if true, shows debug log",
+                            "type": "String",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "class": "Fixture",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/fixture.coffee",
+            "line": 55,
+            "description": "add data to pool for model's data",
+            "itemtype": "method",
+            "name": "addToDataPool",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "Fixture",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/fixture.coffee",
+            "line": 66,
+            "description": "inserts data to datasource",
+            "params": [
+                {
+                    "name": "names",
+                    "description": "list of fixture models to insert data",
+                    "type": "Array"
+                }
+            ],
+            "itemtype": "method",
+            "name": "insert",
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "Fixture",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/fixture.coffee",
+            "line": 108,
+            "description": "adds dependent models, topological sort",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "names",
+                    "description": "list of fixture models to insert data",
+                    "type": "Array"
+                }
+            ],
+            "itemtype": "method",
+            "name": "resolveDependencies",
+            "return": {
+                "description": "model names",
+                "type": "Array"
+            },
+            "class": "Fixture",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/fixture.coffee",
+            "line": 173,
+            "is_constructor": 1,
+            "class": "FixtureModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/fixture.coffee",
+            "line": 183,
+            "description": "inserts data to datasource",
+            "itemtype": "method",
+            "name": "insert",
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "FixtureModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/fixture.coffee",
+            "line": 226,
+            "description": "read TSV, returns model data",
+            "itemtype": "method",
+            "name": "readTSV",
+            "class": "FixtureModel",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/list-factory.coffee",
+            "line": 20,
+            "description": "creates an instance of BaseList by value",
+            "itemtype": "method",
+            "name": "createList",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "BaseList"
+            },
+            "class": "ListFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/list-factory.coffee",
+            "line": 40,
+            "description": "creates an instance of BaseList from array",
+            "itemtype": "method",
+            "name": "createFromArray",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "BaseList"
+            },
+            "class": "ListFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/list-factory.coffee",
+            "line": 62,
+            "description": "creates an instance of BaseList by value",
+            "itemtype": "method",
+            "name": "createEmpty",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "BaseList"
+            },
+            "class": "ListFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/list-factory.coffee",
+            "line": 74,
+            "description": "creates an instance of BaseList by value",
+            "itemtype": "method",
+            "name": "createEmpty",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "BaseList"
+            },
+            "class": "ListFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/list-factory.coffee",
+            "line": 97,
+            "description": "creates an instance of BaseList by value",
+            "itemtype": "method",
+            "name": "createEmpty",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "objList",
+                    "description": "",
+                    "type": "Array(Object)"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "BaseList"
+            },
+            "class": "ListFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/master-repository.coffee",
+            "line": 13,
+            "description": "a flag to load and store all models with @load() method\nif set to true, master table is generated after @load() method,\nand used in BaseFactory#createFromObject()",
+            "itemtype": "property",
+            "name": "storeMasterTable",
+            "static": 1,
+            "type": "Boolean",
+            "class": "MasterRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/master-repository.coffee",
+            "line": 25,
+            "description": "loaded map of id => models",
+            "itemtype": "property",
+            "name": "modelsById",
+            "static": 1,
+            "access": "protected",
+            "tagname": "",
+            "class": "MasterRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/master-repository.coffee",
+            "line": 34,
+            "description": "loaded map of id => models",
+            "itemtype": "method",
+            "name": "getByIdSync",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "model",
+                "type": "Model"
+            },
+            "class": "MasterRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/master-repository.coffee",
+            "line": 53,
+            "description": "load whole master data of the model\nwhen @storeMasterTable is off, load will fail.",
+            "itemtype": "method",
+            "name": "load",
+            "return": {
+                "description": "is load succeed or not.",
+                "type": "Promise(Boolean)"
+            },
+            "class": "MasterRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 12,
+            "description": "property whose type is CREATED_AT",
+            "itemtype": "property",
+            "name": "createdAt",
+            "type": "String",
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 19,
+            "description": "property whose type is UPDATED_AT",
+            "itemtype": "property",
+            "name": "updatedAt",
+            "type": "String",
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 26,
+            "description": "properties whose type is MODEL",
+            "itemtype": "property",
+            "name": "modelProps",
+            "type": "Array",
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 33,
+            "description": "properties whose type is MODEL_LIST",
+            "itemtype": "property",
+            "name": "listProps",
+            "type": "Array",
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 40,
+            "description": "properties whose type is MODEL and the model extends Entity",
+            "itemtype": "property",
+            "name": "entityProps",
+            "type": "Array",
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 47,
+            "description": "key value pairs of (property => TypeInfo)",
+            "itemtype": "property",
+            "name": "dic",
+            "type": "Object",
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 63,
+            "description": "classify each prop by type",
+            "itemtype": "method",
+            "name": "build",
+            "access": "private",
+            "tagname": "",
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 96,
+            "description": "check if the given prop is entity prop",
+            "itemtype": "method",
+            "name": "isEntityProp",
+            "params": [
+                {
+                    "name": "prop",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 107,
+            "description": "check if the given prop is model prop",
+            "itemtype": "method",
+            "name": "isModelProp",
+            "params": [
+                {
+                    "name": "prop",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/resource-client-interface.coffee",
+            "line": 16,
+            "description": "Create new instance of Model class, saved in database",
+            "itemtype": "method",
+            "name": "create",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise(Object)"
+            },
+            "class": "ResourceClientInterface",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/resource-client-interface.coffee",
+            "line": 28,
+            "description": "Update or insert a model instance\nThe update will override any specified attributes in the request data object. It won’t remove  existing ones unless the value is set to null.",
+            "itemtype": "method",
+            "name": "upsert",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise(Object)"
+            },
+            "class": "ResourceClientInterface",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/resource-client-interface.coffee",
+            "line": 41,
+            "description": "Find object by ID.",
+            "itemtype": "method",
+            "name": "findById",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise(Object)"
+            },
+            "class": "ResourceClientInterface",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/resource-client-interface.coffee",
+            "line": 54,
+            "description": "Find all model instances that match filter specification.",
+            "itemtype": "method",
+            "name": "find",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "filter",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise(Array(Object))"
+            },
+            "class": "ResourceClientInterface",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/resource-client-interface.coffee",
+            "line": 65,
+            "description": "Find one model instance that matches filter specification. Same as find, but limited to one result",
+            "itemtype": "method",
+            "name": "findOne",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "filter",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise(Object)"
+            },
+            "class": "ResourceClientInterface",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/resource-client-interface.coffee",
+            "line": 77,
+            "description": "Destroy model instance",
+            "itemtype": "method",
+            "name": "destroyById",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ResourceClientInterface",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/resource-client-interface.coffee",
+            "line": 89,
+            "description": "Destroy model instance with the specified ID.",
+            "itemtype": "method",
+            "name": "destroyById",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "ResourceClientInterface",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/resource-client-interface.coffee",
+            "line": 101,
+            "description": "Update set of attributes.",
+            "itemtype": "method",
+            "name": "updateAttributes",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Promise(Object)"
+            },
+            "class": "ResourceClientInterface",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/resource-client-interface.coffee",
+            "line": 114,
+            "description": "return Promise object as mock",
+            "itemtype": "method",
+            "name": "mock",
+            "access": "private",
+            "tagname": "",
+            "class": "ResourceClientInterface",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/type-info.coffee",
+            "line": 14,
+            "description": "check if the type is the given typeName",
+            "itemtype": "method",
+            "name": "equals",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "typeName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "retrun": "{Boolean}",
+            "class": "TypeInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/type-info.coffee",
+            "line": 24,
+            "description": "check if the type is not the given typeName",
+            "itemtype": "method",
+            "name": "notEquals",
+            "access": "public",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "typeName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "retrun": "{Boolean}",
+            "class": "TypeInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/type-info.coffee",
+            "line": 35,
+            "description": "get TypeInfo as MODEL",
+            "itemtype": "method",
+            "name": "createModelType",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "params": [
+                {
+                    "name": "modelName",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "idPropName",
+                    "description": "by default: xxxYyyId when modelName is xxx-yyy",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "type",
+                "type": "TypeInfo"
+            },
+            "class": "TypeInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/type-info.coffee",
+            "line": 61,
+            "description": "get TypeInfo as MODEL_LIST",
+            "itemtype": "method",
+            "name": "createModelListType",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "params": [
+                {
+                    "name": "modelName",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options.idPropName",
+                    "description": "by default: xxxYyyIds when modelName is xxx-yyy",
+                    "type": "String",
+                    "optional": true
+                },
+                {
+                    "name": "options.name",
+                    "description": "name of list model, by default: xxx-yyy-list when modelName is xxx-yyy",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "type",
+                "type": "TypeInfo"
+            },
+            "class": "TypeInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/type-info.coffee",
+            "line": 79,
+            "description": "TYPES defines various data type, including model and array of models\n\nkey: typeName (String)\nvalue: type TypeInfo|Function(TypeInfo)",
+            "itemtype": "property",
+            "name": "TYPES",
+            "static": 1,
+            "class": "TypeInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/type-info.coffee",
+            "line": 107,
+            "description": "converts hyphenation to camel case\n\n    'shinout-no-macbook-pro => shinoutNoMacbookPro'",
+            "itemtype": "method",
+            "name": "camelize",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "params": [
+                {
+                    "name": "hyphened",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "cameled",
+                "type": "String"
+            },
+            "class": "TypeInfo",
+            "module": "base-domain"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: abstract",
+            "line": " src/lib/base-factory.coffee:213"
+        },
+        {
+            "message": "unknown tag: abstract",
+            "line": " src/lib/base-factory.coffee:226"
+        },
+        {
+            "message": "replacing incorrect tag: params with param",
+            "line": " src/lib/base-list.coffee:24"
+        },
+        {
+            "message": "unknown tag: abstract",
+            "line": " src/lib/base-model.coffee:44"
+        },
+        {
+            "message": "unknown tag: properties",
+            "line": " src/lib/base-model.coffee:78"
+        },
+        {
+            "message": "unknown tag: properties",
+            "line": " src/lib/base-model.coffee:78"
+        },
+        {
+            "message": "unknown tag: abstract",
+            "line": " src/lib/base-repository.coffee:32"
+        },
+        {
+            "message": "unknown tag: reason",
+            "line": " src/lib/domain-error.coffee:32"
+        },
+        {
+            "message": "replacing incorrect tag: params with param",
+            "line": " src/lib/list-factory.coffee:74"
+        },
+        {
+            "message": "replacing incorrect tag: params with param",
+            "line": " src/lib/list-factory.coffee:97"
+        },
+        {
+            "message": "unknown tag: abstract",
+            "line": " src/lib/master-repository.coffee:4"
+        },
+        {
+            "message": "unknown tag: retrun",
+            "line": " src/lib/type-info.coffee:14"
+        },
+        {
+            "message": "unknown tag: retrun",
+            "line": " src/lib/type-info.coffee:24"
+        },
+        {
+            "message": "Missing item type\nconstructor",
+            "line": " src/lib/base-factory.coffee:30"
+        },
+        {
+            "message": "Missing item type\nModelName -> model-name",
+            "line": " src/lib/base-model.coffee:35"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src/lib/base-model.coffee:128"
+        },
+        {
+            "message": "Missing item type\nset value to prop",
+            "line": " src/lib/base-model.coffee:144"
+        },
+        {
+            "message": "Missing item type\nset model prop",
+            "line": " src/lib/base-model.coffee:163"
+        },
+        {
+            "message": "Missing item type\nconstructor",
+            "line": " src/lib/base-repository.coffee:46"
+        },
+        {
+            "message": "Missing item type\nconstructor",
+            "line": " src/lib/facade.coffee:30"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src/lib/fixture.coffee:11"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src/lib/fixture.coffee:173"
+        }
+    ]
+}

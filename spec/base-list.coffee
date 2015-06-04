@@ -20,7 +20,12 @@ describe 'BaseList', ->
             hobbyIds = (hobby.id for hobby in hobbies)
             expect(hobbyIds).to.deep.equal [3, 2, 1]
 
-            hobbyList = BaseList.createAnonymous('hobby', hobbies)
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(hobbies)
 
             hobbyIdsSorted = (hobby.id for hobby in hobbyList.items)
 
@@ -31,7 +36,13 @@ describe 'BaseList', ->
 
         it 'get array of items', ->
 
-            hobbyList = BaseList.createAnonymous('hobby', hobbies)
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(hobbies)
+
             expect(hobbyList.ids).to.deep.equal [1, 2, 3]
 
 
@@ -39,7 +50,12 @@ describe 'BaseList', ->
 
         it 'returns first value of the items', ->
 
-            hobbyList = BaseList.createAnonymous('hobby', hobbies)
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(hobbies)
 
             expect(hobbyList.first()).to.equal hobbies[2]
 
@@ -49,7 +65,12 @@ describe 'BaseList', ->
 
         it 'returns last value of the items', ->
 
-            hobbyList = BaseList.createAnonymous('hobby', hobbies)
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(hobbies)
 
             expect(hobbyList.last()).to.equal hobbies[0]
 
@@ -58,6 +79,11 @@ describe 'BaseList', ->
 
         it 'returns deeply-equal array to items', ->
 
-            hobbyList = BaseList.createAnonymous('hobby', hobbies)
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(hobbies)
 
             expect(hobbyList.toArray()).to.deep.equal hobbyList.items

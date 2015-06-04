@@ -1,6 +1,7 @@
 
 
 Base  = require './base'
+ListFactory = require './list-factory'
 
 ###*
 Base factory class of DDD pattern.
@@ -69,12 +70,15 @@ class BaseFactory extends Base
     ###
     createFromObject: (obj) ->
 
+        ModelClass = @getModelClass()
+
+        return obj if obj instanceof ModelClass
+
         obj = @beforeCreateFromObject obj
 
         if not obj? or typeof obj isnt 'object'
             return null
 
-        ModelClass = @getModelClass()
 
         model = new ModelClass()
 
@@ -103,7 +107,6 @@ class BaseFactory extends Base
     fetchEntityProp: (model, prop) ->
 
         typeInfo = model.getTypeInfo(prop)
-
         idPropName = typeInfo.idPropName
 
         try
@@ -115,24 +118,29 @@ class BaseFactory extends Base
         catch e
             return
 
-        if typeInfo.equals 'MODELS'
+        id = model[idPropName]
+        subModel = repository.getByIdSync(id)
+        model.setEntityProp(prop, subModel) if subModel
 
-            ids = model[idPropName]
-            return if not Array.isArray ids
 
-            subModels = []
-            for id in ids
-                subModel = repository.getByIdSync(id)
-                return if not subModel # TODO: throws 'invalid id' error?
-                subModels.push subModel
 
-            model.setEntityProps(prop, subModels)
+    # WIP, not called.
+    fetchListProp: (model, prop) ->
 
-        else # if typeInfo.equals 'MODEL'
+        typeInfo = model.getTypeInfo(prop)
 
-            id = model[idPropName]
+        ids = model[idPropName]
+
+        return if not Array.isArray ids
+
+        subModels = []
+        for id in ids
             subModel = repository.getByIdSync(id)
-            model.setEntityProp(prop, subModel) if subModel
+            return if not subModel # TODO: throws 'invalid id' error?
+            subModels.push subModel
+
+        model.setNonEntityProp(prop, subModels)
+
 
 
     ###*
@@ -147,8 +155,8 @@ class BaseFactory extends Base
 
         switch typeInfo?.name
 
-            when 'MODELS'
-                @setSubModelArrToModel(model, prop, value)
+            when 'MODEL_LIST'
+                @setSubModelListToModel(model, prop, value)
 
             when 'MODEL'
                 @setSubModelToModel(model, prop, value)
@@ -159,35 +167,20 @@ class BaseFactory extends Base
 
 
     ###*
-    set submodels (array) to the prop
+    creates list and set it to the model
 
-    @method setSubModelArrToModel
+    @method setSubModelListToModel
     @private
     ###
-    setSubModelArrToModel: (model, prop, arr) ->
-        if not Array.isArray arr
-            model.setNonEntityProp(prop, arr)
-            return
+    setSubModelListToModel: (model, prop, arr) ->
 
-        subModelName = model.getTypeInfo(prop).model
+        typeInfo = model.getTypeInfo(prop)
 
-        useAnonymousFactory = on # if no factory is declared, altered one is used 
-        subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)
+        listFactory = @getFacade().createListFactory typeInfo.listName, typeInfo.model
 
-        SubModel = subModelFactory.getModelClass()
+        list = listFactory.createList(arr)
 
-        subModels = (for subObj in arr
-            if subObj instanceof SubModel
-                subObj
-            else
-                subModelFactory.createFromObject(subObj)
-        )
-
-        if SubModel.isEntity
-            model.setEntityProps(prop, subModels)
-
-        else
-            model.setNonEntityProp(prop, subModels)
+        model.setNonEntityProp(prop, list)
 
         return
 
@@ -210,9 +203,9 @@ class BaseFactory extends Base
             value = subModelFactory.createFromObject(value)
 
         if SubModel.isEntity
-            model.setEntityProps(prop, value)
+            model.setEntityProp(prop, value)
         else
-            model.setNonEntityProps(prop, value)
+            model.setNonEntityProp(prop, value)
 
         return
 

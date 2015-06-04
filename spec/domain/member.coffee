@@ -8,8 +8,8 @@ class Member extends Entity
         firstName    : @TYPES.STRING
         age          : @TYPES.NUMBER
         registeredAt : @TYPES.DATE
-        hobbies      : @TYPES.MODELS 'hobby'
-        newHobbies   : @TYPES.MODELS 'hobby', 'newHobbyIds'
+        hobbies      : @TYPES.MODEL_LIST 'hobby'
+        newHobbies   : @TYPES.MODEL_LIST 'hobby'
         mCreatedAt   : @TYPES.CREATED_AT
         mUpdatedAt   : @TYPES.UPDATED_AT
 

@@ -49,27 +49,19 @@ class TypeInfo
             idPropName : idPropName ?  TypeInfo.camelize(modelName) + 'Id'
 
 
-    ###*
-    get TypeInfo as MODELS
-
-    @method createModelsType
-    @private
-    @static
-    @param {String} modelName
-    @param {String} [idPropName] by default: xxxYyyIds when modelName is xxx-yyy
-    @return {TypeInfo} type
-    ###
     @createModelsType: (modelName, idPropName) -> 
-        new TypeInfo 'MODELS',
-            model      : modelName
-            idPropName : idPropName ? TypeInfo.camelize(modelName) + 'Ids'
 
+        throw new Error """
+            @TYPES.MODELS is deprecated.
+            use @TYPES.MODEL_LIST instead.
+            in #{modelName}, #{idPropName}
+        """
 
 
     ###*
     get TypeInfo as MODEL_LIST
 
-    @method createModelsType
+    @method createModelListType
     @private
     @static
     @param {String} modelName

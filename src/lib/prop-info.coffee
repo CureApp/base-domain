@@ -31,6 +31,13 @@ class PropInfo
         @modelProps  = []
 
         ###*
+        properties whose type is MODEL_LIST
+        @property listProps
+        @type Array
+        ###
+        @listProps  = []
+
+        ###*
         properties whose type is MODEL and the model extends Entity
         @property entityProps
         @type Array
@@ -43,6 +50,11 @@ class PropInfo
         @type Object
         ###
         @dic = {}
+
+
+        # private
+        @entityDic = {}
+        @modelDic = {}
 
 
         @build props, facade
@@ -68,10 +80,38 @@ class PropInfo
                 when 'UPDATED_AT'
                     @updatedAt = prop
 
-                when 'MODEL', 'MODELS'
+                when 'MODEL'
                     @modelProps.push prop
+                    @modelDic[prop] = true
+
                     if facade.getModel(typeInfo.model).isEntity
                         @entityProps.push prop
+                        @entityDic[prop] = true
 
+                when 'MODEL_LIST'
+                    @listProps.push prop
+
+        return
+
+    ###*
+    check if the given prop is entity prop
+
+    @method isEntityProp
+    @param {String} prop
+    @return {Boolean}
+    ###
+    isEntityProp: (prop) ->
+        return @entityDic[prop]?
+
+
+    ###*
+    check if the given prop is model prop
+
+    @method isModelProp
+    @param {String} prop
+    @return {Boolean}
+    ###
+    isModelProp: (prop) ->
+        return @modelDic[prop]?
 
 module.exports = PropInfo

@@ -10,13 +10,6 @@ list class of DDD pattern.
 ###
 class BaseList extends BaseModel
 
-    @createAnonymous: (itemModelName, models = [])->
-
-        class AnonymousList extends BaseList
-            @itemModelName: itemModelName
-
-        return new AnonymousList(models)
-
     ###*
     model name of the item
 
@@ -26,6 +19,22 @@ class BaseList extends BaseModel
     @type String
     ###
     @itemModelName: ''
+
+
+    ###*
+    creates child class of BaseList
+
+    @method getAnonymousClass
+    @params {String} itemModelName
+    @return {Function} child class of BaseList
+    ###
+    @getAnonymousClass: (itemModelName) ->
+
+
+        class AnonymousList extends BaseList
+            @itemModelName: itemModelName
+
+        return AnonymousList
 
 
     ###*
@@ -48,6 +57,18 @@ class BaseList extends BaseModel
     constructor: (models = []) ->
 
         @items = models.slice().sort(@sort)
+
+
+    ###*
+    returns item is Entity
+
+    @method containsEntity
+    @static
+    @public
+    @return {Boolean}
+    ###
+    @containsEntity: ->
+        return @getFacade().getModel(@itemModelName).isEntity
 
 
     ###*
@@ -94,6 +115,30 @@ class BaseList extends BaseModel
     ###
     toArray: ->
         @items.slice()
+
+
+    ###*
+    create plain list.
+    if this list contains entities, returns their ids
+    if this list contains non-entity models, returns their plain objects 
+
+    @method toPlainObject
+    @return {Object} plainObject
+    ###
+    toPlainObject: ->
+
+        if @constructor.containsEntity()
+            return ids: @ids
+
+        else
+            plainItems = []
+            for item in @items
+                if typeof item.toPlainObject is 'function'
+                    plainItems.push item.toPlainObject()
+                else
+                    plainItems.push item
+
+            return items: plainItems
 
 
 module.exports = BaseList

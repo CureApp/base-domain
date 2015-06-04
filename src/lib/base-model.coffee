@@ -49,7 +49,7 @@ class BaseModel extends Base
         age          : @TYPES.NUMBER
         registeredAt : @TYPES.DATE
         team         : @TYPES.MODEL 'team'
-        hobbies      : @TYPES.MODELS 'hobby'
+        hobbies      : @TYPES.MODEL_LIST 'hobby'
         info         : @TYPES.ANY
 
     see type-info.coffee for full options.
@@ -138,6 +138,8 @@ class BaseModel extends Base
     getTypeInfo: (prop) ->
         @constructor.getPropInfo().dic[prop]
 
+    isEntityProp: (prop) ->
+        @constructor.getPropInfo().isEntityProp prop
 
     ###*
     set value to prop
@@ -150,7 +152,7 @@ class BaseModel extends Base
 
         typeInfo = @getTypeInfo prop
 
-        if typeInfo?.model and @isSubClassOfEntity(typeInfo.model)
+        if typeInfo?.model and @isEntityProp prop
             @setEntityProp(prop, value)
         else
             @setNonEntityProp(prop, value)
@@ -164,29 +166,6 @@ class BaseModel extends Base
     ###
     setNonEntityProp: (prop, value) ->
         @[prop] = value
-
-
-
-    ###*
-    synchronize relation columns and relationId columns
-
-    @param {Object} [options]
-    @param {Boolean} [options.force]
-    @method updateRelationIds
-    ###
-    updateRelationIds: (options = {})->
-
-        for propName in @constructor.getEntityProps()
-
-            typeInfo = @getTypeInfo propName
-
-            modelName = typeInfo.model
-
-            propValue = @[propName]
-
-            @setEntityProp(propName, propValue)
-
-        return @
 
 
     ###*
@@ -206,25 +185,9 @@ class BaseModel extends Base
 
         idPropName = typeInfo.idPropName
 
-        if typeInfo.equals 'MODEL'
-            @[idPropName] = submodel?.id
-        else # if typeInfo.equals 'MODELS'
-            @[idPropName] = 
-                if submodel
-                    (sub.id for sub in submodel)
-                else
-                    []
+        @[idPropName] = submodel?.id
 
         return @
-
-
-    ###*
-    alias for setEntityProp
-
-    @method setEntityProps
-    ###
-    setEntityProps: (prop, submodels) -> @setEntityProp(prop, submodels)
-
 
 
     ###*
@@ -248,41 +211,6 @@ class BaseModel extends Base
             @[idPropName] = []
 
         return @
-
-
-    ###*
-    alias for unsetEntityProp
-
-    @method unsetEntityProps
-    ###
-    unsetEntityProps: (prop, submodels) -> @unsetEntityProp(prop, submodels)
-
-
-    ###*
-    add related models
-
-    @param {String} prop property name of the related models
-    @return {BaseModel} this
-    @method addRelatedModels
-    ###
-    addRelatedModels: (prop, submodels...) ->
-
-        typeInfo = @getTypeInfo prop
-        modelName = typeInfo.model
-
-        if typeInfo.notEquals 'MODELS'
-            throw @getFacade().error """
-                #{@constructor.name}.addRelatedModels(#{prop})
-                #{prop} is not a prop for models.
-            """
-        idPropName = typeInfo.idPropName
-        @[prop] ?= []
-        @[prop].push submodel for submodel in submodels
-        @[idPropName] ?= []
-        @[idPropName].push submodel.id for submodel in submodels
-
-        return @
-
 
 
     ###*
@@ -315,6 +243,10 @@ class BaseModel extends Base
         plainObject = {}
 
         for own prop, value of @
+            # remove entities
+            if @isEntityProp prop
+                continue
+
             typeInfo = @getTypeInfo prop
 
             # set non-model properties
@@ -322,27 +254,12 @@ class BaseModel extends Base
                 plainObject[prop] = value
                 continue
 
+            # plainize submodels, lists
+            if typeof value?.toPlainObject is 'function'
+                plainObject[prop] = value.toPlainObject()
 
-            # strip model if it is descendant of Entity
-            if @isSubClassOfEntity typeInfo.model
-                continue
-
-
-            # strip submodel's relation
-            if typeInfo.equals 'MODEL'
-                if value instanceof BaseModel
-                    plainObject[prop] = value.toPlainObject()
-                else
-                    plainObject[prop] = value
-
-            else # typeInfo.equals 'MODELS'
-                plainObject[prop] = 
-                    for subData in value
-                        if subData instanceof BaseModel
-                            subData.toPlainObject()
-                        else
-                            subData
-
+            else
+                plainObject[prop] = value
 
         return plainObject
 
@@ -413,34 +330,15 @@ class BaseModel extends Base
             for modelProp in @constructor.getModelProps()
                 propInfo = @getTypeInfo modelProp
 
-                if propInfo.equals('MODELS') and Array.isArray @[modelProp]
-                    for model in @[modelProp]
-                        if model instanceof BaseModel
-                            promise = model.include(recursive: true, modelPool: modelPool)
-                            subPromises.push promise
-
-                else
-                    model = @[modelProp]
-                    if model instanceof BaseModel
-                        promise = model.include(recursive: true, modelPool: modelPool)
-                        subPromises.push promise
+                model = @[modelProp]
+                if model instanceof BaseModel
+                    promise = model.include(recursive: true, modelPool: modelPool)
+                    subPromises.push promise
 
             return Promise.all subPromises
 
         .then =>
             return @
-
-
-    ###*
-    return if Model is subclass of Entity
-
-    @method isSubClassOfEntity
-    @private
-    ###
-    isSubClassOfEntity: (modelName) ->
-        ModelClass = @getFacade().getModel modelName
-        return ModelClass.isEntity
-
 
 
 module.exports = BaseModel

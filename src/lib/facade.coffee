@@ -37,6 +37,10 @@ class Facade
     constructor: (options) ->
         @classes = {}
         @dirname = options.dirname ? '.'
+
+        ListFactory = require './list-factory'
+        @addClass('list-factory', ListFactory)
+
         @init()
 
 
@@ -63,6 +67,34 @@ class Facade
     ###
     getModel: (name) ->
         return @require(name)
+
+
+    ###*
+    get a list model class
+
+    @method getListModel
+    @param {String} listModelName
+    @param {String} [itemModelName]
+    @return {Class}
+    ###
+    getListModel: (listModelName, itemModelName) ->
+
+        BaseList = @constructor.BaseList
+
+        if @hasClass listModelName
+            ListClass = @getModel(listModelName)
+            # ListClass.name = listModelName
+
+            unless ListClass:: instanceof BaseList
+                throw @error "#{listModelName} is not instance of BaseList"
+
+            return ListClass
+
+        if @hasClass itemModelName
+            throw @error "#{itemModelName} is not valid model name"
+
+        AnonymousListClass = BaseList.getAnonymousClass(itemModelName)
+        return @addClass(listModelName, AnonymousListClass)
 
 
     ###*
@@ -143,6 +175,21 @@ class Facade
 
 
     ###*
+    check existence of the class of the given name
+
+    @method hasClass
+    @param {String} name
+    @return {Function}
+    ###
+    hasClass: (name) ->
+        try
+            @requre(name)
+            return true
+        catch e
+            return false
+
+
+    ###*
     set klass to dictionary
     attaches getFacade() method
 
@@ -181,6 +228,20 @@ class Facade
     create: (name, options) ->
         DomainClass = @require(name)
         return new DomainClass(options)
+
+
+    ###*
+    creates a list factory class
+
+    @method createListFactory
+    @param {String} listModelName
+    @param {String} itemModelName
+    @return {ListFactory}
+    ###
+    createListFactory: (listModelName, itemModelName) ->
+
+        ListFactory = @require('list-factory')
+        return new ListFactory listModelName, itemModelName
 
 
     ###*

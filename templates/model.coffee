@@ -32,8 +32,8 @@ class <%=@Model%> extends BaseModel
         confirmedAt : @TYPES.DATE
         team        : @TYPES.MODEL 'team'
         extraTeam   : @TYPES.MODEL 'team', 'exTeamId'
-        hobbies     : @TYPES.MODELS 'hobby'
-        newHobbies  : @TYPES.MODELS 'hobby', 'newHobbyIds'
+        hobbies     : @TYPES.MODEL_LIST 'hobby'
+        newHobbies  : @TYPES.MODEL_LIST 'hobby', 'new-hobby-collection'
         otherInfo   : @TYPES.OBJECT
         createdAt   : @TYPES.CREATED_AT
         updatedAt   : @TYPES.UPDATED_AT

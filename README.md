@@ -47,7 +47,7 @@ class Hospital extends require('base-domain').Entity
         beds         : @TYPES.NUMBER
         registeredAt : @TYPES.DATE
         isValidated  : @TYPES.BOOLEAN
-        doctors      : @TYPES.MODELS 'doctor'
+        doctors      : @TYPES.MODEL_LIST 'doctor'
 
 module.exports = Hospital
 ```

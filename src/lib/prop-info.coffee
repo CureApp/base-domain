@@ -1,11 +1,12 @@
 
 class PropInfo
 
-    constructor: (props) ->
+    constructor: (props, facade) ->
 
         @createdAt = null
         @updatedAt = null
-        @modelProps = []
+        @modelProps  = []
+        @entityProps = []
         @props = {}
         @list = []
 
@@ -25,6 +26,8 @@ class PropInfo
 
                 when 'MODEL', 'MODELS'
                     @modelProps.push prop
+                    if facade.getModel(typeInfo.model).isEntity
+                        @entityProps.push prop
 
 
 module.exports = PropInfo

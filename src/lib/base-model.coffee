@@ -54,7 +54,7 @@ class BaseModel extends Base
 
     @_pi: null
     @getPropInfo: ->
-        @_pi ?= new PropInfo @properties
+        @_pi ?= new PropInfo @properties, @getFacade()
 
 
     ###*

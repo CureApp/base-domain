@@ -111,8 +111,8 @@ class BaseModel extends Base
 
         typeInfo = @getTypeInfo prop
 
-        if typeInfo?.model
-            @setRelatedModel(prop, value)
+        if typeInfo?.model and @isSubClassOfEntity(typeInfo.model)
+            @setEntityProp(prop, value)
         else
             @setNonEntityProp(prop, value)
 
@@ -145,7 +145,7 @@ class BaseModel extends Base
 
             propValue = @[propName]
 
-            @setRelatedModel(propName, propValue)
+            @setEntityProp(propName, propValue)
 
         return @
 
@@ -153,22 +153,17 @@ class BaseModel extends Base
     ###*
     set related model(s)
 
-    @method setRelatedModel
+    @method setEntityProp
     @param {String} prop property name of the related model
     @param {Entity|Array<Entity>} submodel
     @return {BaseModel} this
     ###
-    setRelatedModel: (prop, submodel) ->
+    setEntityProp: (prop, submodel) ->
 
         typeInfo = @getTypeInfo prop
         modelName = typeInfo.model
 
         @[prop] = submodel
-
-        # id(s) are not added if submodel is not subclass of entity
-        if not @isSubClassOfEntity modelName
-            return @
-
 
         idPropName = typeInfo.idPropName
 
@@ -185,11 +180,11 @@ class BaseModel extends Base
 
 
     ###*
-    alias for setRelatedModel
+    alias for setEntityProp
 
-    @method setRelatedModels
+    @method setEntityProps
     ###
-    setRelatedModels: (prop, submodels) -> @setRelatedModel(prop, submodels)
+    setEntityProps: (prop, submodels) -> @setEntityProp(prop, submodels)
 
 
 
@@ -198,9 +193,9 @@ class BaseModel extends Base
 
     @param {String} prop property name of the related models
     @return {BaseModel} this
-    @method setRelatedModels
+    @method unsetEntityProp
     ###
-    unsetRelatedModel: (prop) ->
+    unsetEntityProp: (prop) ->
 
         typeInfo = @getTypeInfo prop
         modelName = typeInfo.model
@@ -217,11 +212,11 @@ class BaseModel extends Base
 
 
     ###*
-    alias for unsetRelatedModel
+    alias for unsetEntityProp
 
-    @method unsetRelatedModels
+    @method unsetEntityProps
     ###
-    unsetRelatedModels: (prop, submodels) -> @unsetRelatedModel(prop, submodels)
+    unsetEntityProps: (prop, submodels) -> @unsetEntityProp(prop, submodels)
 
 
     ###*

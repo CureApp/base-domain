@@ -85,9 +85,13 @@ class BaseFactory extends Base
 
         # check idPropName
         for relModelProp in ModelClass.getModelProps()
+            continue if model[relModelProp]
 
-            if not model[relModelProp]? and ModelClass.isEntity
-                @fetchSubModel(model, relModelProp)
+            typeInfo = model.getTypeInfo(relModelProp)
+
+            if @getFacade().getModel(typeInfo.model).isEntity
+
+                @fetchEntityProp(model, relModelProp)
 
         return @afterCreateModel model
 
@@ -97,10 +101,10 @@ class BaseFactory extends Base
     available only when repository of submodel implements 'getByIdSync'
     (MasterRepository implements one)
 
-    @method fetchSubModel
+    @method fetchEntityProp
     @private
     ###
-    fetchSubModel: (model, prop) ->
+    fetchEntityProp: (model, prop) ->
 
         typeInfo = model.getTypeInfo(prop)
 
@@ -126,13 +130,13 @@ class BaseFactory extends Base
                 return if not subModel # TODO: throws 'invalid id' error?
                 subModels.push subModel
 
-            model.setRelatedModels(prop, subModels)
+            model.setEntityProps(prop, subModels)
 
         else # if typeInfo.equals 'MODEL'
 
             id = model[idPropName]
             subModel = repository.getByIdSync(id)
-            model.setRelatedModel(prop, subModel) if subModel
+            model.setEntityProp(prop, subModel) if subModel
 
 
     ###*
@@ -183,7 +187,11 @@ class BaseFactory extends Base
                 subModelFactory.createFromObject(subObj)
         )
 
-        model.setRelatedModels(prop, subModels)
+        if SubModel.isEntity
+            model.setEntityProps(prop, subModels)
+
+        else
+            model.setNonEntityProp(prop, subModels)
 
         return
 
@@ -202,15 +210,15 @@ class BaseFactory extends Base
         subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)
         SubModel = subModelFactory.getModelClass()
 
-        if value instanceof SubModel
-            model.setRelatedModel(prop, value)
+        if value not instanceof SubModel
+            value = subModelFactory.createFromObject(value)
 
+        if SubModel.isEntity
+            model.setEntityProps(prop, value)
         else
-            subModel = subModelFactory.createFromObject(value)
-            model.setRelatedModel(prop, subModel)
+            model.setNonEntityProps(prop, value)
 
         return
-
 
 
     ###*

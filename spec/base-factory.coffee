@@ -89,7 +89,7 @@ describe 'BaseFactory', ->
             expect(diary).to.have.property 'memberId', 12 # not "authorId"
 
 
-    describe 'fetchSubModel', ->
+    describe 'fetchEntityProp', ->
 
         before (done) ->
 
@@ -113,13 +113,13 @@ describe 'BaseFactory', ->
             diary = new Diary()
             diary.memberId = 'dummy'
 
-            factory.fetchSubModel(diary, 'author')
+            factory.fetchEntityProp(diary, 'author')
 
             expect(diary.author).to.be.instanceof Member
             expect(diary.author.id).to.equal 'dummy'
 
 
-    describe 'fetchSubModel', -> # intentionally, appeared twice
+    describe 'fetchEntityProp', -> # intentionally, appeared twice
 
         before (done) ->
 
@@ -144,7 +144,7 @@ describe 'BaseFactory', ->
             member = new Member()
             member.newHobbyIds = ['dummy']
 
-            factory.fetchSubModel(member, 'newHobbies')
+            factory.fetchEntityProp(member, 'newHobbies')
 
             expect(member.newHobbies).to.have.length 1
             expect(member.newHobbies[0]).to.be.instanceof Hobby
@@ -156,7 +156,7 @@ describe 'BaseFactory', ->
             member = new Member()
             member.newHobbyIds = ['dummy', 'xxx']
 
-            factory.fetchSubModel(member, 'newHobbies')
+            factory.fetchEntityProp(member, 'newHobbies')
 
             expect(member.newHobbies).not.to.exist
 

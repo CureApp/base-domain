@@ -113,28 +113,28 @@ describe 'BaseModel', ->
             expect(member.hobbyIds).to.eql [1,2,3]
 
 
-    describe 'setRelatedModel(s)', ->
+    describe 'setEntityProp(s)', ->
         it 'set relation and its ids (has one / belongs to)', ->
             diary = diaryFactory.createFromObject
                 title : 'crazy about room335'
                 comment: 'progression of room335 is wonderful'
                 date  : new Date()
 
-            diary.setRelatedModel('coauthor', member)
+            diary.setEntityProp('coauthor', member)
 
             expect(diary.coauthor).to.equal member
             expect(diary.coauthorId).to.equal 12
 
         it 'set relation and its ids (has many)', ->
             mem = memberFactory.createEmptyModel()
-            mem.setRelatedModels 'hobbies', member.hobbies
+            mem.setEntityProps 'hobbies', member.hobbies
 
             expect(mem.hobbies).to.equal member.hobbies
             expect(mem.hobbyIds).to.eql [1,2,3]
 
 
 
-    describe 'unsetRelatedModel(s)', ->
+    describe 'unsetEntityProp(s)', ->
         it 'unset relation and its ids (has one / belongs to)', ->
             diary = diaryFactory.createFromObject
                 title : 'crazy about room335'
@@ -142,16 +142,16 @@ describe 'BaseModel', ->
                 date  : new Date()
                 author : member
 
-            diary.unsetRelatedModel('author')
+            diary.unsetEntityProp('author')
 
             expect(diary.author).not.to.exist
             expect(diary.memberId).not.to.exist
 
         it 'unset relation and its ids (has many)', ->
             mem = memberFactory.createEmptyModel()
-            mem.setRelatedModels 'hobbies', member.hobbies
+            mem.setEntityProps 'hobbies', member.hobbies
 
-            mem.unsetRelatedModels 'hobbies'
+            mem.unsetEntityProps 'hobbies'
             expect(mem.hobbies).not.to.exist
             expect(mem.hobbyIds).to.eql []
 

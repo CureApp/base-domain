@@ -199,16 +199,9 @@ class BaseModel extends Base
     ###
     unsetEntityProp: (prop) ->
 
-        typeInfo = @getTypeInfo prop
-        modelName = typeInfo.model
-        idPropName = typeInfo.idPropName
-
+        typeInfo = @getTypeInfo(prop)
         @[prop] = undefined
-
-        if typeInfo.equals 'MODEL'
-            @[idPropName] = undefined
-        else
-            @[idPropName] = []
+        @[typeInfo.idPropName] = undefined
 
         return @
 

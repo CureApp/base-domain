@@ -109,7 +109,8 @@ describe 'BaseModel', ->
 
     describe 'unsetEntityProp', ->
 
-        it 'unset relation and its ids (has one / belongs to)', ->
+        it 'unset relation and its id', ->
+
             diary = diaryFactory.createFromObject
                 title : 'crazy about room335'
                 comment: 'progression of room335 is wonderful'

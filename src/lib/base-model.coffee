@@ -3,6 +3,7 @@
 TypeInfo = require './type-info'
 PropInfo = require './prop-info'
 Base  = require './base'
+Includer = require './includer'
 
 ###*
 Base model class of DDD pattern.
@@ -119,10 +120,16 @@ class BaseModel extends Base
     @method getModelProps
     @public
     @static
+    @param {Object} [options]
+    @param {Boolean} [options.includeList] include props of BaseList
     @return {Array}
     ###
-    @getModelProps: ->
-        @getPropInfo().modelProps
+    @getModelProps: (options = {}) ->
+        propInfo = @getPropInfo()
+        ret = propInfo.modelProps.slice()
+        ret.concat propInfo.listProps if options.includeList
+
+        return ret
 
 
     ###*
@@ -260,78 +267,13 @@ class BaseModel extends Base
     ###*
     include all relational models if not set
 
-    @method includeAll
+    @method include
     @param {Object} [options]
-    @param {Boolean|Object} [options.recursive] recursively include models or not. unstable.
+    @param {Boolean} [options.recursive] recursively include models or not
     @return {Promise(BaseModel)} self
     ###
     include: (options = {}) ->
-        facade = @getFacade()
 
-        modelPool = options.modelPool ? {}
-
-        if options.recursive
-            modelName = @constructor.getModelName()
-
-            modelPool[modelName] = {}
-            modelPool[modelName][@id] = @ if @id?
-
-
-        promises =
-            for m in @constructor.getEntityProps()
-                do (modelProp = m) =>
-                    propInfo = @getTypeInfo modelProp
-
-                    if not @[modelProp]? and (relId = @[propInfo.idPropName])?
-
-                        repo = facade.createRepository(propInfo.model)
-
-                        promise =
-                            if Array.isArray relId
-                                relIds = relId
-                                objs = []
-                                novelRelIds = []
-
-                                for relId in relIds
-                                    if modelPool[propInfo.model]?[relId]?
-                                        objs.push modelPool[propInfo.model][relId]
-                                    else
-                                        novelRelIds.push relId
-
-                                if objs.length is relIds.length
-                                    Promise.resolve(objs)
-                                else
-                                    repo.query(where: id: inq: novelRelIds).then (results) ->
-                                        objs = objs.concat results
-
-                            else
-                                if modelPool[propInfo.model]?[relId]?
-                                    Promise.resolve(modelPool[propInfo.model][relId])
-                                repo.get(relId)
-
-                        promise.then (val) =>
-                            @set modelProp, val
-                        .catch (e) ->
-
-
-        Promise.all(promises).then =>
-            unless options.recursive
-                return @
-
-            subPromises = []
-
-            for modelProp in @constructor.getModelProps()
-                propInfo = @getTypeInfo modelProp
-
-                model = @[modelProp]
-                if model instanceof BaseModel
-                    promise = model.include(recursive: true, modelPool: modelPool)
-                    subPromises.push promise
-
-            return Promise.all subPromises
-
-        .then =>
-            return @
-
+        new Includer(@).include(recursive: options.recursive)
 
 module.exports = BaseModel

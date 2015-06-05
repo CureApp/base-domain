@@ -55,9 +55,10 @@ class ListFactory extends Base
         if typeof firstValue is 'object'
             return @createFromObjectList(arr)
 
-        else
+        if @ListClass.containsEntity()
             return @createFromIds(arr)
 
+        throw new Error "cannot create #{@listModelName} with arr\n [#{arr.toString()}]"
 
     ###*
     creates an instance of BaseList by value
@@ -123,12 +124,11 @@ class ListFactory extends Base
     ###
     createFromIds: (ids) ->
 
-        ItemRepository = @getFacade().createRepository(@itemModelName)
+        ItemRepository = @getFacade().getRepository(@itemModelName)
 
         repo = new ItemRepository()
 
         if ItemRepository.storeMasterTable and ItemRepository.loaded()
-
 
             items = (repo.getByIdSync(id) for id in ids)
 
@@ -139,6 +139,5 @@ class ListFactory extends Base
             modelsPromise = repo.query(where: id: inq: ids)
 
             return new @ListClass(modelsPromise)
-
 
 module.exports = ListFactory

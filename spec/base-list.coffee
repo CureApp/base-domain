@@ -115,3 +115,39 @@ describe 'BaseList', ->
             hobbyList = new HobbyList(hobbies)
 
             expect(hobbyList.toArray()).to.deep.equal hobbyList.items
+
+
+
+    describe "on('loaded')", ->
+
+        it 'executed after loaded when promise is given in constructor', (done) ->
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbiesPromise = new Promise (resolve) -> resolve hobbies
+
+            hobbyList = new HobbyList(hobbiesPromise)
+            expect(hobbyList.loaded).to.be.false
+            expect(hobbyList.items).to.have.length 0
+
+            hobbyList.on 'loaded', ->
+                expect(hobbyList.loaded).to.be.true
+                expect(hobbyList.items).to.have.length 3
+                done()
+
+        it 'executed after event registered when array is given in constructor', (done) ->
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(hobbies)
+
+            hobbyList.on 'loaded', ->
+                expect(hobbyList.loaded).to.be.true
+                expect(hobbyList.items).to.have.length 3
+                done()

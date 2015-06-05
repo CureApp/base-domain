@@ -68,6 +68,7 @@ class BaseList extends BaseModel
     @param {Array|Promise} models
     ###
     constructor: (models = []) ->
+        @listeners = []
 
         if typeof models.then is 'function' # is thenable
 
@@ -77,10 +78,12 @@ class BaseList extends BaseModel
             models.then (items) =>
                 @items = items.slice().sort(@sort)
                 @loaded = true
+                @emitLoaded()
 
         else
             @items = models.slice().sort(@sort)
             @loaded = true
+            @emitLoaded() # meaningless, as @loadedListeners is always empty
 
 
     ###*
@@ -164,5 +167,31 @@ class BaseList extends BaseModel
 
             return items: plainItems
 
+
+    ###*
+    on addEventListeners for 'loaded'
+
+    @method on
+    @public
+    ###
+    on: (evtname, fn) ->
+        return if evtname isnt 'loaded'
+
+        if @loaded
+            process.nextTick fn
+        else if typeof fn is 'function'
+            @listeners.push fn
+        return
+
+
+    ###*
+    tell listeners emit loaded
+    @method emitLoaded
+    @private
+    ###
+    emitLoaded: ->
+        while fn = @listeners.shift()
+            process.nextTick fn
+        return
 
 module.exports = BaseList

@@ -9,7 +9,17 @@ describe 'ListFactory', ->
             @properties:
                 name: @TYPES.STRING
 
+        class NonEntity extends Facade.BaseModel
+            @properties:
+                name: @TYPES.STRING
+
+        class HobbyRepository extends Facade.MasterRepository
+            @modelName: 'hobby'
+
+
         facade.addClass('hobby', Hobby)
+        facade.addClass('non-entity', NonEntity)
+        facade.addClass('hobby-repository', HobbyRepository)
 
 
     describe 'createEmpty', ->
@@ -31,4 +41,34 @@ describe 'ListFactory', ->
     xdescribe 'createFromObject', ->
 
         it 'regards arg as list object when arg has ids', ->
+
+
+    describe 'createFromArray', ->
+
+        it 'throws error when array of non-object given to non-entity-list factory', ->
+
+            hobbyListFactory = facade.createListFactory('ne-list', 'non-entity')
+            expect(-> hobbyListFactory.createFromArray(['abc', 'def'])).to.throw Error
+
+        it 'regards string array as id list', (done) ->
+            hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+            list = hobbyListFactory.createFromArray(['dummy'])
+
+            list.on 'loaded', ->
+                expect(list.items).to.have.length.above 0
+                done()
+
+        it 'regards object array as pre-model list', (done) ->
+
+            data = [ {id: 3, name: 'keyboard'}, {id: 2, name: 'sailing'} ]
+
+            hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+            list = hobbyListFactory.createFromArray(data)
+
+            list.on 'loaded', ->
+                Hobby = facade.getModel 'hobby'
+                expect(list.items).to.have.length 2
+                expect(list.items[0]).to.be.instanceof Hobby
+                expect(list.ids).to.eql [2,3]
+                done()
 

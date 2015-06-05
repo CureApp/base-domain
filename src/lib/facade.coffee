@@ -150,7 +150,7 @@ class Facade
     @method createFactory
     @param {String} name
     @param {Boolean} [useAnonymousWhenFailed=false]
-    @return {DomainFactory}
+    @return {BaseFactory}
     ###
     createFactory: (name, useAnonymousWhenFailed = off) ->
         FactoryClass = @getFactory(name, useAnonymousWhenFailed)
@@ -176,7 +176,7 @@ class Facade
     @method createRepository
     @param {String} name
     @param {Object} [options]
-    @return {DomainRepository}
+    @return {BaseRepository}
     ###
     createRepository: (name, options) ->
         @create("#{name}-repository", options)
@@ -242,7 +242,7 @@ class Facade
     @private
     @param {String} name
     @param {Object} [options]
-    @return {DomainFactory}
+    @return {BaseFactory}
     ###
     create: (name, options) ->
         DomainClass = @require(name)

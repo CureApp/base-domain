@@ -190,30 +190,24 @@ class Facade
 
 
     ###*
-    set klass to dictionary
-    attaches getFacade() method
+    add copied class to facade.
+    the class is acquired by @require(name)
+
+    attaches getFacade() method (for both class and instance)
 
     @method addClass
     @private
     @param {String} name
     @param {Function} klass
-    @param {Boolean} skipCompare skip comparing getFacade() function
     @return {Function}
-
-    FIXME: the 3rd arg "skipCompare" is set only by browserified code
-    because browserified classes don't have the same getFacade() method as Base
     ###
-    addClass: (name, klass, skipCompare = false) ->
+    addClass: (name, klass) ->
 
-        if skipCompare or klass::getFacade is @constructor.Base::getFacade
-            facade = @
-            Class = copy(klass)
-            Class.getFacade  = -> facade
-            Class::getFacade = -> facade
-            @classes[name] = Class
-        else
-            @classes[name] = klass
-
+        facade = @
+        Class = copy(klass)
+        Class.getFacade  = -> facade
+        Class::getFacade = -> facade
+        @classes[name] = Class
 
 
     ###*

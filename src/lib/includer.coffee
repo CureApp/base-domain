@@ -12,7 +12,7 @@ class Includer
 
         @ModelClass = @model.constructor
 
-        @cache(@ModelClass.getModelName(), @model)
+        @cache(@ModelClass.getModelName(), @model) if @ModelClass.isEntity
 
 
     ###*

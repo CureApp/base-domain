@@ -1,5 +1,4 @@
 
-BaseList = require './base-list'
 BaseFactory = require './base-factory'
 
 

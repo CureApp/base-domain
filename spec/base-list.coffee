@@ -28,6 +28,41 @@ describe 'BaseList', ->
         )
 
 
+    it '"items", "loaded", and "listeners" are hidden properties', ->
+
+        class HobbyList extends BaseList
+            @getFacade: -> facade
+            getFacade:  -> facade
+            @itemModelName: 'hobby'
+
+        hobbyList = new HobbyList(hobbies)
+
+        explicitKeys = Object.keys(hobbyList)
+
+        expect(explicitKeys).to.have.length 0
+        expect(explicitKeys).not.to.contain 'items'
+        expect(explicitKeys).not.to.contain 'listeners'
+        expect(explicitKeys).not.to.contain 'loaded'
+
+
+    it 'can contain custom properties', ->
+
+        class HobbyList extends BaseList
+            @getFacade: -> facade
+            getFacade:  -> facade
+            @itemModelName: 'hobby'
+            @properties:
+                annualCost: @TYPES.NUMBER
+
+        hobbyList = new HobbyList(hobbies, annualCost: 2000)
+
+        expect(hobbyList).to.have.property 'annualCost', 2000
+
+        explicitKeys = Object.keys(hobbyList)
+        expect(explicitKeys).to.contain 'annualCost'
+
+
+
     describe 'constructor', ->
 
         it 'sorts model by id', ->
@@ -151,3 +186,49 @@ describe 'BaseList', ->
                 expect(hobbyList.loaded).to.be.true
                 expect(hobbyList.items).to.have.length 3
                 done()
+
+
+    describe 'toPlainObject', ->
+
+        it 'returns object with ids when item is entity', ->
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(hobbies)
+            plain = hobbyList.toPlainObject()
+
+            expect(plain).to.have.property 'ids'
+            expect(plain).not.to.have.property 'items'
+
+
+        it 'returns object with items when item is non-entity', ->
+
+            class NonEntityList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'non-entity'
+
+            hobbyList = new NonEntityList(hobbies)
+            plain = hobbyList.toPlainObject()
+
+            expect(plain).not.to.have.property 'ids'
+            expect(plain).to.have.property 'items'
+
+
+        it 'returns object with custom properties', ->
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+                @properties:
+                    annualCost: @TYPES.NUMBER
+
+            hobbyList = new HobbyList(hobbies, annualCost: 2000)
+
+            expect(hobbyList.toPlainObject()).to.have.property 'ids'
+            expect(hobbyList.toPlainObject()).to.have.property 'annualCost'
+

@@ -67,23 +67,29 @@ class BaseList extends BaseModel
     @constructor
     @param {Array|Promise} models
     ###
-    constructor: (models = []) ->
-        @listeners = []
+    constructor: (models = [], props = {}) ->
+
+        # items, loaded and listeners are hidden properties
+        Object.defineProperties @, 
+            items     : value: []
+            loaded    : value: true, writable: true
+            listeners : value: []
 
         if typeof models.then is 'function' # is thenable
-
             @loaded = false
-            @items = []
 
             models.then (items) =>
-                @items = items.slice().sort(@sort)
+                @items.push item for item in items
+                @items.sort(@sort)
                 @loaded = true
                 @emitLoaded()
 
         else
-            @items = models.slice().sort(@sort)
-            @loaded = true
+            @items.push item for item in models
+            @items.sort(@sort)
             @emitLoaded() # meaningless, as @loadedListeners is always empty
+
+        super(props)
 
 
     ###*
@@ -154,8 +160,10 @@ class BaseList extends BaseModel
     ###
     toPlainObject: ->
 
+        plain = super()
+
         if @constructor.containsEntity()
-            return ids: @ids
+            plain.ids = @ids
 
         else
             plainItems = []
@@ -165,7 +173,9 @@ class BaseList extends BaseModel
                 else
                     plainItems.push item
 
-            return items: plainItems
+            plain.items = plainItems
+
+        return plain
 
 
     ###*

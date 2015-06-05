@@ -84,11 +84,11 @@ class ListFactory extends Base
 
         if obj.items and Array.isArray obj.items
 
-            return @createFromArray(obj)
+            return @createFromArray(obj.items)
 
-        if obj.ids and Array.isArray obj.items
+        if obj.ids and Array.isArray obj.ids
 
-            return @createFromArray(obj)
+            return @createFromArray(obj.ids)
 
         # regard the obj as (pre)model
         objList = [obj]

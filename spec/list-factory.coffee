@@ -38,9 +38,39 @@ describe 'ListFactory', ->
             expect(hobbyList.ids).to.have.length 0
 
 
-    xdescribe 'createFromObject', ->
+    describe 'createFromObject', ->
 
-        it 'regards arg as list object when arg has ids', ->
+        it 'regards arg as list object when arg has items', ->
+
+            obj = items: [ {name: 'keyboard'}, {name: 'programming'} ]
+
+            hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+            list = hobbyListFactory.createFromObject(obj)
+            expect(list.items).to.have.length 2
+
+
+        it 'regards arg as list object when arg has ids', (done) ->
+
+            obj = ids: ['dummy']
+
+            hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+            list = hobbyListFactory.createFromObject(obj)
+
+            list.on 'loaded', ->
+                expect(list.items).to.have.length.above 0
+                done()
+
+
+        it 'regards arg as one (pre)model when arg has neither ids nor items', ->
+
+            obj = name: 'climbing'
+
+            hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+            list = hobbyListFactory.createFromObject(obj)
+
+            expect(list.items).to.have.length 1
+            expect(list.first().name).to.equal 'climbing'
+
 
 
     describe 'createFromArray', ->
@@ -71,4 +101,51 @@ describe 'ListFactory', ->
                 expect(list.items[0]).to.be.instanceof Hobby
                 expect(list.ids).to.eql [2,3]
                 done()
+
+
+
+    describe 'createFromIds', ->
+
+        class Commodity extends Facade.Entity
+            @properties:
+                name: @TYPES.STRING
+
+        class CommodityRepository extends Facade.BaseRepository
+            @modelName: 'hobby'
+
+            query: ->
+                items = [{id: 1, name: 'pencil'}, {id: 2, name: 'toothbrush'}, {id: 3, name: 'potatochips'}]
+                Promise.resolve (@factory.createFromObject(item) for item in items)
+
+        facade.addClass('commodity', Commodity)
+        facade.addClass('commodity-repository', CommodityRepository)
+
+
+        it 'can load data by ids synchronously from MasterRepository', (done) ->
+
+            HobbyRepository = facade.getRepository 'hobby'
+            HobbyRepository.load().then ->
+
+                hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+                list = hobbyListFactory.createFromIds(['dummy'])
+
+                expect(list.loaded).to.be.true
+                expect(list.items).to.have.length.above 0
+
+                done()
+
+        it 'loads data by ids asynchronously from non-MasterRepository', (done) ->
+
+            commodityListFactory = facade.createListFactory('commodity-list', 'commodity')
+            list = commodityListFactory.createFromIds([1, 2, 3])
+
+            expect(list.loaded).to.be.false
+            expect(list.items).to.have.length 0
+
+            list.on 'loaded', ->
+                expect(list.loaded).to.be.true
+                expect(list.items).to.have.length 3
+
+                done()
+
 

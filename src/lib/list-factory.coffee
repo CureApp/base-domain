@@ -43,6 +43,14 @@ class ListFactory extends BaseFactory
 
 
     ###*
+    @constructor
+    ###
+    constructor: ->
+        @itemFactory = @getFacade().createFactory(@constructor.itemModelName, true)
+        super
+
+
+    ###*
     creates an instance of BaseList by value
 
     @method createFromObject
@@ -117,10 +125,14 @@ class ListFactory extends BaseFactory
         return new ListModel().setItems()
 
 
-    createItemFromObject: (obj) ->
+    ###*
+    create item model
 
-        itemFactory = @getFacade().createFactory(@constructor.itemModelName, true)
-        return itemFactory.createFromObject(obj)
+    @method createItemFromObject
+    @return {BaseModel}
+    ###
+    createItemFromObject: (obj) ->
+        return @itemFactory.createFromObject(obj)
 
 
 module.exports = ListFactory

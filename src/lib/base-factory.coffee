@@ -28,6 +28,22 @@ class BaseFactory extends Base
 
 
     ###*
+    get anonymous factory class
+
+    @method getAnonymousClass
+    @param {String} modelName
+    @return {Function}
+    ###
+    @getAnonymousClass: (modelName) ->
+
+        class AnonymousFactory extends BaseFactory
+            @modelName  : modelName
+            @isAnonymous: true
+
+        return AnonymousFactory
+
+
+    ###*
     constructor
 
     @constructor

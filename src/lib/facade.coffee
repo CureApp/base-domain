@@ -113,9 +113,7 @@ class Facade
         catch e
             throw e if not useAnonymousWhenFailed
 
-            class AnonymousFactory extends Facade.BaseFactory
-                @modelName  : name
-                @isAnonymous: true
+            AnonymousFactory = Facade.BaseFactory.getAnonymousClass(name)
 
             @addClass("#{name}-factory", AnonymousFactory)
 

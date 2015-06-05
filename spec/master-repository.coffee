@@ -26,6 +26,28 @@ describe 'MasterRepository', ->
 
             expect(BaseRepository.storeMasterTable).not.to.be.true
 
+    describe 'loaded', ->
+
+        it 'returns false when class is just created', ->
+
+            class Child extends MasterRepository
+
+            expect(Child.loaded()).to.be.false
+
+        it 'returns true when loaded', ->
+
+            class HobbyRepository extends MasterRepository
+                @modelName: 'hobby'
+                getFacade: -> facade
+
+            expect(HobbyRepository.modelsById).not.to.exist
+            expect(HobbyRepository.loaded()).to.be.false
+
+            HobbyRepository.load().then (isSucceed) ->
+
+                expect(HobbyRepository.loaded()).to.be.true
+                done()
+
 
     describe 'load', ->
 
@@ -36,10 +58,12 @@ describe 'MasterRepository', ->
                 getFacade: -> facade
 
             expect(HobbyRepository.modelsById).not.to.exist
+            expect(HobbyRepository.loaded()).to.be.false
 
             HobbyRepository.load().then (isSucceed) ->
 
                 expect(HobbyRepository.modelsById).to.be.an 'object'
+                expect(HobbyRepository.loaded()).to.be.true
                 expect(HobbyRepository.modelsById.dummy).to.be.instanceof Hobby
                 expect(isSucceed).to.be.true
                 done()

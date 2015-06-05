@@ -31,8 +31,18 @@ class MasterRepository extends BaseRepository
     ###
     @modelsById: null
 
+
     ###*
-    loaded map of id => models
+    check loaded or not
+
+    @method loaded
+    @static
+    @public
+    ###
+    @loaded: -> @modelsById?
+
+    ###*
+    get model by id
 
     @method getByIdSync
     @public
@@ -69,6 +79,5 @@ class MasterRepository extends BaseRepository
 
             @modelsById[model.id] = model for model in models
             return true
-
 
 module.exports = MasterRepository

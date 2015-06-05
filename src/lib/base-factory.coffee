@@ -97,6 +97,30 @@ class BaseFactory extends Base
 
 
     ###*
+    set value to model in creation
+
+    @method setValueToModel
+    @private
+    ###
+    setValueToModel: (model, prop, value) ->
+
+        typeInfo = model.getTypeInfo(prop)
+
+        switch typeInfo?.name
+
+            when 'MODEL_LIST'
+                @setSubModelListToModel(model, prop, value)
+
+            when 'MODEL'
+                @setSubModelToModel(model, prop, value)
+
+            else
+                # set normal props
+                model.setNonEntityProp(prop, value)
+
+
+
+    ###*
     fetch submodel(s) by id
     available only when repository of submodel implements 'getByIdSync'
     (MasterRepository implements one)
@@ -121,29 +145,6 @@ class BaseFactory extends Base
         id = model[idPropName]
         subModel = repository.getByIdSync(id)
         model.setEntityProp(prop, subModel) if subModel
-
-
-    ###*
-    set value to model in creation
-
-    @method setValueToModel
-    @private
-    ###
-    setValueToModel: (model, prop, value) ->
-
-        typeInfo = model.getTypeInfo(prop)
-
-        switch typeInfo?.name
-
-            when 'MODEL_LIST'
-                @setSubModelListToModel(model, prop, value)
-
-            when 'MODEL'
-                @setSubModelToModel(model, prop, value)
-
-            else
-                # set normal props
-                model.setNonEntityProp(prop, value)
 
 
     ###*

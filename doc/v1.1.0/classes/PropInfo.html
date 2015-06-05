@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PropInfo</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/Base.html">Base</a></li>
+                                <li><a href="../classes/BaseFactory.html">BaseFactory</a></li>
+                                <li><a href="../classes/BaseList.html">BaseList</a></li>
+                                <li><a href="../classes/BaseModel.html">BaseModel</a></li>
+                                <li><a href="../classes/BaseRepository.html">BaseRepository</a></li>
+                                <li><a href="../classes/DomainError.html">DomainError</a></li>
+                                <li><a href="../classes/Entity.html">Entity</a></li>
+                                <li><a href="../classes/Facade.html">Facade</a></li>
+                                <li><a href="../classes/Fixture.html">Fixture</a></li>
+                                <li><a href="../classes/FixtureModel.html">FixtureModel</a></li>
+                                <li><a href="../classes/ListFactory.html">ListFactory</a></li>
+                                <li><a href="../classes/MasterRepository.html">MasterRepository</a></li>
+                                <li><a href="../classes/PropInfo.html">PropInfo</a></li>
+                                <li><a href="../classes/ResourceClientInterface.html">ResourceClientInterface</a></li>
+                                <li><a href="../classes/TypeInfo.html">TypeInfo</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/base-domain.html">base-domain</a></li>
+                                <li><a href="../modules/base-domain
+                
+                # class DomainError extends Error  # not worked.
+                # see http:__stackoverflow.com_questions_19422145_property-in-subclass-of-error-not-set.html">base-domain
+                
+                # class DomainError extends Error  # not worked.
+                # see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>PropInfo Class</h1>
+<div class="box meta">
+
+
+        <div class="foundat">
+            Defined in: <a href="../files/src_lib_prop-info.coffee.html#l2"><code>src&#x2F;lib&#x2F;prop-info.coffee:2</code></a>
+        </div>
+
+            Module: <a href="../modules/base-domain.html">base-domain</a>
+
+</div>
+
+
+<div class="box intro">
+    <p>parses model properties and classifies them</p>
+
+</div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method private">
+                                <a href="#method_build">build</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_isEntityProp">isEntityProp</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_isModelProp">isModelProp</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                            <li class="index-item property">
+                                <a href="#property_createdAt">createdAt</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_dic">dic</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_entityProps">entityProps</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_listProps">listProps</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_modelProps">modelProps</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_updatedAt">updatedAt</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_build" class="method item private">
+    <h3 class="name"><code>build</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_prop-info.coffee.html#l63"><code>src&#x2F;lib&#x2F;prop-info.coffee:63</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>classify each prop by type</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_isEntityProp" class="method item">
+    <h3 class="name"><code>isEntityProp</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>prop</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_prop-info.coffee.html#l96"><code>src&#x2F;lib&#x2F;prop-info.coffee:96</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>check if the given prop is entity prop</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">prop</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_isModelProp" class="method item">
+    <h3 class="name"><code>isModelProp</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>prop</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_prop-info.coffee.html#l107"><code>src&#x2F;lib&#x2F;prop-info.coffee:107</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>check if the given prop is model prop</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">prop</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+            </div>
+
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                    <div id="property_createdAt" class="property item">
+                        <h3 class="name"><code>createdAt</code></h3>
+                        <span class="type">String</span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/src_lib_prop-info.coffee.html#l12"><code>src&#x2F;lib&#x2F;prop-info.coffee:12</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>property whose type is CREATED_AT</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="property_dic" class="property item">
+                        <h3 class="name"><code>dic</code></h3>
+                        <span class="type">Object</span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/src_lib_prop-info.coffee.html#l47"><code>src&#x2F;lib&#x2F;prop-info.coffee:47</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>key value pairs of (property =&gt; TypeInfo)</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="property_entityProps" class="property item">
+                        <h3 class="name"><code>entityProps</code></h3>
+                        <span class="type">Array</span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/src_lib_prop-info.coffee.html#l40"><code>src&#x2F;lib&#x2F;prop-info.coffee:40</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>properties whose type is MODEL and the model extends Entity</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="property_listProps" class="property item">
+                        <h3 class="name"><code>listProps</code></h3>
+                        <span class="type">Array</span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/src_lib_prop-info.coffee.html#l33"><code>src&#x2F;lib&#x2F;prop-info.coffee:33</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>properties whose type is MODEL_LIST</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="property_modelProps" class="property item">
+                        <h3 class="name"><code>modelProps</code></h3>
+                        <span class="type">Array</span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/src_lib_prop-info.coffee.html#l26"><code>src&#x2F;lib&#x2F;prop-info.coffee:26</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>properties whose type is MODEL</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="property_updatedAt" class="property item">
+                        <h3 class="name"><code>updatedAt</code></h3>
+                        <span class="type">String</span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/src_lib_prop-info.coffee.html#l19"><code>src&#x2F;lib&#x2F;prop-info.coffee:19</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>property whose type is UPDATED_AT</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+            </div>
+
+
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

@@ -38,7 +38,7 @@ describe 'ListFactory', ->
             expect(hobbyList.ids).to.have.length 0
 
 
-    describe 'createFromObject', ->
+    describe 'createFromNonArrayObject', ->
 
         it 'regards arg as list object when arg has items', ->
 

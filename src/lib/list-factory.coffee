@@ -29,6 +29,7 @@ class ListFactory extends BaseFactory
 
         return AnonymousListFactory
 
+
     ###*
     get model class this factory handles
 
@@ -44,21 +45,20 @@ class ListFactory extends BaseFactory
     ###*
     creates an instance of BaseList by value
 
-    @method createList
+    @method createFromObject
     @public
     @param {any} value
     @return {BaseList}
     ###
-    createList: (value) ->
+    createFromObject: (value) ->
 
         if not value? or typeof value isnt 'object'
             return @createEmpty()
 
         if not Array.isArray value
-            return @createFromObject(value)
+            return @createFromNonArrayObject(value)
 
         return @createFromArray(value)
-
 
 
     ###*
@@ -102,12 +102,12 @@ class ListFactory extends BaseFactory
     ###*
     creates an instance of BaseList by value
 
-    @method createFromObject
+    @method createFromNonArrayObject
     @private
     @params {Object} obj
     @return {BaseList}
     ###
-    createFromObject: (obj) ->
+    createFromNonArrayObject: (obj) ->
 
         if obj.items and Array.isArray obj.items
 

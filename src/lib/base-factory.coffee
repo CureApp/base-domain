@@ -168,13 +168,13 @@ class BaseFactory extends Base
     @method setSubModelListToModel
     @private
     ###
-    setSubModelListToModel: (model, prop, arr) ->
+    setSubModelListToModel: (model, prop, value) ->
 
         typeInfo = model.getTypeInfo(prop)
 
         listFactory = @getFacade().createListFactory typeInfo.listName, typeInfo.model
 
-        list = listFactory.createList(arr)
+        list = listFactory.createFromObject(value)
 
         model.setNonEntityProp(prop, list)
 

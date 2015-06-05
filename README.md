@@ -102,6 +102,4 @@ browserify -t [ base-domain/ify --dirname /path/to/domain/dir ] <entry-file>
 ```
 
 ## API documentations
-- [v1.1.0](http://cureapp.github.io/base-domain/doc/v1.1.0/index.html)
-- [v1.0.0](http://cureapp.github.io/base-domain/doc/v1.0.0/index.html)
-- [v1.0.0](http://cureapp.github.io/base-domain/doc/v1.0.0/index.html)
+- [v1.1.1](http://cureapp.github.io/base-domain/doc/v1.1.1/index.html)

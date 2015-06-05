@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/lib/type-info.coffee</title>
+    <title>src/lib/list-factory.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,138 +97,148 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src/lib/type-info.coffee</h1>
+<h1 class="file-heading">File: src/lib/list-factory.coffee</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 
-###*
-type of model&#x27;s property 
+BaseFactory = require &#x27;./base-factory&#x27;
 
-@class TypeInfo
+
+###*
+factory of list
+
+@class ListFactory
+@extends Base
 @module base-domain
 ###
-class TypeInfo
-
-    constructor: (@name, options = {}) -&gt;
-        @[k] = v for k, v of options
+class ListFactory extends BaseFactory
 
 
     ###*
-    check if the type is the given typeName
+    get anonymous list factory class
 
-    @method equals
-    @public
-    @param {String} typeName
-    @retrun {Boolean}
-    ###
-    equals: (typeName) -&gt; @name is typeName
-
-    ###*
-    check if the type is not the given typeName
-
-    @method notEquals
-    @public
-    @param {String} typeName
-    @retrun {Boolean}
-    ###
-    notEquals: (typeName) -&gt; @name isnt typeName
-
-
-    ###*
-    get TypeInfo as MODEL
-
-    @method createModelType
-    @private
-    @static
+    @method getAnonymousClass
     @param {String} modelName
-    @param {String} [idPropName] by default: xxxYyyId when modelName is xxx-yyy
-    @return {TypeInfo} type
+    @param {String} itemModelName
+    @return {Function}
     ###
-    @createModelType: (modelName, idPropName) -&gt; 
+    @getAnonymousClass: (modelName, itemModelName) -&gt;
 
-        new TypeInfo &#x27;MODEL&#x27;,
-            model      : modelName
-            idPropName : idPropName ?  TypeInfo.camelize(modelName) + &#x27;Id&#x27;
+        class AnonymousListFactory extends ListFactory
+            @modelName     : modelName
+            @itemModelName : itemModelName
+            @isAnonymous   : true
 
-
-    @createModelsType: (modelName, idPropName) -&gt; 
-
-        throw new Error &quot;&quot;&quot;
-            @TYPES.MODELS is deprecated.
-            use @TYPES.MODEL_LIST instead.
-            in #{modelName}, #{idPropName}
-        &quot;&quot;&quot;
+        return AnonymousListFactory
 
 
     ###*
-    get TypeInfo as MODEL_LIST
+    get model class this factory handles
 
-    @method createModelListType
+    @method getModelClass
+    @return {Class}
+    ###
+    @_ModelClass: undefined
+    getModelClass: -&gt;
+        {modelName, itemModelName} = @constructor
+        @_ModelClass ?= @getFacade().getListModel(modelName, itemModelName)
+
+
+    ###*
+    @constructor
+    ###
+    constructor: -&gt;
+        @itemFactory = @getFacade().createFactory(@constructor.itemModelName, true)
+        super
+
+
+    ###*
+    creates an instance of BaseList by value
+
+    @method createFromObject
+    @public
+    @param {any} obj
+    @return {BaseList}
+    ###
+    createFromObject: (obj) -&gt;
+
+        if not obj? or typeof obj isnt &#x27;object&#x27;
+            return @createEmpty()
+
+        if Array.isArray obj
+            return @createFromArray(obj)
+
+        ListModel = @getModelClass()
+
+        { ids, items } = obj
+
+        if items
+            delete obj.items
+            items = (@createItemFromObject obj for obj in items)
+            list = super(obj).setItems items
+            obj.items = items
+
+        else if ListModel.containsEntity()
+            delete obj.ids
+            list = super(obj).setIds ids
+            obj.ids = ids
+        else
+            return super(obj)
+
+        return list
+
+
+    ###*
+    creates an instance of BaseList from array
+
+    @method createFromArray
+    @public
+    @param {Array} arr
+    @return {BaseList}
+    ###
+    createFromArray: (arr) -&gt;
+
+        ListModel = @getModelClass()
+
+        firstValue = arr[0]
+
+        if not firstValue?
+            return @createEmpty()
+
+        if typeof firstValue is &#x27;object&#x27;
+            items = (@createItemFromObject obj for obj in arr)
+            return new ListModel().setItems items
+
+        if ListModel.containsEntity()
+            return new ListModel().setIds arr
+
+        throw new Error &quot;cannot create #{@constructor.modelName} with arr\n [#{arr.toString()}]&quot;
+
+    ###*
+    creates an instance of BaseList by value
+
+    @method createEmpty
     @private
-    @static
-    @param {String} modelName
-    @param {String} [options.idPropName] by default: xxxYyyIds when modelName is xxx-yyy
-    @param {String} [options.name] name of list model, by default: xxx-yyy-list when modelName is xxx-yyy
-    @return {TypeInfo} type
+    @return {BaseList}
     ###
-    @createModelListType: (modelName, options = {}) -&gt; 
-        new TypeInfo &#x27;MODEL_LIST&#x27;,
-            model      : modelName
-            idPropName : options.idPropName ? TypeInfo.camelize(modelName) + &#x27;Ids&#x27;
-            listName   : options.name ? &quot;#{modelName}-list&quot;
+    createEmpty: -&gt;
+
+        ListModel = @getModelClass()
+        return new ListModel().setItems()
 
 
     ###*
-    TYPES defines various data type, including model and array of models
+    create item model
 
-    key: typeName (String)
-    value: type TypeInfo|Function(TypeInfo)
-
-    @property TYPES
-    @static
+    @method createItemFromObject
+    @return {BaseModel}
     ###
-
-    @TYPES:
-        ANY        : new TypeInfo &#x27;ANY&#x27;
-        STRING     : new TypeInfo &#x27;STRING&#x27;
-        NUMBER     : new TypeInfo &#x27;NUMBER&#x27;
-        BOOLEAN    : new TypeInfo &#x27;BOOLEAN&#x27;
-        OBJECT     : new TypeInfo &#x27;OBJECT&#x27;
-        ARRAY      : new TypeInfo &#x27;ARRAY&#x27;
-        DATE       : new TypeInfo &#x27;DATE&#x27;
-        BUFFER     : new TypeInfo &#x27;BUFFER&#x27;
-        GEOPOINT   : new TypeInfo &#x27;GEOPOINT&#x27;
-        CREATED_AT : new TypeInfo &#x27;CREATED_AT&#x27;
-        UPDATED_AT : new TypeInfo &#x27;UPDATED_AT&#x27;
-        MODEL      : TypeInfo.createModelType
-        MODELS     : TypeInfo.createModelsType
-        MODEL_LIST : TypeInfo.createModelListType
+    createItemFromObject: (obj) -&gt;
+        return @itemFactory.createFromObject(obj)
 
 
-
-    ###*
-    converts hyphenation to camel case
-
-        &#x27;shinout-no-macbook-pro =&gt; shinoutNoMacbookPro&#x27;
-
-    @method camelize
-    @private
-    @static
-    @param {String} hyphened
-    @return {String} cameled
-    ###
-    @camelize: (hyphened) -&gt;
-       (for substr, i in hyphened.split(&#x27;-&#x27;)
-           if i is 0
-               substr
-           else
-               substr.charAt(0).toUpperCase() + substr.slice(1)
-       ).join(&#x27;&#x27;)
-
-
-
-module.exports = TypeInfo
+module.exports = ListFactory
 
     </pre>
 </div>

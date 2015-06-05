@@ -1,5 +1,5 @@
 
-facade = require('./create-facade').create()
+facade = require('../create-facade').create()
 Facade = facade.constructor
 
 describe 'ListFactory', ->

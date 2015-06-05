@@ -6,11 +6,7 @@ module.exports = (grunt) ->
         'mocha-chai-sinon':
             spec:
                 src: [
-                    'spec/**/*.coffee'
-                    '!spec/domain/**/*'
-                    '!spec/base-domain.coffee'
-                    '!spec/init.coffee'
-                    '!spec/fixtures/**/*'
+                    'spec/lib/*.coffee'
                 ]
                 options:
                     ui: 'bdd'

@@ -1,5 +1,5 @@
 
-facade = require('./create-facade').create('domain')
+facade = require('../create-facade').create('domain')
 
 Hobby  = facade.getModel 'hobby'
 Member = facade.getModel 'member'

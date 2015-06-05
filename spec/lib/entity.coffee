@@ -1,5 +1,5 @@
 
-facade = require './init'
+facade = require('../create-facade').create('domain')
 
 Hobby  = facade.getModel 'hobby'
 

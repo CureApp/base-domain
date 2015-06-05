@@ -1,5 +1,5 @@
 
-TypeInfo = require '../src/lib/type-info'
+TypeInfo = require '../../src/lib/type-info'
 
 describe 'TypeInfo', ->
 

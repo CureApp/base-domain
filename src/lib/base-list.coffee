@@ -45,8 +45,9 @@ class BaseList extends BaseModel
     @public
     ###
     Object.defineProperty @::, 'ids',
-        get: -> (item.id for item in @items)
-
+        get: ->
+            return null if not @constructor.containsEntity()
+            return (item.id for item in @items)
 
     ###*
     items: array of models

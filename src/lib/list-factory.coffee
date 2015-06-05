@@ -74,7 +74,7 @@ class ListFactory extends Base
     ###*
     creates an instance of BaseList by value
 
-    @method createEmpty
+    @method createFromObject
     @private
     @params {Object} obj
     @return {BaseList}
@@ -97,7 +97,7 @@ class ListFactory extends Base
     ###*
     creates an instance of BaseList by value
 
-    @method createEmpty
+    @method createFromObjectList
     @private
     @params {Array(Object)} objList
     @return {BaseList}
@@ -111,6 +111,34 @@ class ListFactory extends Base
         subModels = (itemFactory.createFromObject(subObj) for subObj in objList)
 
         return new @ListClass(subModels)
+
+
+    ###*
+    creates an instance of BaseList by value
+
+    @method createFromIds
+    @private
+    @params {Array(String|Number)} ids
+    @return {BaseList}
+    ###
+    createFromIds: (ids) ->
+
+        ItemRepository = @getFacade().createRepository(@itemModelName)
+
+        repo = new ItemRepository()
+
+        if ItemRepository.storeMasterTable and ItemRepository.loaded()
+
+
+            items = (repo.getByIdSync(id) for id in ids)
+
+            return new @ListClass(items)
+
+        else
+
+            modelsPromise = repo.query(where: id: inq: ids)
+
+            return new @ListClass(modelsPromise)
 
 
 module.exports = ListFactory

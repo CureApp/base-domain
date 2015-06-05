@@ -54,9 +54,32 @@ class BaseList extends BaseModel
     @property items
     @type Array
     ###
+
+    ###*
+    loaded: is data loaded or not
+
+    @property loaded
+    @type Boolean
+    ###
+
+    ###*
+    @constructor
+    @param {Array|Promise} models
+    ###
     constructor: (models = []) ->
 
-        @items = models.slice().sort(@sort)
+        if typeof models.then is 'function' # is thenable
+
+            @loaded = false
+            @items = []
+
+            models.then (items) =>
+                @items = items.slice().sort(@sort)
+                @loaded = true
+
+        else
+            @items = models.slice().sort(@sort)
+            @loaded = true
 
 
     ###*

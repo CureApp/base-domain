@@ -123,26 +123,6 @@ class BaseFactory extends Base
         model.setEntityProp(prop, subModel) if subModel
 
 
-
-    # WIP, not called.
-    fetchListProp: (model, prop) ->
-
-        typeInfo = model.getTypeInfo(prop)
-
-        ids = model[idPropName]
-
-        return if not Array.isArray ids
-
-        subModels = []
-        for id in ids
-            subModel = repository.getByIdSync(id)
-            return if not subModel # TODO: throws 'invalid id' error?
-            subModels.push subModel
-
-        model.setNonEntityProp(prop, subModels)
-
-
-
     ###*
     set value to model in creation
 

@@ -1,6 +1,6 @@
 
 BaseList = require './base-list'
-Base = require './base'
+BaseFactory = require './base-factory'
 
 
 ###*
@@ -10,11 +10,36 @@ factory of list
 @extends Base
 @module base-domain
 ###
-class ListFactory extends Base
+class ListFactory extends BaseFactory
 
-    constructor: (@listModelName, @itemModelName) ->
 
-        @ListClass = @getFacade().getListModel(@listModelName, @itemModelName)
+    ###*
+    get anonymous list factory class
+
+    @method getAnonymousClass
+    @param {String} modelName
+    @param {String} itemModelName
+    @return {Function}
+    ###
+    @getAnonymousClass: (modelName, itemModelName) ->
+
+        class AnonymousListFactory extends ListFactory
+            @modelName     : modelName
+            @itemModelName : itemModelName
+            @isAnonymous   : true
+
+        return AnonymousListFactory
+
+    ###*
+    get model class this factory handles
+
+    @method getModelClass
+    @return {Class}
+    ###
+    @_ModelClass: undefined
+    getModelClass: ->
+        {modelName, itemModelName} = @constructor
+        @_ModelClass ?= @getFacade().getListModel(modelName, itemModelName)
 
 
     ###*
@@ -47,6 +72,8 @@ class ListFactory extends Base
     ###
     createFromArray: (arr) ->
 
+        ListModel = @getModelClass()
+
         firstValue = arr[0]
 
         if not firstValue?
@@ -55,10 +82,10 @@ class ListFactory extends Base
         if typeof firstValue is 'object'
             return @createFromObjectList(arr)
 
-        if @ListClass.containsEntity()
+        if ListModel.containsEntity()
             return @createFromIds(arr)
 
-        throw new Error "cannot create #{@listModelName} with arr\n [#{arr.toString()}]"
+        throw new Error "cannot create #{@constructor.modelName} with arr\n [#{arr.toString()}]"
 
     ###*
     creates an instance of BaseList by value
@@ -69,7 +96,8 @@ class ListFactory extends Base
     ###
     createEmpty: ->
 
-        return new @ListClass()
+        ListModel = @getModelClass()
+        return new ListModel()
 
 
     ###*
@@ -105,13 +133,15 @@ class ListFactory extends Base
     ###
     createFromObjectList: (objList) ->
 
-        itemFactory = @getFacade().createFactory(@itemModelName, true)
+        itemFactory = @getFacade().createFactory(@constructor.itemModelName, true)
 
         SubModel = itemFactory.getModelClass()
 
         subModels = (itemFactory.createFromObject(subObj) for subObj in objList)
 
-        return new @ListClass(subModels)
+        ListModel = @getModelClass()
+
+        return new ListModel(subModels)
 
 
     ###*
@@ -124,7 +154,8 @@ class ListFactory extends Base
     ###
     createFromIds: (ids) ->
 
-        ItemRepository = @getFacade().getRepository(@itemModelName)
+        ListModel = @getModelClass()
+        ItemRepository = @getFacade().getRepository(@constructor.itemModelName)
 
         repo = new ItemRepository()
 
@@ -132,12 +163,12 @@ class ListFactory extends Base
 
             items = (repo.getByIdSync(id) for id in ids)
 
-            return new @ListClass(items)
+            return new ListModel(items)
 
         else
 
             modelsPromise = repo.query(where: id: inq: ids)
 
-            return new @ListClass(modelsPromise)
+            return new ListModel(modelsPromise)
 
 module.exports = ListFactory

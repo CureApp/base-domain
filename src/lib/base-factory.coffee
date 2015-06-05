@@ -1,7 +1,6 @@
 
 
 Base  = require './base'
-ListFactory = require './list-factory'
 
 ###*
 Base factory class of DDD pattern.

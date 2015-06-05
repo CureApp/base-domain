@@ -37,10 +37,6 @@ class Facade
     constructor: (options) ->
         @classes = {}
         @dirname = options.dirname ? '.'
-
-        ListFactory = require './list-factory'
-        @addClass('list-factory', ListFactory)
-
         @init()
 
 
@@ -105,7 +101,7 @@ class Facade
     @method getFactory
     @param {String} name
     @param {Boolean} [useAnonymousWhenFailed=false]
-    @return {Class}
+    @return {Function}
     ###
     getFactory: (name, useAnonymousWhenFailed = off) ->
         try
@@ -114,6 +110,25 @@ class Facade
             throw e if not useAnonymousWhenFailed
 
             AnonymousFactory = Facade.BaseFactory.getAnonymousClass(name)
+
+            @addClass("#{name}-factory", AnonymousFactory)
+
+
+    ###*
+    get a list factory class
+
+    @method getListFactory
+    @param {String} name
+    @param {String} [itemModelName]
+    @return {Function}
+    ###
+    getListFactory: (name, itemModelName) ->
+        try
+            return @require("#{name}-factory")
+        catch e
+            throw e if not itemModelName
+
+            AnonymousFactory = Facade.ListFactory.getAnonymousClass(name, itemModelName)
 
             @addClass("#{name}-factory", AnonymousFactory)
 
@@ -141,6 +156,18 @@ class Facade
         FactoryClass = @getFactory(name, useAnonymousWhenFailed)
         return new FactoryClass()
 
+
+    ###*
+    create a factory instance
+
+    @method createFactory
+    @param {String} name
+    @param {String} [itemModelName]
+    @return {ListFactory}
+    ###
+    createListFactory: (name, itemModelName) ->
+        ListFactoryClass = @getListFactory(name, itemModelName)
+        return new ListFactoryClass()
 
 
     ###*
@@ -223,20 +250,6 @@ class Facade
 
 
     ###*
-    creates a list factory class
-
-    @method createListFactory
-    @param {String} listModelName
-    @param {String} itemModelName
-    @return {ListFactory}
-    ###
-    createListFactory: (listModelName, itemModelName) ->
-
-        ListFactory = @require('list-factory')
-        return new ListFactory listModelName, itemModelName
-
-
-    ###*
     create instance of DomainError
 
     @method error
@@ -289,6 +302,7 @@ class Facade
     @Entity           : require './entity'
     @BaseList         : require './base-list'
     @BaseFactory      : require './base-factory'
+    @ListFactory      : require './list-factory'
     @BaseRepository   : require './base-repository'
     @MasterRepository : require './master-repository'
     @DomainError      : require './domain-error'

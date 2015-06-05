@@ -65,32 +65,67 @@ class BaseList extends BaseModel
 
     ###*
     @constructor
-    @param {Array|Promise} models
     ###
-    constructor: (models = [], props = {}) ->
+    constructor: (props = {}) ->
 
         # items, loaded and listeners are hidden properties
         Object.defineProperties @, 
             items     : value: []
-            loaded    : value: true, writable: true
+            loaded    : value: false, writable: true
             listeners : value: []
 
-        if typeof models.then is 'function' # is thenable
-            @loaded = false
+        if props.items
+            @setItems props.items
 
-            models.then (items) =>
-                @items.push item for item in items
-                @items.sort(@sort)
-                @loaded = true
-                @emitLoaded()
-
-        else
-            @items.push item for item in models
-            @items.sort(@sort)
-            @emitLoaded() # meaningless, as @loadedListeners is always empty
+        if props.ids
+            @setIds props.ids
 
         super(props)
 
+
+    ###*
+    set ids.
+
+    @method setIds
+    @param {Array(String|Number)} ids 
+    ###
+    setIds: (ids = []) ->
+
+        return if not @constructor.containsEntity()
+
+        @loaded = false
+        ItemRepository = @getFacade().getRepository(@constructor.itemModelName)
+
+        repo = new ItemRepository()
+
+        if ItemRepository.storeMasterTable and ItemRepository.loaded()
+
+            subModels = (repo.getByIdSync(id) for id in ids)
+            @setItems(subModels)
+
+        else
+            repo.query(where: id: inq: ids).then (subModels) =>
+                @setItems(subModels)
+
+        return @
+
+
+    ###*
+    set items
+
+    @method setItems
+    @param {Array} models
+    ###
+    setItems: (models = []) ->
+        ItemClass = @getFacade().getModel @constructor.itemModelName
+
+        @items.push item for item in models when item instanceof ItemClass
+
+        @items.sort(@sort)
+
+        @loaded = true
+        @emitLoaded()
+        return @
 
     ###*
     returns item is Entity

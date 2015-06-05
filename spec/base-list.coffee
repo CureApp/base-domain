@@ -18,8 +18,14 @@ describe 'BaseList', ->
             @properties:
                 name: @TYPES.STRING
 
+        class HobbyRepository extends Facade.MasterRepository
+            @modelName: 'hobby'
+
+
+
         facade.addClass 'hobby', Hobby
         facade.addClass 'non-entity', NonEntity
+        facade.addClass('hobby-repository', HobbyRepository)
 
         hobbyFactory = facade.createFactory('hobby', true)
 
@@ -35,7 +41,7 @@ describe 'BaseList', ->
             getFacade:  -> facade
             @itemModelName: 'hobby'
 
-        hobbyList = new HobbyList(hobbies)
+        hobbyList = new HobbyList(items: hobbies)
 
         explicitKeys = Object.keys(hobbyList)
 
@@ -54,7 +60,7 @@ describe 'BaseList', ->
             @properties:
                 annualCost: @TYPES.NUMBER
 
-        hobbyList = new HobbyList(hobbies, annualCost: 2000)
+        hobbyList = new HobbyList(items: hobbies, annualCost: 2000)
 
         expect(hobbyList).to.have.property 'annualCost', 2000
 
@@ -75,7 +81,7 @@ describe 'BaseList', ->
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            hobbyList = new HobbyList(hobbies)
+            hobbyList = new HobbyList(items: hobbies)
 
             hobbyIdsSorted = (hobby.id for hobby in hobbyList.items)
 
@@ -104,7 +110,7 @@ describe 'BaseList', ->
 
         it 'get array of ids when the item is Entity', ->
 
-            hobbyList = new HobbyList(hobbies)
+            hobbyList = new HobbyList(items: hobbies)
             expect(hobbyList.ids).to.deep.equal [1, 2, 3]
 
 
@@ -118,7 +124,7 @@ describe 'BaseList', ->
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            hobbyList = new HobbyList(hobbies)
+            hobbyList = new HobbyList(items: hobbies)
 
             expect(hobbyList.first()).to.equal hobbies[2]
 
@@ -133,7 +139,7 @@ describe 'BaseList', ->
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            hobbyList = new HobbyList(hobbies)
+            hobbyList = new HobbyList(items: hobbies)
 
             expect(hobbyList.last()).to.equal hobbies[0]
 
@@ -147,30 +153,29 @@ describe 'BaseList', ->
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            hobbyList = new HobbyList(hobbies)
+            hobbyList = new HobbyList(items: hobbies)
 
             expect(hobbyList.toArray()).to.deep.equal hobbyList.items
 
 
-
     describe "on('loaded')", ->
 
-        it 'executed after loaded when promise is given in constructor', (done) ->
+        it 'loaded after loaded when ids is given in constructor', (done) ->
 
             class HobbyList extends BaseList
                 @getFacade: -> facade
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            hobbiesPromise = new Promise (resolve) -> resolve hobbies
 
-            hobbyList = new HobbyList(hobbiesPromise)
+            hobbyList = new HobbyList(ids: ['dummy'])
             expect(hobbyList.loaded).to.be.false
             expect(hobbyList.items).to.have.length 0
+            expect(hobbyList.ids).to.have.length 0
 
             hobbyList.on 'loaded', ->
                 expect(hobbyList.loaded).to.be.true
-                expect(hobbyList.items).to.have.length 3
+                expect(hobbyList.items).to.have.length 1
                 done()
 
         it 'executed after event registered when array is given in constructor', (done) ->
@@ -180,7 +185,7 @@ describe 'BaseList', ->
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            hobbyList = new HobbyList(hobbies)
+            hobbyList = new HobbyList(items: hobbies)
 
             hobbyList.on 'loaded', ->
                 expect(hobbyList.loaded).to.be.true
@@ -197,7 +202,7 @@ describe 'BaseList', ->
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            hobbyList = new HobbyList(hobbies)
+            hobbyList = new HobbyList(items: hobbies)
             plain = hobbyList.toPlainObject()
 
             expect(plain).to.have.property 'ids'
@@ -211,7 +216,7 @@ describe 'BaseList', ->
                 getFacade:  -> facade
                 @itemModelName: 'non-entity'
 
-            hobbyList = new NonEntityList(hobbies)
+            hobbyList = new NonEntityList(items: hobbies)
             plain = hobbyList.toPlainObject()
 
             expect(plain).not.to.have.property 'ids'
@@ -227,8 +232,71 @@ describe 'BaseList', ->
                 @properties:
                     annualCost: @TYPES.NUMBER
 
-            hobbyList = new HobbyList(hobbies, annualCost: 2000)
+            hobbyList = new HobbyList(items: hobbies, annualCost: 2000)
 
             expect(hobbyList.toPlainObject()).to.have.property 'ids'
             expect(hobbyList.toPlainObject()).to.have.property 'annualCost'
+
+
+    describe 'setIds', ->
+
+        class Commodity extends Facade.Entity
+            @properties:
+                name: @TYPES.STRING
+
+        class CommodityRepository extends Facade.BaseRepository
+            @modelName: 'commodity'
+
+            query: (params) ->
+                ids = params.where.id.inq
+                items = [{id: 1, name: 'pencil'}, {id: 2, name: 'toothbrush'}, {id: 3, name: 'potatochips'}]
+                Promise.resolve (@factory.createFromObject(item) for item in items when item.id in ids)
+
+        facade.addClass('commodity', Commodity)
+        facade.addClass('commodity-repository', CommodityRepository)
+
+
+        it 'can load data by ids synchronously from MasterRepository', (done) ->
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+
+            HobbyRepository = facade.getRepository 'hobby'
+            HobbyRepository.load().then ->
+
+                list = new HobbyList()
+
+                list.setIds(['dummy'])
+
+                expect(list.loaded).to.be.true
+                expect(list.items).to.have.length.above 0
+
+                done()
+
+            .catch done
+
+
+        it 'loads data by ids asynchronously from non-MasterRepository', (done) ->
+
+            class CommodityList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'commodity'
+
+            list = new CommodityList()
+
+            list.setIds([2, 3])
+
+            expect(list.loaded).to.be.false
+            expect(list.items).to.have.length 0
+
+            list.on 'loaded', ->
+
+                expect(list.loaded).to.be.true
+                expect(list.items).to.have.length 2
+
+                done()
 

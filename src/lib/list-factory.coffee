@@ -47,25 +47,42 @@ class ListFactory extends BaseFactory
 
     @method createFromObject
     @public
-    @param {any} value
+    @param {any} obj
     @return {BaseList}
     ###
-    createFromObject: (value) ->
+    createFromObject: (obj) ->
 
-        if not value? or typeof value isnt 'object'
+        if not obj? or typeof obj isnt 'object'
             return @createEmpty()
 
-        if not Array.isArray value
-            return @createFromNonArrayObject(value)
+        if Array.isArray obj
+            return @createFromArray(obj)
 
-        return @createFromArray(value)
+        ListModel = @getModelClass()
+
+        { ids, items } = obj
+
+        if items
+            delete obj.items
+            items = (@createItemFromObject obj for obj in items)
+            list = super(obj).setItems items
+            obj.items = items
+
+        else if ListModel.containsEntity()
+            delete obj.ids
+            list = super(obj).setIds ids
+            obj.ids = ids
+        else
+            return super(obj)
+
+        return list
 
 
     ###*
     creates an instance of BaseList from array
 
     @method createFromArray
-    @private
+    @public
     @param {Array} arr
     @return {BaseList}
     ###
@@ -79,10 +96,11 @@ class ListFactory extends BaseFactory
             return @createEmpty()
 
         if typeof firstValue is 'object'
-            return @createFromObjectList(arr)
+            items = (@createItemFromObject obj for obj in arr)
+            return new ListModel().setItems items
 
         if ListModel.containsEntity()
-            return @createFromIds(arr)
+            return new ListModel().setIds arr
 
         throw new Error "cannot create #{@constructor.modelName} with arr\n [#{arr.toString()}]"
 
@@ -96,78 +114,13 @@ class ListFactory extends BaseFactory
     createEmpty: ->
 
         ListModel = @getModelClass()
-        return new ListModel()
+        return new ListModel().setItems()
 
 
-    ###*
-    creates an instance of BaseList by value
-
-    @method createFromNonArrayObject
-    @private
-    @params {Object} obj
-    @return {BaseList}
-    ###
-    createFromNonArrayObject: (obj) ->
-
-        if obj.items and Array.isArray obj.items
-
-            return @createFromArray(obj.items)
-
-        if obj.ids and Array.isArray obj.ids
-
-            return @createFromArray(obj.ids)
-
-        # regard the obj as (pre)model
-        objList = [obj]
-        return @createFromObjectList objList
-
-
-    ###*
-    creates an instance of BaseList by value
-
-    @method createFromObjectList
-    @private
-    @params {Array(Object)} objList
-    @return {BaseList}
-    ###
-    createFromObjectList: (objList) ->
+    createItemFromObject: (obj) ->
 
         itemFactory = @getFacade().createFactory(@constructor.itemModelName, true)
+        return itemFactory.createFromObject(obj)
 
-        SubModel = itemFactory.getModelClass()
-
-        subModels = (itemFactory.createFromObject(subObj) for subObj in objList)
-
-        ListModel = @getModelClass()
-
-        return new ListModel(subModels)
-
-
-    ###*
-    creates an instance of BaseList by value
-
-    @method createFromIds
-    @private
-    @params {Array(String|Number)} ids
-    @return {BaseList}
-    ###
-    createFromIds: (ids) ->
-
-        ListModel = @getModelClass()
-        ItemRepository = @getFacade().getRepository(@constructor.itemModelName)
-
-        repo = new ItemRepository()
-
-        if ItemRepository.storeMasterTable and ItemRepository.loaded()
-
-            items = (repo.getByIdSync(id) for id in ids)
-
-            return new ListModel(items)
-
-        else
-
-            modelsPromise = repo.query(where: id: inq: ids)
-
-            return new ListModel(modelsPromise)
 
 module.exports = ListFactory

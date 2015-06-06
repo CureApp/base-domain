@@ -497,7 +497,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 114,
+            "line": 111,
             "description": "set value to model in creation",
             "itemtype": "method",
             "name": "setValueToModel",
@@ -508,10 +508,10 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 138,
-            "description": "fetch submodel(s) by id\navailable only when repository of submodel implements 'getByIdSync'\n(MasterRepository implements one)",
+            "line": 133,
+            "description": "set empty values to model in creation",
             "itemtype": "method",
-            "name": "fetchEntityProp",
+            "name": "setEmptyValueToModel",
             "access": "private",
             "tagname": "",
             "class": "BaseFactory",
@@ -519,7 +519,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 165,
+            "line": 158,
             "description": "creates list and set it to the model",
             "itemtype": "method",
             "name": "setSubModelListToModel",
@@ -530,7 +530,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 184,
+            "line": 177,
             "description": "set submodel to the prop",
             "itemtype": "method",
             "name": "setSubModelToModel",
@@ -541,7 +541,40 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 209,
+            "line": 202,
+            "description": "fetch submodel(s) by id\navailable only when repository of submodel implements 'getByIdSync'\n(MasterRepository implements one)",
+            "itemtype": "method",
+            "name": "fetchEntityProp",
+            "access": "private",
+            "tagname": "",
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 228,
+            "description": "create empty non-entity model and set to the prop",
+            "itemtype": "method",
+            "name": "createEmptyNonEntityProp",
+            "access": "private",
+            "tagname": "",
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 241,
+            "description": "create empty list and set to the prop",
+            "itemtype": "method",
+            "name": "createEmptyListProp",
+            "access": "private",
+            "tagname": "",
+            "class": "BaseFactory",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-factory.coffee",
+            "line": 254,
             "description": "modify plain object before @createFromObject(obj)",
             "itemtype": "method",
             "name": "beforeCreateFromObject",
@@ -564,7 +597,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 222,
+            "line": 267,
             "description": "modify model after createFromObject(obj), createEmptyModel()",
             "itemtype": "method",
             "name": "afterCreateModel",
@@ -913,7 +946,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 151,
+            "line": 149,
             "description": "set value to prop",
             "return": {
                 "description": "this",
@@ -924,7 +957,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 170,
+            "line": 168,
             "description": "set model prop",
             "return": {
                 "description": "this",
@@ -935,7 +968,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 178,
+            "line": 176,
             "description": "set related model(s)",
             "itemtype": "method",
             "name": "setEntityProp",
@@ -960,7 +993,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 200,
+            "line": 198,
             "description": "unset related model(s)",
             "params": [
                 {
@@ -980,7 +1013,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 216,
+            "line": 214,
             "description": "inherit value of anotherModel",
             "itemtype": "method",
             "name": "inherit",
@@ -1000,7 +1033,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 231,
+            "line": 229,
             "description": "create plain object without relational entities\ndescendants of Entity are removed, but not descendants of BaseModel\ndescendants of Entity in descendants of BaseModel are removed ( = recursive)",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -1013,7 +1046,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 267,
+            "line": 265,
             "description": "include all relational models if not set",
             "itemtype": "method",
             "name": "include",
@@ -2313,6 +2346,16 @@
         {
             "file": "src/lib/prop-info.coffee",
             "line": 47,
+            "description": "properties whose type is MODEL and the model does not extend Entity",
+            "itemtype": "property",
+            "name": "nonEntityProps",
+            "type": "Array",
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 54,
             "description": "key value pairs of (property => TypeInfo)",
             "itemtype": "property",
             "name": "dic",
@@ -2322,7 +2365,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 63,
+            "line": 70,
             "description": "classify each prop by type",
             "itemtype": "method",
             "name": "build",
@@ -2333,7 +2376,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 96,
+            "line": 105,
             "description": "check if the given prop is entity prop",
             "itemtype": "method",
             "name": "isEntityProp",
@@ -2353,7 +2396,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 107,
+            "line": 116,
             "description": "check if the given prop is model prop",
             "itemtype": "method",
             "name": "isModelProp",
@@ -2703,11 +2746,11 @@
     "warnings": [
         {
             "message": "unknown tag: abstract",
-            "line": " src/lib/base-factory.coffee:209"
+            "line": " src/lib/base-factory.coffee:254"
         },
         {
             "message": "unknown tag: abstract",
-            "line": " src/lib/base-factory.coffee:222"
+            "line": " src/lib/base-factory.coffee:267"
         },
         {
             "message": "replacing incorrect tag: params with param",
@@ -2755,11 +2798,11 @@
         },
         {
             "message": "Missing item type\nset value to prop",
-            "line": " src/lib/base-model.coffee:151"
+            "line": " src/lib/base-model.coffee:149"
         },
         {
             "message": "Missing item type\nset model prop",
-            "line": " src/lib/base-model.coffee:170"
+            "line": " src/lib/base-model.coffee:168"
         },
         {
             "message": "Missing item type\nconstructor",

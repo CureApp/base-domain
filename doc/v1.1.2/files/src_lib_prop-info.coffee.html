@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/lib/base-factory.coffee</title>
+    <title>src/lib/prop-info.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,247 +97,136 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src/lib/base-factory.coffee</h1>
+<h1 class="file-heading">File: src/lib/prop-info.coffee</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 
-
-Base  = require &#x27;./base&#x27;
-
 ###*
-Base factory class of DDD pattern.
+parses model properties and classifies them
 
-create instance of model
-
-the parent &quot;Base&quot; class just simply gives a @getFacade() method.
-
-@class BaseFactory
-@extends Base
+@class PropInfo
 @module base-domain
 ###
-class BaseFactory extends Base
+class PropInfo
 
-    ###*
-    model name to handle
+    constructor: (props, facade) -&gt;
 
-    @property modelName
-    @static
-    @protected
-    @type String
-    ###
-    @modelName: null
+        ###*
+        property whose type is CREATED_AT
+        @property createdAt
+        @type String
+        ###
+        @createdAt = null
 
+        ###*
+        property whose type is UPDATED_AT
+        @property updatedAt
+        @type String
+        ###
+        @updatedAt = null
 
-    ###*
-    get anonymous factory class
+        ###*
+        properties whose type is MODEL
+        @property modelProps
+        @type Array
+        ###
+        @modelProps  = []
 
-    @method getAnonymousClass
-    @param {String} modelName
-    @return {Function}
-    ###
-    @getAnonymousClass: (modelName) -&gt;
+        ###*
+        properties whose type is MODEL_LIST
+        @property listProps
+        @type Array
+        ###
+        @listProps  = []
 
-        class AnonymousFactory extends BaseFactory
-            @modelName  : modelName
-            @isAnonymous: true
+        ###*
+        properties whose type is MODEL and the model extends Entity
+        @property entityProps
+        @type Array
+        ###
+        @entityProps = []
 
-        return AnonymousFactory
+        ###*
+        properties whose type is MODEL and the model does not extend Entity
+        @property nonEntityProps
+        @type Array
+        ###
+        @nonEntityProps = []
 
-
-    ###*
-    constructor
-
-    @constructor
-    ###
-    constructor: -&gt;
-
-
-
-    ###*
-    get model class this factory handles
-
-    @method getModelClass
-    @return {Class}
-    ###
-    @_ModelClass: undefined
-    getModelClass: -&gt;
-        @_ModelClass ?= @getFacade().getModel(@constructor.modelName)
-
-
-    ###*
-    create empty model instance
-
-    @method createEmptyModel
-    @return {BaseModel}
-    ###
-    createEmptyModel: -&gt;
-        @createFromObject({})
+        ###*
+        key value pairs of (property =&gt; TypeInfo)
+        @property dic
+        @type Object
+        ###
+        @dic = {}
 
 
-    ###*
-    create instance of model class by plain object
-
-    for each prop, values are set by Model#set(prop, value)
-
-    @method createFromObject
-    @public
-    @param {Object} obj
-    @param {BaseModel} baseModel fallback properties
-    @return {BaseModel} model
-    ###
-    createFromObject: (obj) -&gt;
-
-        ModelClass = @getModelClass()
-
-        return obj if obj instanceof ModelClass
-
-        obj = @beforeCreateFromObject obj
-
-        if not obj? or typeof obj isnt &#x27;object&#x27;
-            return null
+        # private
+        @entityDic = {}
+        @modelDic = {}
 
 
-        model = new ModelClass()
-
-        for own prop, value of obj
-
-            @setValueToModel model, prop, value
-
-        # check idPropName
-        for entityProp in ModelClass.getEntityProps()
-            continue if model[entityProp]
-
-            typeInfo = model.getTypeInfo(entityProp)
-            @fetchEntityProp(model, entityProp)
-
-        return @afterCreateModel model
+        @build props, facade
 
 
     ###*
-    set value to model in creation
+    classify each prop by type
 
-    @method setValueToModel
+    @method build
     @private
     ###
-    setValueToModel: (model, prop, value) -&gt;
+    build: (props, facade) -&gt;
 
-        typeInfo = model.getTypeInfo(prop)
+        for prop, typeInfo of props
 
-        switch typeInfo?.name
+            @dic[prop] = typeInfo
 
-            when &#x27;MODEL_LIST&#x27;
-                @setSubModelListToModel(model, prop, value)
+            switch typeInfo.name
 
-            when &#x27;MODEL&#x27;
-                @setSubModelToModel(model, prop, value)
+                when &#x27;CREATED_AT&#x27;
+                    @createdAt = prop
 
-            else
-                # set normal props
-                model.setNonEntityProp(prop, value)
+                when &#x27;UPDATED_AT&#x27;
+                    @updatedAt = prop
 
+                when &#x27;MODEL&#x27;
+                    @modelProps.push prop
+                    @modelDic[prop] = true
 
+                    if facade.getModel(typeInfo.model).isEntity
+                        @entityProps.push prop
+                        @entityDic[prop] = true
+                    else
+                        @nonEntityProps.push prop
 
-    ###*
-    fetch submodel(s) by id
-    available only when repository of submodel implements &#x27;getByIdSync&#x27;
-    (MasterRepository implements one)
-
-    @method fetchEntityProp
-    @private
-    ###
-    fetchEntityProp: (model, prop) -&gt;
-
-        typeInfo = model.getTypeInfo(prop)
-        idPropName = typeInfo.idPropName
-
-        try
-            Repository = @getFacade().getRepository typeInfo.model
-            return if not Repository.storeMasterTable
-
-            repository = new Repository()
-            return if not repository.getByIdSync
-        catch e
-            return
-
-        id = model[idPropName]
-        subModel = repository.getByIdSync(id)
-        model.setEntityProp(prop, subModel) if subModel
-
-
-    ###*
-    creates list and set it to the model
-
-    @method setSubModelListToModel
-    @private
-    ###
-    setSubModelListToModel: (model, prop, value) -&gt;
-
-        typeInfo = model.getTypeInfo(prop)
-
-        listFactory = @getFacade().createListFactory typeInfo.listName, typeInfo.model
-
-        list = listFactory.createFromObject(value)
-
-        model.setNonEntityProp(prop, list)
+                when &#x27;MODEL_LIST&#x27;
+                    @listProps.push prop
 
         return
 
-
     ###*
-    set submodel to the prop
+    check if the given prop is entity prop
 
-    @method setSubModelToModel
-    @private
+    @method isEntityProp
+    @param {String} prop
+    @return {Boolean}
     ###
-    setSubModelToModel: (model, prop, value) -&gt;
-
-        subModelName = model.getTypeInfo(prop).model
-
-        useAnonymousFactory = on # if no factory is declared, altered one is used 
-        subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)
-        SubModel = subModelFactory.getModelClass()
-
-        if value not instanceof SubModel
-            value = subModelFactory.createFromObject(value)
-
-        if SubModel.isEntity
-            model.setEntityProp(prop, value)
-        else
-            model.setNonEntityProp(prop, value)
-
-        return
+    isEntityProp: (prop) -&gt;
+        return @entityDic[prop]?
 
 
     ###*
-    modify plain object before @createFromObject(obj)
+    check if the given prop is model prop
 
-    @method beforeCreateFromObject
-    @protected
-    @abstract
-    @param {Object} obj
-    @return {Object} obj
+    @method isModelProp
+    @param {String} prop
+    @return {Boolean}
     ###
-    beforeCreateFromObject: (obj) -&gt;
+    isModelProp: (prop) -&gt;
+        return @modelDic[prop]?
 
-        return obj
-
-    ###*
-    modify model after createFromObject(obj), createEmptyModel()
-
-    @method afterCreateModel
-    @protected
-    @abstract
-    @param {BaseModel} model
-    @return {BaseModel} model
-    ###
-    afterCreateModel: (model) -&gt;
-
-        return model
-
-
-
-module.exports = BaseFactory
+module.exports = PropInfo
 
     </pre>
 </div>

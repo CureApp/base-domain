@@ -45,6 +45,13 @@ class PropInfo
         @entityProps = []
 
         ###*
+        properties whose type is MODEL and the model does not extend Entity
+        @property nonEntityProps
+        @type Array
+        ###
+        @nonEntityProps = []
+
+        ###*
         key value pairs of (property => TypeInfo)
         @property dic
         @type Object
@@ -87,6 +94,8 @@ class PropInfo
                     if facade.getModel(typeInfo.model).isEntity
                         @entityProps.push prop
                         @entityDic[prop] = true
+                    else
+                        @nonEntityProps.push prop
 
                 when 'MODEL_LIST'
                     @listProps.push prop

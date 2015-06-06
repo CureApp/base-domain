@@ -70,7 +70,7 @@ class BaseFactory extends Base
     ###
     createEmptyModel: ->
         @createFromObject({})
-
+    createEmpty: -> @createFromObject({})
 
     ###*
     create instance of model class by plain object
@@ -94,19 +94,16 @@ class BaseFactory extends Base
         if not obj? or typeof obj isnt 'object'
             return null
 
-
         model = new ModelClass()
 
         for own prop, value of obj
-
             @setValueToModel model, prop, value
 
-        # check idPropName
-        for entityProp in ModelClass.getEntityProps()
-            continue if model[entityProp]
+        propInfo = ModelClass.getPropInfo()
 
-            typeInfo = model.getTypeInfo(entityProp)
-            @fetchEntityProp(model, entityProp)
+        for prop, typeInfo in propInfo.dic
+            continue if model[prop]?
+            @setEmptyValueToModel model, prop, typeInfo
 
         return @afterCreateModel model
 
@@ -129,37 +126,33 @@ class BaseFactory extends Base
             when 'MODEL'
                 @setSubModelToModel(model, prop, value)
 
-            else
-                # set normal props
+            else # set normal props
                 model.setNonEntityProp(prop, value)
 
 
-
     ###*
-    fetch submodel(s) by id
-    available only when repository of submodel implements 'getByIdSync'
-    (MasterRepository implements one)
+    set empty values to model in creation
 
-    @method fetchEntityProp
+    @method setEmptyValueToModel
     @private
     ###
-    fetchEntityProp: (model, prop) ->
+    setEmptyValueToModel: (model, prop, typeInfo) ->
 
-        typeInfo = model.getTypeInfo(prop)
-        idPropName = typeInfo.idPropName
+        switch typeInfo.name
 
-        try
-            Repository = @getFacade().getRepository typeInfo.model
-            return if not Repository.storeMasterTable
+            when 'MODEL'
+                if propInfo.isEntityProp(prop)
+                    @fetchEntityProp(model, prop, typeInfo) # trying to get entity by id
 
-            repository = new Repository()
-            return if not repository.getByIdSync
-        catch e
-            return
+                else
+                    @createEmptyNonEntityProp(model, prop, typeInfo)
 
-        id = model[idPropName]
-        subModel = repository.getByIdSync(id)
-        model.setEntityProp(prop, subModel) if subModel
+            when 'MODEL_LIST'
+                @createEmptyListProp(model, prop, typeInfo)
+
+            else
+                model[prop] = undefined
+
 
 
     ###*
@@ -204,6 +197,58 @@ class BaseFactory extends Base
             model.setNonEntityProp(prop, value)
 
         return
+
+
+    ###*
+    fetch submodel(s) by id
+    available only when repository of submodel implements 'getByIdSync'
+    (MasterRepository implements one)
+
+    @method fetchEntityProp
+    @private
+    ###
+    fetchEntityProp: (model, prop, typeInfo) ->
+
+        idPropName = typeInfo.idPropName
+
+        try
+            Repository = @getFacade().getRepository typeInfo.model
+            return if not Repository.storeMasterTable
+
+            repository = new Repository()
+            return if not repository.getByIdSync
+        catch e
+            return
+
+        id = model[idPropName]
+        subModel = repository.getByIdSync(id)
+        model.setEntityProp(prop, subModel) if subModel
+
+
+    ###*
+    create empty non-entity model and set to the prop
+
+    @method createEmptyNonEntityProp
+    @private
+    ###
+    createEmptyNonEntityProp: (model, prop, typeInfo) ->
+
+        factory = @getFacade().createFactory typeInfo.model
+        submodel = factory.createEmpty()
+        model.setNonEntityProp(prop, submodel)
+
+
+    ###*
+    create empty list and set to the prop
+
+    @method createEmptyListProp
+    @private
+    ###
+    createEmptyListProp: (model, prop, typeInfo) ->
+
+        listFactory = @getFacade().createListFactory typeInfo.listName, typeInfo.model
+        list = listFactory.createEmpty()
+        model.setNonEntityProp(prop, list)
 
 
     ###*

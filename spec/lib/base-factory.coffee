@@ -114,7 +114,7 @@ describe 'BaseFactory', ->
             diary = new Diary()
             diary.memberId = 'dummy'
 
-            factory.fetchEntityProp(diary, 'author')
+            factory.fetchEntityProp(diary, 'author', diary.getTypeInfo('author'))
 
             expect(diary.author).to.be.instanceof Member
             expect(diary.author.id).to.equal 'dummy'

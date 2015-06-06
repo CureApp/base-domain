@@ -41,7 +41,6 @@ describe 'BaseModel', ->
 
         expect(hospital).to.have.property 'name', 'shinout clinic'
         expect(hospital).not.to.have.property 'beds'
-        expect(Object.keys(hospital)).to.contain 'beds'
 
 
     describe '@withParentProp', ->

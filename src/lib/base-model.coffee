@@ -136,8 +136,6 @@ class BaseModel extends Base
     @constructor
     ###
     constructor: (obj) ->
-
-        @[prop] ?= undefined for prop of @constructor.properties
         @set obj if obj
 
 

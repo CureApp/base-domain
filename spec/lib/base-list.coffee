@@ -34,7 +34,7 @@ describe 'BaseList', ->
         )
 
 
-    it '"items", "loaded", and "listeners" are hidden properties', ->
+    it '"items", "loaded", "listeners" and "itemFactory" are hidden properties', ->
 
         class HobbyList extends BaseList
             @getFacade: -> facade
@@ -49,6 +49,22 @@ describe 'BaseList', ->
         expect(explicitKeys).not.to.contain 'items'
         expect(explicitKeys).not.to.contain 'listeners'
         expect(explicitKeys).not.to.contain 'loaded'
+        expect(explicitKeys).not.to.contain 'itemFactory'
+
+    it 'itemFactory is hidden properties, created once referred', ->
+
+        class HobbyList extends BaseList
+            @getFacade: -> facade
+            getFacade:  -> facade
+            @itemModelName: 'hobby'
+
+        hobbyList = new HobbyList(items: hobbies)
+
+        itemFactory = hobbyList.itemFactory
+
+        expect(itemFactory).to.be.instanceof Facade.BaseFactory
+        expect(itemFactory).to.equal hobbyList.itemFactory
+
 
 
     it 'can contain custom properties', ->

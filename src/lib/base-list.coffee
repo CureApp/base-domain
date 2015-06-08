@@ -70,10 +70,13 @@ class BaseList extends BaseModel
     constructor: (props = {}) ->
 
         # items, loaded and listeners are hidden properties
+        _itemFactory = null
         Object.defineProperties @, 
-            items     : value: []
-            loaded    : value: false, writable: true
-            listeners : value: []
+            items       : value: []
+            loaded      : value: false, writable: true
+            listeners   : value: []
+            itemFactory : get: ->
+                _itemFactory ?= @getFacade().createFactory(@constructor.itemModelName, true)
 
         if props.items
             @setItems props.items

@@ -519,7 +519,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 158,
+            "line": 160,
             "description": "creates list and set it to the model",
             "itemtype": "method",
             "name": "setSubModelListToModel",
@@ -530,7 +530,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 177,
+            "line": 179,
             "description": "set submodel to the prop",
             "itemtype": "method",
             "name": "setSubModelToModel",
@@ -541,7 +541,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 202,
+            "line": 204,
             "description": "fetch submodel(s) by id\navailable only when repository of submodel implements 'getByIdSync'\n(MasterRepository implements one)",
             "itemtype": "method",
             "name": "fetchEntityProp",
@@ -552,7 +552,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 228,
+            "line": 230,
             "description": "create empty non-entity model and set to the prop",
             "itemtype": "method",
             "name": "createEmptyNonEntityProp",
@@ -563,7 +563,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 241,
+            "line": 243,
             "description": "create empty list and set to the prop",
             "itemtype": "method",
             "name": "createEmptyListProp",
@@ -574,7 +574,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 254,
+            "line": 256,
             "description": "modify plain object before @createFromObject(obj)",
             "itemtype": "method",
             "name": "beforeCreateFromObject",
@@ -597,7 +597,7 @@
         },
         {
             "file": "src/lib/base-factory.coffee",
-            "line": 267,
+            "line": 269,
             "description": "modify model after createFromObject(obj), createEmptyModel()",
             "itemtype": "method",
             "name": "afterCreateModel",
@@ -653,7 +653,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 40,
+            "line": 41,
             "description": "ids: get ids of items",
             "itemtype": "property",
             "name": "ids",
@@ -665,7 +665,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 52,
+            "line": 53,
             "description": "items: array of models",
             "itemtype": "property",
             "name": "items",
@@ -675,7 +675,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 59,
+            "line": 60,
             "description": "loaded: is data loaded or not",
             "itemtype": "property",
             "name": "loaded",
@@ -685,14 +685,24 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 66,
+            "line": 67,
+            "description": "itemFactory: instance of factory which creates item models",
+            "itemtype": "property",
+            "name": "itemFactory",
+            "type": "BaseFactory",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 74,
             "is_constructor": 1,
             "class": "BaseList",
             "module": "base-domain"
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 86,
+            "line": 97,
             "description": "set ids.",
             "itemtype": "method",
             "name": "setIds",
@@ -708,7 +718,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 113,
+            "line": 124,
             "description": "set items",
             "itemtype": "method",
             "name": "setItems",
@@ -724,7 +734,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 130,
+            "line": 141,
             "description": "returns item is Entity",
             "itemtype": "method",
             "name": "containsEntity",
@@ -740,7 +750,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 142,
+            "line": 153,
             "description": "sort items in constructor",
             "itemtype": "method",
             "name": "sort",
@@ -751,7 +761,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 152,
+            "line": 163,
             "description": "first item",
             "itemtype": "method",
             "name": "first",
@@ -762,7 +772,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 165,
+            "line": 176,
             "description": "last item",
             "itemtype": "method",
             "name": "last",
@@ -773,7 +783,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 178,
+            "line": 189,
             "description": "export models to Array",
             "itemtype": "method",
             "name": "toArray",
@@ -784,7 +794,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 188,
+            "line": 199,
             "description": "create plain list.\nif this list contains entities, returns their ids\nif this list contains non-entity models, returns their plain objects",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -797,7 +807,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 216,
+            "line": 227,
             "description": "on addEventListeners for 'loaded'",
             "itemtype": "method",
             "name": "on",
@@ -808,7 +818,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 232,
+            "line": 243,
             "description": "tell listeners emit loaded",
             "itemtype": "method",
             "name": "emitLoaded",
@@ -1571,7 +1581,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 136,
+            "line": 140,
             "description": "get a repository class",
             "itemtype": "method",
             "name": "getRepository",
@@ -1591,7 +1601,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 147,
+            "line": 151,
             "description": "create a factory instance",
             "itemtype": "method",
             "name": "createFactory",
@@ -1618,7 +1628,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 160,
+            "line": 164,
             "description": "create a factory instance",
             "itemtype": "method",
             "name": "createFactory",
@@ -1644,7 +1654,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 173,
+            "line": 177,
             "description": "create a repository instance",
             "itemtype": "method",
             "name": "createRepository",
@@ -1670,7 +1680,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 185,
+            "line": 189,
             "description": "read a file and returns class",
             "itemtype": "method",
             "name": "require",
@@ -1692,7 +1702,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 202,
+            "line": 206,
             "description": "check existence of the class of the given name",
             "itemtype": "method",
             "name": "hasClass",
@@ -1712,7 +1722,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 217,
+            "line": 221,
             "description": "add copied class to facade.\nthe class is acquired by @require(name)\n\nattaches getFacade() method (for both class and instance)",
             "itemtype": "method",
             "name": "addClass",
@@ -1739,7 +1749,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 238,
+            "line": 242,
             "description": "read a file and returns the instance of the file's class",
             "itemtype": "method",
             "name": "create",
@@ -1767,7 +1777,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 252,
+            "line": 256,
             "description": "create instance of DomainError",
             "itemtype": "method",
             "name": "error",
@@ -1793,7 +1803,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 266,
+            "line": 270,
             "description": "check if given object is instance of DomainError",
             "itemtype": "method",
             "name": "isDomainError",
@@ -1813,7 +1823,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 279,
+            "line": 283,
             "description": "insert fixture data\n(Node.js only)",
             "itemtype": "method",
             "name": "insertFixtures",
@@ -2396,7 +2406,27 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 116,
+            "line": 115,
+            "description": "get typeInfo by prop",
+            "itemtype": "method",
+            "name": "getTypeInfo",
+            "params": [
+                {
+                    "name": "prop",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "TypeInfo"
+            },
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 126,
             "description": "check if the given prop is model prop",
             "itemtype": "method",
             "name": "isModelProp",
@@ -2416,7 +2446,7 @@
         },
         {
             "file": "src/lib/resource-client-interface.coffee",
-            "line": 16,
+            "line": 18,
             "description": "Create new instance of Model class, saved in database",
             "itemtype": "method",
             "name": "create",
@@ -2438,7 +2468,7 @@
         },
         {
             "file": "src/lib/resource-client-interface.coffee",
-            "line": 28,
+            "line": 31,
             "description": "Update or insert a model instance\nThe update will override any specified attributes in the request data object. It won’t remove  existing ones unless the value is set to null.",
             "itemtype": "method",
             "name": "upsert",
@@ -2460,7 +2490,7 @@
         },
         {
             "file": "src/lib/resource-client-interface.coffee",
-            "line": 41,
+            "line": 45,
             "description": "Find object by ID.",
             "itemtype": "method",
             "name": "findById",
@@ -2482,7 +2512,7 @@
         },
         {
             "file": "src/lib/resource-client-interface.coffee",
-            "line": 54,
+            "line": 58,
             "description": "Find all model instances that match filter specification.",
             "itemtype": "method",
             "name": "find",
@@ -2504,7 +2534,7 @@
         },
         {
             "file": "src/lib/resource-client-interface.coffee",
-            "line": 65,
+            "line": 69,
             "description": "Find one model instance that matches filter specification. Same as find, but limited to one result",
             "itemtype": "method",
             "name": "findOne",
@@ -2526,7 +2556,7 @@
         },
         {
             "file": "src/lib/resource-client-interface.coffee",
-            "line": 77,
+            "line": 81,
             "description": "Destroy model instance",
             "itemtype": "method",
             "name": "destroyById",
@@ -2548,7 +2578,7 @@
         },
         {
             "file": "src/lib/resource-client-interface.coffee",
-            "line": 89,
+            "line": 93,
             "description": "Destroy model instance with the specified ID.",
             "itemtype": "method",
             "name": "destroyById",
@@ -2570,7 +2600,7 @@
         },
         {
             "file": "src/lib/resource-client-interface.coffee",
-            "line": 101,
+            "line": 105,
             "description": "Update set of attributes.",
             "itemtype": "method",
             "name": "updateAttributes",
@@ -2592,7 +2622,7 @@
         },
         {
             "file": "src/lib/resource-client-interface.coffee",
-            "line": 114,
+            "line": 118,
             "description": "return Promise object as mock",
             "itemtype": "method",
             "name": "mock",
@@ -2711,7 +2741,7 @@
         },
         {
             "file": "src/lib/type-info.coffee",
-            "line": 70,
+            "line": 73,
             "description": "TYPES defines various data type, including model and array of models\n\nkey: typeName (String)\nvalue: type TypeInfo|Function(TypeInfo)",
             "itemtype": "property",
             "name": "TYPES",
@@ -2721,7 +2751,7 @@
         },
         {
             "file": "src/lib/type-info.coffee",
-            "line": 97,
+            "line": 100,
             "description": "converts hyphenation to camel case\n\n    'shinout-no-macbook-pro => shinoutNoMacbookPro'",
             "itemtype": "method",
             "name": "camelize",
@@ -2746,11 +2776,11 @@
     "warnings": [
         {
             "message": "unknown tag: abstract",
-            "line": " src/lib/base-factory.coffee:254"
+            "line": " src/lib/base-factory.coffee:256"
         },
         {
             "message": "unknown tag: abstract",
-            "line": " src/lib/base-factory.coffee:267"
+            "line": " src/lib/base-factory.coffee:269"
         },
         {
             "message": "replacing incorrect tag: params with param",
@@ -2786,7 +2816,7 @@
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/base-list.coffee:66"
+            "line": " src/lib/base-list.coffee:74"
         },
         {
             "message": "Missing item type\nModelName -> model-name",

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/lib/list-factory.coffee</title>
+    <title>src/lib/base-factory.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,40 +97,61 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src/lib/list-factory.coffee</h1>
+<h1 class="file-heading">File: src/lib/base-factory.coffee</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 
-BaseFactory = require &#x27;./base-factory&#x27;
 
+Base  = require &#x27;./base&#x27;
 
 ###*
-factory of list
+Base factory class of DDD pattern.
 
-@class ListFactory
+create instance of model
+
+the parent &quot;Base&quot; class just simply gives a @getFacade() method.
+
+@class BaseFactory
 @extends Base
 @module base-domain
 ###
-class ListFactory extends BaseFactory
+class BaseFactory extends Base
+
+    ###*
+    model name to handle
+
+    @property modelName
+    @static
+    @protected
+    @type String
+    ###
+    @modelName: null
 
 
     ###*
-    get anonymous list factory class
+    get anonymous factory class
 
     @method getAnonymousClass
     @param {String} modelName
-    @param {String} itemModelName
     @return {Function}
     ###
-    @getAnonymousClass: (modelName, itemModelName) -&gt;
+    @getAnonymousClass: (modelName) -&gt;
 
-        class AnonymousListFactory extends ListFactory
-            @modelName     : modelName
-            @itemModelName : itemModelName
-            @isAnonymous   : true
+        class AnonymousFactory extends BaseFactory
+            @modelName  : modelName
+            @isAnonymous: true
 
-        return AnonymousListFactory
+        return AnonymousFactory
+
+
+    ###*
+    constructor
+
+    @constructor
+    ###
+    constructor: -&gt;
+
 
 
     ###*
@@ -141,104 +162,229 @@ class ListFactory extends BaseFactory
     ###
     @_ModelClass: undefined
     getModelClass: -&gt;
-        {modelName, itemModelName} = @constructor
-        @_ModelClass ?= @getFacade().getListModel(modelName, itemModelName)
+        @_ModelClass ?= @getFacade().getModel(@constructor.modelName)
 
 
     ###*
-    @constructor
+    create empty model instance
+
+    @method createEmptyModel
+    @return {BaseModel}
     ###
-    constructor: -&gt;
-        @itemFactory = @getFacade().createFactory(@constructor.itemModelName, true)
-        super
-
+    createEmptyModel: -&gt;
+        @createFromObject({})
+    createEmpty: -&gt; @createFromObject({})
 
     ###*
-    creates an instance of BaseList by value
+    create instance of model class by plain object
+
+    for each prop, values are set by Model#set(prop, value)
 
     @method createFromObject
     @public
-    @param {any} obj
-    @return {BaseList}
+    @param {Object} obj
+    @param {BaseModel} baseModel fallback properties
+    @return {BaseModel} model
     ###
     createFromObject: (obj) -&gt;
 
+        ModelClass = @getModelClass()
+
+        return obj if obj instanceof ModelClass
+
+        obj = @beforeCreateFromObject obj
+
         if not obj? or typeof obj isnt &#x27;object&#x27;
-            return @createEmpty()
+            return null
 
-        if Array.isArray obj
-            return @createFromArray(obj)
+        model = new ModelClass()
 
-        ListModel = @getModelClass()
+        for own prop, value of obj
+            @setValueToModel model, prop, value
 
-        { ids, items } = obj
+        propInfo = ModelClass.getPropInfo()
 
-        if items
-            delete obj.items
-            items = (@createItemFromObject obj for obj in items)
-            list = super(obj).setItems items
-            obj.items = items
+        for prop of propInfo.dic
+            continue if model[prop]?
+            @setEmptyValueToModel model, prop, propInfo
 
-        else if ListModel.containsEntity()
-            delete obj.ids
-            list = super(obj).setIds ids
-            obj.ids = ids
-        else
-            return super(obj)
-
-        return list
+        return @afterCreateModel model
 
 
     ###*
-    creates an instance of BaseList from array
+    set value to model in creation
 
-    @method createFromArray
-    @public
-    @param {Array} arr
-    @return {BaseList}
-    ###
-    createFromArray: (arr) -&gt;
-
-        ListModel = @getModelClass()
-
-        firstValue = arr[0]
-
-        if not firstValue?
-            return @createEmpty()
-
-        if typeof firstValue is &#x27;object&#x27;
-            items = (@createItemFromObject obj for obj in arr)
-            return new ListModel().setItems items
-
-        if ListModel.containsEntity()
-            return new ListModel().setIds arr
-
-        throw new Error &quot;cannot create #{@constructor.modelName} with arr\n [#{arr.toString()}]&quot;
-
-    ###*
-    creates an instance of BaseList by value
-
-    @method createEmpty
+    @method setValueToModel
     @private
-    @return {BaseList}
     ###
-    createEmpty: -&gt;
+    setValueToModel: (model, prop, value) -&gt;
 
-        ListModel = @getModelClass()
-        return new ListModel().setItems()
+        typeInfo = model.getTypeInfo(prop)
+
+        switch typeInfo?.name
+
+            when &#x27;MODEL_LIST&#x27;
+                @setSubModelListToModel(model, prop, value)
+
+            when &#x27;MODEL&#x27;
+                @setSubModelToModel(model, prop, value)
+
+            else # set normal props
+                model.setNonEntityProp(prop, value)
 
 
     ###*
-    create item model
+    set empty values to model in creation
 
-    @method createItemFromObject
-    @return {BaseModel}
+    @method setEmptyValueToModel
+    @private
     ###
-    createItemFromObject: (obj) -&gt;
-        return @itemFactory.createFromObject(obj)
+    setEmptyValueToModel: (model, prop, propInfo) -&gt;
+
+        typeInfo = propInfo.getTypeInfo(prop)
+
+        switch typeInfo.name
+
+            when &#x27;MODEL&#x27;
+                if propInfo.isEntityProp(prop)
+                    @fetchEntityProp(model, prop, typeInfo) # trying to get entity by id
+
+                else
+                    @createEmptyNonEntityProp(model, prop, typeInfo)
+
+            when &#x27;MODEL_LIST&#x27;
+                @createEmptyListProp(model, prop, typeInfo)
+
+            else
+                model[prop] = undefined
 
 
-module.exports = ListFactory
+
+    ###*
+    creates list and set it to the model
+
+    @method setSubModelListToModel
+    @private
+    ###
+    setSubModelListToModel: (model, prop, value) -&gt;
+
+        typeInfo = model.getTypeInfo(prop)
+
+        listFactory = @getFacade().createListFactory typeInfo.listName, typeInfo.model
+
+        list = listFactory.createFromObject(value)
+
+        model.setNonEntityProp(prop, list)
+
+        return
+
+
+    ###*
+    set submodel to the prop
+
+    @method setSubModelToModel
+    @private
+    ###
+    setSubModelToModel: (model, prop, value) -&gt;
+
+        subModelName = model.getTypeInfo(prop).model
+
+        useAnonymousFactory = on # if no factory is declared, altered one is used 
+        subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)
+        SubModel = subModelFactory.getModelClass()
+
+        if value not instanceof SubModel
+            value = subModelFactory.createFromObject(value)
+
+        if SubModel.isEntity
+            model.setEntityProp(prop, value)
+        else
+            model.setNonEntityProp(prop, value)
+
+        return
+
+
+    ###*
+    fetch submodel(s) by id
+    available only when repository of submodel implements &#x27;getByIdSync&#x27;
+    (MasterRepository implements one)
+
+    @method fetchEntityProp
+    @private
+    ###
+    fetchEntityProp: (model, prop, typeInfo) -&gt;
+
+        idPropName = typeInfo.idPropName
+
+        try
+            Repository = @getFacade().getRepository typeInfo.model
+            return if not Repository.storeMasterTable
+
+            repository = new Repository()
+            return if not repository.getByIdSync
+        catch e
+            return
+
+        id = model[idPropName]
+        subModel = repository.getByIdSync(id)
+        model.setEntityProp(prop, subModel) if subModel
+
+
+    ###*
+    create empty non-entity model and set to the prop
+
+    @method createEmptyNonEntityProp
+    @private
+    ###
+    createEmptyNonEntityProp: (model, prop, typeInfo) -&gt;
+
+        factory = @getFacade().createFactory typeInfo.model
+        submodel = factory.createEmpty()
+        model.setNonEntityProp(prop, submodel)
+
+
+    ###*
+    create empty list and set to the prop
+
+    @method createEmptyListProp
+    @private
+    ###
+    createEmptyListProp: (model, prop, typeInfo) -&gt;
+
+        listFactory = @getFacade().createListFactory typeInfo.listName, typeInfo.model
+        list = listFactory.createEmpty()
+        model.setNonEntityProp(prop, list)
+
+
+    ###*
+    modify plain object before @createFromObject(obj)
+
+    @method beforeCreateFromObject
+    @protected
+    @abstract
+    @param {Object} obj
+    @return {Object} obj
+    ###
+    beforeCreateFromObject: (obj) -&gt;
+
+        return obj
+
+    ###*
+    modify model after createFromObject(obj), createEmptyModel()
+
+    @method afterCreateModel
+    @protected
+    @abstract
+    @param {BaseModel} model
+    @return {BaseModel} model
+    ###
+    afterCreateModel: (model) -&gt;
+
+        return model
+
+
+
+module.exports = BaseFactory
 
     </pre>
 </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/lib/type-info.coffee</title>
+    <title>src/lib/includer.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,128 +97,137 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src/lib/type-info.coffee</h1>
+<h1 class="file-heading">File: src/lib/includer.coffee</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 
 ###*
-type of model&#x27;s property 
+include submodels
 
-@class TypeInfo
-@module base-domain
 ###
-class TypeInfo
+class Includer
 
-    constructor: (@name, options = {}) -&gt;
-        @[k] = v for k, v of options
+    ###*
+    @constructor
+    ###
+    constructor: (@model, @modelPool = {}) -&gt;
+
+        @ModelClass = @model.constructor
+
+        @cache(@ModelClass.getModelName(), @model) if @ModelClass.isEntity
 
 
     ###*
-    check if the type is the given typeName
+    include sub entities
 
-    @method equals
+    @method include
     @public
-    @param {String} typeName
-    @return {Boolean}
+    @param {Object} options
+    @param {Boolean} [recursive=false] recursively include or not
+    @return {Promise}
     ###
-    equals: (typeName) -&gt; @name is typeName
+    include: (options = {}) -&gt;
+
+        entityProps = @ModelClass.getEntityProps() 
+
+        promises = []
+
+        for entityProp in entityProps when not @model[entityProp]?
+
+            subModelPromise = @setSubEntity(entityProp)
+
+            promises.push subModelPromise if subModelPromise
+
+        Promise.all(promises).then =&gt;
+
+            if options.recursive
+                return @doRecursively()
+
+            return @model
+
 
     ###*
-    check if the type is not the given typeName
+    run include for each submodel
 
-    @method notEquals
-    @public
-    @param {String} typeName
-    @return {Boolean}
-    ###
-    notEquals: (typeName) -&gt; @name isnt typeName
-
-
-    ###*
-    get TypeInfo as MODEL
-
-    @method createModelType
+    @method doRecursively
     @private
-    @static
+    @return {Promise}
+    ###
+    doRecursively: -&gt;
+
+        promises = []
+        subModelProps = @ModelClass.getModelProps(includeList: true)
+        BaseModel = @model.getFacade().constructor.BaseModel
+
+        for modelProp in subModelProps
+
+            subModel = @model[modelProp]
+
+            continue if subModel not instanceof BaseModel
+
+            includer = new Includer(subModel, @modelPool)
+            promises.push includer.include(recursive: true)
+
+        return Promise.all(promises).then =&gt; @model
+
+
+    ###*
+    load entity by entityProp and set it to @model
+
+    @method setSubEntity
+    @private
+    @param {String} entityProp
+    @return {Promise}
+    ###
+    setSubEntity: (entityProp) -&gt;
+
+        propInfo = @model.getTypeInfo entityProp
+
+        subId = @model[propInfo.idPropName]
+
+        return if not subId?
+
+        if sub = @cached(propInfo.model, subId)
+            @model.set(entityProp, sub)
+            return
+
+        repo = @model.getFacade().createRepository(propInfo.model)
+
+        return repo.get(subId).then (subModel) =&gt;
+            @model.set entityProp, subModel 
+        .catch (e) -&gt;
+
+
+    ###*
+    cache model
+
+    @method cache
+    @private
     @param {String} modelName
-    @param {String} [idPropName] by default: xxxYyyId when modelName is xxx-yyy
-    @return {TypeInfo} type
+    @param {Entity} model
     ###
-    @createModelType: (modelName, idPropName) -&gt; 
-
-        new TypeInfo &#x27;MODEL&#x27;,
-            model      : modelName
-            idPropName : idPropName ?  TypeInfo.camelize(modelName) + &#x27;Id&#x27;
+    cache: (modelName, model) -&gt;
+        @modelPool[modelName] ?= {}
+        @modelPool[modelName][model.id] = model
+        return
 
 
     ###*
-    get TypeInfo as MODEL_LIST
+    get cached model
 
-    @method createModelListType
+    @method cached
     @private
-    @static
     @param {String} modelName
-    @param {String} [options.idPropName] by default: xxxYyyIds when modelName is xxx-yyy
-    @param {String} [options.name] name of list model, by default: xxx-yyy-list when modelName is xxx-yyy
-    @return {TypeInfo} type
+    @param {String|Number} id
+    @return {Entity} model
     ###
-    @createModelListType: (modelName, options = {}) -&gt; 
-        new TypeInfo &#x27;MODEL_LIST&#x27;,
-            model      : modelName
-            idPropName : options.idPropName ? TypeInfo.camelize(modelName) + &#x27;Ids&#x27;
-            listName   : options.name ? &quot;#{modelName}-list&quot;
-
-
-    ###*
-    TYPES defines various data type, including model and array of models
-
-    key: typeName (String)
-    value: type TypeInfo|Function(TypeInfo)
-
-    @property TYPES
-    @static
-    ###
-
-    @TYPES:
-        ANY        : new TypeInfo &#x27;ANY&#x27;
-        STRING     : new TypeInfo &#x27;STRING&#x27;
-        NUMBER     : new TypeInfo &#x27;NUMBER&#x27;
-        BOOLEAN    : new TypeInfo &#x27;BOOLEAN&#x27;
-        OBJECT     : new TypeInfo &#x27;OBJECT&#x27;
-        ARRAY      : new TypeInfo &#x27;ARRAY&#x27;
-        DATE       : new TypeInfo &#x27;DATE&#x27;
-        BUFFER     : new TypeInfo &#x27;BUFFER&#x27;
-        GEOPOINT   : new TypeInfo &#x27;GEOPOINT&#x27;
-        CREATED_AT : new TypeInfo &#x27;CREATED_AT&#x27;
-        UPDATED_AT : new TypeInfo &#x27;UPDATED_AT&#x27;
-        MODEL      : TypeInfo.createModelType
-        MODEL_LIST : TypeInfo.createModelListType
+    cached: (modelName, id) -&gt;
+        @modelPool[modelName]?[id]
 
 
 
-    ###*
-    converts hyphenation to camel case
-
-        &#x27;shinout-no-macbook-pro =&gt; shinoutNoMacbookPro&#x27;
-
-    @method camelize
-    @private
-    @static
-    @param {String} hyphened
-    @return {String} cameled
-    ###
-    @camelize: (hyphened) -&gt;
-       (for substr, i in hyphened.split(&#x27;-&#x27;)
-           if i is 0
-               substr
-           else
-               substr.charAt(0).toUpperCase() + substr.slice(1)
-       ).join(&#x27;&#x27;)
-
-
-
-module.exports = TypeInfo
+module.exports = Includer
 
     </pre>
 </div>

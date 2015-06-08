@@ -136,6 +136,7 @@ class BaseList extends BaseModel
 
         class AnonymousList extends BaseList
             @itemModelName: itemModelName
+            @isAnonymous: true
 
         return AnonymousList
 
@@ -167,15 +168,25 @@ class BaseList extends BaseModel
     ###
 
     ###*
+    itemFactory: instance of factory which creates item models
+
+    @property itemFactory
+    @type BaseFactory
+    ###
+
+    ###*
     @constructor
     ###
     constructor: (props = {}) -&gt;
 
         # items, loaded and listeners are hidden properties
+        _itemFactory = null
         Object.defineProperties @, 
-            items     : value: []
-            loaded    : value: false, writable: true
-            listeners : value: []
+            items       : value: []
+            loaded      : value: false, writable: true
+            listeners   : value: []
+            itemFactory : get: -&gt;
+                _itemFactory ?= @getFacade().createFactory(@constructor.itemModelName, true)
 
         if props.items
             @setItems props.items

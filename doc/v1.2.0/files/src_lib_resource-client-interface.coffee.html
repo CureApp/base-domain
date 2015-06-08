@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/lib/prop-info.coffee</title>
+    <title>src/lib/resource-client-interface.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,136 +97,138 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src/lib/prop-info.coffee</h1>
+<h1 class="file-heading">File: src/lib/resource-client-interface.coffee</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 
 ###*
-parses model properties and classifies them
+interface of client accessing to resource.
+Used in BaseRepository
 
-@class PropInfo
+LoopBackClient in loopback-promised package implements this interface.
+
+see https://github.com/CureApp/loopback-promised
+
+@class ResourceClientInterface
 @module base-domain
 ###
-class PropInfo
+class ResourceClientInterface
 
-    constructor: (props, facade) -&gt;
+    constructor: -&gt;
+        @current_id = 0
 
-        ###*
-        property whose type is CREATED_AT
-        @property createdAt
-        @type String
-        ###
-        @createdAt = null
+    ###*
+    Create new instance of Model class, saved in database
 
-        ###*
-        property whose type is UPDATED_AT
-        @property updatedAt
-        @type String
-        ###
-        @updatedAt = null
-
-        ###*
-        properties whose type is MODEL
-        @property modelProps
-        @type Array
-        ###
-        @modelProps  = []
-
-        ###*
-        properties whose type is MODEL_LIST
-        @property listProps
-        @type Array
-        ###
-        @listProps  = []
-
-        ###*
-        properties whose type is MODEL and the model extends Entity
-        @property entityProps
-        @type Array
-        ###
-        @entityProps = []
-
-        ###*
-        properties whose type is MODEL and the model does not extend Entity
-        @property nonEntityProps
-        @type Array
-        ###
-        @nonEntityProps = []
-
-        ###*
-        key value pairs of (property =&gt; TypeInfo)
-        @property dic
-        @type Object
-        ###
-        @dic = {}
-
-
-        # private
-        @entityDic = {}
-        @modelDic = {}
-
-
-        @build props, facade
+    @method create
+    @public
+    @param {Object} data
+    @return {Promise(Object)}
+    ###
+    create: (data = {}) -&gt;
+        data.id = ++@current_id
+        return Promise.resolve(data)
 
 
     ###*
-    classify each prop by type
+    Update or insert a model instance
+    The update will override any specified attributes in the request data object. It won’t remove  existing ones unless the value is set to null.
 
-    @method build
+    @method upsert
+    @public
+    @param {Object} data
+    @return {Promise(Object)}
+    ###
+    upsert: (data = {}) -&gt;
+        data.id ?= ++@current_id
+        return Promise.resolve(data)
+
+
+    ###*
+    Find object by ID.
+
+    @method findById
+    @public
+    @param {String} id
+    @return {Promise(Object)}
+    ###
+    findById: (id) -&gt;
+        @mock(id)
+
+
+
+    ###*
+    Find all model instances that match filter specification.
+
+    @method find
+    @public
+    @param {Object} filter
+    @return {Promise(Array(Object))}
+    ###
+    find: (filter) -&gt;
+        return Promise.resolve([{id: &#x27;dummy&#x27;, mock: true}])
+
+    ###*
+    Find one model instance that matches filter specification. Same as find, but limited to one result
+
+    @method findOne
+    @public
+    @param {Object} filter
+    @return {Promise(Object)}
+    ###
+    findOne: (filter) -&gt;
+        @mock(filter)
+
+
+    ###*
+    Destroy model instance
+
+    @method destroyById
+    @public
+    @param {Object} data
+    @return {Promise}
+    ###
+    destroy: (data) -&gt;
+        Promise.resolve({})
+
+
+    ###*
+    Destroy model instance with the specified ID.
+
+    @method destroyById
+    @public
+    @param {String} id
+    @return {Promise}
+    ###
+    destroyById: (id) -&gt;
+        Promise.resolve({})
+
+
+    ###*
+    Update set of attributes.
+
+    @method updateAttributes
+    @public
+    @param {Object} data
+    @return {Promise(Object)}
+    ###
+    updateAttributes: (id, data) -&gt;
+        @mock(id, data)
+
+
+
+    ###*
+    return Promise object as mock
+
+    @method mock
     @private
     ###
-    build: (props, facade) -&gt;
-
-        for prop, typeInfo of props
-
-            @dic[prop] = typeInfo
-
-            switch typeInfo.name
-
-                when &#x27;CREATED_AT&#x27;
-                    @createdAt = prop
-
-                when &#x27;UPDATED_AT&#x27;
-                    @updatedAt = prop
-
-                when &#x27;MODEL&#x27;
-                    @modelProps.push prop
-                    @modelDic[prop] = true
-
-                    if facade.getModel(typeInfo.model).isEntity
-                        @entityProps.push prop
-                        @entityDic[prop] = true
-                    else
-                        @nonEntityProps.push prop
-
-                when &#x27;MODEL_LIST&#x27;
-                    @listProps.push prop
-
-        return
-
-    ###*
-    check if the given prop is entity prop
-
-    @method isEntityProp
-    @param {String} prop
-    @return {Boolean}
-    ###
-    isEntityProp: (prop) -&gt;
-        return @entityDic[prop]?
+    mock: (arg1, arg2) -&gt;
+        return Promise.resolve(id: &#x27;dummy&#x27;, mock: true, arg1: arg1, arg2: arg2)
 
 
-    ###*
-    check if the given prop is model prop
-
-    @method isModelProp
-    @param {String} prop
-    @return {Boolean}
-    ###
-    isModelProp: (prop) -&gt;
-        return @modelDic[prop]?
-
-module.exports = PropInfo
+module.exports = ResourceClientInterface
 
     </pre>
 </div>

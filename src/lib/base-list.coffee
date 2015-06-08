@@ -65,6 +65,13 @@ class BaseList extends BaseModel
     ###
 
     ###*
+    itemFactory: instance of factory which creates item models
+
+    @property itemFactory
+    @type BaseFactory
+    ###
+
+    ###*
     @constructor
     ###
     constructor: (props = {}) ->

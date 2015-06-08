@@ -25,7 +25,7 @@ describe 'Facade', ->
             f = Facade.createInstance()
             expect(f.hasClass('hobby')).to.be.false
 
-        xit 'returns true if a class with the given name is found', ->
+        it 'returns true if a class with the given name is found', ->
             f = Facade.createInstance()
             f.addClass('hobby', ->)
             expect(f.hasClass('hobby')).to.be.true

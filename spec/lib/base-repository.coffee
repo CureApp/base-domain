@@ -28,12 +28,12 @@ describe 'BaseRepository', ->
             memberRepo = facade.createRepository('member')
 
             memberRepo.save(firstName: 'Shin').then (model) =>
-                arg1 = model.arg1 # mock prop
-                expect(arg1).to.have.property('mCreatedAt')
-                expect(arg1).to.have.property('mUpdatedAt')
-                expect(new Date(arg1.mCreatedAt)).to.be.instanceof Date
-                expect(new Date(arg1.mUpdatedAt)).to.be.instanceof Date
+                expect(model).to.have.property('mCreatedAt')
+                expect(model).to.have.property('mUpdatedAt')
+                expect(new Date(model.mCreatedAt)).to.be.instanceof Date
+                expect(new Date(model.mUpdatedAt)).to.be.instanceof Date
                 done()
+            .catch done
 
         it 'createdAt stays original', (done) ->
 
@@ -41,9 +41,8 @@ describe 'BaseRepository', ->
             now = new Date()
 
             memberRepo.save(firstName: 'Shin', mCreatedAt: now).then (model) =>
-                arg1 = model.arg1 # mock prop
-                expect(arg1).to.have.property('mCreatedAt')
-                expect(arg1.mCreatedAt).to.equal now
+                expect(model).to.have.property('mCreatedAt')
+                expect(model.mCreatedAt).to.equal now
                 done()
 
 
@@ -53,9 +52,8 @@ describe 'BaseRepository', ->
             now = new Date()
 
             memberRepo.save(firstName: 'Shin', mUpdatedAt: now).then (model) =>
-                arg1 = model.arg1 # mock prop
-                expect(arg1).to.have.property('mCreatedAt')
-                expect(arg1.mUpdatedAt).not.to.equal now
+                expect(model).to.have.property('mCreatedAt')
+                expect(model.mUpdatedAt).not.to.equal now
                 done()
 
 
@@ -86,8 +84,7 @@ describe 'BaseRepository', ->
 
             dRepo = facade.createRepository('diary')
             dRepo.save(diary).then (model) =>
-                arg1 = model.arg1 # mock prop
-                expect(arg1).to.have.property('memberId', 12)
+                expect(model).to.have.property('memberId', 12)
                 done()
 
 

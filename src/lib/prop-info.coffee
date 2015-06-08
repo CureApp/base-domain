@@ -112,6 +112,16 @@ class PropInfo
     isEntityProp: (prop) ->
         return @entityDic[prop]?
 
+    ###*
+    get typeInfo by prop
+
+    @method getTypeInfo
+    @param {String} prop
+    @return {TypeInfo}
+    ###
+    getTypeInfo: (prop) ->
+        return @dic[prop]
+
 
     ###*
     check if the given prop is model prop

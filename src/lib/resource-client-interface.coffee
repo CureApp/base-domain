@@ -12,6 +12,8 @@ see https://github.com/CureApp/loopback-promised
 ###
 class ResourceClientInterface
 
+    constructor: ->
+        @current_id = 0
 
     ###*
     Create new instance of Model class, saved in database
@@ -22,7 +24,8 @@ class ResourceClientInterface
     @return {Promise(Object)}
     ###
     create: (data = {}) ->
-        @mock(data)
+        data.id = ++@current_id
+        return Promise.resolve(data)
 
 
     ###*
@@ -35,7 +38,8 @@ class ResourceClientInterface
     @return {Promise(Object)}
     ###
     upsert: (data = {}) ->
-        @mock(data)
+        data.id ?= ++@current_id
+        return Promise.resolve(data)
 
 
     ###*

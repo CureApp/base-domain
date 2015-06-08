@@ -101,9 +101,9 @@ class BaseFactory extends Base
 
         propInfo = ModelClass.getPropInfo()
 
-        for prop, typeInfo in propInfo.dic
+        for prop of propInfo.dic
             continue if model[prop]?
-            @setEmptyValueToModel model, prop, typeInfo
+            @setEmptyValueToModel model, prop, propInfo
 
         return @afterCreateModel model
 
@@ -136,7 +136,9 @@ class BaseFactory extends Base
     @method setEmptyValueToModel
     @private
     ###
-    setEmptyValueToModel: (model, prop, typeInfo) ->
+    setEmptyValueToModel: (model, prop, propInfo) ->
+
+        typeInfo = propInfo.getTypeInfo(prop)
 
         switch typeInfo.name
 

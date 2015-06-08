@@ -1,5 +1,6 @@
 
 facade = require('../create-facade').create('domain')
+Facade = facade.constructor
 
 Hobby  = facade.getModel 'hobby'
 Member = facade.getModel 'member'
@@ -88,6 +89,18 @@ describe 'BaseFactory', ->
                 date  : new Date()
 
             expect(diary).to.have.property 'memberId', 12 # not "authorId"
+
+
+        it 'creates empty list', ->
+
+            mFactory = facade.createFactory('member')
+
+            member = mFactory.createFromObject
+                firstName: 'Shin'
+
+            expect(member.hobbies).to.be.instanceof Facade.BaseList
+
+
 
 
     describe 'fetchEntityProp', ->

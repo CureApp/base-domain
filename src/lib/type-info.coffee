@@ -61,6 +61,9 @@ class TypeInfo
     @return {TypeInfo} type
     ###
     @createModelListType: (modelName, options = {}) -> 
+        if typeof options is 'string'
+            options = name: options
+
         new TypeInfo 'MODEL_LIST',
             model      : modelName
             idPropName : options.idPropName ? TypeInfo.camelize(modelName) + 'Ids'

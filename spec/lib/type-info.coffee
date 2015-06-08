@@ -19,3 +19,10 @@ describe 'TypeInfo', ->
 
             typeInfo = TypeInfo.createModelListType('hobby', name: 'another-hobby-list')
             expect(typeInfo).to.have.property('listName', 'another-hobby-list')
+
+
+        it 'parses 2nd argument as listName when it is string ', ->
+
+            typeInfo = TypeInfo.createModelListType('hobby', 'happy-hobby-list')
+            expect(typeInfo).to.have.property('listName', 'happy-hobby-list')
+

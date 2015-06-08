@@ -33,6 +33,7 @@ class BaseList extends BaseModel
 
         class AnonymousList extends BaseList
             @itemModelName: itemModelName
+            @isAnonymous: true
 
         return AnonymousList
 

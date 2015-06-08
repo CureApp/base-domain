@@ -81,12 +81,12 @@ class Facade
             ListClass = @getModel(listModelName)
             # ListClass.name = listModelName
 
-            unless ListClass:: instanceof BaseList
+            unless (ListClass::) instanceof BaseList
                 throw @error "#{listModelName} is not instance of BaseList"
 
             return ListClass
 
-        if @hasClass itemModelName
+        if not @hasClass itemModelName
             throw @error "#{itemModelName} is not valid model name"
 
         AnonymousListClass = BaseList.getAnonymousClass(itemModelName)
@@ -127,6 +127,10 @@ class Facade
             return @require("#{name}-factory")
         catch e
             throw e if not itemModelName
+
+            if not @hasClass itemModelName
+                throw @error "#{itemModelName} is not valid model name"
+
 
             AnonymousFactory = Facade.ListFactory.getAnonymousClass(name, itemModelName)
 
@@ -208,7 +212,7 @@ class Facade
     ###
     hasClass: (name) ->
         try
-            @requre(name)
+            @require(name)
             return true
         catch e
             return false

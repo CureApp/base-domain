@@ -79,7 +79,7 @@ class Includer
     ###
     setSubEntity: (entityProp) ->
 
-        propInfo = model.getTypeInfo entityProp
+        propInfo = @model.getTypeInfo entityProp
 
         subId = @model[propInfo.idPropName]
 

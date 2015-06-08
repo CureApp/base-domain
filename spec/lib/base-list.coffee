@@ -216,11 +216,17 @@ describe 'BaseList', ->
                 getFacade:  -> facade
                 @itemModelName: 'non-entity'
 
-            hobbyList = new NonEntityList(items: hobbies)
-            plain = hobbyList.toPlainObject()
+            nonEntityFactory = facade.createFactory('non-entity', true)
+            nonEntities = (for name, i in ['keyboard', 'jogging', 'cycling']
+                nonEntityFactory.createFromObject id: 3 - i, name: name
+            )
+
+            nonEntityList = new NonEntityList(items: nonEntities)
+            plain = nonEntityList.toPlainObject()
 
             expect(plain).not.to.have.property 'ids'
             expect(plain).to.have.property 'items'
+            expect(plain.items).to.have.length 3
 
 
         it 'returns object with custom properties', ->

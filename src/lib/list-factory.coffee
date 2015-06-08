@@ -72,7 +72,7 @@ class ListFactory extends BaseFactory
 
         if items
             delete obj.items
-            items = (@createItemFromObject obj for obj in items)
+            items = (@createItemFromObject item for item in items)
             list = super(obj).setItems items
             obj.items = items
 

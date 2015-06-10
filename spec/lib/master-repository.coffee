@@ -124,3 +124,31 @@ describe 'MasterRepository', ->
                 expect(hobby).to.be.null
 
                 done()
+
+
+    describe 'getAllSync', ->
+
+        class HobbyRepository extends MasterRepository
+
+            @modelName: 'hobby'
+
+            getFacade: -> facade
+
+
+        it 'returns empty array when not loaded', ->
+
+            hobbies = new HobbyRepository().getAllSync()
+
+            expect(hobbies).to.eql []
+
+
+        it 'returns array of models', (done) ->
+
+            HobbyRepository.load().then ->
+
+                hobbies = new HobbyRepository().getAllSync()
+
+                expect(hobbies).to.be.instanceof Array
+                expect(hobbies[0]).to.be.instanceof Hobby
+
+                done()

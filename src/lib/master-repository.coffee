@@ -61,6 +61,21 @@ class MasterRepository extends BaseRepository
 
 
     ###*
+    get model by id
+
+    @method getAllSync
+    @public
+
+    @return {Array(Model)} model
+    ###
+    getAllSync: ->
+        return [] if not @constructor.loaded()
+
+        return (model for id, model of @constructor.modelsById)
+
+
+
+    ###*
     load whole master data of the model
     when @storeMasterTable is off, load will fail.
 

@@ -91,6 +91,30 @@ describe 'BaseModel', ->
             expect(plainDiary.authorId).not.to.exist
             expect(plainDiary.memberId).to.equal 12
 
+        it 'returns plain object without tmp values', ->
+
+            class Medicine extends BaseModel
+                @properties:
+                    name: @TYPES.STRING
+                    abc : @TYPES.TMP
+                    obj : @TYPES.TMP 'OBJECT'
+
+                getFacade: -> facade
+                @getFacade: -> facade
+
+            medicine = new Medicine(name: 'hoge', abc: 'yeah', obj: key: 'value')
+
+            expect(medicine).to.have.property 'name', 'hoge'
+            expect(medicine).to.have.property 'abc', 'yeah'
+            expect(medicine).to.have.property 'obj'
+
+            plain = medicine.toPlainObject()
+
+            expect(plain).to.have.property 'name', 'hoge'
+            expect(plain).not.to.have.property 'abc'
+            expect(plain).not.to.have.property 'obj'
+
+
 
     describe 'setEntityProp', ->
         it 'set relation and its ids (has one / belongs to)', ->

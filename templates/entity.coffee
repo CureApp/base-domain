@@ -37,6 +37,8 @@ class <%=@Model%> extends Entity
         otherInfo   : @TYPES.OBJECT
         createdAt   : @TYPES.CREATED_AT
         updatedAt   : @TYPES.UPDATED_AT
+        temporary   : @TYPES.TMP # temporary prop, removed in toPlainObject()
+        tmpObj      : @TYPES.TMP 'OBJECT'
     ###
 
 module.exports = <%=@Model %>

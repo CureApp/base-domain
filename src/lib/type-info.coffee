@@ -71,6 +71,30 @@ class TypeInfo
 
 
     ###*
+    get TypeInfo as temporary value
+
+    @method createTemporaryType
+    @private
+    @static
+    @param {String} typeName
+    @return {TypeInfo} type
+    ###
+    @createTemporaryType: (typeName = 'ANY', options = {}) ->
+
+        options.tmp = true
+
+        new TypeInfo typeName, options
+
+    ###
+    these hacky codes makes
+        @TYPES.TMP
+    an object and also a function
+    ###
+    TypeInfo.createTemporaryType[k] = v for k, v of TypeInfo.createTemporaryType()
+
+
+
+    ###*
     TYPES defines various data type, including model and array of models
 
     key: typeName (String)
@@ -94,6 +118,7 @@ class TypeInfo
         UPDATED_AT : new TypeInfo 'UPDATED_AT'
         MODEL      : TypeInfo.createModelType
         MODEL_LIST : TypeInfo.createModelListType
+        TMP        : TypeInfo.createTemporaryType
 
 
 

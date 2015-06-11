@@ -350,6 +350,8 @@ class BaseModel extends Base
 
             typeInfo = @getTypeInfo prop
 
+            continue if typeInfo?.tmp
+
             # set non-model properties
             if not typeInfo?.model?
                 plainObject[prop] = value

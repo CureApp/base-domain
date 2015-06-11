@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>BaseList</title>
+    <title>BaseModel</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,15 +97,15 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>BaseList Class</h1>
+<h1>BaseModel Class</h1>
 <div class="box meta">
 
         <div class="extends">
-            Extends <a href="../classes/BaseModel.html" class="crosslink">BaseModel</a>
+            Extends <a href="../classes/Base.html" class="crosslink">Base</a>
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_lib_base-list.coffee.html#l4"><code>src&#x2F;lib&#x2F;base-list.coffee:4</code></a>
+            Defined in: <a href="../files/src_lib_base-model.coffee.html#l8"><code>src&#x2F;lib&#x2F;base-model.coffee:8</code></a>
         </div>
 
             Module: <a href="../modules/base-domain.html">base-domain</a>
@@ -114,7 +114,8 @@
 
 
 <div class="box intro">
-    <p>list class of DDD pattern.</p>
+    <p>Base model class of DDD pattern.</p>
+<p>the parent &quot;Base&quot; class just simply gives a @getFacade() method.</p>
 
 </div>
 
@@ -136,73 +137,47 @@
 
                     <ul class="index-list methods extends">
                             <li class="index-item method public">
-                                <a href="#method_containsEntity">containsEntity</a>
+                                <a href="#method_getEntityProps">getEntityProps</a>
 
                                     <span class="flag static">static</span>
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_emitLoaded">emitLoaded</a>
-
-                            </li>
-                            <li class="index-item method public">
-                                <a href="#method_first">first</a>
-
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_getAnonymousClass">getAnonymousClass</a>
-
                             </li>
                             <li class="index-item method inherited">
                                 <a href="#method_getFacade">getFacade</a>
 
                             </li>
-                            <li class="index-item method public inherited">
+                            <li class="index-item method public">
+                                <a href="#method_getModelProps">getModelProps</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item method public">
                                 <a href="#method_getPropInfo">getPropInfo</a>
 
                             </li>
-                            <li class="index-item method inherited">
+                            <li class="index-item method">
                                 <a href="#method_include">include</a>
 
                             </li>
-                            <li class="index-item method inherited">
+                            <li class="index-item method">
                                 <a href="#method_inherit">inherit</a>
 
                             </li>
-                            <li class="index-item method public">
-                                <a href="#method_last">last</a>
-
-                            </li>
-                            <li class="index-item method public">
-                                <a href="#method_on">on</a>
-
-                            </li>
-                            <li class="index-item method inherited">
+                            <li class="index-item method">
                                 <a href="#method_setEntityProp">setEntityProp</a>
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_setIds">setIds</a>
-
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_setItems">setItems</a>
-
-                            </li>
-                            <li class="index-item method protected">
-                                <a href="#method_sort">sort</a>
-
-                            </li>
-                            <li class="index-item method public">
-                                <a href="#method_toArray">toArray</a>
-
-                            </li>
-                            <li class="index-item method inherited">
                                 <a href="#method_toPlainObject">toPlainObject</a>
 
                             </li>
-                            <li class="index-item method inherited">
+                            <li class="index-item method">
                                 <a href="#method_unsetEntityProp">unsetEntityProp</a>
 
+                            </li>
+                            <li class="index-item method protected">
+                                <a href="#method_withParentProps">withParentProps</a>
+
+                                    <span class="flag static">static</span>
                             </li>
                     </ul>
                 </div>
@@ -211,26 +186,15 @@
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
-                            <li class="index-item property public">
-                                <a href="#property_ids">ids</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_itemFactory">itemFactory</a>
-
-                            </li>
                             <li class="index-item property protected">
-                                <a href="#property_itemModelName">itemModelName</a>
+                                <a href="#property_properties">properties</a>
 
                                     <span class="flag static">static</span>
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_items">items</a>
+                            <li class="index-item property protected">
+                                <a href="#property_TYPES">TYPES</a>
 
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_loaded">loaded</a>
-
+                                    <span class="flag static">static</span>
                             </li>
                     </ul>
                 </div>
@@ -241,13 +205,13 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_containsEntity" class="method item public">
-    <h3 class="name"><code>containsEntity</code></h3>
+<div id="method_getEntityProps" class="method item public">
+    <h3 class="name"><code>getEntityProps</code></h3>
 
         <span class="paren">()</span>
 
         <span class="returns-inline">
-            <span class="type">Boolean</span>
+            <span class="type">Array</span>
         </span>
 
 
@@ -261,7 +225,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l141"><code>src&#x2F;lib&#x2F;base-list.coffee:141</code></a>
+        <a href="../files/src_lib_base-model.coffee.html#l106"><code>src&#x2F;lib&#x2F;base-model.coffee:106</code></a>
         </p>
 
 
@@ -269,7 +233,7 @@
     </div>
 
     <div class="description">
-        <p>returns item is Entity</p>
+        <p>get list of properties which contains entity</p>
 
     </div>
 
@@ -278,136 +242,7 @@
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                        <span class="type">Boolean</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_emitLoaded" class="method item private">
-    <h3 class="name"><code>emitLoaded</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l243"><code>src&#x2F;lib&#x2F;base-list.coffee:243</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>tell listeners emit loaded</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_first" class="method item public">
-    <h3 class="name"><code>first</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l163"><code>src&#x2F;lib&#x2F;base-list.coffee:163</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>first item</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_getAnonymousClass" class="method item">
-    <h3 class="name"><code>getAnonymousClass</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>itemModelName</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Function</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l24"><code>src&#x2F;lib&#x2F;base-list.coffee:24</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>creates child class of BaseList</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">itemModelName</code>
-                        <span class="type">String</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Function</span>:
-                    <p>child class of BaseList</p>
-
+                        <span class="type">Array</span>:
             </div>
         </div>
 
@@ -455,7 +290,86 @@
 
 
 </div>
-<div id="method_getPropInfo" class="method item public inherited">
+<div id="method_getModelProps" class="method item public">
+    <h3 class="name"><code>getModelProps</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code class="optional">[options]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_base-model.coffee.html#l117"><code>src&#x2F;lib&#x2F;base-model.coffee:117</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>get list of properties which contains relational model</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[includeList]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <p>include props of BaseList</p>
+
+                                </div>
+
+                            </li>
+                        </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Array</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getPropInfo" class="method item public">
     <h3 class="name"><code>getPropInfo</code></h3>
 
         <span class="paren">()</span>
@@ -472,8 +386,8 @@
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_getPropInfo">BaseModel</a>:
+                <p>
+                Defined in
         <a href="../files/src_lib_base-model.coffee.html#l67"><code>src&#x2F;lib&#x2F;base-model.coffee:67</code></a>
         </p>
 
@@ -497,7 +411,7 @@
 
 
 </div>
-<div id="method_include" class="method item inherited">
+<div id="method_include" class="method item">
     <h3 class="name"><code>include</code></h3>
 
         <div class="args">
@@ -519,9 +433,9 @@
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_include">BaseModel</a>:
-        <a href="../files/src_lib_base-model.coffee.html#l265"><code>src&#x2F;lib&#x2F;base-model.coffee:265</code></a>
+                <p>
+                Defined in
+        <a href="../files/src_lib_base-model.coffee.html#l267"><code>src&#x2F;lib&#x2F;base-model.coffee:267</code></a>
         </p>
 
 
@@ -544,7 +458,7 @@
 
 
                     <div class="param-description">
-                         
+                        
                     </div>
 
                         <ul class="params-list">
@@ -576,7 +490,7 @@
 
 
 </div>
-<div id="method_inherit" class="method item inherited">
+<div id="method_inherit" class="method item">
     <h3 class="name"><code>inherit</code></h3>
 
         <div class="args">
@@ -598,8 +512,8 @@
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_inherit">BaseModel</a>:
+                <p>
+                Defined in
         <a href="../files/src_lib_base-model.coffee.html#l214"><code>src&#x2F;lib&#x2F;base-model.coffee:214</code></a>
         </p>
 
@@ -622,7 +536,7 @@
 
 
                     <div class="param-description">
-                         
+                        
                     </div>
 
                 </li>
@@ -641,71 +555,7 @@
 
 
 </div>
-<div id="method_last" class="method item public">
-    <h3 class="name"><code>last</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l176"><code>src&#x2F;lib&#x2F;base-list.coffee:176</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>last item</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_on" class="method item public">
-    <h3 class="name"><code>on</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l227"><code>src&#x2F;lib&#x2F;base-list.coffee:227</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>on addEventListeners for &#39;loaded&#39;</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_setEntityProp" class="method item inherited">
+<div id="method_setEntityProp" class="method item">
     <h3 class="name"><code>setEntityProp</code></h3>
 
         <div class="args">
@@ -730,8 +580,8 @@
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_setEntityProp">BaseModel</a>:
+                <p>
+                Defined in
         <a href="../files/src_lib_base-model.coffee.html#l176"><code>src&#x2F;lib&#x2F;base-model.coffee:176</code></a>
         </p>
 
@@ -765,7 +615,7 @@
 
 
                     <div class="param-description">
-                         
+                        
                     </div>
 
                 </li>
@@ -781,176 +631,6 @@
 
             </div>
         </div>
-
-
-</div>
-<div id="method_setIds" class="method item">
-    <h3 class="name"><code>setIds</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>ids</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l97"><code>src&#x2F;lib&#x2F;base-list.coffee:97</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>set ids.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">ids</code>
-                        <span class="type">Array(String | Number)</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-
-
-</div>
-<div id="method_setItems" class="method item">
-    <h3 class="name"><code>setItems</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>models</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l124"><code>src&#x2F;lib&#x2F;base-list.coffee:124</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>set items</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">models</code>
-                        <span class="type">Array</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-
-
-</div>
-<div id="method_sort" class="method item protected">
-    <h3 class="name"><code>sort</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag protected">protected</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l153"><code>src&#x2F;lib&#x2F;base-list.coffee:153</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>sort items in constructor</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_toArray" class="method item public">
-    <h3 class="name"><code>toArray</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l189"><code>src&#x2F;lib&#x2F;base-list.coffee:189</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>export models to Array</p>
-
-    </div>
-
-
 
 
 </div>
@@ -970,12 +650,9 @@
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/BaseModel.html#method_toPlainObject">
-                BaseModel
-            </a>
-            but overwritten in
-        <a href="../files/src_lib_base-list.coffee.html#l199"><code>src&#x2F;lib&#x2F;base-list.coffee:199</code></a>
+                <p>
+                Defined in
+        <a href="../files/src_lib_base-model.coffee.html#l229"><code>src&#x2F;lib&#x2F;base-model.coffee:229</code></a>
         </p>
 
 
@@ -983,9 +660,9 @@
     </div>
 
     <div class="description">
-        <p>create plain list.
-if this list contains entities, returns their ids
-if this list contains non-entity models, returns their plain objects</p>
+        <p>create plain object without relational entities
+descendants of Entity are removed, but not descendants of BaseModel
+descendants of Entity in descendants of BaseModel are removed ( = recursive)</p>
 
     </div>
 
@@ -1002,7 +679,7 @@ if this list contains non-entity models, returns their plain objects</p>
 
 
 </div>
-<div id="method_unsetEntityProp" class="method item inherited">
+<div id="method_unsetEntityProp" class="method item">
     <h3 class="name"><code>unsetEntityProp</code></h3>
 
         <div class="args">
@@ -1024,8 +701,8 @@ if this list contains non-entity models, returns their plain objects</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_unsetEntityProp">BaseModel</a>:
+                <p>
+                Defined in
         <a href="../files/src_lib_base-model.coffee.html#l198"><code>src&#x2F;lib&#x2F;base-model.coffee:198</code></a>
         </p>
 
@@ -1068,65 +745,65 @@ if this list contains non-entity models, returns their plain objects</p>
 
 
 </div>
+<div id="method_withParentProps" class="method item protected">
+    <h3 class="name"><code>withParentProps</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+        <span class="flag protected">protected</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_base-model.coffee.html#l79"><code>src&#x2F;lib&#x2F;base-model.coffee:79</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>extend @properties of Parent class</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+            </div>
+        </div>
+
+
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>class Parent extends BaseModel
+</code></pre>
+            </div>
+        </div>
+</div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-                    <div id="property_ids" class="property item public">
-                        <h3 class="name"><code>ids</code></h3>
-                        <span class="type">Array</span>
-                    
-                    
-                            <span class="flag public">public</span>
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/src_lib_base-list.coffee.html#l41"><code>src&#x2F;lib&#x2F;base-list.coffee:41</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>ids: get ids of items</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_itemFactory" class="property item">
-                        <h3 class="name"><code>itemFactory</code></h3>
-                        <span class="type"><a href="../classes/BaseFactory.html" class="crosslink">BaseFactory</a></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/src_lib_base-list.coffee.html#l67"><code>src&#x2F;lib&#x2F;base-list.coffee:67</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>itemFactory: instance of factory which creates item models</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_itemModelName" class="property item protected">
-                        <h3 class="name"><code>itemModelName</code></h3>
-                        <span class="type">String</span>
+                    <div id="property_properties" class="property item protected">
+                        <h3 class="name"><code>properties</code></h3>
+                        <span class="type">Object</span>
                     
                     
                             <span class="flag protected">protected</span>
@@ -1137,64 +814,51 @@ if this list contains non-entity models, returns their plain objects</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/src_lib_base-list.coffee.html#l13"><code>src&#x2F;lib&#x2F;base-list.coffee:13</code></a>
+                            <a href="../files/src_lib_base-model.coffee.html#l45"><code>src&#x2F;lib&#x2F;base-model.coffee:45</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>model name of the item</p>
+                            <p>key-value pair representing property&#39;s name - type of the model</p>
+                    <pre class="code prettyprint"><code>firstName    : @TYPES.STRING
+                    lastName     : @TYPES.STRING
+                    age          : @TYPES.NUMBER
+                    registeredAt : @TYPES.DATE
+                    team         : @TYPES.MODEL &#39;team&#39;
+                    hobbies      : @TYPES.MODEL_LIST &#39;hobby&#39;
+                    info         : @TYPES.ANY
+                    </code></pre><p>see type-info.coffee for full options.</p>
                     
                         </div>
                     
                     
                     
                     </div>
-                    <div id="property_items" class="property item">
-                        <h3 class="name"><code>items</code></h3>
-                        <span class="type">Array</span>
+                    <div id="property_TYPES" class="property item protected">
+                        <h3 class="name"><code>TYPES</code></h3>
+                        <span class="type">Object</span>
                     
                     
+                            <span class="flag protected">protected</span>
                     
+                            <span class="flag final">final</span>
                     
+                            <span class="flag static">static</span>
                     
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/src_lib_base-list.coffee.html#l53"><code>src&#x2F;lib&#x2F;base-list.coffee:53</code></a>
+                            <a href="../files/src_lib_base-model.coffee.html#l22"><code>src&#x2F;lib&#x2F;base-model.coffee:22</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>items: array of models</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="property_loaded" class="property item">
-                        <h3 class="name"><code>loaded</code></h3>
-                        <span class="type">Boolean</span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/src_lib_base-list.coffee.html#l60"><code>src&#x2F;lib&#x2F;base-list.coffee:60</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>loaded: is data loaded or not</p>
+                            <p>key-value pair representing typeName - type</p>
+                    <p>use for definition of @properties for each extender</p>
                     
                         </div>
                     

@@ -1056,7 +1056,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 265,
+            "line": 267,
             "description": "include all relational models if not set",
             "itemtype": "method",
             "name": "include",
@@ -2293,6 +2293,21 @@
         {
             "file": "src/lib/master-repository.coffee",
             "line": 63,
+            "description": "get model by id",
+            "itemtype": "method",
+            "name": "getAllSync",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "model",
+                "type": "Array(Model)"
+            },
+            "class": "MasterRepository",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/master-repository.coffee",
+            "line": 78,
             "description": "load whole master data of the model\nwhen @storeMasterTable is off, load will fail.",
             "itemtype": "method",
             "name": "load",
@@ -2742,6 +2757,29 @@
         {
             "file": "src/lib/type-info.coffee",
             "line": 73,
+            "description": "get TypeInfo as temporary value",
+            "itemtype": "method",
+            "name": "createTemporaryType",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "params": [
+                {
+                    "name": "typeName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "type",
+                "type": "TypeInfo"
+            },
+            "class": "TypeInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/type-info.coffee",
+            "line": 97,
             "description": "TYPES defines various data type, including model and array of models\n\nkey: typeName (String)\nvalue: type TypeInfo|Function(TypeInfo)",
             "itemtype": "property",
             "name": "TYPES",
@@ -2751,7 +2789,7 @@
         },
         {
             "file": "src/lib/type-info.coffee",
-            "line": 100,
+            "line": 125,
             "description": "converts hyphenation to camel case\n\n    'shinout-no-macbook-pro => shinoutNoMacbookPro'",
             "itemtype": "method",
             "name": "camelize",

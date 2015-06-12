@@ -1,4 +1,6 @@
 
+{ camelize } = require './util'
+
 ###*
 type of model's property 
 
@@ -46,7 +48,7 @@ class TypeInfo
 
         new TypeInfo 'MODEL',
             model      : modelName
-            idPropName : idPropName ?  TypeInfo.camelize(modelName) + 'Id'
+            idPropName : idPropName ?  camelize(modelName, true) + 'Id'
 
 
     ###*
@@ -66,7 +68,6 @@ class TypeInfo
 
         new TypeInfo 'MODEL_LIST',
             model      : modelName
-            idPropName : options.idPropName ? TypeInfo.camelize(modelName) + 'Ids'
             listName   : options.name ? "#{modelName}-list"
 
 
@@ -119,27 +120,6 @@ class TypeInfo
         MODEL      : TypeInfo.createModelType
         MODEL_LIST : TypeInfo.createModelListType
         TMP        : TypeInfo.createTemporaryType
-
-
-
-    ###*
-    converts hyphenation to camel case
-
-        'shinout-no-macbook-pro => shinoutNoMacbookPro'
-
-    @method camelize
-    @private
-    @static
-    @param {String} hyphened
-    @return {String} cameled
-    ###
-    @camelize: (hyphened) ->
-       (for substr, i in hyphened.split('-')
-           if i is 0
-               substr
-           else
-               substr.charAt(0).toUpperCase() + substr.slice(1)
-       ).join('')
 
 
 

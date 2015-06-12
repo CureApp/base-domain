@@ -34,15 +34,6 @@ class BaseModel extends Base
 
 
     ###*
-    ModelName -> model-name
-
-    @private
-    ###
-    @getModelName: ->
-        @name.replace(/([A-Z])/g, (st)-> '-' + st.charAt(0).toLowerCase()).slice(1)
-
-
-    ###*
     key-value pair representing property's name - type of the model
 
         firstName    : @TYPES.STRING

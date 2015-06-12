@@ -1,4 +1,5 @@
 
+{ hyphenize } = require './util'
 
 ###*
 parent class of model, factory and repository.
@@ -43,5 +44,18 @@ class Base
             Require domain classes by facade.getModel(), facade.getFactory(), facade.getRepository()
             to attach them getFacade() method.
         """
+
+    ###*
+    ClassName -> class-name
+    the name must compatible with file name
+
+    @method getName
+    @public
+    @static
+    @return {String}
+    ###
+    @getName: -> hyphenize @name
+
+
 
 module.exports = Base

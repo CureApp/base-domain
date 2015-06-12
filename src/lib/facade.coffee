@@ -2,6 +2,10 @@
 require('es6-promise').polyfill()
 copy = require('copy-class').copy
 
+{ camelize } = require './util'
+
+getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
+
 ###*
 Facade class of DDD pattern.
 
@@ -90,7 +94,7 @@ class Facade
             throw @error "#{itemModelName} is not valid model name"
 
         AnonymousListClass = BaseList.getAnonymousClass(itemModelName)
-        return @addClass(listModelName, AnonymousListClass)
+        return @addClass(listModelName, AnonymousListClass, true)
 
 
     ###*
@@ -111,7 +115,7 @@ class Facade
 
             AnonymousFactory = Facade.BaseFactory.getAnonymousClass(name)
 
-            @addClass("#{name}-factory", AnonymousFactory)
+            @addClass("#{name}-factory", AnonymousFactory, true)
 
 
     ###*
@@ -134,7 +138,7 @@ class Facade
 
             AnonymousFactory = Facade.ListFactory.getAnonymousClass(name, itemModelName)
 
-            @addClass("#{name}-factory", AnonymousFactory)
+            @addClass("#{name}-factory", AnonymousFactory, true)
 
 
     ###*
@@ -228,12 +232,29 @@ class Facade
     @private
     @param {String} name
     @param {Function} klass
+    @param {Boolean} skipNameValidation validate class name is compatible with the name to register
     @return {Function}
     ###
-    addClass: (name, klass) ->
+    addClass: (name, klass, skipNameValidation = false) ->
+
+        if skipNameValidation
+            camelCasedName = camelize name
+
+        else
+            if klass.getName() isnt name
+                throw @error """given class should be named '#{klass.getName()}',
+                                but '#{name}' given."""
+            camelCasedName = klass.name
+
+        ParentClass = getProto(klass::).constructor
+
+        if @constructor.isBaseClass ParentClass
+            Class = copy(klass, camelCasedName)
+        else
+            CopiedParentClass = @require ParentClass.getName()
+            Class = copy(klass, camelCasedName, CopiedParentClass)
 
         facade = @
-        Class = copy(klass)
         Class.getFacade  = -> facade
         Class::getFacade = -> facade
         @classes[name] = Class
@@ -259,7 +280,7 @@ class Facade
     @method error
     @param {String} reason reason of the error
     @param {String} [message]
-    @return {DomainError}
+    @return {Error}
     ###
     error: (reason, message) ->
 
@@ -298,7 +319,25 @@ class Facade
         fixture.insert(options.models).then ->
             return fixture.dataPool
 
+    ###*
+    check the given class is registered in facade
 
+    @method isBaseClass
+    @static
+    @param {Function} klass
+    @return {Boolean}
+    ###
+    @isBaseClass: (klass) ->
+        (klass is @[klass.name]) or (klass is @DomainError) # DomainError does not have name
+
+    ###*
+    registers the given class as a base class
+
+    @method registerBaseClass
+    @static
+    @param {Function} klass
+    ###
+    @registerBaseClass: (klass) -> @[klass.name] = klass
 
 
     @Base             : require './base'

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/lib/base.coffee</title>
+    <title>src/lib/util.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,57 +97,53 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src/lib/base.coffee</h1>
+<h1 class="file-heading">File: src/lib/util.coffee</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 
-
-###*
-parent class of model, factory and repository.
-
-gives them @getFacade() method.
-
-@class Base
-@module base-domain
-###
-class Base
+class Util
 
     ###*
-    get facade
+    converts hyphenation to camel case
 
-    the implementation is in Facade#requre()
+        &#x27;shinout-no-macbook-pro&#x27; =&gt; &#x27;ShinoutNoMacbookPro&#x27;
+        &#x27;shinout-no-macbook-pro&#x27; =&gt; &#x27;shinoutNoMacbookPro&#x27; # if lowerFirst = true
 
-
-    @method getFacade
+    @method camelize
+    @private
     @static
-    @return {Facade}
+    @param {String} hyphened
+    @param {Boolean} [lowerFirst=false] make capital char lower
+    @return {String} cameled
     ###
-    @getFacade : -&gt;
-        throw new Error &quot;&quot;&quot;
-            Facade is not created yet, or you required domain classes not from Facade.
-            Require domain classes by facade.getModel(), facade.getFactory(), facade.getRepository()
-            to attach them getFacade() method.
-        &quot;&quot;&quot;
+    @camelize: (hyphened, lowerFirst = false) -&gt;
+       (for substr, i in hyphened.split(&#x27;-&#x27;)
+           if i is 0 and lowerFirst
+               substr
+           else
+               substr.charAt(0).toUpperCase() + substr.slice(1)
+       ).join(&#x27;&#x27;)
 
 
     ###*
-    get facade
+    converts hyphenation to camel case
 
-    the implementation is in Facade#requre()
+        &#x27;ShinoutNoMacbookPro&#x27; =&gt; &#x27;shinout-no-macbook-pro&#x27;
+        &#x27;ABC&#x27; =&gt; &#x27;a-b-c&#x27; # current implementation... FIXME ?
 
-
-    @method getFacade
-    @return {Facade}
+    @method hyphenize
+    @private
+    @static
+    @param {String} hyphened
+    @return {String} cameled
     ###
-    getFacade : -&gt;
-        throw new Error &quot;&quot;&quot;
-            Facade is not created yet, or you required domain classes not from Facade.
-            Require domain classes by facade.getModel(), facade.getFactory(), facade.getRepository()
-            to attach them getFacade() method.
-        &quot;&quot;&quot;
+    @hyphenize: (cameled) -&gt;
 
-module.exports = Base
+        cameled = cameled.charAt(0).toUpperCase() + cameled.slice(1)
+        cameled.replace(/([A-Z])/g, (st)-&gt; &#x27;-&#x27; + st.charAt(0).toLowerCase()).slice(1)
+
+module.exports = Util
 
     </pre>
 </div>

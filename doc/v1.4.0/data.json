@@ -138,6 +138,13 @@
             },
             "fors": {},
             "namespaces": {}
+        },
+        "src/lib/util.coffee": {
+            "name": "src/lib/util.coffee",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
         }
     },
     "modules": {
@@ -166,7 +173,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "src/lib/type-info.coffee",
-            "line": 2,
+            "line": 4,
             "description": "Base model class with \"id\" column"
         },
         "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set": {
@@ -254,7 +261,7 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/base.coffee",
-            "line": 3,
+            "line": 4,
             "description": "parent class of model, factory and repository.\n\ngives them @getFacade() method."
         },
         "DomainError": {
@@ -298,7 +305,7 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/facade.coffee",
-            "line": 5,
+            "line": 9,
             "description": "Facade class of DDD pattern.\n\n- create instance of factories\n- create instance of repositories"
         },
         "Fixture": {
@@ -396,7 +403,7 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/type-info.coffee",
-            "line": 2,
+            "line": 4,
             "description": "type of model's property"
         }
     },
@@ -844,15 +851,6 @@
         {
             "file": "src/lib/base-model.coffee",
             "line": 36,
-            "description": "ModelName -> model-name",
-            "access": "private",
-            "tagname": "",
-            "class": "BaseModel",
-            "module": "base-domain"
-        },
-        {
-            "file": "src/lib/base-model.coffee",
-            "line": 45,
             "description": "key-value pair representing property's name - type of the model\n\n    firstName    : @TYPES.STRING\n    lastName     : @TYPES.STRING\n    age          : @TYPES.NUMBER\n    registeredAt : @TYPES.DATE\n    team         : @TYPES.MODEL 'team'\n    hobbies      : @TYPES.MODEL_LIST 'hobby'\n    info         : @TYPES.ANY\n\nsee type-info.coffee for full options.",
             "itemtype": "property",
             "name": "properties",
@@ -866,7 +864,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 67,
+            "line": 58,
             "description": "get an instance of PropInfo, which summarizes properties of this class",
             "itemtype": "method",
             "name": "getPropInfo",
@@ -881,7 +879,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 79,
+            "line": 70,
             "description": "extend @properties of Parent class",
             "example": [
                 "\n    class Parent extends BaseModel"
@@ -901,7 +899,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 106,
+            "line": 97,
             "description": "get list of properties which contains entity",
             "itemtype": "method",
             "name": "getEntityProps",
@@ -917,7 +915,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 117,
+            "line": 108,
             "description": "get list of properties which contains relational model",
             "itemtype": "method",
             "name": "getModelProps",
@@ -949,14 +947,14 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 135,
+            "line": 126,
             "is_constructor": 1,
             "class": "BaseModel",
             "module": "base-domain"
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 149,
+            "line": 140,
             "description": "set value to prop",
             "return": {
                 "description": "this",
@@ -967,7 +965,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 168,
+            "line": 159,
             "description": "set model prop",
             "return": {
                 "description": "this",
@@ -978,7 +976,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 176,
+            "line": 167,
             "description": "set related model(s)",
             "itemtype": "method",
             "name": "setEntityProp",
@@ -1003,7 +1001,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 198,
+            "line": 189,
             "description": "unset related model(s)",
             "params": [
                 {
@@ -1023,7 +1021,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 214,
+            "line": 205,
             "description": "inherit value of anotherModel",
             "itemtype": "method",
             "name": "inherit",
@@ -1043,7 +1041,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 229,
+            "line": 220,
             "description": "create plain object without relational entities\ndescendants of Entity are removed, but not descendants of BaseModel\ndescendants of Entity in descendants of BaseModel are removed ( = recursive)",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -1056,7 +1054,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 267,
+            "line": 258,
             "description": "include all relational models if not set",
             "itemtype": "method",
             "name": "include",
@@ -1374,7 +1372,7 @@
         },
         {
             "file": "src/lib/base.coffee",
-            "line": 13,
+            "line": 14,
             "description": "get facade\n\nthe implementation is in Facade#requre()",
             "itemtype": "method",
             "name": "getFacade",
@@ -1388,13 +1386,29 @@
         },
         {
             "file": "src/lib/base.coffee",
-            "line": 31,
+            "line": 32,
             "description": "get facade\n\nthe implementation is in Facade#requre()",
             "itemtype": "method",
             "name": "getFacade",
             "return": {
                 "description": "",
                 "type": "Facade"
+            },
+            "class": "Base",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base.coffee",
+            "line": 48,
+            "description": "ClassName -> class-name\nthe name must compatible with file name",
+            "itemtype": "method",
+            "name": "getName",
+            "access": "public",
+            "tagname": "",
+            "static": 1,
+            "return": {
+                "description": "",
+                "type": "String"
             },
             "class": "Base",
             "module": "base-domain"
@@ -1422,7 +1436,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 17,
+            "line": 21,
             "description": "create instance of Facade",
             "itemtype": "method",
             "name": "createInstance",
@@ -1444,7 +1458,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 30,
+            "line": 34,
             "description": "constructor",
             "is_constructor": 1,
             "params": [
@@ -1469,7 +1483,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 47,
+            "line": 51,
             "description": "load master tables",
             "itemtype": "method",
             "name": "loadMasterTables",
@@ -1482,7 +1496,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 57,
+            "line": 61,
             "description": "get a model class",
             "itemtype": "method",
             "name": "getModel",
@@ -1502,7 +1516,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 68,
+            "line": 72,
             "description": "get a list model class",
             "itemtype": "method",
             "name": "getListModel",
@@ -1528,7 +1542,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 96,
+            "line": 100,
             "description": "get a factory class\n\nISSUE: user will never know load failure",
             "itemtype": "method",
             "name": "getFactory",
@@ -1555,7 +1569,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 117,
+            "line": 121,
             "description": "get a list factory class",
             "itemtype": "method",
             "name": "getListFactory",
@@ -1581,7 +1595,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 140,
+            "line": 144,
             "description": "get a repository class",
             "itemtype": "method",
             "name": "getRepository",
@@ -1601,7 +1615,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 151,
+            "line": 155,
             "description": "create a factory instance",
             "itemtype": "method",
             "name": "createFactory",
@@ -1628,7 +1642,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 164,
+            "line": 168,
             "description": "create a factory instance",
             "itemtype": "method",
             "name": "createFactory",
@@ -1654,7 +1668,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 177,
+            "line": 181,
             "description": "create a repository instance",
             "itemtype": "method",
             "name": "createRepository",
@@ -1680,7 +1694,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 189,
+            "line": 193,
             "description": "read a file and returns class",
             "itemtype": "method",
             "name": "require",
@@ -1702,7 +1716,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 206,
+            "line": 210,
             "description": "check existence of the class of the given name",
             "itemtype": "method",
             "name": "hasClass",
@@ -1722,7 +1736,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 221,
+            "line": 225,
             "description": "add copied class to facade.\nthe class is acquired by @require(name)\n\nattaches getFacade() method (for both class and instance)",
             "itemtype": "method",
             "name": "addClass",
@@ -1738,6 +1752,11 @@
                     "name": "klass",
                     "description": "",
                     "type": "Function"
+                },
+                {
+                    "name": "skipNameValidation",
+                    "description": "validate class name is compatible with the name to register",
+                    "type": "Boolean"
                 }
             ],
             "return": {
@@ -1749,7 +1768,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 242,
+            "line": 263,
             "description": "read a file and returns the instance of the file's class",
             "itemtype": "method",
             "name": "create",
@@ -1777,7 +1796,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 256,
+            "line": 277,
             "description": "create instance of DomainError",
             "itemtype": "method",
             "name": "error",
@@ -1796,14 +1815,14 @@
             ],
             "return": {
                 "description": "",
-                "type": "DomainError"
+                "type": "Error"
             },
             "class": "Facade",
             "module": "base-domain"
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 270,
+            "line": 291,
             "description": "check if given object is instance of DomainError",
             "itemtype": "method",
             "name": "isDomainError",
@@ -1823,7 +1842,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 283,
+            "line": 304,
             "description": "insert fixture data\n(Node.js only)",
             "itemtype": "method",
             "name": "insertFixtures",
@@ -1862,6 +1881,44 @@
                 "description": "dataPool inserted data",
                 "type": "Promise(Object)"
             },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 322,
+            "description": "check the given class is registered in facade",
+            "itemtype": "method",
+            "name": "isBaseClass",
+            "static": 1,
+            "params": [
+                {
+                    "name": "klass",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Facade",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/facade.coffee",
+            "line": 333,
+            "description": "registers the given class as a base class",
+            "itemtype": "method",
+            "name": "registerBaseClass",
+            "static": 1,
+            "params": [
+                {
+                    "name": "klass",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
             "class": "Facade",
             "module": "base-domain"
         },
@@ -2648,7 +2705,7 @@
         },
         {
             "file": "src/lib/type-info.coffee",
-            "line": 14,
+            "line": 16,
             "description": "check if the type is the given typeName",
             "itemtype": "method",
             "name": "equals",
@@ -2670,7 +2727,7 @@
         },
         {
             "file": "src/lib/type-info.coffee",
-            "line": 24,
+            "line": 26,
             "description": "check if the type is not the given typeName",
             "itemtype": "method",
             "name": "notEquals",
@@ -2692,7 +2749,7 @@
         },
         {
             "file": "src/lib/type-info.coffee",
-            "line": 35,
+            "line": 37,
             "description": "get TypeInfo as MODEL",
             "itemtype": "method",
             "name": "createModelType",
@@ -2721,7 +2778,7 @@
         },
         {
             "file": "src/lib/type-info.coffee",
-            "line": 52,
+            "line": 54,
             "description": "get TypeInfo as MODEL_LIST",
             "itemtype": "method",
             "name": "createModelListType",
@@ -2756,7 +2813,7 @@
         },
         {
             "file": "src/lib/type-info.coffee",
-            "line": 73,
+            "line": 74,
             "description": "get TypeInfo as temporary value",
             "itemtype": "method",
             "name": "createTemporaryType",
@@ -2779,7 +2836,7 @@
         },
         {
             "file": "src/lib/type-info.coffee",
-            "line": 97,
+            "line": 98,
             "description": "TYPES defines various data type, including model and array of models\n\nkey: typeName (String)\nvalue: type TypeInfo|Function(TypeInfo)",
             "itemtype": "property",
             "name": "TYPES",
@@ -2788,11 +2845,41 @@
             "module": "base-domain"
         },
         {
-            "file": "src/lib/type-info.coffee",
-            "line": 125,
-            "description": "converts hyphenation to camel case\n\n    'shinout-no-macbook-pro => shinoutNoMacbookPro'",
+            "file": "src/lib/util.coffee",
+            "line": 4,
+            "description": "converts hyphenation to camel case\n\n    'shinout-no-macbook-pro' => 'ShinoutNoMacbookPro'\n    'shinout-no-macbook-pro' => 'shinoutNoMacbookPro' # if lowerFirst = true",
             "itemtype": "method",
             "name": "camelize",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "params": [
+                {
+                    "name": "hyphened",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "lowerFirst",
+                    "description": "make capital char lower",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ],
+            "return": {
+                "description": "cameled",
+                "type": "String"
+            },
+            "class": "",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/util.coffee",
+            "line": 26,
+            "description": "converts hyphenation to camel case\n\n    'ShinoutNoMacbookPro' => 'shinout-no-macbook-pro'\n    'ABC' => 'a-b-c' # current implementation... FIXME ?",
+            "itemtype": "method",
+            "name": "hyphenize",
             "access": "private",
             "tagname": "",
             "static": 1,
@@ -2807,7 +2894,7 @@
                 "description": "cameled",
                 "type": "String"
             },
-            "class": "TypeInfo",
+            "class": "",
             "module": "base-domain"
         }
     ],
@@ -2826,15 +2913,15 @@
         },
         {
             "message": "unknown tag: abstract",
-            "line": " src/lib/base-model.coffee:45"
+            "line": " src/lib/base-model.coffee:36"
         },
         {
             "message": "unknown tag: properties",
-            "line": " src/lib/base-model.coffee:79"
+            "line": " src/lib/base-model.coffee:70"
         },
         {
             "message": "unknown tag: properties",
-            "line": " src/lib/base-model.coffee:79"
+            "line": " src/lib/base-model.coffee:70"
         },
         {
             "message": "unknown tag: abstract",
@@ -2857,20 +2944,16 @@
             "line": " src/lib/base-list.coffee:74"
         },
         {
-            "message": "Missing item type\nModelName -> model-name",
-            "line": " src/lib/base-model.coffee:36"
-        },
-        {
             "message": "Missing item type",
-            "line": " src/lib/base-model.coffee:135"
+            "line": " src/lib/base-model.coffee:126"
         },
         {
             "message": "Missing item type\nset value to prop",
-            "line": " src/lib/base-model.coffee:149"
+            "line": " src/lib/base-model.coffee:140"
         },
         {
             "message": "Missing item type\nset model prop",
-            "line": " src/lib/base-model.coffee:168"
+            "line": " src/lib/base-model.coffee:159"
         },
         {
             "message": "Missing item type\nconstructor",
@@ -2878,7 +2961,7 @@
         },
         {
             "message": "Missing item type\nconstructor",
-            "line": " src/lib/facade.coffee:30"
+            "line": " src/lib/facade.coffee:34"
         },
         {
             "message": "Missing item type",

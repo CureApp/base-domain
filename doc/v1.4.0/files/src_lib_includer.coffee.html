@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Base</title>
+    <title>src/lib/includer.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,150 +97,139 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>Base Class</h1>
-<div class="box meta">
+<h1 class="file-heading">File: src/lib/includer.coffee</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+
+###*
+include submodels
+
+###
+class Includer
+
+    ###*
+    @constructor
+    ###
+    constructor: (@model, @modelPool = {}) -&gt;
+
+        @ModelClass = @model.constructor
+
+        @cache(@ModelClass.getName(), @model) if @ModelClass.isEntity
 
 
-        <div class="foundat">
-            Defined in: <a href="../files/src_lib_base.coffee.html#l3"><code>src&#x2F;lib&#x2F;base.coffee:3</code></a>
-        </div>
+    ###*
+    include sub entities
 
-            Module: <a href="../modules/base-domain.html">base-domain</a>
+    @method include
+    @public
+    @param {Object} options
+    @param {Boolean} [recursive=false] recursively include or not
+    @return {Promise}
+    ###
+    include: (options = {}) -&gt;
 
-</div>
+        entityProps = @ModelClass.getEntityProps() 
 
+        promises = []
 
-<div class="box intro">
-    <p>parent class of model, factory and repository.</p>
-<p>gives them @getFacade() method.</p>
+        for entityProp in entityProps when not @model[entityProp]?
 
-</div>
+            subModelPromise = @setSubEntity(entityProp)
 
+            promises.push subModelPromise if subModelPromise
 
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
+        Promise.all(promises).then =&gt;
 
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-    </ul>
+            if options.recursive
+                return @doRecursively()
 
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
-
-                <div class="index-section methods">
-                    <h3>Methods</h3>
-
-                    <ul class="index-list methods">
-                            <li class="index-item method">
-                                <a href="#method_getFacade">getFacade</a>
-
-                                    <span class="flag static">static</span>
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_getFacade">getFacade</a>
-
-                            </li>
-                    </ul>
-                </div>
+            return @model
 
 
+    ###*
+    run include for each submodel
 
-        </div>
+    @method doRecursively
+    @private
+    @return {Promise}
+    ###
+    doRecursively: -&gt;
 
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
+        promises = []
+        subModelProps = @ModelClass.getModelProps(includeList: true)
+        BaseModel = @model.getFacade().constructor.BaseModel
 
-<div id="method_getFacade" class="method item">
-    <h3 class="name"><code>getFacade</code></h3>
+        for modelProp in subModelProps
 
-        <span class="paren">()</span>
+            subModel = @model[modelProp]
 
-        <span class="returns-inline">
-            <span class="type"><a href="../classes/Facade.html" class="crosslink">Facade</a></span>
-        </span>
+            continue if subModel not instanceof BaseModel
 
+            includer = new Includer(subModel, @modelPool)
+            promises.push includer.include(recursive: true)
 
-
-
-        <span class="flag static">static</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base.coffee.html#l13"><code>src&#x2F;lib&#x2F;base.coffee:13</code></a>
-        </p>
+        return Promise.all(promises).then =&gt; @model
 
 
+    ###*
+    load entity by entityProp and set it to @model
 
-    </div>
+    @method setSubEntity
+    @private
+    @param {String} entityProp
+    @return {Promise}
+    ###
+    setSubEntity: (entityProp) -&gt;
 
-    <div class="description">
-        <p>get facade</p>
-<p>the implementation is in Facade#requre()</p>
+        propInfo = @model.getTypeInfo entityProp
 
-    </div>
+        subId = @model[propInfo.idPropName]
 
+        return if not subId?
 
-        <div class="returns">
-            <h4>Returns:</h4>
+        if sub = @cached(propInfo.model, subId)
+            @model.set(entityProp, sub)
+            return
 
-            <div class="returns-description">
-                        <span class="type"><a href="../classes/Facade.html" class="crosslink">Facade</a></span>:
-            </div>
-        </div>
+        repo = @model.getFacade().createRepository(propInfo.model)
 
-
-</div>
-<div id="method_getFacade" class="method item">
-    <h3 class="name"><code>getFacade</code></h3>
-
-        <span class="paren">()</span>
-
-        <span class="returns-inline">
-            <span class="type"><a href="../classes/Facade.html" class="crosslink">Facade</a></span>
-        </span>
+        return repo.get(subId).then (subModel) =&gt;
+            @model.set entityProp, subModel 
+        .catch (e) -&gt;
 
 
+    ###*
+    cache model
+
+    @method cache
+    @private
+    @param {String} modelName
+    @param {Entity} model
+    ###
+    cache: (modelName, model) -&gt;
+        @modelPool[modelName] ?= {}
+        @modelPool[modelName][model.id] = model
+        return
 
 
+    ###*
+    get cached model
 
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_base.coffee.html#l31"><code>src&#x2F;lib&#x2F;base.coffee:31</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>get facade</p>
-<p>the implementation is in Facade#requre()</p>
-
-    </div>
-
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type"><a href="../classes/Facade.html" class="crosslink">Facade</a></span>:
-            </div>
-        </div>
-
-
-</div>
-            </div>
+    @method cached
+    @private
+    @param {String} modelName
+    @param {String|Number} id
+    @return {Entity} model
+    ###
+    cached: (modelName, id) -&gt;
+        @modelPool[modelName]?[id]
 
 
 
-    </div>
+module.exports = Includer
+
+    </pre>
 </div>
                     </div>
                 </div>

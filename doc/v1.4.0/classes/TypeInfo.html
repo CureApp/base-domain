@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Entity</title>
+    <title>TypeInfo</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,15 +97,12 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>Entity Class</h1>
+<h1>TypeInfo Class</h1>
 <div class="box meta">
 
-        <div class="extends">
-            Extends <a href="../classes/BaseModel.html" class="crosslink">BaseModel</a>
-        </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_lib_entity.coffee.html#l5"><code>src&#x2F;lib&#x2F;entity.coffee:5</code></a>
+            Defined in: <a href="../files/src_lib_type-info.coffee.html#l4"><code>src&#x2F;lib&#x2F;type-info.coffee:4</code></a>
         </div>
 
             Module: <a href="../modules/base-domain.html">base-domain</a>
@@ -114,7 +111,7 @@
 
 
 <div class="box intro">
-    <p>Base model class with &quot;id&quot; column</p>
+    <p>type of model&#39;s property</p>
 
 </div>
 
@@ -134,33 +131,28 @@
                 <div class="index-section methods">
                     <h3>Methods</h3>
 
-                    <ul class="index-list methods extends">
-                            <li class="index-item method inherited">
-                                <a href="#method_getFacade">getFacade</a>
+                    <ul class="index-list methods">
+                            <li class="index-item method private">
+                                <a href="#method_createModelListType">createModelListType</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_createModelType">createModelType</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_createTemporaryType">createTemporaryType</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_equals">equals</a>
 
                             </li>
-                            <li class="index-item method public inherited">
-                                <a href="#method_getPropInfo">getPropInfo</a>
-
-                            </li>
-                            <li class="index-item method inherited">
-                                <a href="#method_include">include</a>
-
-                            </li>
-                            <li class="index-item method inherited">
-                                <a href="#method_inherit">inherit</a>
-
-                            </li>
-                            <li class="index-item method inherited">
-                                <a href="#method_setEntityProp">setEntityProp</a>
-
-                            </li>
-                            <li class="index-item method inherited">
-                                <a href="#method_toPlainObject">toPlainObject</a>
-
-                            </li>
-                            <li class="index-item method inherited">
-                                <a href="#method_unsetEntityProp">unsetEntityProp</a>
+                            <li class="index-item method public">
+                                <a href="#method_notEquals">notEquals</a>
 
                             </li>
                     </ul>
@@ -169,10 +161,11 @@
                 <div class="index-section properties">
                     <h3>Properties</h3>
 
-                    <ul class="index-list properties extends">
+                    <ul class="index-list properties">
                             <li class="index-item property">
-                                <a href="#property_id">id</a>
+                                <a href="#property_TYPES">TYPES</a>
 
+                                    <span class="flag static">static</span>
                             </li>
                     </ul>
                 </div>
@@ -183,25 +176,39 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_getFacade" class="method item inherited">
-    <h3 class="name"><code>getFacade</code></h3>
+<div id="method_createModelListType" class="method item private">
+    <h3 class="name"><code>createModelListType</code></h3>
 
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>modelName</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[options.idPropName]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[options.name]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
 
         <span class="returns-inline">
-            <span class="type"><a href="../classes/Facade.html" class="crosslink">Facade</a></span>
+            <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>
         </span>
 
 
+        <span class="flag private">private</span>
 
 
+        <span class="flag static">static</span>
 
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Base.html#method_getFacade">Base</a>:
-        <a href="../files/src_lib_base.coffee.html#l31"><code>src&#x2F;lib&#x2F;base.coffee:31</code></a>
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l54"><code>src&#x2F;lib&#x2F;type-info.coffee:54</code></a>
         </p>
 
 
@@ -209,29 +216,225 @@
     </div>
 
     <div class="description">
-        <p>get facade</p>
-<p>the implementation is in Facade#requre()</p>
+        <p>get TypeInfo as MODEL_LIST</p>
 
     </div>
 
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">modelName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[options.idPropName]</code>
+                        <span class="type">String</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>by default: xxxYyyIds when modelName is xxx-yyy</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[options.name]</code>
+                        <span class="type">String</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>name of list model, by default: xxx-yyy-list when modelName is xxx-yyy</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                        <span class="type"><a href="../classes/Facade.html" class="crosslink">Facade</a></span>:
+                        <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>:
+                    <p>type</p>
+
             </div>
         </div>
 
 
 </div>
-<div id="method_getPropInfo" class="method item public inherited">
-    <h3 class="name"><code>getPropInfo</code></h3>
+<div id="method_createModelType" class="method item private">
+    <h3 class="name"><code>createModelType</code></h3>
 
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>modelName</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[idPropName]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
 
         <span class="returns-inline">
-            <span class="type"><a href="../classes/PropInfo.html" class="crosslink">PropInfo</a></span>
+            <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l37"><code>src&#x2F;lib&#x2F;type-info.coffee:37</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>get TypeInfo as MODEL</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">modelName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[idPropName]</code>
+                        <span class="type">String</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>by default: xxxYyyId when modelName is xxx-yyy</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>:
+                    <p>type</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_createTemporaryType" class="method item private">
+    <h3 class="name"><code>createTemporaryType</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>typeName</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l74"><code>src&#x2F;lib&#x2F;type-info.coffee:74</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>get TypeInfo as temporary value</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">typeName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>:
+                    <p>type</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_equals" class="method item public">
+    <h3 class="name"><code>equals</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>typeName</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
         </span>
 
 
@@ -242,9 +445,9 @@
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_getPropInfo">BaseModel</a>:
-        <a href="../files/src_lib_base-model.coffee.html#l67"><code>src&#x2F;lib&#x2F;base-model.coffee:67</code></a>
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l16"><code>src&#x2F;lib&#x2F;type-info.coffee:16</code></a>
         </p>
 
 
@@ -252,54 +455,7 @@
     </div>
 
     <div class="description">
-        <p>get an instance of PropInfo, which summarizes properties of this class</p>
-
-    </div>
-
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type"><a href="../classes/PropInfo.html" class="crosslink">PropInfo</a></span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_include" class="method item inherited">
-    <h3 class="name"><code>include</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code class="optional">[options]</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Promise(BaseModel)</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_include">BaseModel</a>:
-        <a href="../files/src_lib_base-model.coffee.html#l267"><code>src&#x2F;lib&#x2F;base-model.coffee:267</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>include all relational models if not set</p>
+        <p>check if the type is the given typeName</p>
 
     </div>
 
@@ -308,166 +464,72 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name optional">[options]</code>
-                        <span class="type">Object</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                        <ul class="params-list">
-                            <li class="param">
-                                    <code class="param-name optional">[recursive]</code>
-                                    <span class="type">Boolean</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <p>recursively include models or not</p>
-
-                                </div>
-
-                            </li>
-                        </ul>
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Promise(BaseModel)</span>:
-                    <p>self</p>
-
-            </div>
-        </div>
-
-
-</div>
-<div id="method_inherit" class="method item inherited">
-    <h3 class="name"><code>inherit</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>anotherModel</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_inherit">BaseModel</a>:
-        <a href="../files/src_lib_base-model.coffee.html#l214"><code>src&#x2F;lib&#x2F;base-model.coffee:214</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>inherit value of anotherModel</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">anotherModel</code>
-                        <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>:
-                    <p>this</p>
-
-            </div>
-        </div>
-
-
-</div>
-<div id="method_setEntityProp" class="method item inherited">
-    <h3 class="name"><code>setEntityProp</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>prop</code>
-                </li>
-                <li class="arg">
-                        <code>submodel</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_setEntityProp">BaseModel</a>:
-        <a href="../files/src_lib_base-model.coffee.html#l176"><code>src&#x2F;lib&#x2F;base-model.coffee:176</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>set related model(s)</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">prop</code>
+                        <code class="param-name">typeName</code>
                         <span class="type">String</span>
 
 
                     <div class="param-description">
-                        <p>property name of the related model</p>
-
+                         
                     </div>
 
                 </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_notEquals" class="method item public">
+    <h3 class="name"><code>notEquals</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>typeName</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l26"><code>src&#x2F;lib&#x2F;type-info.coffee:26</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>check if the type is not the given typeName</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">submodel</code>
-                        <span class="type"><a href="../classes/Entity.html" class="crosslink">Entity</a> | Array<Entity></span>
+                        <code class="param-name">typeName</code>
+                        <span class="type">String</span>
 
 
                     <div class="param-description">
@@ -482,120 +544,7 @@
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                        <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>:
-                    <p>this</p>
-
-            </div>
-        </div>
-
-
-</div>
-<div id="method_toPlainObject" class="method item inherited">
-    <h3 class="name"><code>toPlainObject</code></h3>
-
-        <span class="paren">()</span>
-
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_toPlainObject">BaseModel</a>:
-        <a href="../files/src_lib_base-model.coffee.html#l229"><code>src&#x2F;lib&#x2F;base-model.coffee:229</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>create plain object without relational entities
-descendants of Entity are removed, but not descendants of BaseModel
-descendants of Entity in descendants of BaseModel are removed ( = recursive)</p>
-
-    </div>
-
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Object</span>:
-                    <p>plainObject</p>
-
-            </div>
-        </div>
-
-
-</div>
-<div id="method_unsetEntityProp" class="method item inherited">
-    <h3 class="name"><code>unsetEntityProp</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>prop</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/BaseModel.html#method_unsetEntityProp">BaseModel</a>:
-        <a href="../files/src_lib_base-model.coffee.html#l198"><code>src&#x2F;lib&#x2F;base-model.coffee:198</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>unset related model(s)</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">prop</code>
-                        <span class="type">String</span>
-
-
-                    <div class="param-description">
-                        <p>property name of the related models</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>:
-                    <p>this</p>
-
+                        <span class="type">Boolean</span>:
             </div>
         </div>
 
@@ -606,25 +555,28 @@ descendants of Entity in descendants of BaseModel are removed ( = recursive)</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-                    <div id="property_id" class="property item">
-                        <h3 class="name"><code>id</code></h3>
-                        <span class="type">Any</span>
+                    <div id="property_TYPES" class="property item">
+                        <h3 class="name"><code>TYPES</code></h3>
+                        <span class="type">Unknown</span>
                     
                     
                     
                     
+                            <span class="flag static">static</span>
                     
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/src_lib_entity.coffee.html#l16"><code>src&#x2F;lib&#x2F;entity.coffee:16</code></a>
+                            <a href="../files/src_lib_type-info.coffee.html#l98"><code>src&#x2F;lib&#x2F;type-info.coffee:98</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>primary key for the model</p>
+                            <p>TYPES defines various data type, including model and array of models</p>
+                    <p>key: typeName (String)
+                    value: type TypeInfo|Function(TypeInfo)</p>
                     
                         </div>
                     

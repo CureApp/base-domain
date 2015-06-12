@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/lib/type-info.coffee</title>
+    <title>src/lib/base-model.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -97,156 +97,280 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src/lib/type-info.coffee</h1>
+<h1 class="file-heading">File: src/lib/base-model.coffee</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 
-###*
-type of model&#x27;s property 
 
-@class TypeInfo
+TypeInfo = require &#x27;./type-info&#x27;
+PropInfo = require &#x27;./prop-info&#x27;
+Base  = require &#x27;./base&#x27;
+Includer = require &#x27;./includer&#x27;
+
+###*
+Base model class of DDD pattern.
+
+the parent &quot;Base&quot; class just simply gives a @getFacade() method.
+
+
+@class BaseModel
+@extends Base
 @module base-domain
 ###
-class TypeInfo
+class BaseModel extends Base
 
-    constructor: (@name, options = {}) -&gt;
-        @[k] = v for k, v of options
-
+    @isEntity: false
 
     ###*
-    check if the type is the given typeName
+    key-value pair representing typeName - type
 
-    @method equals
-    @public
-    @param {String} typeName
-    @return {Boolean}
-    ###
-    equals: (typeName) -&gt; @name is typeName
-
-    ###*
-    check if the type is not the given typeName
-
-    @method notEquals
-    @public
-    @param {String} typeName
-    @return {Boolean}
-    ###
-    notEquals: (typeName) -&gt; @name isnt typeName
-
-
-    ###*
-    get TypeInfo as MODEL
-
-    @method createModelType
-    @private
-    @static
-    @param {String} modelName
-    @param {String} [idPropName] by default: xxxYyyId when modelName is xxx-yyy
-    @return {TypeInfo} type
-    ###
-    @createModelType: (modelName, idPropName) -&gt; 
-
-        new TypeInfo &#x27;MODEL&#x27;,
-            model      : modelName
-            idPropName : idPropName ?  TypeInfo.camelize(modelName) + &#x27;Id&#x27;
-
-
-    ###*
-    get TypeInfo as MODEL_LIST
-
-    @method createModelListType
-    @private
-    @static
-    @param {String} modelName
-    @param {String} [options.idPropName] by default: xxxYyyIds when modelName is xxx-yyy
-    @param {String} [options.name] name of list model, by default: xxx-yyy-list when modelName is xxx-yyy
-    @return {TypeInfo} type
-    ###
-    @createModelListType: (modelName, options = {}) -&gt; 
-        if typeof options is &#x27;string&#x27;
-            options = name: options
-
-        new TypeInfo &#x27;MODEL_LIST&#x27;,
-            model      : modelName
-            idPropName : options.idPropName ? TypeInfo.camelize(modelName) + &#x27;Ids&#x27;
-            listName   : options.name ? &quot;#{modelName}-list&quot;
-
-
-    ###*
-    get TypeInfo as temporary value
-
-    @method createTemporaryType
-    @private
-    @static
-    @param {String} typeName
-    @return {TypeInfo} type
-    ###
-    @createTemporaryType: (typeName = &#x27;ANY&#x27;, options = {}) -&gt;
-
-        options.tmp = true
-
-        new TypeInfo typeName, options
-
-    ###
-    these hacky codes makes
-        @TYPES.TMP
-    an object and also a function
-    ###
-    TypeInfo.createTemporaryType[k] = v for k, v of TypeInfo.createTemporaryType()
-
-
-
-    ###*
-    TYPES defines various data type, including model and array of models
-
-    key: typeName (String)
-    value: type TypeInfo|Function(TypeInfo)
+    use for definition of @properties for each extender
 
     @property TYPES
+    @protected
+    @final
     @static
+    @type Object
     ###
-
-    @TYPES:
-        ANY        : new TypeInfo &#x27;ANY&#x27;
-        STRING     : new TypeInfo &#x27;STRING&#x27;
-        NUMBER     : new TypeInfo &#x27;NUMBER&#x27;
-        BOOLEAN    : new TypeInfo &#x27;BOOLEAN&#x27;
-        OBJECT     : new TypeInfo &#x27;OBJECT&#x27;
-        ARRAY      : new TypeInfo &#x27;ARRAY&#x27;
-        DATE       : new TypeInfo &#x27;DATE&#x27;
-        BUFFER     : new TypeInfo &#x27;BUFFER&#x27;
-        GEOPOINT   : new TypeInfo &#x27;GEOPOINT&#x27;
-        CREATED_AT : new TypeInfo &#x27;CREATED_AT&#x27;
-        UPDATED_AT : new TypeInfo &#x27;UPDATED_AT&#x27;
-        MODEL      : TypeInfo.createModelType
-        MODEL_LIST : TypeInfo.createModelListType
-        TMP        : TypeInfo.createTemporaryType
-
+    @TYPES: TypeInfo.TYPES
 
 
     ###*
-    converts hyphenation to camel case
+    key-value pair representing property&#x27;s name - type of the model
 
-        &#x27;shinout-no-macbook-pro =&gt; shinoutNoMacbookPro&#x27;
+        firstName    : @TYPES.STRING
+        lastName     : @TYPES.STRING
+        age          : @TYPES.NUMBER
+        registeredAt : @TYPES.DATE
+        team         : @TYPES.MODEL &#x27;team&#x27;
+        hobbies      : @TYPES.MODEL_LIST &#x27;hobby&#x27;
+        info         : @TYPES.ANY
 
-    @method camelize
-    @private
+    see type-info.coffee for full options.
+
+    @property properties
+    @abstract
     @static
-    @param {String} hyphened
-    @return {String} cameled
+    @protected
+    @type Object
     ###
-    @camelize: (hyphened) -&gt;
-       (for substr, i in hyphened.split(&#x27;-&#x27;)
-           if i is 0
-               substr
-           else
-               substr.charAt(0).toUpperCase() + substr.slice(1)
-       ).join(&#x27;&#x27;)
+    @properties: {}
+
+
+    ###*
+    get an instance of PropInfo, which summarizes properties of this class
+
+    @method getPropInfo
+    @public
+    @return {PropInfo}
+    ###
+    @_pi: null
+    @getPropInfo: -&gt;
+        @_pi ?= new PropInfo @properties, @getFacade()
+
+
+    ###*
+    extend @properties of Parent class
+
+    @example
+        class Parent extends BaseModel
+            @properties:
+                prop1: @TYPES.STRING
+
+
+        class ChildModel extends ParentModel
+
+            @properties: @withParentProps
+                prop2: @TYPES.NUMBER
+
+        ChildModel.properties # prop1 and prop2
+
+
+    @method withParentProps
+    @protected
+    @static
+    @return {Object}
+    ###
+    @withParentProps: (props = {}) -&gt;
+        props[k] ?= v for k, v of @properties # @properties === parent&#x27;s properties
+        return props
+
+
+    ###*
+    get list of properties which contains entity
+
+    @method getEntityProps
+    @public
+    @static
+    @return {Array}
+    ###
+    @getEntityProps: -&gt;
+        @getPropInfo().entityProps
+
+    ###*
+    get list of properties which contains relational model
+
+    @method getModelProps
+    @public
+    @static
+    @param {Object} [options]
+    @param {Boolean} [options.includeList] include props of BaseList
+    @return {Array}
+    ###
+    @getModelProps: (options = {}) -&gt;
+        propInfo = @getPropInfo()
+        ret = propInfo.modelProps.slice()
+        ret.concat propInfo.listProps if options.includeList
+
+        return ret
+
+
+    ###*
+    @constructor
+    ###
+    constructor: (obj) -&gt;
+        @set obj if obj
 
 
 
-module.exports = TypeInfo
+    getTypeInfo: (prop) -&gt;
+        @constructor.getPropInfo().dic[prop]
+
+    isEntityProp: (prop) -&gt;
+        @constructor.getPropInfo().isEntityProp prop
+
+    ###*
+    set value to prop
+    @return {BaseModel} this
+    ###
+    set: (prop, value) -&gt;
+        if typeof prop is &#x27;object&#x27;
+            @set(k, v) for k, v of prop
+            return @
+
+        typeInfo = @getTypeInfo prop
+
+        if typeInfo?.model and @isEntityProp prop
+            @setEntityProp(prop, value)
+        else
+            @setNonEntityProp(prop, value)
+
+        return @
+
+
+    ###*
+    set model prop
+    @return {BaseModel} this
+    ###
+    setNonEntityProp: (prop, value) -&gt;
+        @[prop] = value
+
+
+    ###*
+    set related model(s)
+
+    @method setEntityProp
+    @param {String} prop property name of the related model
+    @param {Entity|Array&lt;Entity&gt;} submodel
+    @return {BaseModel} this
+    ###
+    setEntityProp: (prop, submodel) -&gt;
+
+        typeInfo = @getTypeInfo prop
+        modelName = typeInfo.model
+
+        @[prop] = submodel
+
+        idPropName = typeInfo.idPropName
+
+        @[idPropName] = submodel?.id
+
+        return @
+
+
+    ###*
+    unset related model(s)
+
+    @param {String} prop property name of the related models
+    @return {BaseModel} this
+    @method unsetEntityProp
+    ###
+    unsetEntityProp: (prop) -&gt;
+
+        typeInfo = @getTypeInfo(prop)
+        @[prop] = undefined
+        @[typeInfo.idPropName] = undefined
+
+        return @
+
+
+    ###*
+    inherit value of anotherModel
+
+    @method inherit
+    @param {BaseModel} anotherModel
+    @return {BaseModel} this
+    ###
+    inherit: (anotherModel) -&gt;
+        for own k, v of anotherModel
+            if v?
+                @[k] = v
+
+        return @
+
+
+    ###*
+    create plain object without relational entities
+    descendants of Entity are removed, but not descendants of BaseModel
+    descendants of Entity in descendants of BaseModel are removed ( = recursive)
+
+    @method toPlainObject
+    @return {Object} plainObject
+    ###
+    toPlainObject: -&gt;
+
+        facade = @getFacade()
+
+        plainObject = {}
+
+        for own prop, value of @
+            # remove entities
+            if @isEntityProp prop
+                continue
+
+            typeInfo = @getTypeInfo prop
+
+            continue if typeInfo?.tmp
+
+            # set non-model properties
+            if not typeInfo?.model?
+                plainObject[prop] = value
+                continue
+
+            # plainize submodels, lists
+            if typeof value?.toPlainObject is &#x27;function&#x27;
+                plainObject[prop] = value.toPlainObject()
+
+            else
+                plainObject[prop] = value
+
+        return plainObject
+
+
+    ###*
+    include all relational models if not set
+
+    @method include
+    @param {Object} [options]
+    @param {Boolean} [options.recursive] recursively include models or not
+    @return {Promise(BaseModel)} self
+    ###
+    include: (options = {}) -&gt;
+
+        new Includer(@).include(recursive: options.recursive)
+
+module.exports = BaseModel
 
     </pre>
 </div>

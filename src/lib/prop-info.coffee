@@ -45,6 +45,14 @@ class PropInfo
         @entityProps = []
 
         ###*
+        properties whose type is DATE, CREATED_AT and UPDATED_AT
+        @property dateProps
+        @type Array
+        ###
+        @dateProps = []
+
+
+        ###*
         properties whose type is MODEL and the model does not extend Entity
         @property nonEntityProps
         @type Array
@@ -80,12 +88,16 @@ class PropInfo
             @dic[prop] = typeInfo
 
             switch typeInfo.name
+                when 'DATE'
+                    @dateProps.push prop
 
                 when 'CREATED_AT'
                     @createdAt = prop
+                    @dateProps.push prop
 
                 when 'UPDATED_AT'
                     @updatedAt = prop
+                    @dateProps.push prop
 
                 when 'MODEL'
                     @modelProps.push prop

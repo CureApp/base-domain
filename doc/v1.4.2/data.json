@@ -814,7 +814,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 227,
+            "line": 228,
             "description": "on addEventListeners for 'loaded'",
             "itemtype": "method",
             "name": "on",
@@ -825,7 +825,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 243,
+            "line": 244,
             "description": "tell listeners emit loaded",
             "itemtype": "method",
             "name": "emitLoaded",
@@ -2428,6 +2428,16 @@
         {
             "file": "src/lib/prop-info.coffee",
             "line": 47,
+            "description": "properties whose type is DATE, CREATED_AT and UPDATED_AT",
+            "itemtype": "property",
+            "name": "dateProps",
+            "type": "Array",
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 55,
             "description": "properties whose type is MODEL and the model does not extend Entity",
             "itemtype": "property",
             "name": "nonEntityProps",
@@ -2437,7 +2447,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 54,
+            "line": 62,
             "description": "key value pairs of (property => TypeInfo)",
             "itemtype": "property",
             "name": "dic",
@@ -2447,7 +2457,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 70,
+            "line": 78,
             "description": "classify each prop by type",
             "itemtype": "method",
             "name": "build",
@@ -2458,7 +2468,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 105,
+            "line": 117,
             "description": "check if the given prop is entity prop",
             "itemtype": "method",
             "name": "isEntityProp",
@@ -2478,7 +2488,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 115,
+            "line": 127,
             "description": "get typeInfo by prop",
             "itemtype": "method",
             "name": "getTypeInfo",
@@ -2498,7 +2508,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 126,
+            "line": 138,
             "description": "check if the given prop is model prop",
             "itemtype": "method",
             "name": "isModelProp",

@@ -1,4 +1,5 @@
 
+{ normalize } = require('path')
 fs = require('fs')
 
 ###*
@@ -33,13 +34,14 @@ class Fixture
                 [ __dirname + '/fixtures' ]
 
         for dirname in dirnames
-            files = fs.readdirSync(dirname + '/data')
+            dataDir = normalize dirname + '/data'
 
-            for file in files
-                modelName = file.split('.').shift()
-                setting = require(dirname + '/data/' + file)
+            for file in fs.readdirSync(dataDir)
+                [ modelName, ext ] = file.split('.')
+                continue if ext not in ['js', 'coffee', 'json']
 
-                @fxModelMap[modelName] = new FixtureModel(@, modelName, setting, dirname)
+                setting = require(dataDir + '/' + file)
+                @fxModelMap[modelName] = new FixtureModel(@, modelName, setting, normalize dirname)
 
 
         # initial data pool

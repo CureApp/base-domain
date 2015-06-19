@@ -102,6 +102,7 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 
+{ normalize } = require(&#x27;path&#x27;)
 fs = require(&#x27;fs&#x27;)
 
 ###*
@@ -136,13 +137,14 @@ class Fixture
                 [ __dirname + &#x27;/fixtures&#x27; ]
 
         for dirname in dirnames
-            files = fs.readdirSync(dirname + &#x27;/data&#x27;)
+            dataDir = normalize dirname + &#x27;/data&#x27;
 
-            for file in files
-                modelName = file.split(&#x27;.&#x27;).shift()
-                setting = require(dirname + &#x27;/data/&#x27; + file)
+            for file in fs.readdirSync(dataDir)
+                [ modelName, ext ] = file.split(&#x27;.&#x27;)
+                continue if ext not in [&#x27;js&#x27;, &#x27;coffee&#x27;, &#x27;json&#x27;]
 
-                @fxModelMap[modelName] = new FixtureModel(@, modelName, setting, dirname)
+                setting = require(dataDir + &#x27;/&#x27; + file)
+                @fxModelMap[modelName] = new FixtureModel(@, modelName, setting, normalize dirname)
 
 
         # initial data pool

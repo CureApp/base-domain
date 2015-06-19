@@ -319,7 +319,7 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/fixture.coffee",
-            "line": 4
+            "line": 5
         },
         "FixtureModel": {
             "name": "FixtureModel",
@@ -332,7 +332,7 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/fixture.coffee",
-            "line": 167
+            "line": 169
         },
         "ListFactory": {
             "name": "ListFactory",
@@ -1924,7 +1924,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 11,
+            "line": 12,
             "is_constructor": 1,
             "params": [
                 {
@@ -1961,7 +1961,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 55,
+            "line": 57,
             "description": "add data to pool for model's data",
             "itemtype": "method",
             "name": "addToDataPool",
@@ -1974,7 +1974,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 66,
+            "line": 68,
             "description": "inserts data to datasource",
             "params": [
                 {
@@ -1994,7 +1994,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 108,
+            "line": 110,
             "description": "adds dependent models, topological sort",
             "access": "private",
             "tagname": "",
@@ -2016,14 +2016,14 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 173,
+            "line": 175,
             "is_constructor": 1,
             "class": "FixtureModel",
             "module": "base-domain"
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 183,
+            "line": 185,
             "description": "inserts data to datasource",
             "itemtype": "method",
             "name": "insert",
@@ -2036,7 +2036,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 226,
+            "line": 228,
             "description": "read TSV, returns model data",
             "itemtype": "method",
             "name": "readTSV",
@@ -2975,11 +2975,11 @@
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/fixture.coffee:11"
+            "line": " src/lib/fixture.coffee:12"
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/fixture.coffee:173"
+            "line": " src/lib/fixture.coffee:175"
         },
         {
             "message": "Missing item type\ninclude submodels",

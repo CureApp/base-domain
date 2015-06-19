@@ -76,10 +76,10 @@ class BaseList extends BaseModel
     ###
     constructor: (props = {}) ->
 
-        # items, loaded and listeners are hidden properties
+        # loaded and listeners are hidden properties
         _itemFactory = null
         Object.defineProperties @, 
-            items       : value: []
+            items       : value: [], enumerable: true
             loaded      : value: false, writable: true
             listeners   : value: []
             itemFactory : get: ->
@@ -210,6 +210,7 @@ class BaseList extends BaseModel
 
         if @constructor.containsEntity()
             plain.ids = @ids
+            delete plain.items
 
         else
             plainItems = []

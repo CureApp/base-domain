@@ -9,7 +9,7 @@ describe 'Fixture', ->
 
             facade = require('../create-facade').create()
             facade.insertFixtures(dirname: __dirname + '/../fixtures/empty', debug: true).then (dataPool) ->
-                    done()
+                done()
 
 
         it 'inserts data', (done) ->

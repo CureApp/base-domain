@@ -85,11 +85,8 @@ class BaseRepository extends Base
         client ?= @client
 
         # set "createdAt-compatible property when id is not set
-        # FIXME createdAt is not set when creating with id (#1)
-        isCreate = not entity.id?
-
         data = entity.toPlainObject()
-        @appendTimeStamp(data, isCreate)
+        @appendTimeStamp(data)
 
         client.upsert(data).then (obj) =>
             newEntity = @factory.createFromObject(obj)
@@ -190,8 +187,7 @@ class BaseRepository extends Base
             """
 
         client ?= @client
-        isCreate = false
-        @appendTimeStamp(data, isCreate)
+        @appendTimeStamp(data, isUpdate = true)
 
         client.updateAttributes(id, data).then (obj) =>
             return @factory.createFromObject(obj)
@@ -205,21 +201,22 @@ class BaseRepository extends Base
     @method appendTimeStamp
     @protected
     @param {Object} data 
-    @param {Boolean} [isCreate=false]
+    @param {Boolean} isUpdate true when updating
     @return {Object} data
     ###
-    appendTimeStamp: (data, isCreate = false) ->
+    appendTimeStamp: (data, isUpdate = false) ->
         Model = @getModelClass()
 
         propCreatedAt = Model.getPropInfo().createdAt
         propUpdatedAt = Model.getPropInfo().updatedAt
 
+        now = new Date().toISOString()
 
-        if isCreate and propCreatedAt
-            data[propCreatedAt] ?= new Date().toISOString()
+        if propCreatedAt and not isUpdate
+            data[propCreatedAt] ?= now
 
         if propUpdatedAt
-            data[propUpdatedAt] = new Date().toISOString()
+            data[propUpdatedAt] = now
 
         return data
 

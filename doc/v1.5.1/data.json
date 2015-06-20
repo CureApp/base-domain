@@ -1162,7 +1162,7 @@
         },
         {
             "file": "src/lib/base-repository.coffee",
-            "line": 99,
+            "line": 96,
             "description": "get object by ID.",
             "itemtype": "method",
             "name": "get",
@@ -1191,7 +1191,7 @@
         },
         {
             "file": "src/lib/base-repository.coffee",
-            "line": 115,
+            "line": 112,
             "description": "alias for get()",
             "itemtype": "method",
             "name": "getById",
@@ -1220,7 +1220,7 @@
         },
         {
             "file": "src/lib/base-repository.coffee",
-            "line": 129,
+            "line": 126,
             "description": "Find all model instances that match params",
             "itemtype": "method",
             "name": "query",
@@ -1250,7 +1250,7 @@
         },
         {
             "file": "src/lib/base-repository.coffee",
-            "line": 144,
+            "line": 141,
             "description": "Find one model instance that matches params, Same as query, but limited to one result",
             "itemtype": "method",
             "name": "singleQuery",
@@ -1280,7 +1280,7 @@
         },
         {
             "file": "src/lib/base-repository.coffee",
-            "line": 160,
+            "line": 157,
             "description": "Destroy the given entity (which must have \"id\" value)",
             "itemtype": "method",
             "name": "delete",
@@ -1309,7 +1309,7 @@
         },
         {
             "file": "src/lib/base-repository.coffee",
-            "line": 175,
+            "line": 172,
             "description": "Update set of attributes.",
             "itemtype": "method",
             "name": "update",
@@ -1343,7 +1343,7 @@
         },
         {
             "file": "src/lib/base-repository.coffee",
-            "line": 200,
+            "line": 196,
             "description": "add createdAt, updatedAt to given data\n- createdAt will not be overriden if already set.\n- updatedAt will be overriden for each time",
             "itemtype": "method",
             "name": "appendTimeStamp",
@@ -1356,11 +1356,9 @@
                     "type": "Object"
                 },
                 {
-                    "name": "isCreate",
-                    "description": "",
-                    "type": "Boolean",
-                    "optional": true,
-                    "optdefault": "false"
+                    "name": "isUpdate",
+                    "description": "true when updating",
+                    "type": "Boolean"
                 }
             ],
             "return": {

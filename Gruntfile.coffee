@@ -1,4 +1,4 @@
-currentVersion = 'v1.5.0'
+currentVersion = 'v1.5.1'
 module.exports = (grunt) ->
 
     grunt.config.init

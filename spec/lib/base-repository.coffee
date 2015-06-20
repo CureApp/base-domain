@@ -45,6 +45,17 @@ describe 'BaseRepository', ->
                 expect(model.mCreatedAt).to.equal now
                 done()
 
+        it 'createdAt is newly set even when model has id', (done) ->
+
+            memberRepo = facade.createRepository('member')
+            now = new Date()
+
+            memberRepo.save(firstName: 'Shin', id: 'shin').then (model) =>
+                expect(model).to.have.property('mCreatedAt')
+                expect(new Date(model.mCreatedAt)).to.be.instanceof Date
+                expect(new Date(model.mUpdatedAt)).to.be.instanceof Date
+                done()
+
 
         it 'updatedAt changes for each saving', (done) ->
 
@@ -150,3 +161,4 @@ describe 'BaseRepository', ->
                 expect(arg2).to.have.property('mUpdatedAt')
                 expect(new Date(arg2.mUpdatedAt)).to.be.instanceof Date
                 done()
+            .catch done

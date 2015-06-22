@@ -59,7 +59,7 @@ class Util
         fileInfo = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, path)
 
         if fileInfo.exists()
-            return require path
+            return require file
         else
             throw new Error("#{path}: no such file.")
 

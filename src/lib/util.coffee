@@ -8,7 +8,6 @@ class Util
         'shinout-no-macbook-pro' => 'shinoutNoMacbookPro' # if lowerFirst = true
 
     @method camelize
-    @private
     @static
     @param {String} hyphened
     @param {Boolean} [lowerFirst=false] make capital char lower
@@ -30,7 +29,6 @@ class Util
         'ABC' => 'a-b-c' # current implementation... FIXME ?
 
     @method hyphenize
-    @private
     @static
     @param {String} hyphened
     @return {String} cameled
@@ -41,6 +39,17 @@ class Util
         cameled.replace(/([A-Z])/g, (st)-> '-' + st.charAt(0).toLowerCase()).slice(1)
 
 
+    ###*
+    requires js file
+    in Titanium, file-not-found-like-exception occurred in require function cannot be caught.
+    Thus, before require function is called, check the existence of the file.
+    File extension must be '.js' in Titanium.
+
+    @method requireFile
+    @static
+    @param {String} file name without extension
+    @return {any} required value
+    ###
     @requireFile: (file) ->
         if not Ti?
             return require file

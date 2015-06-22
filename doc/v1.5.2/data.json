@@ -305,7 +305,7 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/facade.coffee",
-            "line": 9,
+            "line": 10,
             "description": "Facade class of DDD pattern.\n\n- create instance of factories\n- create instance of repositories"
         },
         "Fixture": {
@@ -1434,7 +1434,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 21,
+            "line": 22,
             "description": "create instance of Facade",
             "itemtype": "method",
             "name": "createInstance",
@@ -1456,7 +1456,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 34,
+            "line": 35,
             "description": "constructor",
             "is_constructor": 1,
             "params": [
@@ -1481,7 +1481,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 51,
+            "line": 52,
             "description": "load master tables",
             "itemtype": "method",
             "name": "loadMasterTables",
@@ -1494,7 +1494,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 61,
+            "line": 62,
             "description": "get a model class",
             "itemtype": "method",
             "name": "getModel",
@@ -1514,7 +1514,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 72,
+            "line": 73,
             "description": "get a list model class",
             "itemtype": "method",
             "name": "getListModel",
@@ -1540,7 +1540,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 100,
+            "line": 101,
             "description": "get a factory class\n\nISSUE: user will never know load failure",
             "itemtype": "method",
             "name": "getFactory",
@@ -1567,7 +1567,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 121,
+            "line": 122,
             "description": "get a list factory class",
             "itemtype": "method",
             "name": "getListFactory",
@@ -1593,7 +1593,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 144,
+            "line": 145,
             "description": "get a repository class",
             "itemtype": "method",
             "name": "getRepository",
@@ -1613,7 +1613,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 155,
+            "line": 156,
             "description": "create a factory instance",
             "itemtype": "method",
             "name": "createFactory",
@@ -1640,7 +1640,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 168,
+            "line": 169,
             "description": "create a factory instance",
             "itemtype": "method",
             "name": "createFactory",
@@ -1666,7 +1666,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 181,
+            "line": 182,
             "description": "create a repository instance",
             "itemtype": "method",
             "name": "createRepository",
@@ -1692,7 +1692,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 193,
+            "line": 194,
             "description": "read a file and returns class",
             "itemtype": "method",
             "name": "require",
@@ -1714,7 +1714,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 210,
+            "line": 211,
             "description": "check existence of the class of the given name",
             "itemtype": "method",
             "name": "hasClass",
@@ -1734,7 +1734,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 225,
+            "line": 226,
             "description": "add copied class to facade.\nthe class is acquired by @require(name)\n\nattaches getFacade() method (for both class and instance)",
             "itemtype": "method",
             "name": "addClass",
@@ -1766,7 +1766,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 263,
+            "line": 264,
             "description": "read a file and returns the instance of the file's class",
             "itemtype": "method",
             "name": "create",
@@ -1794,7 +1794,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 277,
+            "line": 278,
             "description": "create instance of DomainError",
             "itemtype": "method",
             "name": "error",
@@ -1820,7 +1820,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 291,
+            "line": 292,
             "description": "check if given object is instance of DomainError",
             "itemtype": "method",
             "name": "isDomainError",
@@ -1840,7 +1840,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 304,
+            "line": 305,
             "description": "insert fixture data\n(Node.js only)",
             "itemtype": "method",
             "name": "insertFixtures",
@@ -1884,7 +1884,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 322,
+            "line": 323,
             "description": "check the given class is registered in facade",
             "itemtype": "method",
             "name": "isBaseClass",
@@ -1905,7 +1905,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 333,
+            "line": 334,
             "description": "registers the given class as a base class",
             "itemtype": "method",
             "name": "registerBaseClass",
@@ -2858,8 +2858,6 @@
             "description": "converts hyphenation to camel case\n\n    'shinout-no-macbook-pro' => 'ShinoutNoMacbookPro'\n    'shinout-no-macbook-pro' => 'shinoutNoMacbookPro' # if lowerFirst = true",
             "itemtype": "method",
             "name": "camelize",
-            "access": "private",
-            "tagname": "",
             "static": 1,
             "params": [
                 {
@@ -2884,12 +2882,10 @@
         },
         {
             "file": "src/lib/util.coffee",
-            "line": 26,
+            "line": 25,
             "description": "converts hyphenation to camel case\n\n    'ShinoutNoMacbookPro' => 'shinout-no-macbook-pro'\n    'ABC' => 'a-b-c' # current implementation... FIXME ?",
             "itemtype": "method",
             "name": "hyphenize",
-            "access": "private",
-            "tagname": "",
             "static": 1,
             "params": [
                 {
@@ -2901,6 +2897,27 @@
             "return": {
                 "description": "cameled",
                 "type": "String"
+            },
+            "class": "",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/util.coffee",
+            "line": 42,
+            "description": "requires js file\nin Titanium, file-not-found-like-exception occurred in require function cannot be caught.\nThus, before require function is called, check the existence of the file.\nFile extension must be '.js' in Titanium.",
+            "itemtype": "method",
+            "name": "requireFile",
+            "static": 1,
+            "params": [
+                {
+                    "name": "file",
+                    "description": "name without extension",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "required value",
+                "type": "Any"
             },
             "class": "",
             "module": "base-domain"
@@ -2969,7 +2986,7 @@
         },
         {
             "message": "Missing item type\nconstructor",
-            "line": " src/lib/facade.coffee:34"
+            "line": " src/lib/facade.coffee:35"
         },
         {
             "message": "Missing item type",

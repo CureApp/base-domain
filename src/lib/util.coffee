@@ -40,4 +40,19 @@ class Util
         cameled = cameled.charAt(0).toUpperCase() + cameled.slice(1)
         cameled.replace(/([A-Z])/g, (st)-> '-' + st.charAt(0).toLowerCase()).slice(1)
 
+
+    @requireFile: (file) ->
+        if not Ti?
+            return require file
+
+        # in Titanium
+        path = file + '.js'
+        fileInfo = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, path)
+
+        if fileInfo.exists()
+            return require path
+        else
+            throw new Error("#{path}: no such file.")
+
+
 module.exports = Util

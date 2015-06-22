@@ -2,7 +2,8 @@
 require('es6-promise').polyfill()
 copy = require('copy-class').copy
 
-{ camelize } = require './util'
+{ camelize, requireFile } = require './util'
+
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
 
@@ -201,8 +202,8 @@ class Facade
     require: (name) ->
         return @classes[name] if @classes[name]?
 
-        path = "#{@dirname}/#{name}"
-        klass = require path
+        file = "#{@dirname}/#{name}"
+        klass = requireFile file
 
         @addClass name, klass
 

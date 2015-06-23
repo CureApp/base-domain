@@ -1905,7 +1905,7 @@
         },
         {
             "file": "src/lib/facade.coffee",
-            "line": 334,
+            "line": 336,
             "description": "registers the given class as a base class",
             "itemtype": "method",
             "name": "registerBaseClass",

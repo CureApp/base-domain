@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/CureApp/base-domain.png?label=ready&title=Ready)](https://waffle.io/CureApp/base-domain)
 # base-domain
 
 simple module to help build Domain-Driven Design"

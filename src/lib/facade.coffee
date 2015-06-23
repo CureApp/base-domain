@@ -329,7 +329,9 @@ class Facade
     @return {Boolean}
     ###
     @isBaseClass: (klass) ->
-        (klass is @[klass.name]) or (klass is @DomainError) # DomainError does not have name
+        (klass is @[klass.name]) or
+        (klass is @DomainError) or
+        (@[klass.name]?.toString() is klass.toString())
 
     ###*
     registers the given class as a base class

@@ -1,6 +1,6 @@
 {
   "name": "base-domain",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "description": "simple module to help build Domain-Driven Design",
   "main": "index.js",
   "scripts": {

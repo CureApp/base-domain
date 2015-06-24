@@ -105,7 +105,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_lib_base-list.coffee.html#l4"><code>src&#x2F;lib&#x2F;base-list.coffee:4</code></a>
+            Defined in: <a href="../files/src_lib_base-list.coffee.html#l5"><code>src&#x2F;lib&#x2F;base-list.coffee:5</code></a>
         </div>
 
             Module: <a href="../modules/base-domain.html">base-domain</a>
@@ -152,12 +152,20 @@
                                 <a href="#method_getAnonymousClass">getAnonymousClass</a>
 
                             </li>
+                            <li class="index-item method public">
+                                <a href="#method_getByKey">getByKey</a>
+
+                            </li>
                             <li class="index-item method inherited">
                                 <a href="#method_getFacade">getFacade</a>
 
                             </li>
                             <li class="index-item method public inherited">
                                 <a href="#method_getPropInfo">getPropInfo</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_has">has</a>
 
                             </li>
                             <li class="index-item method inherited">
@@ -167,6 +175,11 @@
                             <li class="index-item method inherited">
                                 <a href="#method_inherit">inherit</a>
 
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_key">key</a>
+
+                                    <span class="flag static">static</span>
                             </li>
                             <li class="index-item method public">
                                 <a href="#method_last">last</a>
@@ -188,6 +201,10 @@
                                 <a href="#method_setItems">setItems</a>
 
                             </li>
+                            <li class="index-item method private">
+                                <a href="#method_setKeys">setKeys</a>
+
+                            </li>
                             <li class="index-item method protected">
                                 <a href="#method_sort">sort</a>
 
@@ -202,6 +219,10 @@
                             </li>
                             <li class="index-item method inherited">
                                 <a href="#method_unsetEntityProp">unsetEntityProp</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_unsetKeys">unsetKeys</a>
 
                             </li>
                     </ul>
@@ -261,7 +282,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l141"><code>src&#x2F;lib&#x2F;base-list.coffee:141</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l218"><code>src&#x2F;lib&#x2F;base-list.coffee:218</code></a>
         </p>
 
 
@@ -300,7 +321,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l244"><code>src&#x2F;lib&#x2F;base-list.coffee:244</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l321"><code>src&#x2F;lib&#x2F;base-list.coffee:321</code></a>
         </p>
 
 
@@ -332,7 +353,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l163"><code>src&#x2F;lib&#x2F;base-list.coffee:163</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l240"><code>src&#x2F;lib&#x2F;base-list.coffee:240</code></a>
         </p>
 
 
@@ -372,7 +393,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l24"><code>src&#x2F;lib&#x2F;base-list.coffee:24</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l44"><code>src&#x2F;lib&#x2F;base-list.coffee:44</code></a>
         </p>
 
 
@@ -407,6 +428,72 @@
             <div class="returns-description">
                         <span class="type">Function</span>:
                     <p>child class of BaseList</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getByKey" class="method item public">
+    <h3 class="name"><code>getByKey</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>key</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_base-list.coffee.html#l163"><code>src&#x2F;lib&#x2F;base-list.coffee:163</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>get an item by key</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">key</code>
+                        <span class="type">String | Number</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>:
+                    <p>item</p>
 
             </div>
         </div>
@@ -492,6 +579,70 @@
 
             <div class="returns-description">
                         <span class="type"><a href="../classes/PropInfo.html" class="crosslink">PropInfo</a></span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_has" class="method item public">
+    <h3 class="name"><code>has</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>key</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_base-list.coffee.html#l152"><code>src&#x2F;lib&#x2F;base-list.coffee:152</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>check if items has model by key</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">key</code>
+                        <span class="type">String | Number</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
             </div>
         </div>
 
@@ -641,6 +792,77 @@
 
 
 </div>
+<div id="method_key" class="method item">
+    <h3 class="name"><code>key</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>item</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String | Number</span>
+        </span>
+
+
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_base-list.coffee.html#l25"><code>src&#x2F;lib&#x2F;base-list.coffee:25</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>key of the item in this list
+returns null or undefined if no keys is needed
+if key is set, we can get model by key by @has()</p>
+<pre class="code prettyprint"><code>memberModel = id: &#39;shin&#39;, name: &#39;Shin Suzuki&#39;
+memberList.setItems([memberModel])
+
+memberList.has(&#39;shin&#39;)  # true
+memberList.has(&#39;kohta&#39;) # false
+</code></pre>
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">item</code>
+                        <span class="type">Model</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String | Number</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_last" class="method item public">
     <h3 class="name"><code>last</code></h3>
 
@@ -657,7 +879,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l176"><code>src&#x2F;lib&#x2F;base-list.coffee:176</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l253"><code>src&#x2F;lib&#x2F;base-list.coffee:253</code></a>
         </p>
 
 
@@ -689,7 +911,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l228"><code>src&#x2F;lib&#x2F;base-list.coffee:228</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l305"><code>src&#x2F;lib&#x2F;base-list.coffee:305</code></a>
         </p>
 
 
@@ -805,7 +1027,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l97"><code>src&#x2F;lib&#x2F;base-list.coffee:97</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l174"><code>src&#x2F;lib&#x2F;base-list.coffee:174</code></a>
         </p>
 
 
@@ -858,7 +1080,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l124"><code>src&#x2F;lib&#x2F;base-list.coffee:124</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l201"><code>src&#x2F;lib&#x2F;base-list.coffee:201</code></a>
         </p>
 
 
@@ -890,6 +1112,60 @@
 
 
 </div>
+<div id="method_setKeys" class="method item private">
+    <h3 class="name"><code>setKeys</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>newItems</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_base-list.coffee.html#l128"><code>src&#x2F;lib&#x2F;base-list.coffee:128</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>set keys of new items to dic</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">newItems</code>
+                        <span class="type">Array(BaseModel)</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_sort" class="method item protected">
     <h3 class="name"><code>sort</code></h3>
 
@@ -906,7 +1182,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l153"><code>src&#x2F;lib&#x2F;base-list.coffee:153</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l230"><code>src&#x2F;lib&#x2F;base-list.coffee:230</code></a>
         </p>
 
 
@@ -938,7 +1214,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_base-list.coffee.html#l189"><code>src&#x2F;lib&#x2F;base-list.coffee:189</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l266"><code>src&#x2F;lib&#x2F;base-list.coffee:266</code></a>
         </p>
 
 
@@ -975,7 +1251,7 @@
                 BaseModel
             </a>
             but overwritten in
-        <a href="../files/src_lib_base-list.coffee.html#l199"><code>src&#x2F;lib&#x2F;base-list.coffee:199</code></a>
+        <a href="../files/src_lib_base-list.coffee.html#l276"><code>src&#x2F;lib&#x2F;base-list.coffee:276</code></a>
         </p>
 
 
@@ -1068,6 +1344,60 @@ if this list contains non-entity models, returns their plain objects</p>
 
 
 </div>
+<div id="method_unsetKeys" class="method item private">
+    <h3 class="name"><code>unsetKeys</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>deletedItems</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_base-list.coffee.html#l140"><code>src&#x2F;lib&#x2F;base-list.coffee:140</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>unset keys of deleted items in dic</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">deletedItems</code>
+                        <span class="type">Array(BaseModel)</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
@@ -1085,7 +1415,7 @@ if this list contains non-entity models, returns their plain objects</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/src_lib_base-list.coffee.html#l41"><code>src&#x2F;lib&#x2F;base-list.coffee:41</code></a>
+                            <a href="../files/src_lib_base-list.coffee.html#l61"><code>src&#x2F;lib&#x2F;base-list.coffee:61</code></a>
                             </p>
                     
                     
@@ -1110,7 +1440,7 @@ if this list contains non-entity models, returns their plain objects</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/src_lib_base-list.coffee.html#l67"><code>src&#x2F;lib&#x2F;base-list.coffee:67</code></a>
+                            <a href="../files/src_lib_base-list.coffee.html#l87"><code>src&#x2F;lib&#x2F;base-list.coffee:87</code></a>
                             </p>
                     
                     
@@ -1137,7 +1467,7 @@ if this list contains non-entity models, returns their plain objects</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/src_lib_base-list.coffee.html#l13"><code>src&#x2F;lib&#x2F;base-list.coffee:13</code></a>
+                            <a href="../files/src_lib_base-list.coffee.html#l14"><code>src&#x2F;lib&#x2F;base-list.coffee:14</code></a>
                             </p>
                     
                     
@@ -1162,7 +1492,7 @@ if this list contains non-entity models, returns their plain objects</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/src_lib_base-list.coffee.html#l53"><code>src&#x2F;lib&#x2F;base-list.coffee:53</code></a>
+                            <a href="../files/src_lib_base-list.coffee.html#l73"><code>src&#x2F;lib&#x2F;base-list.coffee:73</code></a>
                             </p>
                     
                     
@@ -1187,7 +1517,7 @@ if this list contains non-entity models, returns their plain objects</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/src_lib_base-list.coffee.html#l60"><code>src&#x2F;lib&#x2F;base-list.coffee:60</code></a>
+                            <a href="../files/src_lib_base-list.coffee.html#l80"><code>src&#x2F;lib&#x2F;base-list.coffee:80</code></a>
                             </p>
                     
                     

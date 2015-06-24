@@ -103,6 +103,7 @@
     <pre class="code prettyprint linenums">
 
 BaseModel = require &#x27;./base-model&#x27;
+EventedArrayGenerator = require &#x27;./evented-array-generator&#x27;
 
 ###*
 list class of DDD pattern.
@@ -122,6 +123,25 @@ class BaseList extends BaseModel
     @type String
     ###
     @itemModelName: &#x27;&#x27;
+
+
+    ###*
+    key of the item in this list
+    returns null or undefined if no keys is needed
+    if key is set, we can get model by key by @has()
+
+        memberModel = id: &#x27;shin&#x27;, name: &#x27;Shin Suzuki&#x27;
+        memberList.setItems([memberModel])
+
+        memberList.has(&#x27;shin&#x27;)  # true
+        memberList.has(&#x27;kohta&#x27;) # false
+
+    @method key
+    @static
+    @param {Model} item
+    @return {String|Number}
+    ###
+    @key: (item) -&gt; item.id
 
 
     ###*
@@ -181,8 +201,12 @@ class BaseList extends BaseModel
 
         # loaded and listeners are hidden properties
         _itemFactory = null
+
+        items = @createEmptyItemArray() # just an array. observes bang methods.
+
         Object.defineProperties @, 
-            items       : value: [], enumerable: true
+            items       : value: items, enumerable: true
+            dic         : value: {}
             loaded      : value: false, writable: true
             listeners   : value: []
             itemFactory : get: -&gt;
@@ -195,6 +219,59 @@ class BaseList extends BaseModel
             @setIds props.ids
 
         super(props)
+
+
+    createEmptyItemArray : -&gt;
+        items = EventedArrayGenerator.generate(@)
+        items.on &#x27;added&#x27;,  @setKeys
+        items.on &#x27;removed&#x27;,@unsetKeys
+        return items
+
+
+    ###*
+    set keys of new items to dic
+
+    @method setKeys
+    @private
+    @param {Array(BaseModel)} newItems
+    ###
+    setKeys: (newItems) -&gt;
+        for newItem in newItems
+            key = @constructor.key(newItem)
+            @dic[key] = newItem if key?
+
+    ###*
+    unset keys of deleted items in dic
+
+    @method unsetKeys
+    @private
+    @param {Array(BaseModel)} deletedItems
+    ###
+    unsetKeys: (deletedItems) -&gt;
+        for deletedItem in deletedItems
+            key = @constructor.key(deletedItem)
+            delete @dic[key] if key?
+
+    ###*
+    check if items has model by key
+
+    @public
+    @method has
+    @param {String|Number} key
+    @return {Boolean}
+    ###
+    has: (key) -&gt; @dic[key]?
+
+
+    ###*
+    get an item by key
+
+    @public
+    @method getByKey
+    @param {String|Number} key
+    @return {BaseModel} item
+    ###
+    getByKey: (key) -&gt; @dic[key]
 
 
     ###*

@@ -160,8 +160,25 @@
                                 <a href="#method_createRepository">createRepository</a>
 
                             </li>
+                            <li class="index-item method private">
+                                <a href="#method_defineEventProps">defineEventProps</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_enableHookToBangMethods">enableHookToBangMethods</a>
+
+                            </li>
                             <li class="index-item method">
                                 <a href="#method_error">error</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_generate">generate</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_generate">generate</a>
 
                             </li>
                             <li class="index-item method">
@@ -404,83 +421,6 @@ the class is acquired by @require(name)</p>
                         <code>name</code>
                 </li>
                 <li class="arg">
-                        <code class="optional">[itemModelName]</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type"><a href="../classes/ListFactory.html" class="crosslink">ListFactory</a></span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_facade.coffee.html#l169"><code>src&#x2F;lib&#x2F;facade.coffee:169</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>create a factory instance</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">name</code>
-                        <span class="type">String</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[itemModelName]</code>
-                        <span class="type">String</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type"><a href="../classes/ListFactory.html" class="crosslink">ListFactory</a></span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_createFactory" class="method item">
-    <h3 class="name"><code>createFactory</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>name</code>
-                </li>
-                <li class="arg">
                         <code class="optional">[useAnonymousWhenFailed=false]</code>
                 </li>
             </ul><span class="paren">)</span>
@@ -544,6 +484,83 @@ the class is acquired by @require(name)</p>
 
             <div class="returns-description">
                         <span class="type"><a href="../classes/BaseFactory.html" class="crosslink">BaseFactory</a></span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_createFactory" class="method item">
+    <h3 class="name"><code>createFactory</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>name</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[itemModelName]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/ListFactory.html" class="crosslink">ListFactory</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_facade.coffee.html#l169"><code>src&#x2F;lib&#x2F;facade.coffee:169</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>create a factory instance</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">name</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[itemModelName]</code>
+                        <span class="type">String</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="../classes/ListFactory.html" class="crosslink">ListFactory</a></span>:
             </div>
         </div>
 
@@ -691,6 +708,70 @@ the class is acquired by @require(name)</p>
 
 
 </div>
+<div id="method_defineEventProps" class="method item private">
+    <h3 class="name"><code>defineEventProps</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_evented-array-generator.coffee.html#l43"><code>src&#x2F;lib&#x2F;evented-array-generator.coffee:43</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>define props related to event-handling</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_enableHookToBangMethods" class="method item private">
+    <h3 class="name"><code>enableHookToBangMethods</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_evented-array-generator.coffee.html#l60"><code>src&#x2F;lib&#x2F;evented-array-generator.coffee:60</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>enable Array&#39;s bang methods to emit event</p>
+
+    </div>
+
+
+
+
+</div>
 <div id="method_error" class="method item">
     <h3 class="name"><code>error</code></h3>
 
@@ -764,6 +845,154 @@ the class is acquired by @require(name)</p>
 
             <div class="returns-description">
                         <span class="type">Error</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_generate" class="method item public">
+    <h3 class="name"><code>generate</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>thisOfListeners</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_evented-array-generator.coffee.html#l9"><code>src&#x2F;lib&#x2F;evented-array-generator.coffee:9</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>generate empty array with event props</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">thisOfListeners</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>&quot;this&quot; of listener functions</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Array</span>:
+                    <p>arr</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_generate" class="method item private">
+    <h3 class="name"><code>generate</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>arr</code>
+                </li>
+                <li class="arg">
+                        <code>thisOfListeners</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_evented-array-generator.coffee.html#l27"><code>src&#x2F;lib&#x2F;evented-array-generator.coffee:27</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>append event props to given array</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">arr</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">thisOfListeners</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>&quot;this&quot; of listener functions</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Array</span>:
+                    <p>arr</p>
+
             </div>
         </div>
 

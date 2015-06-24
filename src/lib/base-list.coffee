@@ -1,5 +1,6 @@
 
 BaseModel = require './base-model'
+EventedArrayGenerator = require './evented-array-generator'
 
 ###*
 list class of DDD pattern.
@@ -19,6 +20,25 @@ class BaseList extends BaseModel
     @type String
     ###
     @itemModelName: ''
+
+
+    ###*
+    key of the item in this list
+    returns null or undefined if no keys is needed
+    if key is set, we can get model by key by @has()
+
+        memberModel = id: 'shin', name: 'Shin Suzuki'
+        memberList.setItems([memberModel])
+
+        memberList.has('shin')  # true
+        memberList.has('kohta') # false
+
+    @method key
+    @static
+    @param {Model} item
+    @return {String|Number}
+    ###
+    @key: (item) -> item.id
 
 
     ###*
@@ -78,8 +98,12 @@ class BaseList extends BaseModel
 
         # loaded and listeners are hidden properties
         _itemFactory = null
+
+        items = @createEmptyItemArray() # just an array. observes bang methods.
+
         Object.defineProperties @, 
-            items       : value: [], enumerable: true
+            items       : value: items, enumerable: true
+            dic         : value: {}
             loaded      : value: false, writable: true
             listeners   : value: []
             itemFactory : get: ->
@@ -92,6 +116,34 @@ class BaseList extends BaseModel
             @setIds props.ids
 
         super(props)
+
+
+    createEmptyItemArray : ->
+        items = EventedArrayGenerator.generate(@)
+        items.on 'added',  @setKeys
+        items.on 'removed',@unsetKeys
+        return items
+
+
+    ###*
+    set keys of new items to dic
+
+    @method setKeys
+    @param {Array(BaseModel)} newItems
+    ###
+    setKeys: (newItems) ->
+        for newItem in newItems
+            @dic[@constructor.key(newItem)] = newItem
+
+    ###*
+    unset keys of deleted items in dic
+
+    @method unsetKeys
+    @param {Array(BaseModel)} deletedItems
+    ###
+    unsetKeys: (deletedItems) ->
+        for deletedItem in deletedItems
+            delete @dic[@constructor.key(newItem)]
 
 
     ###*

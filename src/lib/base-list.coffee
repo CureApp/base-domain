@@ -129,21 +129,46 @@ class BaseList extends BaseModel
     set keys of new items to dic
 
     @method setKeys
+    @private
     @param {Array(BaseModel)} newItems
     ###
     setKeys: (newItems) ->
         for newItem in newItems
-            @dic[@constructor.key(newItem)] = newItem
+            key = @constructor.key(newItem)
+            @dic[key] = newItem if key?
 
     ###*
     unset keys of deleted items in dic
 
     @method unsetKeys
+    @private
     @param {Array(BaseModel)} deletedItems
     ###
     unsetKeys: (deletedItems) ->
         for deletedItem in deletedItems
-            delete @dic[@constructor.key(newItem)]
+            key = @constructor.key(deletedItem)
+            delete @dic[key] if key?
+
+    ###*
+    check if items has model by key
+
+    @public
+    @method has
+    @param {String|Number} key
+    @return {Boolean}
+    ###
+    has: (key) -> @dic[key]?
+
+
+    ###*
+    get an item by key
+
+    @public
+    @method getByKey
+    @param {String|Number} key
+    @return {BaseModel} item
+    ###
+    getByKey: (key) -> @dic[key]
 
 
     ###*

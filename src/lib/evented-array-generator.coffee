@@ -88,9 +88,6 @@ class EventedMethods
             for fn in (@listeners[name] ? []) when typeof fn is 'function'
                 fn.call(@thisOfListeners, param)
         catch e
-            console.log "error in emit"
-            console.log e
-            console.log e.stack
 
 
     @on: (name, fn) ->
@@ -119,10 +116,11 @@ class EventedMethods
         return ret
 
 
-    @splice: (idx, num, args...) ->
+    @splice: (args...) ->
         removed = Array::splice.apply(@, args)
         @emit('removed', removed)
-        @emit('added', args)
+        @emit('added', args.slice(2))
+
         return removed
 
 

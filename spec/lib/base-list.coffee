@@ -34,7 +34,7 @@ describe 'BaseList', ->
         )
 
 
-    it '"loaded", "listeners" and "itemFactory" are hidden properties whereas items is explicit', ->
+    it '"loaded", "listeners", "dic" and "itemFactory" are hidden properties whereas items is explicit', ->
 
         class HobbyList extends BaseList
             @getFacade: -> facade
@@ -50,6 +50,7 @@ describe 'BaseList', ->
         expect(explicitKeys).not.to.contain 'listeners'
         expect(explicitKeys).not.to.contain 'loaded'
         expect(explicitKeys).not.to.contain 'itemFactory'
+        expect(explicitKeys).not.to.contain 'dic'
 
 
 
@@ -324,3 +325,105 @@ describe 'BaseList', ->
 
                 done()
 
+    describe 'has', ->
+
+        beforeEach ->
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            @hobbyFactory = facade.createFactory('hobby', true)
+
+            hobbies = (for name, i in ['cycling', 'jogging', 'keyboard']
+                @hobbyFactory.createFromObject id: name, name: name
+            )
+
+            @hobbyList = new HobbyList(items: hobbies)
+
+        it 'checks if the list has item by key or not', ->
+
+            expect(@hobbyList.has('cycling')).to.be.true
+            expect(@hobbyList.has('jogging')).to.be.true
+            expect(@hobbyList.has('keyboard')).to.be.true
+            expect(@hobbyList.has('shogi')).to.be.false
+
+
+        it 'reflects state of items when pushed', ->
+            newHobbies = (for name, i in ['shogi', 'driving']
+                @hobbyFactory.createFromObject id: name, name: name
+            )
+            @hobbyList.items.push newHobbies[0], newHobbies[1]
+
+            expect(@hobbyList.has('shogi')).to.be.true
+            expect(@hobbyList.has('driving')).to.be.true
+            expect(@hobbyList.has('jogging')).to.be.true
+
+        it 'reflects state of items when popped', ->
+            @hobbyList.items.pop()
+            expect(@hobbyList.has('cycling')).to.be.true
+            expect(@hobbyList.has('jogging')).to.be.true
+            expect(@hobbyList.has('keyboard')).to.be.false
+
+
+        it 'reflects state of items when unshifted', ->
+            newHobbies = (for name, i in ['cooking', 'hiking']
+                @hobbyFactory.createFromObject id: name, name: name
+            )
+            @hobbyList.items.unshift newHobbies[0], newHobbies[1]
+
+            expect(@hobbyList.has('cooking')).to.be.true
+            expect(@hobbyList.has('hiking')).to.be.true
+            expect(@hobbyList.has('keyboard')).to.be.true
+
+
+        it 'reflects state of items when shifted', ->
+
+            @hobbyList.items.shift()
+            expect(@hobbyList.has('cycling')).to.be.false
+            expect(@hobbyList.has('jogging')).to.be.true
+            expect(@hobbyList.has('keyboard')).to.be.true
+
+
+        it 'reflects state of items when spliced', ->
+
+            newHobbies = (for name, i in ['baseball', 'soccer']
+                @hobbyFactory.createFromObject id: name, name: name
+            )
+
+            @hobbyList.items.splice(1, 2, newHobbies[0], newHobbies[1])
+
+            expect(@hobbyList.has('cycling')).to.be.true
+            expect(@hobbyList.has('jogging')).to.be.false
+            expect(@hobbyList.has('keyboard')).to.be.false
+            expect(@hobbyList.has('baseball')).to.be.true
+            expect(@hobbyList.has('soccer')).to.be.true
+
+
+    describe 'getByKey', ->
+
+        beforeEach ->
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            @hobbyFactory = facade.createFactory('hobby', true)
+
+            hobbies = (for name, i in ['cycling', 'jogging', 'keyboard']
+                @hobbyFactory.createFromObject id: name, name: name
+            )
+
+            @hobbyList = new HobbyList(items: hobbies)
+
+        it 'returns item by key', ->
+            expect(@hobbyList.getByKey('cycling')).to.have.property 'id', 'cycling'
+            expect(@hobbyList.getByKey('cycling')).to.have.property 'name', 'cycling'
+
+
+        it 'follows change of property in item', ->
+            @hobbyList.items[0].hoge = true
+            expect(@hobbyList.getByKey('cycling')).to.have.property 'hoge', true
+            expect(@hobbyList.getByKey('cycling')).to.have.property 'name', 'cycling'

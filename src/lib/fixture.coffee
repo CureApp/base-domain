@@ -3,8 +3,10 @@
 fs = require('fs')
 
 ###*
+load data from directory and generates fixtures
 
 @class Fixture
+@module base-domain
 ###
 class Fixture
 

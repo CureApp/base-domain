@@ -2,6 +2,8 @@
 ###*
 include submodels
 
+@class Includer
+@module base-domain
 ###
 class Includer
 

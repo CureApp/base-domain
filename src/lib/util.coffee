@@ -1,4 +1,10 @@
 
+###*
+utility functions
+
+@class Util
+@module base-domain
+###
 class Util
 
     ###*

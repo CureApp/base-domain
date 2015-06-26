@@ -6,7 +6,7 @@ load master data
 
 @abstract
 @class MasterRepository
-@
+@module base-domain
 ###
 class MasterRepository extends BaseRepository
 

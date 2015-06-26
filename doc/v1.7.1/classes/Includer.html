@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ResourceClientInterface</title>
+    <title>Includer</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -94,12 +94,12 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>ResourceClientInterface Class</h1>
+<h1>Includer Class</h1>
 <div class="box meta">
 
 
         <div class="foundat">
-            Defined in: <a href="../files/src_lib_resource-client-interface.coffee.html#l2"><code>src&#x2F;lib&#x2F;resource-client-interface.coffee:2</code></a>
+            Defined in: <a href="../files/src_lib_includer.coffee.html#l2"><code>src&#x2F;lib&#x2F;includer.coffee:2</code></a>
         </div>
 
             Module: <a href="../modules/base-domain.html">base-domain</a>
@@ -108,10 +108,7 @@
 
 
 <div class="box intro">
-    <p>interface of client accessing to resource.
-Used in BaseRepository</p>
-<p>LoopBackClient in loopback-promised package implements this interface.</p>
-<p>see <a href="https://github.com/CureApp/loopback-promised">https://github.com/CureApp/loopback-promised</a></p>
+    <p>include submodels</p>
 
 </div>
 
@@ -131,40 +128,24 @@ Used in BaseRepository</p>
                     <h3>Methods</h3>
 
                     <ul class="index-list methods">
-                            <li class="index-item method public">
-                                <a href="#method_create">create</a>
-
-                            </li>
-                            <li class="index-item method public">
-                                <a href="#method_destroyById">destroyById</a>
-
-                            </li>
-                            <li class="index-item method public">
-                                <a href="#method_destroyById">destroyById</a>
-
-                            </li>
-                            <li class="index-item method public">
-                                <a href="#method_find">find</a>
-
-                            </li>
-                            <li class="index-item method public">
-                                <a href="#method_findById">findById</a>
-
-                            </li>
-                            <li class="index-item method public">
-                                <a href="#method_findOne">findOne</a>
+                            <li class="index-item method private">
+                                <a href="#method_cache">cache</a>
 
                             </li>
                             <li class="index-item method private">
-                                <a href="#method_mock">mock</a>
+                                <a href="#method_cached">cached</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_doRecursively">doRecursively</a>
 
                             </li>
                             <li class="index-item method public">
-                                <a href="#method_updateAttributes">updateAttributes</a>
+                                <a href="#method_include">include</a>
 
                             </li>
-                            <li class="index-item method public">
-                                <a href="#method_upsert">upsert</a>
+                            <li class="index-item method private">
+                                <a href="#method_setSubEntity">setSubEntity</a>
 
                             </li>
                     </ul>
@@ -177,394 +158,19 @@ Used in BaseRepository</p>
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_create" class="method item public">
-    <h3 class="name"><code>create</code></h3>
+<div id="method_cache" class="method item private">
+    <h3 class="name"><code>cache</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>data</code>
+                        <code>modelName</code>
                 </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Promise(Object)</span>
-        </span>
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_resource-client-interface.coffee.html#l18"><code>src&#x2F;lib&#x2F;resource-client-interface.coffee:18</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Create new instance of Model class, saved in database</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">data</code>
-                        <span class="type">Object</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Promise(Object)</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_destroyById" class="method item public">
-    <h3 class="name"><code>destroyById</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>data</code>
+                        <code>model</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
-
-        <span class="returns-inline">
-            <span class="type">Promise</span>
-        </span>
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_resource-client-interface.coffee.html#l81"><code>src&#x2F;lib&#x2F;resource-client-interface.coffee:81</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Destroy model instance</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">data</code>
-                        <span class="type">Object</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Promise</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_destroyById" class="method item public">
-    <h3 class="name"><code>destroyById</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>id</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Promise</span>
-        </span>
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_resource-client-interface.coffee.html#l93"><code>src&#x2F;lib&#x2F;resource-client-interface.coffee:93</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Destroy model instance with the specified ID.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">id</code>
-                        <span class="type">String</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Promise</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_find" class="method item public">
-    <h3 class="name"><code>find</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>filter</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Promise(Array(Object))</span>
-        </span>
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_resource-client-interface.coffee.html#l58"><code>src&#x2F;lib&#x2F;resource-client-interface.coffee:58</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Find all model instances that match filter specification.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">filter</code>
-                        <span class="type">Object</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Promise(Array(Object))</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_findById" class="method item public">
-    <h3 class="name"><code>findById</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>id</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Promise(Object)</span>
-        </span>
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_resource-client-interface.coffee.html#l45"><code>src&#x2F;lib&#x2F;resource-client-interface.coffee:45</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Find object by ID.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">id</code>
-                        <span class="type">String</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Promise(Object)</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_findOne" class="method item public">
-    <h3 class="name"><code>findOne</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>filter</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Promise(Object)</span>
-        </span>
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_resource-client-interface.coffee.html#l69"><code>src&#x2F;lib&#x2F;resource-client-interface.coffee:69</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Find one model instance that matches filter specification. Same as find, but limited to one result</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">filter</code>
-                        <span class="type">Object</span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Promise(Object)</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_mock" class="method item private">
-    <h3 class="name"><code>mock</code></h3>
-
-        <span class="paren">()</span>
 
 
 
@@ -577,7 +183,7 @@ Used in BaseRepository</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_resource-client-interface.coffee.html#l118"><code>src&#x2F;lib&#x2F;resource-client-interface.coffee:118</code></a>
+        <a href="../files/src_lib_includer.coffee.html#l101"><code>src&#x2F;lib&#x2F;includer.coffee:101</code></a>
         </p>
 
 
@@ -585,48 +191,7 @@ Used in BaseRepository</p>
     </div>
 
     <div class="description">
-        <p>return Promise object as mock</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_updateAttributes" class="method item public">
-    <h3 class="name"><code>updateAttributes</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>data</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Promise(Object)</span>
-        </span>
-
-
-        <span class="flag public">public</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_resource-client-interface.coffee.html#l105"><code>src&#x2F;lib&#x2F;resource-client-interface.coffee:105</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Update set of attributes.</p>
+        <p>cache model</p>
 
     </div>
 
@@ -635,8 +200,88 @@ Used in BaseRepository</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">data</code>
-                        <span class="type">Object</span>
+                        <code class="param-name">modelName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">model</code>
+                        <span class="type"><a href="../classes/Entity.html" class="crosslink">Entity</a></span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_cached" class="method item private">
+    <h3 class="name"><code>cached</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>modelName</code>
+                </li>
+                <li class="arg">
+                        <code>id</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Entity.html" class="crosslink">Entity</a></span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_includer.coffee.html#l115"><code>src&#x2F;lib&#x2F;includer.coffee:115</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>get cached model</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">modelName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">id</code>
+                        <span class="type">String | Number</span>
 
 
                     <div class="param-description">
@@ -651,25 +296,72 @@ Used in BaseRepository</p>
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                        <span class="type">Promise(Object)</span>:
+                        <span class="type"><a href="../classes/Entity.html" class="crosslink">Entity</a></span>:
+                    <p>model</p>
+
             </div>
         </div>
 
 
 </div>
-<div id="method_upsert" class="method item public">
-    <h3 class="name"><code>upsert</code></h3>
+<div id="method_doRecursively" class="method item private">
+    <h3 class="name"><code>doRecursively</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Promise</span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_includer.coffee.html#l49"><code>src&#x2F;lib&#x2F;includer.coffee:49</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>run include for each submodel</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Promise</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_include" class="method item public">
+    <h3 class="name"><code>include</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>data</code>
+                        <code>options</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[recursive=false]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
 
         <span class="returns-inline">
-            <span class="type">Promise(Object)</span>
+            <span class="type">Promise</span>
         </span>
 
 
@@ -682,7 +374,7 @@ Used in BaseRepository</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_lib_resource-client-interface.coffee.html#l31"><code>src&#x2F;lib&#x2F;resource-client-interface.coffee:31</code></a>
+        <a href="../files/src_lib_includer.coffee.html#l20"><code>src&#x2F;lib&#x2F;includer.coffee:20</code></a>
         </p>
 
 
@@ -690,8 +382,7 @@ Used in BaseRepository</p>
     </div>
 
     <div class="description">
-        <p>Update or insert a model instance
-The update will override any specified attributes in the request data object. It won’t remove  existing ones unless the value is set to null.</p>
+        <p>include sub entities</p>
 
     </div>
 
@@ -700,8 +391,84 @@ The update will override any specified attributes in the request data object. It
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">data</code>
+                        <code class="param-name">options</code>
                         <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[recursive=false]</code>
+                        <span class="type">Boolean</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>recursively include or not</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Promise</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_setSubEntity" class="method item private">
+    <h3 class="name"><code>setSubEntity</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>entityProp</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Promise</span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_includer.coffee.html#l74"><code>src&#x2F;lib&#x2F;includer.coffee:74</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>load entity by entityProp and set it to @model</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">entityProp</code>
+                        <span class="type">String</span>
 
 
                     <div class="param-description">
@@ -716,7 +483,7 @@ The update will override any specified attributes in the request data object. It
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                        <span class="type">Promise(Object)</span>:
+                        <span class="type">Promise</span>:
             </div>
         </div>
 

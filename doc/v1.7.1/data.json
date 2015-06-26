@@ -3,7 +3,9 @@
     "files": {
         "src/lib/base-dict.coffee": {
             "name": "src/lib/base-dict.coffee",
-            "modules": {},
+            "modules": {
+                "base-domain": 1
+            },
             "classes": {
                 "BaseDict": 1
             },
@@ -66,9 +68,7 @@
         },
         "src/lib/domain-error.coffee": {
             "name": "src/lib/domain-error.coffee",
-            "modules": {
-                "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set": 1
-            },
+            "modules": {},
             "classes": {
                 "DomainError": 1
             },
@@ -77,9 +77,7 @@
         },
         "src/lib/entity.coffee": {
             "name": "src/lib/entity.coffee",
-            "modules": {
-                "base-domain": 1
-            },
+            "modules": {},
             "classes": {
                 "Entity": 1
             },
@@ -108,7 +106,9 @@
         "src/lib/includer.coffee": {
             "name": "src/lib/includer.coffee",
             "modules": {},
-            "classes": {},
+            "classes": {
+                "Includer": 1
+            },
             "fors": {},
             "namespaces": {}
         },
@@ -160,7 +160,9 @@
         "src/lib/util.coffee": {
             "name": "src/lib/util.coffee",
             "modules": {},
-            "classes": {},
+            "classes": {
+                "Util": 1
+            },
             "fors": {},
             "namespaces": {}
         }
@@ -168,11 +170,8 @@
     "modules": {
         "base-domain": {
             "name": "base-domain",
-            "submodules": {
-                "undefined": 1
-            },
+            "submodules": {},
             "classes": {
-                "Entity": 1,
                 "BaseDict": 1,
                 "BaseFactory": 1,
                 "BaseList": 1,
@@ -180,34 +179,25 @@
                 "BaseRepository": 1,
                 "Base": 1,
                 "DictFactory": 1,
+                "DomainError": 1,
+                "Entity": 1,
                 "Facade": 1,
                 "Fixture": 1,
                 "FixtureModel": 1,
+                "Includer": 1,
                 "ListFactory": 1,
                 "MasterRepository": 1,
                 "PropInfo": 1,
                 "ResourceClientInterface": 1,
-                "TypeInfo": 1
+                "TypeInfo": 1,
+                "Util": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "src/lib/type-info.coffee",
-            "line": 4,
-            "description": "Base model class with \"id\" column"
-        },
-        "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set": {
-            "name": "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set",
-            "submodules": {},
-            "classes": {
-                "DomainError": 1
-            },
-            "fors": {},
-            "namespaces": {},
-            "tag": "module",
-            "file": "src/lib/domain-error.coffee",
-            "line": 4,
-            "description": "error thrown by base-domain module"
+            "file": "src/lib/util.coffee",
+            "line": 2,
+            "description": "dictionary-structured data model"
         }
     },
     "classes": {
@@ -322,11 +312,11 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "module": "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set",
+            "module": "base-domain",
             "namespace": "",
             "file": "src/lib/domain-error.coffee",
             "line": 4,
-            "description": "error thrown by base-domain module",
+            "description": "error thrown by base-domain module\n\n    class DomainError extends Error  # not worked.\n\nsee http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set",
             "extends": "Error"
         },
         "Entity": {
@@ -369,7 +359,8 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/fixture.coffee",
-            "line": 5
+            "line": 5,
+            "description": "load data from directory and generates fixtures"
         },
         "FixtureModel": {
             "name": "FixtureModel",
@@ -382,7 +373,21 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/fixture.coffee",
-            "line": 169
+            "line": 171
+        },
+        "Includer": {
+            "name": "Includer",
+            "shortname": "Includer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/includer.coffee",
+            "line": 2,
+            "description": "include submodels"
         },
         "ListFactory": {
             "name": "ListFactory",
@@ -455,6 +460,20 @@
             "file": "src/lib/type-info.coffee",
             "line": 4,
             "description": "type of model's property"
+        },
+        "Util": {
+            "name": "Util",
+            "shortname": "Util",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "base-domain",
+            "namespace": "",
+            "file": "src/lib/util.coffee",
+            "line": 2,
+            "description": "utility functions"
         }
     },
     "classitems": [
@@ -1919,14 +1938,14 @@
         },
         {
             "file": "src/lib/domain-error.coffee",
-            "line": 32,
+            "line": 35,
             "description": "reason of the error\nalphanumeric string (without space) is recommended,",
             "itemtype": "property",
             "name": "reason",
             "type": "{String}",
             "reason": "",
             "class": "DomainError",
-            "module": "base-domain\n\n# class DomainError extends Error  # not worked.\n# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set"
+            "module": "base-domain"
         },
         {
             "file": "src/lib/entity.coffee",
@@ -2350,7 +2369,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 12,
+            "line": 14,
             "is_constructor": 1,
             "params": [
                 {
@@ -2387,7 +2406,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 57,
+            "line": 59,
             "description": "add data to pool for model's data",
             "itemtype": "method",
             "name": "addToDataPool",
@@ -2400,7 +2419,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 68,
+            "line": 70,
             "description": "inserts data to datasource",
             "params": [
                 {
@@ -2420,7 +2439,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 110,
+            "line": 112,
             "description": "adds dependent models, topological sort",
             "access": "private",
             "tagname": "",
@@ -2442,14 +2461,14 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 175,
+            "line": 177,
             "is_constructor": 1,
             "class": "FixtureModel",
             "module": "base-domain"
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 185,
+            "line": 187,
             "description": "inserts data to datasource",
             "itemtype": "method",
             "name": "insert",
@@ -2462,7 +2481,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 228,
+            "line": 230,
             "description": "read TSV, returns model data",
             "itemtype": "method",
             "name": "readTSV",
@@ -2471,21 +2490,14 @@
         },
         {
             "file": "src/lib/includer.coffee",
-            "line": 2,
-            "description": "include submodels",
-            "class": "ListFactory",
-            "module": "base-domain"
-        },
-        {
-            "file": "src/lib/includer.coffee",
-            "line": 8,
+            "line": 10,
             "is_constructor": 1,
-            "class": "ListFactory",
+            "class": "Includer",
             "module": "base-domain"
         },
         {
             "file": "src/lib/includer.coffee",
-            "line": 18,
+            "line": 20,
             "description": "include sub entities",
             "itemtype": "method",
             "name": "include",
@@ -2509,12 +2521,12 @@
                 "description": "",
                 "type": "Promise"
             },
-            "class": "ListFactory",
+            "class": "Includer",
             "module": "base-domain"
         },
         {
             "file": "src/lib/includer.coffee",
-            "line": 47,
+            "line": 49,
             "description": "run include for each submodel",
             "itemtype": "method",
             "name": "doRecursively",
@@ -2524,12 +2536,12 @@
                 "description": "",
                 "type": "Promise"
             },
-            "class": "ListFactory",
+            "class": "Includer",
             "module": "base-domain"
         },
         {
             "file": "src/lib/includer.coffee",
-            "line": 72,
+            "line": 74,
             "description": "load entity by entityProp and set it to @model",
             "itemtype": "method",
             "name": "setSubEntity",
@@ -2546,12 +2558,12 @@
                 "description": "",
                 "type": "Promise"
             },
-            "class": "ListFactory",
+            "class": "Includer",
             "module": "base-domain"
         },
         {
             "file": "src/lib/includer.coffee",
-            "line": 99,
+            "line": 101,
             "description": "cache model",
             "itemtype": "method",
             "name": "cache",
@@ -2569,12 +2581,12 @@
                     "type": "Entity"
                 }
             ],
-            "class": "ListFactory",
+            "class": "Includer",
             "module": "base-domain"
         },
         {
             "file": "src/lib/includer.coffee",
-            "line": 113,
+            "line": 115,
             "description": "get cached model",
             "itemtype": "method",
             "name": "cached",
@@ -2596,7 +2608,7 @@
                 "description": "model",
                 "type": "Entity"
             },
-            "class": "ListFactory",
+            "class": "Includer",
             "module": "base-domain"
         },
         {
@@ -3287,7 +3299,7 @@
         },
         {
             "file": "src/lib/util.coffee",
-            "line": 4,
+            "line": 10,
             "description": "converts hyphenation to camel case\n\n    'shinout-no-macbook-pro' => 'ShinoutNoMacbookPro'\n    'shinout-no-macbook-pro' => 'shinoutNoMacbookPro' # if lowerFirst = true",
             "itemtype": "method",
             "name": "camelize",
@@ -3310,12 +3322,12 @@
                 "description": "cameled",
                 "type": "String"
             },
-            "class": "",
+            "class": "Util",
             "module": "base-domain"
         },
         {
             "file": "src/lib/util.coffee",
-            "line": 25,
+            "line": 31,
             "description": "converts hyphenation to camel case\n\n    'ShinoutNoMacbookPro' => 'shinout-no-macbook-pro'\n    'ABC' => 'a-b-c' # current implementation... FIXME ?",
             "itemtype": "method",
             "name": "hyphenize",
@@ -3331,12 +3343,12 @@
                 "description": "cameled",
                 "type": "String"
             },
-            "class": "",
+            "class": "Util",
             "module": "base-domain"
         },
         {
             "file": "src/lib/util.coffee",
-            "line": 42,
+            "line": 48,
             "description": "requires js file\nin Titanium, file-not-found-like-exception occurred in require function cannot be caught.\nThus, before require function is called, check the existence of the file.\nFile extension must be '.js' in Titanium.",
             "itemtype": "method",
             "name": "requireFile",
@@ -3352,7 +3364,7 @@
                 "description": "required value",
                 "type": "Any"
             },
-            "class": "",
+            "class": "Util",
             "module": "base-domain"
         }
     ],
@@ -3391,7 +3403,7 @@
         },
         {
             "message": "unknown tag: reason",
-            "line": " src/lib/domain-error.coffee:32"
+            "line": " src/lib/domain-error.coffee:35"
         },
         {
             "message": "unknown tag: abstract",
@@ -3439,19 +3451,15 @@
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/fixture.coffee:12"
+            "line": " src/lib/fixture.coffee:14"
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/fixture.coffee:175"
-        },
-        {
-            "message": "Missing item type\ninclude submodels",
-            "line": " src/lib/includer.coffee:2"
+            "line": " src/lib/fixture.coffee:177"
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/includer.coffee:8"
+            "line": " src/lib/includer.coffee:10"
         },
         {
             "message": "Missing item type\ncreate instance",

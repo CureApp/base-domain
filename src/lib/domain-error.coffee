@@ -4,12 +4,15 @@
 ###*
 error thrown by base-domain module
 
+    class DomainError extends Error  # not worked.
+
+see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set
+
+
 @class DomainError
 @extends Error
 @module base-domain
 
-# class DomainError extends Error  # not worked.
-# see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set
 ###
 
 DomainError = (reason, message) ->

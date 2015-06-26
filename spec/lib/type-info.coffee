@@ -36,3 +36,26 @@ describe 'TypeInfo', ->
             typeInfo = TypeInfo.createModelListType('hobby', 'happy-hobby-list')
             expect(typeInfo).to.have.property('listName', 'happy-hobby-list')
 
+
+    describe '@createModelDicType', ->
+
+        it 'returns TypeInfo representing MODEL_DIC', ->
+
+            typeInfo = TypeInfo.createModelDicType('hobby')
+
+            expect(typeInfo).to.have.property('name', 'MODEL_DIC')
+            expect(typeInfo).to.have.property('model', 'hobby')
+            expect(typeInfo).to.have.property('dicName', 'hobby-dic')
+
+
+        it 'returns TypeInfo with dicName', ->
+
+            typeInfo = TypeInfo.createModelDicType('hobby', name: 'another-hobby-dic')
+            expect(typeInfo).to.have.property('dicName', 'another-hobby-dic')
+
+
+        it 'parses 2nd argument as dicName when it is string ', ->
+
+            typeInfo = TypeInfo.createModelDicType('hobby', 'happy-hobby-dic')
+            expect(typeInfo).to.have.property('dicName', 'happy-hobby-dic')
+

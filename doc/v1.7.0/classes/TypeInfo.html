@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>TypeInfo</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/Base.html">Base</a></li>
+                                <li><a href="../classes/BaseDic.html">BaseDic</a></li>
+                                <li><a href="../classes/BaseFactory.html">BaseFactory</a></li>
+                                <li><a href="../classes/BaseList.html">BaseList</a></li>
+                                <li><a href="../classes/BaseModel.html">BaseModel</a></li>
+                                <li><a href="../classes/BaseRepository.html">BaseRepository</a></li>
+                                <li><a href="../classes/DicFactory.html">DicFactory</a></li>
+                                <li><a href="../classes/DomainError.html">DomainError</a></li>
+                                <li><a href="../classes/Entity.html">Entity</a></li>
+                                <li><a href="../classes/Facade.html">Facade</a></li>
+                                <li><a href="../classes/Fixture.html">Fixture</a></li>
+                                <li><a href="../classes/FixtureModel.html">FixtureModel</a></li>
+                                <li><a href="../classes/ListFactory.html">ListFactory</a></li>
+                                <li><a href="../classes/MasterRepository.html">MasterRepository</a></li>
+                                <li><a href="../classes/PropInfo.html">PropInfo</a></li>
+                                <li><a href="../classes/ResourceClientInterface.html">ResourceClientInterface</a></li>
+                                <li><a href="../classes/TypeInfo.html">TypeInfo</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/base-domain.html">base-domain</a></li>
+                                <li><a href="../modules/base-domain
+                
+                # class DomainError extends Error  # not worked.
+                # see http:__stackoverflow.com_questions_19422145_property-in-subclass-of-error-not-set.html">base-domain
+                
+                # class DomainError extends Error  # not worked.
+                # see http://stackoverflow.com/questions/19422145/property-in-subclass-of-error-not-set</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>TypeInfo Class</h1>
+<div class="box meta">
+
+
+        <div class="foundat">
+            Defined in: <a href="../files/src_lib_type-info.coffee.html#l4"><code>src&#x2F;lib&#x2F;type-info.coffee:4</code></a>
+        </div>
+
+            Module: <a href="../modules/base-domain.html">base-domain</a>
+
+</div>
+
+
+<div class="box intro">
+    <p>type of model&#39;s property</p>
+
+</div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method private">
+                                <a href="#method_createModelDicType">createModelDicType</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_createModelListType">createModelListType</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_createModelType">createModelType</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_createTemporaryType">createTemporaryType</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_equals">equals</a>
+
+                            </li>
+                            <li class="index-item method public">
+                                <a href="#method_notEquals">notEquals</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                            <li class="index-item property">
+                                <a href="#property_TYPES">TYPES</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                    </ul>
+                </div>
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_createModelDicType" class="method item private">
+    <h3 class="name"><code>createModelDicType</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>modelName</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[options.name]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l73"><code>src&#x2F;lib&#x2F;type-info.coffee:73</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>get TypeInfo as MODEL_DIC</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">modelName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[options.name]</code>
+                        <span class="type">String</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>name of dic model, by default: xxx-yyy-dic when modelName is xxx-yyy</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>:
+                    <p>type</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_createModelListType" class="method item private">
+    <h3 class="name"><code>createModelListType</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>modelName</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[options.name]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l54"><code>src&#x2F;lib&#x2F;type-info.coffee:54</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>get TypeInfo as MODEL_LIST</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">modelName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[options.name]</code>
+                        <span class="type">String</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>name of list model, by default: xxx-yyy-list when modelName is xxx-yyy</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>:
+                    <p>type</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_createModelType" class="method item private">
+    <h3 class="name"><code>createModelType</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>modelName</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[idPropName]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l37"><code>src&#x2F;lib&#x2F;type-info.coffee:37</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>get TypeInfo as MODEL</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">modelName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[idPropName]</code>
+                        <span class="type">String</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>by default: xxxYyyId when modelName is xxx-yyy</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>:
+                    <p>type</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_createTemporaryType" class="method item private">
+    <h3 class="name"><code>createTemporaryType</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>typeName</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l92"><code>src&#x2F;lib&#x2F;type-info.coffee:92</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>get TypeInfo as temporary value</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">typeName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="../classes/TypeInfo.html" class="crosslink">TypeInfo</a></span>:
+                    <p>type</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_equals" class="method item public">
+    <h3 class="name"><code>equals</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>typeName</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l16"><code>src&#x2F;lib&#x2F;type-info.coffee:16</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>check if the type is the given typeName</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">typeName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_notEquals" class="method item public">
+    <h3 class="name"><code>notEquals</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>typeName</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+        <span class="flag public">public</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_lib_type-info.coffee.html#l26"><code>src&#x2F;lib&#x2F;type-info.coffee:26</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>check if the type is not the given typeName</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">typeName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+            </div>
+
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                    <div id="property_TYPES" class="property item">
+                        <h3 class="name"><code>TYPES</code></h3>
+                        <span class="type">Unknown</span>
+                    
+                    
+                    
+                    
+                            <span class="flag static">static</span>
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/src_lib_type-info.coffee.html#l116"><code>src&#x2F;lib&#x2F;type-info.coffee:116</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>TYPES defines various data type, including model and array of models</p>
+                    <p>key: typeName (String)
+                    value: type TypeInfo|Function(TypeInfo)</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+            </div>
+
+
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

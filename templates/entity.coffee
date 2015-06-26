@@ -34,6 +34,8 @@ class <%=@Model%> extends Entity
         extraTeam   : @TYPES.MODEL 'team', 'exTeamId'
         hobbies     : @TYPES.MODEL_LIST 'hobby'
         newHobbies  : @TYPES.MODEL_LIST 'hobby', 'new-hobby-collection'
+        traits      : @TYPES.MODEL_DIC 'trait'
+        traitsByType: @TYPES.MODEL_DIC 'trait', 'trait-type-dic'
         otherInfo   : @TYPES.OBJECT
         createdAt   : @TYPES.CREATED_AT
         updatedAt   : @TYPES.UPDATED_AT

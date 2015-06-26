@@ -2,13 +2,13 @@
 BaseModel = require './base-model'
 
 ###*
-list class of DDD pattern.
+dictionary-structured data model
 
-@class BaseList
+@class BaseDic
 @extends BaseModel
 @module base-domain
 ###
-class BaseList extends BaseModel
+class BaseDic extends BaseModel
 
     ###*
     model name of the item
@@ -20,22 +20,30 @@ class BaseList extends BaseModel
     ###
     @itemModelName: ''
 
+    ###*
+    get unique key from item
+
+    @method key
+    @static
+    @protected
+    ###
+    @key: (item) -> item.id
+
 
     ###*
-    creates child class of BaseList
+    creates child class of BaseDic
 
     @method getAnonymousClass
     @params {String} itemModelName
-    @return {Function} child class of BaseList
+    @return {Function} child class of BaseDic
     ###
     @getAnonymousClass: (itemModelName) ->
 
-
-        class AnonymousList extends BaseList
+        class AnonymousDic extends BaseDic
             @itemModelName: itemModelName
             @isAnonymous: true
 
-        return AnonymousList
+        return AnonymousDic
 
 
     ###*
@@ -48,13 +56,13 @@ class BaseList extends BaseModel
     Object.defineProperty @::, 'ids',
         get: ->
             return null if not @constructor.containsEntity()
-            return (item.id for item in @items)
+            return (item.id for key, item of @items)
 
     ###*
-    items: array of models
+    items: dictionary of keys - models 
 
     @property items
-    @type Array
+    @type Objects
     ###
 
     ###*
@@ -79,7 +87,7 @@ class BaseList extends BaseModel
         # loaded and listeners are hidden properties
         _itemFactory = null
         Object.defineProperties @, 
-            items       : value: [], enumerable: true
+            items       : value: {}, enumerable: true
             loaded      : value: false, writable: true
             listeners   : value: []
             itemFactory : get: ->
@@ -122,21 +130,24 @@ class BaseList extends BaseModel
 
 
     ###*
-    set items
+    set items from dic object
+    update to new key
 
     @method setItems
-    @param {Array} models
+    @param {Object|Array} models
     ###
-    setItems: (models = []) ->
+    setItems: (models = {}) ->
+
         ItemClass = @getFacade().getModel @constructor.itemModelName
 
-        @items.push item for item in models when item instanceof ItemClass
-
-        @items.sort(@sort)
+        for prevKey, item of models when item instanceof ItemClass
+            key = @constructor.key item
+            @items[key] = item
 
         @loaded = true
         @emitLoaded()
         return @
+
 
     ###*
     returns item is Entity
@@ -151,55 +162,19 @@ class BaseList extends BaseModel
 
 
     ###*
-    sort items in constructor
-
-    @method sort
-    @protected
-    ###
-    sort: (modelA, modelB) ->
-        if modelA.id > modelB.id then 1 else -1
-
-
-    ###*
-    first item
-
-    @method first
-    @public
-    ###
-    first: ->
-        if @items.length is 0
-            return null
-
-        return @items[0]
-
-
-    ###*
-    last item
-
-    @method last
-    @public
-    ###
-    last: ->
-        if @items.length is 0
-            return null
-
-        return @items[@items.length - 1]
-
-
-    ###*
     export models to Array
 
     @method toArray
     @public
     ###
     toArray: ->
-        @items.slice()
+        (item for key, item of @items)
 
 
     ###*
-    create plain list.
-    if this list contains entities, returns their ids
-    if this list contains non-entity models, returns their plain objects 
+    create plain dic.
+    if this dic contains entities, returns their ids
+    if this dic contains non-entity models, returns their plain objects 
 
     @method toPlainObject
     @return {Object} plainObject
@@ -214,11 +189,11 @@ class BaseList extends BaseModel
 
         else
             plainItems = []
-            for item in @items
+            for key, item of @items
                 if typeof item.toPlainObject is 'function'
-                    plainItems.push item.toPlainObject()
+                    plainItems[key] = item.toPlainObject()
                 else
-                    plainItems.push item
+                    plainItems[key] = item
 
             plain.items = plainItems
 
@@ -226,7 +201,7 @@ class BaseList extends BaseModel
 
 
     ###*
-    on addEventListeners for 'loaded'
+    on addEventlisteners for 'loaded'
 
     @method on
     @public
@@ -251,4 +226,4 @@ class BaseList extends BaseModel
             process.nextTick fn
         return
 
-module.exports = BaseList
+module.exports = BaseDic

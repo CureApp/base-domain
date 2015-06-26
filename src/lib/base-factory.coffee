@@ -25,6 +25,16 @@ class BaseFactory extends Base
     ###
     @modelName: null
 
+    ###*
+    name of dicmodel to create dic of @modelName
+
+    @property dicModelName
+    @static
+    @protected
+    @type String
+    ###
+    @dicModelName: null
+
 
     ###*
     get anonymous factory class
@@ -55,7 +65,7 @@ class BaseFactory extends Base
     get model class this factory handles
 
     @method getModelClass
-    @return {Class}
+    @return {Function}
     ###
     @_ModelClass: undefined
     getModelClass: ->
@@ -126,6 +136,9 @@ class BaseFactory extends Base
             when 'MODEL'
                 @setSubModelToModel(model, prop, value)
 
+            when 'MODEL_DIC'
+                @setSubModelDicToModel(model, prop, value)
+
             else # set normal props
                 model.setNonEntityProp(prop, value)
 
@@ -151,6 +164,9 @@ class BaseFactory extends Base
 
             when 'MODEL_LIST'
                 @createEmptyListProp(model, prop, typeInfo)
+
+            when 'MODEL_DIC'
+                @setSubModelDicToModel(model, prop, null)
 
             else
                 model[prop] = undefined
@@ -202,6 +218,26 @@ class BaseFactory extends Base
 
 
     ###*
+    set submodel dic to the prop
+
+    @method setSubModelToModel
+    @private
+    ###
+    setSubModelDicToModel: (model, prop, value) ->
+
+        typeInfo = model.getTypeInfo(prop)
+        subModelName = typeInfo.model
+        subModelFactory = @getFacade().createFactory(subModelName, on)
+        dicModelName = typeInfo.dicName
+
+        dic = subModelFactory.createDic(dicModelName, value)
+
+        model.setNonEntityProp prop, dic
+
+        return
+
+
+    ###*
     fetch submodel(s) by id
     available only when repository of submodel implements 'getByIdSync'
     (MasterRepository implements one)
@@ -235,7 +271,7 @@ class BaseFactory extends Base
     ###
     createEmptyNonEntityProp: (model, prop, typeInfo) ->
 
-        factory = @getFacade().createFactory typeInfo.model
+        factory = @getFacade().createFactory typeInfo.model, true
         submodel = factory.createEmpty()
         model.setNonEntityProp(prop, submodel)
 
@@ -279,6 +315,13 @@ class BaseFactory extends Base
 
         return model
 
+
+    createDic: (dicModelName, obj) ->
+
+        DicFactory = @getFacade().constructor.DicFactory
+
+        dicFactory = DicFactory.create(dicModelName, @)
+        return dicFactory.createFromObject obj
 
 
 module.exports = BaseFactory

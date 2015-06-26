@@ -70,33 +70,6 @@ class Facade
         return @require(name)
 
 
-    ###*
-    get a list model class
-
-    @method getListModel
-    @param {String} listModelName
-    @param {String} [itemModelName]
-    @return {Class}
-    ###
-    getListModel: (listModelName, itemModelName) ->
-
-        BaseList = @constructor.BaseList
-
-        if @hasClass listModelName
-            ListClass = @getModel(listModelName)
-            # ListClass.name = listModelName
-
-            unless (ListClass::) instanceof BaseList
-                throw @error "#{listModelName} is not instance of BaseList"
-
-            return ListClass
-
-        if not @hasClass itemModelName
-            throw @error "#{itemModelName} is not valid model name"
-
-        AnonymousListClass = BaseList.getAnonymousClass(itemModelName)
-        return @addClass(listModelName, AnonymousListClass, true)
-
 
     ###*
     get a factory class
@@ -115,29 +88,6 @@ class Facade
             throw e if not useAnonymousWhenFailed
 
             AnonymousFactory = Facade.BaseFactory.getAnonymousClass(name)
-
-            @addClass("#{name}-factory", AnonymousFactory, true)
-
-
-    ###*
-    get a list factory class
-
-    @method getListFactory
-    @param {String} name
-    @param {String} [itemModelName]
-    @return {Function}
-    ###
-    getListFactory: (name, itemModelName) ->
-        try
-            return @require("#{name}-factory")
-        catch e
-            throw e if not itemModelName
-
-            if not @hasClass itemModelName
-                throw @error "#{itemModelName} is not valid model name"
-
-
-            AnonymousFactory = Facade.ListFactory.getAnonymousClass(name, itemModelName)
 
             @addClass("#{name}-factory", AnonymousFactory, true)
 
@@ -164,19 +114,6 @@ class Facade
     createFactory: (name, useAnonymousWhenFailed = off) ->
         FactoryClass = @getFactory(name, useAnonymousWhenFailed)
         return new FactoryClass()
-
-
-    ###*
-    create a factory instance
-
-    @method createFactory
-    @param {String} name
-    @param {String} [itemModelName]
-    @return {ListFactory}
-    ###
-    createListFactory: (name, itemModelName) ->
-        ListFactoryClass = @getListFactory(name, itemModelName)
-        return new ListFactoryClass()
 
 
     ###*

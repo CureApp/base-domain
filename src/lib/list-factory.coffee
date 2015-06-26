@@ -11,43 +11,29 @@ factory of list
 ###
 class ListFactory extends BaseFactory
 
+    ###*
+    create instance
+    ###
+    @create: (listModelName, itemFactory) ->
+        new ListFactory(listModelName, itemFactory)
+
 
     ###*
-    get anonymous list factory class
-
-    @method getAnonymousClass
-    @param {String} modelName
-    @param {String} itemModelName
-    @return {Function}
+    @constructor
     ###
-    @getAnonymousClass: (modelName, itemModelName) ->
-
-        class AnonymousListFactory extends ListFactory
-            @modelName     : modelName
-            @itemModelName : itemModelName
-            @isAnonymous   : true
-
-        return AnonymousListFactory
+    constructor: (@listModelName, @itemFactory) ->
+        @getFacade = -> @itemFactory.getFacade()
+        super
 
 
     ###*
     get model class this factory handles
 
     @method getModelClass
-    @return {Class}
+    @return {Function}
     ###
-    @_ModelClass: undefined
     getModelClass: ->
-        {modelName, itemModelName} = @constructor
-        @_ModelClass ?= @getFacade().getListModel(modelName, itemModelName)
-
-
-    ###*
-    @constructor
-    ###
-    constructor: ->
-        @itemFactory = @getFacade().createFactory(@constructor.itemModelName, true)
-        super
+        @getFacade().getModel(@listModelName)
 
 
     ###*

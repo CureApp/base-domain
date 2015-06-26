@@ -1,6 +1,7 @@
 
 facade = require('../create-facade').create()
 Facade = facade.constructor
+ListFactory = Facade.ListFactory
 
 describe 'ListFactory', ->
 
@@ -16,16 +17,22 @@ describe 'ListFactory', ->
         class HobbyRepository extends Facade.MasterRepository
             @modelName: 'hobby'
 
+        class HobbyList extends Facade.BaseList
+            @itemModelName: 'hobby'
+
 
         facade.addClass('hobby', Hobby)
         facade.addClass('non-entity', NonEntity)
+        facade.addClass('hobby-list', HobbyList)
         facade.addClass('hobby-repository', HobbyRepository)
+
+        @hobbyFactory = facade.createFactory('hobby', on)
 
 
     describe 'createEmpty', ->
 
         before ->
-            hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+            hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
             @hobbyList = hobbyListFactory.createEmpty()
 
         it 'creates list', ->
@@ -45,7 +52,7 @@ describe 'ListFactory', ->
 
             obj = items: [ {name: 'keyboard'}, {name: 'programming'} ]
 
-            hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+            hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
             list = hobbyListFactory.createFromObject(obj)
             expect(list.items).to.have.length 2
 
@@ -54,7 +61,7 @@ describe 'ListFactory', ->
 
             obj = ids: ['dummy']
 
-            hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+            hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
             list = hobbyListFactory.createFromObject(obj)
 
             list.on 'loaded', ->
@@ -64,13 +71,8 @@ describe 'ListFactory', ->
 
     describe 'createFromArray', ->
 
-        it 'throws error when array of non-object given to non-entity-list factory', ->
-
-            hobbyListFactory = facade.createListFactory('ne-list', 'non-entity')
-            expect(-> hobbyListFactory.createFromArray(['abc', 'def'])).to.throw Error
-
         it 'regards string array as id list', (done) ->
-            hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+            hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
             list = hobbyListFactory.createFromArray(['dummy'])
 
             list.on 'loaded', ->
@@ -81,7 +83,7 @@ describe 'ListFactory', ->
 
             data = [ {id: 3, name: 'keyboard'}, {id: 2, name: 'sailing'} ]
 
-            hobbyListFactory = facade.createListFactory('hobby-list', 'hobby')
+            hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
             list = hobbyListFactory.createFromArray(data)
 
             list.on 'loaded', ->

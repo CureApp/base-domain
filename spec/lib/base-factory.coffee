@@ -154,3 +154,26 @@ describe 'BaseFactory', ->
 
             factory.createDic('super-diary-dic', {})
 
+
+
+    describe 'createList', ->
+
+        before ->
+            @ListFactory = Facade.ListFactory
+
+        after ->
+            Facade.ListFactory = @ListFactory
+
+
+        it 'invoke ListFactory and call createFromObject() of it', (done) ->
+
+            factory = facade.createFactory('diary')
+
+            Facade.ListFactory = create: (listModelName, itemFactory) ->
+                expect(listModelName).to.equal 'super-diary-list'
+                expect(itemFactory).to.equal factory
+
+                return createFromObject: -> done()
+
+            factory.createList('super-diary-list', {})
+

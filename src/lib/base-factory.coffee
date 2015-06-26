@@ -225,10 +225,12 @@ class BaseFactory extends Base
     ###
     setSubModelDicToModel: (model, prop, value) ->
 
-        subModelName = model.getTypeInfo(prop).model
+        typeInfo = model.getTypeInfo(prop)
+        subModelName = typeInfo.model
         subModelFactory = @getFacade().createFactory(subModelName, on)
+        dicModelName = typeInfo.dicName
 
-        dic = subModelFactory.createDic(value)
+        dic = subModelFactory.createDic(dicModelName, value)
 
         model.setNonEntityProp prop, dic
 
@@ -314,11 +316,10 @@ class BaseFactory extends Base
         return model
 
 
-    createDic: (obj) ->
+    createDic: (dicModelName, obj) ->
 
         DicFactory = @getFacade().constructor.DicFactory
 
-        dicModelName = @constructor.dicModelName or (@constructor.modelName + '-dic')
         dicFactory = DicFactory.create(dicModelName, @)
         return dicFactory.createFromObject obj
 

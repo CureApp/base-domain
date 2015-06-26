@@ -132,6 +132,7 @@ describe 'BaseFactory', ->
             expect(diary.author).to.be.instanceof Member
             expect(diary.author.id).to.equal 'dummy'
 
+
     describe 'createDic', ->
 
         before ->
@@ -146,28 +147,10 @@ describe 'BaseFactory', ->
             factory = facade.createFactory('diary')
 
             Facade.DicFactory = create: (dicModelName, itemFactory) ->
-                expect(dicModelName).to.equal 'diary-dic'
+                expect(dicModelName).to.equal 'super-diary-dic'
                 expect(itemFactory).to.equal factory
 
                 return createFromObject: -> done()
 
-            factory.createDic('obj')
-
-
-        it 'use original dic model name', (done) ->
-            DiaryFactory = facade.getFactory 'diary'
-
-            DiaryFactory.dicModelName = 'abcd'
-
-            factory = facade.createFactory('diary')
-
-            Facade.DicFactory = create: (dicModelName, itemFactory) ->
-                expect(dicModelName).to.equal 'abcd'
-                expect(itemFactory).to.equal factory
-                DiaryFactory.dicModelName = null
-
-                return createFromObject: -> done()
-
-            factory.createDic('obj')
-
+            factory.createDic('super-diary-dic', {})
 

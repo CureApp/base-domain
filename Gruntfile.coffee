@@ -1,4 +1,4 @@
-currentVersion = 'v1.7.1'
+currentVersion = 'v1.7.2'
 module.exports = (grunt) ->
 
     grunt.config.init
@@ -30,7 +30,7 @@ module.exports = (grunt) ->
                 extension: '.coffee'
             master:
                 options:
-                    outdir: "doc/#{currentVersion}"
+                    outdir: 'doc'
 
 
         coffee:

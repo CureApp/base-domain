@@ -3,24 +3,24 @@ BaseFactory = require './base-factory'
 
 
 ###*
-factory of dic
+factory of dict
 
-@class DicFactory
+@class DictFactory
 @extends BaseFactory
 @module base-domain
 ###
-class DicFactory extends BaseFactory
+class DictFactory extends BaseFactory
 
     ###*
     create instance
     ###
-    @create: (dicModelName, itemFactory) ->
-        new DicFactory(dicModelName, itemFactory)
+    @create: (dictModelName, itemFactory) ->
+        new DictFactory(dictModelName, itemFactory)
 
     ###*
     @constructor
     ###
-    constructor: (@dicModelName, @itemFactory) ->
+    constructor: (@dictModelName, @itemFactory) ->
         @getFacade = -> @itemFactory.getFacade()
         super
 
@@ -32,17 +32,17 @@ class DicFactory extends BaseFactory
     @return {Function}
     ###
     getModelClass: ->
-        @getFacade().getModel(@dicModelName)
+        @getFacade().getModel(@dictModelName)
 
 
 
     ###*
-    creates an instance of BaseDic by value
+    creates an instance of BaseDict by value
 
     @method createFromObject
     @public
     @param {any} obj
-    @return {BaseDic}
+    @return {BaseDict}
     ###
     createFromObject: (obj) ->
 
@@ -52,37 +52,37 @@ class DicFactory extends BaseFactory
         if Array.isArray obj
             return @createFromArray(obj)
 
-        DicModel = @getModelClass()
+        DictModel = @getModelClass()
 
         { ids, items } = obj
 
         if items
             delete obj.items
             items = (@createItemFromObject item for key, item of items)
-            dic = super(obj).setItems items
+            dict = super(obj).setItems items
             obj.items = items
 
-        else if DicModel.containsEntity()
+        else if DictModel.containsEntity()
             delete obj.ids
-            dic = super(obj).setIds ids
+            dict = super(obj).setIds ids
             obj.ids = ids
         else
             return super(obj)
 
-        return dic
+        return dict
 
 
     ###*
-    creates an instance of BaseDic from array
+    creates an instance of BaseDict from array
 
     @method createFromArray
     @public
     @param {Array} arr
-    @return {BaseDic}
+    @return {BaseDict}
     ###
     createFromArray: (arr) ->
 
-        DicModel = @getModelClass()
+        DictModel = @getModelClass()
 
         firstValue = arr[0]
 
@@ -91,24 +91,24 @@ class DicFactory extends BaseFactory
 
         if typeof firstValue is 'object'
             items = (@createItemFromObject obj for obj in arr)
-            return new DicModel().setItems items
+            return new DictModel().setItems items
 
-        if DicModel.containsEntity()
-            return new DicModel().setIds arr
+        if DictModel.containsEntity()
+            return new DictModel().setIds arr
 
         throw new Error "cannot create #{@constructor.modelName} with arr\n [#{arr.toString()}]"
 
     ###*
-    creates an instance of BaseDic by value
+    creates an instance of BaseDict by value
 
     @method createEmpty
     @private
-    @return {BaseDic}
+    @return {BaseDict}
     ###
     createEmpty: ->
 
-        DicModel = @getModelClass()
-        return new DicModel().setItems()
+        DictModel = @getModelClass()
+        return new DictModel().setItems()
 
 
     ###*
@@ -121,4 +121,4 @@ class DicFactory extends BaseFactory
         return @itemFactory.createFromObject(obj)
 
 
-module.exports = DicFactory
+module.exports = DictFactory

@@ -71,22 +71,22 @@ class TypeInfo
 
 
     ###*
-    get TypeInfo as MODEL_DIC
+    get TypeInfo as MODEL_DICT
 
-    @method createModelDicType
+    @method createModelDictType
     @private
     @static
     @param {String} modelName
-    @param {String} [options.name] name of dic model, by default: xxx-yyy-dic when modelName is xxx-yyy
+    @param {String} [options.name] name of dict model, by default: xxx-yyy-dict when modelName is xxx-yyy
     @return {TypeInfo} type
     ###
-    @createModelDicType: (modelName, options = {}) -> 
+    @createModelDictType: (modelName, options = {}) -> 
         if typeof options is 'string'
             options = name: options
 
-        new TypeInfo 'MODEL_DIC',
-            model   : modelName
-            dicName : options.name ? "#{modelName}-dic"
+        new TypeInfo 'MODEL_DICT',
+            model    : modelName
+            dictName : options.name ? "#{modelName}-dict"
 
 
     ###*
@@ -137,7 +137,7 @@ class TypeInfo
         UPDATED_AT : new TypeInfo 'UPDATED_AT'
         MODEL      : TypeInfo.createModelType
         MODEL_LIST : TypeInfo.createModelListType
-        MODEL_DIC  : TypeInfo.createModelDicType
+        MODEL_DICT : TypeInfo.createModelDictType
         TMP        : TypeInfo.createTemporaryType
 
 

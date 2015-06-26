@@ -72,31 +72,6 @@ class TypeInfo
 
 
     ###*
-    get TypeInfo as MODEL_DIC
-
-    @method createModelDicType
-    @private
-    @static
-    @param {String} modelName
-    @param {String} [options.idPropName] by default: xxxYyyIds when modelName is xxx-yyy
-    @param {String} [options.name] name of dic model, by default: xxx-yyy-dic when modelName is xxx-yyy
-    @param {String} [options.key] function to get key from item. default: returns item.id
-    @return {TypeInfo} type
-    ###
-    @createModelDicType: (modelName, options = {}) ->
-        if typeof options is 'string'
-            options = name: options
-
-        else if typeof options is 'function'
-            options = key: options
-
-        new TypeInfo 'MODEL_DIC',
-            model      : modelName
-            dicName    : options.name ? "#{modelName}-dic"
-            getKey     : options.key
-
-
-    ###*
     get TypeInfo as temporary value
 
     @method createTemporaryType
@@ -144,7 +119,6 @@ class TypeInfo
         UPDATED_AT : new TypeInfo 'UPDATED_AT'
         MODEL      : TypeInfo.createModelType
         MODEL_LIST : TypeInfo.createModelListType
-        MODEL_DIC  : TypeInfo.createModelDicType
         TMP        : TypeInfo.createTemporaryType
 
 

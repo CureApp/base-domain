@@ -347,6 +347,7 @@ class Facade
     @BaseModel        : require './base-model'
     @Entity           : require './entity'
     @BaseList         : require './base-list'
+    @BaseDic          : require './base-dic'
     @BaseFactory      : require './base-factory'
     @ListFactory      : require './list-factory'
     @BaseRepository   : require './base-repository'

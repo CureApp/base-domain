@@ -37,14 +37,11 @@ class BaseDic extends BaseModel
     @params {String} itemModelName
     @return {Function} child class of BaseDic
     ###
-    @getAnonymousClass: (itemModelName, getKey) ->
+    @getAnonymousClass: (itemModelName) ->
 
         class AnonymousDic extends BaseDic
             @itemModelName: itemModelName
             @isAnonymous: true
-
-        if typeof getKey is 'function'
-            AnonymousDic.key = getKey
 
         return AnonymousDic
 
@@ -171,7 +168,7 @@ class BaseDic extends BaseModel
     @public
     ###
     toArray: ->
-        (item for key, item of items)
+        (item for key, item of @items)
 
 
     ###*
@@ -191,7 +188,7 @@ class BaseDic extends BaseModel
             delete plain.items
 
         else
-            plainItems = {}
+            plainItems = []
             for key, item of @items
                 if typeof item.toPlainObject is 'function'
                     plainItems[key] = item.toPlainObject()

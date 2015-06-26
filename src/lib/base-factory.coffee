@@ -316,6 +316,15 @@ class BaseFactory extends Base
         return model
 
 
+    ###*
+    create model dic
+
+    @method createDic
+    @public
+    @param {String} dicModelName model name of dic
+    @param {any} obj
+    @return {BaseDic} dic
+    ###
     createDic: (dicModelName, obj) ->
 
         DicFactory = @getFacade().constructor.DicFactory

@@ -49,7 +49,7 @@ class Hospital extends require('base-domain').Entity
         registeredAt : @TYPES.DATE
         isValidated  : @TYPES.BOOLEAN
         doctors      : @TYPES.MODEL_LIST 'doctor'
-        flags        : @TYPES.MODEL_DIC 'flag'
+        flags        : @TYPES.MODEL_DICT 'flag'
         doctorIdx    : @TYPES.TMP 'NUMBER'
 
 module.exports = Hospital

@@ -37,25 +37,25 @@ describe 'TypeInfo', ->
             expect(typeInfo).to.have.property('listName', 'happy-hobby-list')
 
 
-    describe '@createModelDicType', ->
+    describe '@createModelDictType', ->
 
-        it 'returns TypeInfo representing MODEL_DIC', ->
+        it 'returns TypeInfo representing MODEL_DICT', ->
 
-            typeInfo = TypeInfo.createModelDicType('hobby')
+            typeInfo = TypeInfo.createModelDictType('hobby')
 
-            expect(typeInfo).to.have.property('name', 'MODEL_DIC')
+            expect(typeInfo).to.have.property('name', 'MODEL_DICT')
             expect(typeInfo).to.have.property('model', 'hobby')
-            expect(typeInfo).to.have.property('dicName', 'hobby-dic')
+            expect(typeInfo).to.have.property('dictName', 'hobby-dict')
 
 
-        it 'returns TypeInfo with dicName', ->
+        it 'returns TypeInfo with dictName', ->
 
-            typeInfo = TypeInfo.createModelDicType('hobby', name: 'another-hobby-dic')
-            expect(typeInfo).to.have.property('dicName', 'another-hobby-dic')
+            typeInfo = TypeInfo.createModelDictType('hobby', name: 'another-hobby-dict')
+            expect(typeInfo).to.have.property('dictName', 'another-hobby-dict')
 
 
-        it 'parses 2nd argument as dicName when it is string ', ->
+        it 'parses 2nd argument as dictName when it is string ', ->
 
-            typeInfo = TypeInfo.createModelDicType('hobby', 'happy-hobby-dic')
-            expect(typeInfo).to.have.property('dicName', 'happy-hobby-dic')
+            typeInfo = TypeInfo.createModelDictType('hobby', 'happy-hobby-dict')
+            expect(typeInfo).to.have.property('dictName', 'happy-hobby-dict')
 

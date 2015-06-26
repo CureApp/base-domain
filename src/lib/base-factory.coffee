@@ -26,14 +26,14 @@ class BaseFactory extends Base
     @modelName: null
 
     ###*
-    name of dicmodel to create dic of @modelName
+    name of dict model to create dict of @modelName
 
-    @property dicModelName
+    @property dictModelName
     @static
     @protected
     @type String
     ###
-    @dicModelName: null
+    @dictModelName: null
 
 
     ###*
@@ -136,8 +136,8 @@ class BaseFactory extends Base
             when 'MODEL'
                 @setSubModelToModel(model, prop, value)
 
-            when 'MODEL_DIC'
-                @setSubModelDicToModel(model, prop, value)
+            when 'MODEL_DICT'
+                @setSubModelDictToModel(model, prop, value)
 
             else # set normal props
                 model.setNonEntityProp(prop, value)
@@ -165,8 +165,8 @@ class BaseFactory extends Base
             when 'MODEL_LIST'
                 @setSubModelListToModel(model, prop, null)
 
-            when 'MODEL_DIC'
-                @setSubModelDicToModel(model, prop, null)
+            when 'MODEL_DICT'
+                @setSubModelDictToModel(model, prop, null)
 
             else
                 model[prop] = undefined
@@ -220,21 +220,21 @@ class BaseFactory extends Base
 
 
     ###*
-    set submodel dic to the prop
+    set submodel dict to the prop
 
     @method setSubModelToModel
     @private
     ###
-    setSubModelDicToModel: (model, prop, value) ->
+    setSubModelDictToModel: (model, prop, value) ->
 
         typeInfo = model.getTypeInfo(prop)
         subModelName = typeInfo.model
         subModelFactory = @getFacade().createFactory(subModelName, on)
-        dicModelName = typeInfo.dicName
+        dictModelName = typeInfo.dictName
 
-        dic = subModelFactory.createDic(dicModelName, value)
+        dict = subModelFactory.createDict(dictModelName, value)
 
-        model.setNonEntityProp prop, dic
+        model.setNonEntityProp prop, dict
 
         return
 
@@ -323,20 +323,20 @@ class BaseFactory extends Base
 
 
     ###*
-    create model dic
+    create model dict
 
-    @method createDic
+    @method createDict
     @public
-    @param {String} dicModelName model name of dic
+    @param {String} dictModelName model name of dict
     @param {any} obj
-    @return {BaseDic} dic
+    @return {BaseDict} dict
     ###
-    createDic: (dicModelName, obj) ->
+    createDict: (dictModelName, obj) ->
 
-        DicFactory = @getFacade().constructor.DicFactory
+        DictFactory = @getFacade().constructor.DictFactory
 
-        dicFactory = DicFactory.create(dicModelName, @)
-        return dicFactory.createFromObject obj
+        dictFactory = DictFactory.create(dictModelName, @)
+        return dictFactory.createFromObject obj
 
 
 module.exports = BaseFactory

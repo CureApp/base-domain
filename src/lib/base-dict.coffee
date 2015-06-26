@@ -4,11 +4,11 @@ BaseModel = require './base-model'
 ###*
 dictionary-structured data model
 
-@class BaseDic
+@class BaseDict
 @extends BaseModel
 @module base-domain
 ###
-class BaseDic extends BaseModel
+class BaseDict extends BaseModel
 
     ###*
     model name of the item
@@ -31,19 +31,19 @@ class BaseDic extends BaseModel
 
 
     ###*
-    creates child class of BaseDic
+    creates child class of BaseDict
 
     @method getAnonymousClass
     @params {String} itemModelName
-    @return {Function} child class of BaseDic
+    @return {Function} child class of BaseDict
     ###
     @getAnonymousClass: (itemModelName) ->
 
-        class AnonymousDic extends BaseDic
+        class AnonymousDict extends BaseDict
             @itemModelName: itemModelName
             @isAnonymous: true
 
-        return AnonymousDic
+        return AnonymousDict
 
 
     ###*
@@ -243,9 +243,9 @@ class BaseDic extends BaseModel
 
 
     ###*
-    create plain dic.
-    if this dic contains entities, returns their ids
-    if this dic contains non-entity models, returns their plain objects 
+    create plain dict.
+    if this dict contains entities, returns their ids
+    if this dict contains non-entity models, returns their plain objects 
 
     @method toPlainObject
     @return {Object} plainObject
@@ -297,4 +297,4 @@ class BaseDic extends BaseModel
             process.nextTick fn
         return
 
-module.exports = BaseDic
+module.exports = BaseDict

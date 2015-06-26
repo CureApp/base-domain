@@ -133,26 +133,26 @@ describe 'BaseFactory', ->
             expect(diary.author.id).to.equal 'dummy'
 
 
-    describe 'createDic', ->
+    describe 'createDict', ->
 
         before ->
-            @DicFactory = Facade.DicFactory
+            @DictFactory = Facade.DictFactory
 
         after ->
-            Facade.DicFactory = @DicFactory
+            Facade.DictFactory = @DictFactory
 
 
-        it 'invoke DicFactory and call createFromObject() of it', (done) ->
+        it 'invoke DictFactory and call createFromObject() of it', (done) ->
 
             factory = facade.createFactory('diary')
 
-            Facade.DicFactory = create: (dicModelName, itemFactory) ->
-                expect(dicModelName).to.equal 'super-diary-dic'
+            Facade.DictFactory = create: (dictModelName, itemFactory) ->
+                expect(dictModelName).to.equal 'super-diary-dict'
                 expect(itemFactory).to.equal factory
 
                 return createFromObject: -> done()
 
-            factory.createDic('super-diary-dic', {})
+            factory.createDict('super-diary-dict', {})
 
 
 

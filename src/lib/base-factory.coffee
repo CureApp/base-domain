@@ -136,6 +136,9 @@ class BaseFactory extends Base
             when 'MODEL'
                 @setSubModelToModel(model, prop, value)
 
+            when 'MODEL_DIC'
+                @setSubModelDicToModel(model, prop, value)
+
             else # set normal props
                 model.setNonEntityProp(prop, value)
 
@@ -161,6 +164,9 @@ class BaseFactory extends Base
 
             when 'MODEL_LIST'
                 @createEmptyListProp(model, prop, typeInfo)
+
+            when 'MODEL_DIC'
+                @setSubModelDicToModel(model, prop, null)
 
             else
                 model[prop] = undefined
@@ -207,6 +213,24 @@ class BaseFactory extends Base
             model.setEntityProp(prop, value)
         else
             model.setNonEntityProp(prop, value)
+
+        return
+
+
+    ###*
+    set submodel dic to the prop
+
+    @method setSubModelToModel
+    @private
+    ###
+    setSubModelDicToModel: (model, prop, value) ->
+
+        subModelName = model.getTypeInfo(prop).model
+        subModelFactory = @getFacade().createFactory(subModelName, on)
+
+        dic = subModelFactory.createDic(value)
+
+        model.setNonEntityProp prop, dic
 
         return
 

@@ -189,33 +189,6 @@ describe 'Facade', ->
             List = f.getListModel('hobby-collection')
             expect(List.isAnonymous).not.to.exist
 
-    describe 'getListFactory', ->
-
-        it 'throws error if given name is not found and no item model name given', ->
-            f = Facade.createInstance()
-            expect(-> f.getListFactory('hobby-collection')).to.throw Error
-
-        it 'throws error if given name is not found and invalid item model name given', ->
-            f = Facade.createInstance()
-            expect(-> f.getListFactory('hobby-collection', 'xxx')).to.throw Error
-
-        it 'returns anonymous factory when list model with given name is not found', ->
-            f = Facade.createInstance()
-            class Hobby extends Facade.Entity
-
-            f.addClass('hobby', Hobby)
-            ListFactory = f.getListFactory('hobby-collection', 'hobby')
-            expect(ListFactory.isAnonymous).to.be.true
-
-        it 'returns custom list factory class when registered', ->
-            f = Facade.createInstance()
-            class HobbyCollectionFactory extends Facade.ListFactory
-
-            f.addClass('hobby-collection-factory', HobbyCollectionFactory)
-            ListFactory = f.getListFactory('hobby-collection')
-            expect(ListFactory.isAnonymous).not.to.exist
-
-
 
     describe 'loadMasterTables', ->
 

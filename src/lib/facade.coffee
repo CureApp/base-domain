@@ -120,29 +120,6 @@ class Facade
 
 
     ###*
-    get a list factory class
-
-    @method getListFactory
-    @param {String} name
-    @param {String} [itemModelName]
-    @return {Function}
-    ###
-    getListFactory: (name, itemModelName) ->
-        try
-            return @require("#{name}-factory")
-        catch e
-            throw e if not itemModelName
-
-            if not @hasClass itemModelName
-                throw @error "#{itemModelName} is not valid model name"
-
-
-            AnonymousFactory = Facade.ListFactory.getAnonymousClass(name, itemModelName)
-
-            @addClass("#{name}-factory", AnonymousFactory, true)
-
-
-    ###*
     get a repository class
 
     @method getRepository
@@ -164,19 +141,6 @@ class Facade
     createFactory: (name, useAnonymousWhenFailed = off) ->
         FactoryClass = @getFactory(name, useAnonymousWhenFailed)
         return new FactoryClass()
-
-
-    ###*
-    create a factory instance
-
-    @method createFactory
-    @param {String} name
-    @param {String} [itemModelName]
-    @return {ListFactory}
-    ###
-    createListFactory: (name, itemModelName) ->
-        ListFactoryClass = @getListFactory(name, itemModelName)
-        return new ListFactoryClass()
 
 
     ###*

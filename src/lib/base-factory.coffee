@@ -163,7 +163,7 @@ class BaseFactory extends Base
                     @createEmptyNonEntityProp(model, prop, typeInfo)
 
             when 'MODEL_LIST'
-                @createEmptyListProp(model, prop, typeInfo)
+                @setSubModelListToModel(model, prop, null)
 
             when 'MODEL_DIC'
                 @setSubModelDicToModel(model, prop, null)
@@ -182,14 +182,16 @@ class BaseFactory extends Base
     setSubModelListToModel: (model, prop, value) ->
 
         typeInfo = model.getTypeInfo(prop)
+        subModelName = typeInfo.model
+        subModelFactory = @getFacade().createFactory(subModelName, on)
+        listModelName = typeInfo.listName
 
-        listFactory = @getFacade().createListFactory typeInfo.listName, typeInfo.model
+        list = subModelFactory.createList(listModelName, value)
 
-        list = listFactory.createFromObject(value)
-
-        model.setNonEntityProp(prop, list)
+        model.setNonEntityProp prop, list
 
         return
+
 
 
     ###*
@@ -277,19 +279,6 @@ class BaseFactory extends Base
 
 
     ###*
-    create empty list and set to the prop
-
-    @method createEmptyListProp
-    @private
-    ###
-    createEmptyListProp: (model, prop, typeInfo) ->
-
-        listFactory = @getFacade().createListFactory typeInfo.listName, typeInfo.model
-        list = listFactory.createEmpty()
-        model.setNonEntityProp(prop, list)
-
-
-    ###*
     modify plain object before @createFromObject(obj)
 
     @method beforeCreateFromObject
@@ -314,6 +303,23 @@ class BaseFactory extends Base
     afterCreateModel: (model) ->
 
         return model
+
+
+    ###*
+    create model list
+
+    @method createList
+    @public
+    @param {String} listModelName model name of list
+    @param {any} obj
+    @return {BaseList} list
+    ###
+    createList: (listModelName, obj) ->
+
+        ListFactory = @getFacade().constructor.ListFactory
+
+        listFactory = ListFactory.create(listModelName, @)
+        return listFactory.createFromObject obj
 
 
     ###*

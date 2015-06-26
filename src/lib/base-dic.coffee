@@ -103,6 +103,80 @@ class BaseDic extends BaseModel
 
 
     ###*
+    check if the model has submodel of the given key or not
+
+    @method has
+    @public
+    @param {String|Number} key
+    @return {Boolean}
+    ###
+    has: (key) ->
+        @items[key]?
+
+    ###*
+    check if the model contains the given submodel or not
+
+    @method contains
+    @public
+    @param {BaseModel} item
+    @return {Boolean}
+    ###
+    contains: (item) ->
+        key = @constructor.key item
+        sameKeyItem = @get(key)
+        item is sameKeyItem
+
+
+    ###*
+    return submodel of the given key
+
+    @method get
+    @public
+    @param {String|Number} key
+    @return {BaseModel}
+    ###
+    get: (key) ->
+        @items[key]
+
+
+    ###*
+    add new submodel to item(s)
+
+    @method get
+    @public
+    @param {BaseModel} item
+    ###
+    add: (items...) ->
+        ItemClass = @getFacade().getModel @constructor.itemModelName
+        for prevKey, item of items when item instanceof ItemClass
+            key = @constructor.key item
+            @items[key] = item
+
+
+    ###*
+    remove submodel from items
+    both acceptable, keys and submodels
+
+    @method remove
+    @public
+    @param {BaseModel|String|Number} item
+    ###
+    remove: (args...) ->
+        ItemClass = @getFacade().getModel @constructor.itemModelName
+
+        for arg in args
+            if arg instanceof ItemClass
+                key = @constructor.key(arg)
+            else
+                key = arg
+
+            delete @items[key]
+
+        return
+
+
+
+    ###*
     set ids.
 
     @method setIds
@@ -138,11 +212,8 @@ class BaseDic extends BaseModel
     ###
     setItems: (models = {}) ->
 
-        ItemClass = @getFacade().getModel @constructor.itemModelName
-
-        for prevKey, item of models when item instanceof ItemClass
-            key = @constructor.key item
-            @items[key] = item
+        items = (item for prevKey, item of models)
+        @add items...
 
         @loaded = true
         @emitLoaded()

@@ -295,3 +295,106 @@ describe 'BaseDic', ->
 
                 done()
 
+    describe 'has', ->
+        before ->
+            class HobbyDic extends BaseDic
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+                @key: (item) -> item.name
+
+            @hobbyDic = new HobbyDic(items: hobbies)
+
+        it 'returns true when item exists', ->
+            expect(@hobbyDic.has('keyboard')).to.be.true
+
+        it 'returns false when item does not exist', ->
+            expect(@hobbyDic.has('sailing')).to.be.false
+
+
+    describe 'contains', ->
+
+        before ->
+            class HobbyDic extends BaseDic
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+                @key: (item) -> item.name
+
+            @hobbyDic = new HobbyDic(items: hobbies)
+
+        it 'returns true when item exists', ->
+            expect(@hobbyDic.contains(hobbies[0])).to.be.true
+
+        it 'returns false when item does not exist', ->
+            newHobby = facade.createFactory('hobby').createFromObject id: 4, name: 'xxx'
+            expect(@hobbyDic.has(newHobby)).to.be.false
+
+        it 'returns false when item with same key exists but these two are different', ->
+            newHobby = facade.createFactory('hobby').createFromObject id: 4, name: 'keyboard'
+            expect(@hobbyDic.has(newHobby)).to.be.false
+
+
+    describe 'get', ->
+
+        before ->
+            class HobbyDic extends BaseDic
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+                @key: (item) -> item.name
+
+            @hobbyDic = new HobbyDic(items: hobbies)
+
+        it 'returns submodel when key exists', ->
+            expect(@hobbyDic.get('keyboard')).to.be.instanceof facade.getModel('hobby')
+
+        it 'returns undefined when key does not exist', ->
+            expect(@hobbyDic.get('xxx')).to.be.undefined
+
+
+    describe 'add', ->
+
+        before ->
+            class HobbyDic extends BaseDic
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+                @key: (item) -> item.name
+
+            @hobbyDic = new HobbyDic(items: hobbies)
+
+        it 'add item model', ->
+            newHobby = facade.createFactory('hobby').createFromObject id: 4, name: 'xxx'
+            @hobbyDic.add(newHobby)
+            expect(@hobbyDic.items.xxx).to.be.instanceof facade.getModel 'hobby'
+
+
+        it 'does not add non-item model', ->
+            newHobby = id: 4, name: 'yyyy'
+            @hobbyDic.add(newHobby)
+            expect(@hobbyDic.items.yyyy).not.to.exist
+
+
+    describe 'remove', ->
+
+        beforeEach ->
+            class HobbyDic extends BaseDic
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+                @key: (item) -> item.name
+
+            @hobbyDic = new HobbyDic(items: hobbies)
+
+        it 'removes by key', ->
+            @hobbyDic.remove('keyboard')
+            expect(@hobbyDic.items.keyboard).not.to.exist
+
+        it 'removes by item', ->
+            @hobbyDic.remove(hobbies[0])
+            expect(@hobbyDic.items.keyboard).not.to.exist
+
+
+        it 'do nothing if no key exists', ->
+            @hobbyDic.remove('xxx')

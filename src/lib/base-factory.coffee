@@ -245,7 +245,7 @@ class BaseFactory extends Base
     ###
     createEmptyNonEntityProp: (model, prop, typeInfo) ->
 
-        factory = @getFacade().createFactory typeInfo.model
+        factory = @getFacade().createFactory typeInfo.model, true
         submodel = factory.createEmpty()
         model.setNonEntityProp(prop, submodel)
 

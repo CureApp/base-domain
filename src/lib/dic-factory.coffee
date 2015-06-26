@@ -21,6 +21,7 @@ class DicFactory extends BaseFactory
     @constructor
     ###
     constructor: (@dicModelName, @itemFactory) ->
+        @getFacade = -> @itemFactory.getFacade()
         super
 
 

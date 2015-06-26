@@ -350,6 +350,7 @@ class Facade
     @BaseDic          : require './base-dic'
     @BaseFactory      : require './base-factory'
     @ListFactory      : require './list-factory'
+    @DicFactory       : require './dic-factory'
     @BaseRepository   : require './base-repository'
     @MasterRepository : require './master-repository'
     @DomainError      : require './domain-error'

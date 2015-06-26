@@ -292,10 +292,11 @@ class BaseFactory extends Base
 
     createDic: (obj) ->
 
-        dicModelName = @constructor.dicModelName or (@constructor.modelName + '-dic')
-        dicFactory = require('./dic-factory').create(dicModelName, @)
-        return dicFactory.createFromObject obj
+        DicFactory = @getFacade().constructor.DicFactory
 
+        dicModelName = @constructor.dicModelName or (@constructor.modelName + '-dic')
+        dicFactory = DicFactory.create(dicModelName, @)
+        return dicFactory.createFromObject obj
 
 
 module.exports = BaseFactory

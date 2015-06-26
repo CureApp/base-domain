@@ -25,6 +25,16 @@ class BaseFactory extends Base
     ###
     @modelName: null
 
+    ###*
+    name of dicmodel to create dic of @modelName
+
+    @property dicModelName
+    @static
+    @protected
+    @type String
+    ###
+    @dicModelName: null
+
 
     ###*
     get anonymous factory class
@@ -55,7 +65,7 @@ class BaseFactory extends Base
     get model class this factory handles
 
     @method getModelClass
-    @return {Class}
+    @return {Function}
     ###
     @_ModelClass: undefined
     getModelClass: ->
@@ -278,6 +288,13 @@ class BaseFactory extends Base
     afterCreateModel: (model) ->
 
         return model
+
+
+    createDic: (obj) ->
+
+        dicModelName = @constructor.dicModelName or (@constructor.modelName + '-dic')
+        dicFactory = require('./dic-factory').create(dicModelName, @)
+        return dicFactory.createFromObject obj
 
 
 

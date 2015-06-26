@@ -70,33 +70,6 @@ class Facade
         return @require(name)
 
 
-    ###*
-    get a list model class
-
-    @method getListModel
-    @param {String} listModelName
-    @param {String} [itemModelName]
-    @return {Class}
-    ###
-    getListModel: (listModelName, itemModelName) ->
-
-        BaseList = @constructor.BaseList
-
-        if @hasClass listModelName
-            ListClass = @getModel(listModelName)
-            # ListClass.name = listModelName
-
-            unless (ListClass::) instanceof BaseList
-                throw @error "#{listModelName} is not instance of BaseList"
-
-            return ListClass
-
-        if not @hasClass itemModelName
-            throw @error "#{itemModelName} is not valid model name"
-
-        AnonymousListClass = BaseList.getAnonymousClass(itemModelName)
-        return @addClass(listModelName, AnonymousListClass, true)
-
 
     ###*
     get a factory class

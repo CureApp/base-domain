@@ -282,6 +282,7 @@ class Facade
 
     @Base             : require './base'
     @BaseModel        : require './base-model'
+    @ValueObject      : require './value-object'
     @Entity           : require './entity'
     @BaseList         : require './base-list'
     @BaseDict         : require './base-dict'

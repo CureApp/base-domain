@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>FixtureModel</title>
+    <title>src/lib/value-object.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -95,134 +95,28 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>FixtureModel Class</h1>
-<div class="box meta">
+<h1 class="file-heading">File: src/lib/value-object.coffee</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
 
 
-        <div class="foundat">
-            Defined in: <a href="../files/src_lib_fixture.coffee.html#l171"><code>src&#x2F;lib&#x2F;fixture.coffee:171</code></a>
-        </div>
+BaseModel = require &#x27;./base-model&#x27;
 
-            Module: <a href="../modules/base-domain.html">base-domain</a>
+###*
+Base model class without &quot;id&quot; column
 
-</div>
+@class ValueObject
+@extends BaseModel
+@module base-domain
+###
+class ValueObject extends BaseModel
 
+    @isEntity: false
 
-<div class="box intro">
-    
-</div>
+module.exports = ValueObject
 
-
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
-
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-    </ul>
-
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
-
-                <div class="index-section methods">
-                    <h3>Methods</h3>
-
-                    <ul class="index-list methods">
-                            <li class="index-item method">
-                                <a href="#method_insert">insert</a>
-
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_readTSV">readTSV</a>
-
-                            </li>
-                    </ul>
-                </div>
-
-
-
-        </div>
-
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-<div id="method_insert" class="method item">
-    <h3 class="name"><code>insert</code></h3>
-
-        <span class="paren">()</span>
-
-        <span class="returns-inline">
-            <span class="type">Promise</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_fixture.coffee.html#l187"><code>src&#x2F;lib&#x2F;fixture.coffee:187</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>inserts data to datasource</p>
-
-    </div>
-
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Promise</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_readTSV" class="method item">
-    <h3 class="name"><code>readTSV</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_fixture.coffee.html#l230"><code>src&#x2F;lib&#x2F;fixture.coffee:230</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>read TSV, returns model data</p>
-
-    </div>
-
-
-
-
-</div>
-            </div>
-
-
-
-    </div>
+    </pre>
 </div>
                     </div>
                 </div>

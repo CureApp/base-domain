@@ -19,7 +19,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "PropInfo",
         "ResourceClientInterface",
         "TypeInfo",
-        "Util"
+        "Util",
+        "ValueObject"
     ],
     "modules": [
         "base-domain"

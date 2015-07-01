@@ -57,6 +57,7 @@
                                 <li><a href="../classes/ResourceClientInterface.html">ResourceClientInterface</a></li>
                                 <li><a href="../classes/TypeInfo.html">TypeInfo</a></li>
                                 <li><a href="../classes/Util.html">Util</a></li>
+                                <li><a href="../classes/ValueObject.html">ValueObject</a></li>
                             </ul>
                 
                             <ul id="api-modules" class="apis modules">
@@ -99,16 +100,16 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 
-BaseModel = require &#x27;./base-model&#x27;
+ValueObject = require &#x27;./value-object&#x27;
 
 ###*
 list class of DDD pattern.
 
 @class BaseList
-@extends BaseModel
+@extends ValueObject
 @module base-domain
 ###
-class BaseList extends BaseModel
+class BaseList extends ValueObject
 
     ###*
     model name of the item

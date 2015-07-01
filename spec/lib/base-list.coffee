@@ -14,7 +14,7 @@ describe 'BaseList', ->
             @properties:
                 name: @TYPES.STRING
 
-        class NonEntity extends Facade.BaseModel
+        class NonEntity extends Facade.ValueObject
             @properties:
                 name: @TYPES.STRING
 

@@ -1,14 +1,14 @@
 
-BaseModel = require './base-model'
+ValueObject = require './value-object'
 
 ###*
 list class of DDD pattern.
 
 @class BaseList
-@extends BaseModel
+@extends ValueObject
 @module base-domain
 ###
-class BaseList extends BaseModel
+class BaseList extends ValueObject
 
     ###*
     model name of the item

@@ -1,14 +1,14 @@
 
-BaseModel = require './base-model'
+ValueObject = require './value-object'
 
 ###*
 dictionary-structured data model
 
 @class BaseDict
-@extends BaseModel
+@extends ValueObject
 @module base-domain
 ###
-class BaseDict extends BaseModel
+class BaseDict extends ValueObject
 
     ###*
     model name of the item

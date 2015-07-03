@@ -2,6 +2,7 @@
 facade = require('../create-facade').create('domain')
 
 BaseModel = facade.constructor.BaseModel
+Entity    = facade.constructor.Entity
 BaseList  = facade.constructor.BaseList
 
 Diary  = facade.getModel 'diary'
@@ -41,6 +42,31 @@ describe 'BaseModel', ->
 
         expect(hospital).to.have.property 'name', 'shinout clinic'
         expect(hospital).not.to.have.property 'beds'
+
+
+    it 'can define sub entity with idPropName', ->
+
+        f = require('../create-facade').create()
+
+        class Hospital extends Entity
+            @properties:
+                name: @TYPES.STRING
+        f.addClass 'hospital', Hospital
+
+        class Patient extends BaseModel
+            @properties:
+                hospital: @TYPES.MODEL 'hospital', 'type'
+        f.addClass 'patient', Patient
+
+        Patient  = f.getModel('patient')
+        Hospital = f.getModel('hospital')
+
+        p = new Patient()
+        h = new Hospital(id: 123)
+        p.set 'hospital', h
+
+        expect(p.type).to.equal 123
+
 
 
     describe '@withParentProp', ->

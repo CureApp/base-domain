@@ -13,6 +13,15 @@ describe 'TypeInfo', ->
             expect(typeInfo).to.have.property('model', 'paris-match')
             expect(typeInfo).to.have.property('idPropName', 'parisMatchId')
 
+        it 'returns TypeInfo with custom idPropName', ->
+
+            typeInfo = TypeInfo.createModelType('paris-match', 'type')
+
+            expect(typeInfo).to.have.property('name', 'MODEL')
+            expect(typeInfo).to.have.property('model', 'paris-match')
+            expect(typeInfo).to.have.property('idPropName', 'type')
+
+
 
     describe '@createModelListType', ->
 

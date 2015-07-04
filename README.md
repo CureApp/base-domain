@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/CureApp/base-domain.svg?style=svg&circle-token=7b3c8ea92dbe6214cfd23731ebd533690d8726a2)](https://circleci.com/gh/CureApp/base-domain)
+
 [![Stories in Progress](https://badge.waffle.io/CureApp/base-domain.png?label=In%20Progress&title=In Progress)](https://waffle.io/CureApp/base-domain)
 # base-domain
 

@@ -219,6 +219,7 @@ describe 'BaseDict', ->
 
             expect(plain).not.to.have.property 'ids'
             expect(plain).to.have.property 'items'
+            expect(plain.items).not.to.be.instanceof Array
             expect(plain.items).to.have.property 1
             expect(plain.items).to.have.property 2
             expect(plain.items).to.have.property 3

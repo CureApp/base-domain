@@ -256,7 +256,7 @@ class BaseDict extends ValueObject
             delete plain.items
 
         else
-            plainItems = []
+            plainItems = {}
             for key, item of @items
                 if typeof item.toPlainObject is 'function'
                     plainItems[key] = item.toPlainObject()

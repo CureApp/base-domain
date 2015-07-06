@@ -18,6 +18,16 @@ describe 'BaseFactory', ->
 
             expect(factory.getModelClass()).to.equal Hobby
 
+        it 'returns guessed model class when no @modelName given', ->
+
+            f = require('../create-facade').create()
+            class Foo extends Facade.ValueObject
+            class FooFactory extends Facade.BaseFactory
+            f.addClass 'foo', Foo
+            f.addClass 'foo-factory', FooFactory
+
+            expect(f.createFactory('foo').getModelClass()).to.equal f.getModel 'foo'
+
 
 
     describe 'createEmptyModel', ->
@@ -113,7 +123,6 @@ describe 'BaseFactory', ->
             class Bar extends Facade.ValueObject
             f.addClass 'bar', Bar
             class FooFactory extends Facade.BaseFactory
-                @modelName: 'foo'
             f.addClass 'foo-factory', FooFactory
 
             foo = f.createFactory('foo').createFromObject
@@ -138,7 +147,6 @@ describe 'BaseFactory', ->
             f.addClass 'bar-dict', BarDict
 
             class FooFactory extends Facade.BaseFactory
-                @modelName: 'foo'
             f.addClass 'foo-factory', FooFactory
 
             foo = f.createFactory('foo').createFromObject
@@ -166,7 +174,6 @@ describe 'BaseFactory', ->
         before (done) ->
 
             class MemberRepository extends MasterRepository
-                @modelName: 'member'
                 getFacade: -> facade
 
             MemberRepository.load().then -> done()

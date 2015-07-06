@@ -25,16 +25,6 @@ class BaseFactory extends Base
     ###
     @modelName: null
 
-    ###*
-    name of dict model to create dict of @modelName
-
-    @property dictModelName
-    @static
-    @protected
-    @type String
-    ###
-    @dictModelName: null
-
 
     ###*
     get anonymous factory class
@@ -69,7 +59,8 @@ class BaseFactory extends Base
     ###
     @_ModelClass: undefined
     getModelClass: ->
-        @_ModelClass ?= @getFacade().getModel(@constructor.modelName)
+        modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-factory'.length)
+        @_ModelClass ?= @getFacade().getModel(modelName)
 
 
     ###*

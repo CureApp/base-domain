@@ -101,6 +101,64 @@ describe 'BaseFactory', ->
             expect(member.hobbies).to.be.instanceof Facade.BaseList
 
 
+        it 'does not create sub-model when key is given null', ->
+
+            f = require('../create-facade').create()
+
+            class Foo extends Facade.BaseModel
+                @properties:
+                    bar: @TYPES.MODEL 'bar'
+            f.addClass 'foo', Foo
+
+            class Bar extends Facade.ValueObject
+            f.addClass 'bar', Bar
+            class FooFactory extends Facade.BaseFactory
+                @modelName: 'foo'
+            f.addClass 'foo-factory', FooFactory
+
+            foo = f.createFactory('foo').createFromObject
+                bar: null
+
+            expect(foo.bar).to.equal null
+
+
+        it 'does not create sub-dict when key is given null', ->
+
+            f = require('../create-facade').create()
+
+            class Foo extends Facade.BaseModel
+                @properties:
+                    bars: @TYPES.MODEL_DICT 'bar'
+            f.addClass 'foo', Foo
+
+            class Bar extends Facade.ValueObject
+            f.addClass 'bar', Bar
+            class BarDict extends Facade.BaseDict
+                @itemModelName: 'bar'
+            f.addClass 'bar-dict', BarDict
+
+            class FooFactory extends Facade.BaseFactory
+                @modelName: 'foo'
+            f.addClass 'foo-factory', FooFactory
+
+            foo = f.createFactory('foo').createFromObject
+                bars: null
+
+            expect(foo.bars).to.equal null
+
+
+
+        it 'does not create sub-list when key is given null', ->
+
+            mFactory = facade.createFactory('member')
+            member = mFactory.createFromObject
+                firstName: 'Shin'
+                hobbies: null
+
+            expect(member.hobbies).not.to.exist
+
+
+
 
 
     describe 'fetchEntityProp', ->

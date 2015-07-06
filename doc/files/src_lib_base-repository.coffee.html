@@ -151,7 +151,8 @@ class BaseRepository extends Base
     @return
     ###
     constructor: -&gt;
-        modelName = @constructor.modelName
+        modelName = @constructor.modelName ? @constructor.getName().slice(0, -&#x27;-repository&#x27;.length)
+
         facade = @getFacade()
 
         useAnonymousFactory = on
@@ -165,7 +166,7 @@ class BaseRepository extends Base
     @return {Class}
     ###
     getModelClass: -&gt;
-        modelName = @constructor.modelName
+        modelName = @constructor.modelName ? @constructor.getName().slice(0, -&#x27;-repository&#x27;.length)
         @getFacade().getModel(modelName)
 
 

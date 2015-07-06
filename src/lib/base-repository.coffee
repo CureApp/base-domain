@@ -50,7 +50,8 @@ class BaseRepository extends Base
     @return
     ###
     constructor: ->
-        modelName = @constructor.modelName
+        modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-repository'.length)
+
         facade = @getFacade()
 
         useAnonymousFactory = on
@@ -64,7 +65,7 @@ class BaseRepository extends Base
     @return {Class}
     ###
     getModelClass: ->
-        modelName = @constructor.modelName
+        modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-repository'.length)
         @getFacade().getModel(modelName)
 
 

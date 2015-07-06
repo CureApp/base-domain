@@ -82,6 +82,14 @@ describe 'BaseDict', ->
         explicitKeys = Object.keys(hobbyDict)
         expect(explicitKeys).to.contain 'annualCost'
 
+    it 'throws error if itemModelName is not set', ->
+        class HobbyDict extends BaseDict
+            @getFacade: -> facade
+            getFacade:  -> facade
+
+        expect(-> new HobbyDict()).to.throw Facade.DomainError
+
+
 
     describe '@keys', ->
 

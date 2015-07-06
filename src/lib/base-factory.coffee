@@ -25,16 +25,6 @@ class BaseFactory extends Base
     ###
     @modelName: null
 
-    ###*
-    name of dict model to create dict of @modelName
-
-    @property dictModelName
-    @static
-    @protected
-    @type String
-    ###
-    @dictModelName: null
-
 
     ###*
     get anonymous factory class
@@ -69,7 +59,8 @@ class BaseFactory extends Base
     ###
     @_ModelClass: undefined
     getModelClass: ->
-        @_ModelClass ?= @getFacade().getModel(@constructor.modelName)
+        modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-factory'.length)
+        @_ModelClass ?= @getFacade().getModel(modelName)
 
 
     ###*
@@ -112,7 +103,7 @@ class BaseFactory extends Base
         propInfo = ModelClass.getPropInfo()
 
         for prop of propInfo.dic
-            continue if model[prop]?
+            continue if model[prop]? or obj.hasOwnProperty prop
             @setEmptyValueToModel model, prop, propInfo
 
         return @afterCreateModel model
@@ -163,10 +154,10 @@ class BaseFactory extends Base
                     @createEmptyNonEntityProp(model, prop, typeInfo)
 
             when 'MODEL_LIST'
-                @setSubModelListToModel(model, prop, null)
+                @setSubModelListToModel(model, prop, [])
 
             when 'MODEL_DICT'
-                @setSubModelDictToModel(model, prop, null)
+                @setSubModelDictToModel(model, prop, {})
 
             else
                 model[prop] = undefined
@@ -316,6 +307,8 @@ class BaseFactory extends Base
     ###
     createList: (listModelName, obj) ->
 
+        return null if obj is null
+
         ListFactory = @getFacade().constructor.ListFactory
 
         listFactory = ListFactory.create(listModelName, @)
@@ -332,6 +325,8 @@ class BaseFactory extends Base
     @return {BaseDict} dict
     ###
     createDict: (dictModelName, obj) ->
+
+        return null if obj is null
 
         DictFactory = @getFacade().constructor.DictFactory
 

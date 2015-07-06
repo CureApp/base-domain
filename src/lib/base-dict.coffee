@@ -18,7 +18,7 @@ class BaseDict extends ValueObject
     @protected
     @type String
     ###
-    @itemModelName: ''
+    @itemModelName: null
 
     ###*
     get unique key from item
@@ -28,22 +28,6 @@ class BaseDict extends ValueObject
     @protected
     ###
     @key: (item) -> item.id
-
-
-    ###*
-    creates child class of BaseDict
-
-    @method getAnonymousClass
-    @params {String} itemModelName
-    @return {Function} child class of BaseDict
-    ###
-    @getAnonymousClass: (itemModelName) ->
-
-        class AnonymousDict extends BaseDict
-            @itemModelName: itemModelName
-            @isAnonymous: true
-
-        return AnonymousDict
 
 
     ###*
@@ -84,6 +68,8 @@ class BaseDict extends ValueObject
     ###
     constructor: (props = {}) ->
 
+        itemModelName = @getItemModelName()
+
         # loaded and listeners are hidden properties
         _itemFactory = null
         Object.defineProperties @, 
@@ -91,7 +77,7 @@ class BaseDict extends ValueObject
             loaded      : value: false, writable: true
             listeners   : value: []
             itemFactory : get: ->
-                _itemFactory ?= @getFacade().createFactory(@constructor.itemModelName, true)
+                _itemFactory ?= @getFacade().createFactory(itemModelName, true)
 
         if props.items
             @setItems props.items
@@ -147,7 +133,10 @@ class BaseDict extends ValueObject
     @param {BaseModel} item
     ###
     add: (items...) ->
-        ItemClass = @getFacade().getModel @constructor.itemModelName
+
+        itemModelName = @getItemModelName()
+
+        ItemClass = @getFacade().getModel itemModelName
         for prevKey, item of items when item instanceof ItemClass
             key = @constructor.key item
             @items[key] = item
@@ -162,7 +151,9 @@ class BaseDict extends ValueObject
     @param {BaseModel|String|Number} item
     ###
     remove: (args...) ->
-        ItemClass = @getFacade().getModel @constructor.itemModelName
+        itemModelName = @getItemModelName()
+
+        ItemClass = @getFacade().getModel itemModelName
 
         for arg in args
             if arg instanceof ItemClass
@@ -184,10 +175,12 @@ class BaseDict extends ValueObject
     ###
     setIds: (ids = []) ->
 
+        itemModelName = @getItemModelName()
+
         return if not @constructor.containsEntity()
 
         @loaded = false
-        ItemRepository = @getFacade().getRepository(@constructor.itemModelName)
+        ItemRepository = @getFacade().getRepository(itemModelName)
 
         repo = new ItemRepository()
 
@@ -229,7 +222,11 @@ class BaseDict extends ValueObject
     @return {Boolean}
     ###
     @containsEntity: ->
+        if not @itemModelName? 
+            throw @getFacade().error "@itemModelName is not set, in class #{@name}"
+
         return @getFacade().getModel(@itemModelName).isEntity
+
 
 
     ###*
@@ -296,5 +293,14 @@ class BaseDict extends ValueObject
         while fn = @listeners.shift()
             process.nextTick fn
         return
+
+
+    getItemModelName: ->
+        if not @constructor.itemModelName? 
+            throw @getFacade().error "@itemModelName is not set, in class #{@constructor.name}"
+
+        return @constructor.itemModelName
+
+
 
 module.exports = BaseDict

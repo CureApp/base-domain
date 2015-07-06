@@ -18,24 +18,7 @@ class BaseList extends ValueObject
     @protected
     @type String
     ###
-    @itemModelName: ''
-
-
-    ###*
-    creates child class of BaseList
-
-    @method getAnonymousClass
-    @params {String} itemModelName
-    @return {Function} child class of BaseList
-    ###
-    @getAnonymousClass: (itemModelName) ->
-
-
-        class AnonymousList extends BaseList
-            @itemModelName: itemModelName
-            @isAnonymous: true
-
-        return AnonymousList
+    @itemModelName: null
 
 
     ###*
@@ -76,6 +59,8 @@ class BaseList extends ValueObject
     ###
     constructor: (props = {}) ->
 
+        itemModelName = @getItemModelName()
+
         # loaded and listeners are hidden properties
         _itemFactory = null
         Object.defineProperties @, 
@@ -83,7 +68,7 @@ class BaseList extends ValueObject
             loaded      : value: false, writable: true
             listeners   : value: []
             itemFactory : get: ->
-                _itemFactory ?= @getFacade().createFactory(@constructor.itemModelName, true)
+                _itemFactory ?= @getFacade().createFactory(itemModelName, true)
 
         if props.items
             @setItems props.items
@@ -105,7 +90,8 @@ class BaseList extends ValueObject
         return if not @constructor.containsEntity()
 
         @loaded = false
-        ItemRepository = @getFacade().getRepository(@constructor.itemModelName)
+        itemModelName = @getItemModelName()
+        ItemRepository = @getFacade().getRepository(itemModelName)
 
         repo = new ItemRepository()
 
@@ -128,7 +114,8 @@ class BaseList extends ValueObject
     @param {Array} models
     ###
     setItems: (models = []) ->
-        ItemClass = @getFacade().getModel @constructor.itemModelName
+        itemModelName = @getItemModelName()
+        ItemClass = @getFacade().getModel itemModelName
 
         @items.push item for item in models when item instanceof ItemClass
 
@@ -147,6 +134,9 @@ class BaseList extends ValueObject
     @return {Boolean}
     ###
     @containsEntity: ->
+        if not @itemModelName? 
+            throw @getFacade().error "@itemModelName is not set, in class #{@name}"
+
         return @getFacade().getModel(@itemModelName).isEntity
 
 
@@ -250,5 +240,12 @@ class BaseList extends ValueObject
         while fn = @listeners.shift()
             process.nextTick fn
         return
+
+
+    getItemModelName: ->
+        if not @constructor.itemModelName? 
+            throw @getFacade().error "@itemModelName is not set, in class #{@constructor.name}"
+
+        return @constructor.itemModelName
 
 module.exports = BaseList

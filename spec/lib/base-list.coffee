@@ -86,6 +86,14 @@ describe 'BaseList', ->
         expect(explicitKeys).to.contain 'annualCost'
 
 
+    it 'throws error if itemModelName is not set', ->
+        class HobbyList extends BaseList
+            @getFacade: -> facade
+            getFacade:  -> facade
+
+        expect(-> new HobbyList()).to.throw Facade.DomainError
+
+
 
     describe 'constructor', ->
 

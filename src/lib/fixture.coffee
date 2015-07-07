@@ -1,9 +1,12 @@
 
+debug = null
+
 { normalize } = require('path')
 fs = require('fs')
 
 ###*
 load data from directory and generates fixtures
+only available in Node.js
 
 @class Fixture
 @module base-domain
@@ -20,7 +23,10 @@ class Fixture
     ###
     constructor: (@facade, options = {}) ->
 
-        @debug  = options.debug ? !!@facade.debug
+        debugMode = options.debug ? !!@facade.debug
+        if debugMode
+            require('debug').enable('base-domain:fixture')
+            debug = require('debug')('base-domain:fixture')
 
         # loading model files
         @fxModelMap = {}
@@ -83,12 +89,11 @@ class Fixture
         modelNames = @resolveDependencies(names)
 
         if not modelNames.length
-            console.log 'no data to insert.' if @debug
+            debug 'no data to insert.'
             return Promise.resolve(true)
 
 
-        console.log('insertion order') if @debug
-        console.log("\t#{modelNames.join(' -> ')}\n") if @debug
+        debug("insertion order: #{modelNames.join(' -> ')}")
 
 
         do insert = =>
@@ -202,7 +207,7 @@ class FixtureModel
 
         dataNames = Object.keys modelDataMap
 
-        console.log("inserting #{dataNames.length} data into #{@name}") if @fx.debug
+        debug("inserting #{dataNames.length} data into #{@name}")
 
         useAnonymousFactory = on # if no factory is declared, altered one is used 
         factory = @fx.facade.createFactory(@name, useAnonymousFactory)

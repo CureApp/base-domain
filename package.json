@@ -29,6 +29,7 @@
     "copy-class": "0.3.0",
     "ect": "^0.5.9",
     "es6-promise": "^2.0.1",
+    "debug": "^2.2.0",
     "through": "^2.3.7"
   },
   "devDependencies": {

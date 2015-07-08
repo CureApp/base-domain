@@ -100,11 +100,14 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 
+debug = null
+
 { normalize } = require(&#x27;path&#x27;)
 fs = require(&#x27;fs&#x27;)
 
 ###*
 load data from directory and generates fixtures
+only available in Node.js
 
 @class Fixture
 @module base-domain
@@ -121,7 +124,10 @@ class Fixture
     ###
     constructor: (@facade, options = {}) -&gt;
 
-        @debug  = options.debug ? !!@facade.debug
+        debugMode = options.debug ? !!@facade.debug
+        if debugMode
+            require(&#x27;debug&#x27;).enable(&#x27;base-domain:fixture&#x27;)
+            debug = require(&#x27;debug&#x27;)(&#x27;base-domain:fixture&#x27;)
 
         # loading model files
         @fxModelMap = {}
@@ -184,12 +190,11 @@ class Fixture
         modelNames = @resolveDependencies(names)
 
         if not modelNames.length
-            console.log &#x27;no data to insert.&#x27; if @debug
+            debug &#x27;no data to insert.&#x27;
             return Promise.resolve(true)
 
 
-        console.log(&#x27;insertion order&#x27;) if @debug
-        console.log(&quot;\t#{modelNames.join(&#x27; -&gt; &#x27;)}\n&quot;) if @debug
+        debug(&quot;insertion order: #{modelNames.join(&#x27; -&gt; &#x27;)}&quot;)
 
 
         do insert = =&gt;
@@ -303,7 +308,7 @@ class FixtureModel
 
         dataNames = Object.keys modelDataMap
 
-        console.log(&quot;inserting #{dataNames.length} data into #{@name}&quot;) if @fx.debug
+        debug(&quot;inserting #{dataNames.length} data into #{@name}&quot;)
 
         useAnonymousFactory = on # if no factory is declared, altered one is used 
         factory = @fx.facade.createFactory(@name, useAnonymousFactory)

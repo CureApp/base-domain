@@ -369,8 +369,8 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/fixture.coffee",
-            "line": 5,
-            "description": "load data from directory and generates fixtures"
+            "line": 7,
+            "description": "load data from directory and generates fixtures\nonly available in Node.js"
         },
         "FixtureModel": {
             "name": "FixtureModel",
@@ -383,7 +383,7 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/fixture.coffee",
-            "line": 171
+            "line": 176
         },
         "Includer": {
             "name": "Includer",
@@ -1123,7 +1123,23 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 110,
+            "line": 109,
+            "description": "add model(s)",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "model",
+                    "description": "",
+                    "type": "BaseModel"
+                }
+            ],
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 120,
             "description": "set items",
             "itemtype": "method",
             "name": "setItems",
@@ -1139,7 +1155,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 128,
+            "line": 138,
             "description": "returns item is Entity",
             "itemtype": "method",
             "name": "containsEntity",
@@ -1155,7 +1171,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 143,
+            "line": 153,
             "description": "sort items in constructor",
             "itemtype": "method",
             "name": "sort",
@@ -1166,7 +1182,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 153,
+            "line": 163,
             "description": "first item",
             "itemtype": "method",
             "name": "first",
@@ -1177,7 +1193,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 166,
+            "line": 176,
             "description": "last item",
             "itemtype": "method",
             "name": "last",
@@ -1188,7 +1204,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 179,
+            "line": 189,
             "description": "export models to Array",
             "itemtype": "method",
             "name": "toArray",
@@ -1199,7 +1215,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 189,
+            "line": 199,
             "description": "create plain list.\nif this list contains entities, returns their ids\nif this list contains non-entity models, returns their plain objects",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -1212,7 +1228,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 218,
+            "line": 228,
             "description": "on addEventListeners for 'loaded'",
             "itemtype": "method",
             "name": "on",
@@ -1223,7 +1239,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 234,
+            "line": 244,
             "description": "tell listeners emit loaded",
             "itemtype": "method",
             "name": "emitLoaded",
@@ -2341,7 +2357,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 14,
+            "line": 17,
             "is_constructor": 1,
             "params": [
                 {
@@ -2378,7 +2394,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 59,
+            "line": 65,
             "description": "add data to pool for model's data",
             "itemtype": "method",
             "name": "addToDataPool",
@@ -2391,7 +2407,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 70,
+            "line": 76,
             "description": "inserts data to datasource",
             "params": [
                 {
@@ -2411,7 +2427,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 112,
+            "line": 117,
             "description": "adds dependent models, topological sort",
             "access": "private",
             "tagname": "",
@@ -2433,14 +2449,14 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 177,
+            "line": 182,
             "is_constructor": 1,
             "class": "FixtureModel",
             "module": "base-domain"
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 187,
+            "line": 192,
             "description": "inserts data to datasource",
             "itemtype": "method",
             "name": "insert",
@@ -2453,7 +2469,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 230,
+            "line": 235,
             "description": "read TSV, returns model data",
             "itemtype": "method",
             "name": "readTSV",
@@ -3415,11 +3431,11 @@
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/fixture.coffee:14"
+            "line": " src/lib/fixture.coffee:17"
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/fixture.coffee:177"
+            "line": " src/lib/fixture.coffee:182"
         },
         {
             "message": "Missing item type",

@@ -106,6 +106,16 @@ class BaseList extends ValueObject
 
         return @
 
+    ###*
+    add model(s)
+
+    @method add
+    @param {BaseModel} model
+    ###
+    add: (models...) ->
+
+        @setItems(models)
+
 
     ###*
     set items

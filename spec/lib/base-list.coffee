@@ -270,6 +270,28 @@ describe 'BaseList', ->
             expect(hobbyList.toPlainObject()).to.have.property 'annualCost'
 
 
+    describe 'add', ->
+
+        it 'appends models', ->
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+                @properties:
+                    annualCost: @TYPES.NUMBER
+
+            hobbyList = new HobbyList(items: hobbies, annualCost: 2000)
+            Hobby = facade.getModel 'hobby'
+
+            hobbyList.add new Hobby(id: 0, name: 'abc'), new Hobby(id: 100, name: 'xyz')
+
+            expect(hobbyList.first()).to.have.property 'name', 'abc'
+            expect(hobbyList.last()).to.have.property 'name', 'xyz'
+
+
+
+
     describe 'setIds', ->
 
         class Commodity extends Facade.Entity

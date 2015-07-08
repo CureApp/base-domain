@@ -1070,7 +1070,19 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 36,
+            "line": 37,
+            "description": "the number of items",
+            "itemtype": "property",
+            "name": "length",
+            "type": "number",
+            "access": "public",
+            "tagname": "",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 49,
             "description": "items: array of models",
             "itemtype": "property",
             "name": "items",
@@ -1080,7 +1092,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 43,
+            "line": 56,
             "description": "loaded: is data loaded or not",
             "itemtype": "property",
             "name": "loaded",
@@ -1090,7 +1102,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 50,
+            "line": 63,
             "description": "itemFactory: instance of factory which creates item models",
             "itemtype": "property",
             "name": "itemFactory",
@@ -1100,14 +1112,14 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 57,
+            "line": 70,
             "is_constructor": 1,
             "class": "BaseList",
             "module": "base-domain"
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 82,
+            "line": 95,
             "description": "set ids.",
             "itemtype": "method",
             "name": "setIds",
@@ -1123,7 +1135,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 109,
+            "line": 122,
             "description": "add model(s)",
             "itemtype": "method",
             "name": "add",
@@ -1139,7 +1151,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 120,
+            "line": 133,
             "description": "set items",
             "itemtype": "method",
             "name": "setItems",
@@ -1155,7 +1167,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 138,
+            "line": 151,
             "description": "returns item is Entity",
             "itemtype": "method",
             "name": "containsEntity",
@@ -1171,7 +1183,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 153,
+            "line": 166,
             "description": "sort items in constructor",
             "itemtype": "method",
             "name": "sort",
@@ -1182,7 +1194,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 163,
+            "line": 176,
             "description": "first item",
             "itemtype": "method",
             "name": "first",
@@ -1193,7 +1205,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 176,
+            "line": 189,
             "description": "last item",
             "itemtype": "method",
             "name": "last",
@@ -1204,7 +1216,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 189,
+            "line": 202,
             "description": "export models to Array",
             "itemtype": "method",
             "name": "toArray",
@@ -1215,7 +1227,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 199,
+            "line": 212,
             "description": "create plain list.\nif this list contains entities, returns their ids\nif this list contains non-entity models, returns their plain objects",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -1228,7 +1240,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 228,
+            "line": 241,
             "description": "on addEventListeners for 'loaded'",
             "itemtype": "method",
             "name": "on",
@@ -1239,7 +1251,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 244,
+            "line": 257,
             "description": "tell listeners emit loaded",
             "itemtype": "method",
             "name": "emitLoaded",
@@ -3399,7 +3411,7 @@
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/base-list.coffee:57"
+            "line": " src/lib/base-list.coffee:70"
         },
         {
             "message": "Missing item type",

@@ -197,11 +197,13 @@ describe 'BaseList', ->
             hobbyList = new HobbyList(ids: ['dummy'])
             expect(hobbyList.loaded).to.be.false
             expect(hobbyList.items).to.have.length 0
+            expect(hobbyList).to.have.length 0
             expect(hobbyList.ids).to.have.length 0
 
             hobbyList.on 'loaded', ->
                 expect(hobbyList.loaded).to.be.true
                 expect(hobbyList.items).to.have.length 1
+                expect(hobbyList).to.have.length 1
                 done()
 
         it 'executed after event registered when array is given in constructor', (done) ->
@@ -216,6 +218,7 @@ describe 'BaseList', ->
             hobbyList.on 'loaded', ->
                 expect(hobbyList.loaded).to.be.true
                 expect(hobbyList.items).to.have.length 3
+                expect(hobbyList).to.have.length 3
                 done()
 
 
@@ -346,11 +349,13 @@ describe 'BaseList', ->
 
             expect(list.loaded).to.be.false
             expect(list.items).to.have.length 0
+            expect(list).to.have.length 0
 
             list.on 'loaded', ->
 
                 expect(list.loaded).to.be.true
                 expect(list.items).to.have.length 2
+                expect(list).to.have.length 2
 
                 done()
 

@@ -33,6 +33,19 @@ class BaseList extends ValueObject
             return null if not @constructor.containsEntity()
             return (item.id for item in @items)
 
+
+    ###*
+    the number of items
+
+    @property length
+    @type number
+    @public
+    ###
+    Object.defineProperty @::, 'length',
+        get: ->
+            return @items.length
+
+
     ###*
     items: array of models
 

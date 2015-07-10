@@ -27,6 +27,8 @@ class Fixture
         if debugMode
             require('debug').enable('base-domain:fixture')
             debug = require('debug')('base-domain:fixture')
+        else
+            debug = ->
 
         # loading model files
         @fxModelMap = {}

@@ -1,96 +1,130 @@
+
 through = require 'through'
 fs      = require 'fs'
 coffee  = require 'coffee-script'
 
-initialCodeGenerated = false
+class BaseDomainify
 
-module.exports = (file, options) ->
+    @moduleName = 'base-domain'
 
-    throwError() if not options.dirname
+    constructor: ->
 
-    if initialCodeGenerated
-        return through()
+        @initialCodeGenerated = false
 
-    else
-        initialCode = getInitialCode(options.dirname)
-        initialCodeGenerated = true
+
+    ###*
+    get CoffeeScript code of adding addClass methods to all domain files
+
+    @method run
+    @public
+    @return {String} code CoffeeScript code
+    ###
+    run: (file, options = {}) ->
+
+        @dirname = options.dirname
+
+        @throwError() if not @dirname
+
+        return through() if @initialCodeGenerated
+
+        initialCode = @getInitialCode(options.dirname)
+
+        @initialCodeGenerated = true
 
         data = ''
         write = (buf) -> data += buf
-
-        end = ->
-            @queue initialCode
-            @queue data
-            @queue null
+        end = -> @queue val for val in [initialCode, data, null]
 
         return through write, end
 
 
 
-getInitialCode = (dirname) ->
+    ###*
+    get CoffeeScript code of adding addClass methods to all domain files
 
-    basename = require('path').basename dirname
-    _ = ' ' # spacer for indent
+    @method getInitialCode
+    @private
+    @return {String} code CoffeeScript code
+    ###
+    getInitialCode: ->
 
-    coffeeCode = """
-        Facade = require 'base-domain'
+        basename = require('path').basename @dirname
+        _ = ' ' # spacer for indent
 
-        Facade::init = ->
-        #{_}return unless @dirname.match '#{basename}'\n
-    """
+        coffeeCode = """
+            Facade = require '#{@constructor.moduleName}'
 
-    for filename in getFiles(dirname)
+            Facade::init = ->
+            #{_}return unless @dirname.match '#{basename}'\n
+        """
 
-        path = dirname + '/' + filename
-        name = filename.split('.')[0]
+        for filename in @getFiles()
 
-        coffeeCode += """
-            #{_}@addClass '#{name}', require('#{path}')\n
+            path = @dirname + '/' + filename
+            name = filename.split('.')[0]
+
+            coffeeCode += """
+                #{_}@addClass '#{name}', require('#{path}')\n
+            """
+
+
+        coffeeCode += "#{_}return\n"
+
+        return coffee.compile(coffeeCode, bare: true)
+
+
+
+    ###*
+    get domain files to load
+
+    @method getFiles
+    @private
+    @return {Array} filenames
+    ###
+    getFiles: ->
+
+        fileInfoDict = {}
+
+        for filename in fs.readdirSync(@dirname)
+
+            klass = require @dirname + '/' + filename
+            [ name, ext ] = filename.split('.')
+
+            continue if typeof klass.getName isnt 'function'
+            continue if klass.getName() isnt name
+
+            fileInfoDict[name] = filename: filename, klass: klass
+
+        files = []
+        for name, fileInfo of fileInfoDict
+
+            { klass, filename } = fileInfo
+            continue if filename in files
+
+            ParentClass = Object.getPrototypeOf(klass::).constructor
+
+            if typeof ParentClass.getName is 'function' and pntFileName = fileInfoDict[ParentClass.getName()]?.filename
+
+                files.push pntFileName unless pntFileName in files
+
+            files.push filename
+
+        return files
+
+
+    ###*
+    throw error
+
+    @method throwError
+    @private
+    ###
+    throwError:  ->
+        throw new Error """
+            dirname must be passed.
+
+            browserify -t [ base-domain/ify --dirname dirname ]
+
         """
 
 
-    coffeeCode += "#{_}return\n"
-
-    return coffee.compile(coffeeCode, bare: true)
-
-
-
-getFiles = (dirname) ->
-
-    fileInfoDict = {}
-
-    for filename in fs.readdirSync(dirname)
-
-        klass = require dirname + '/' + filename
-        [ name, ext ] = filename.split('.')
-
-        continue if typeof klass.getName isnt 'function'
-        continue if klass.getName() isnt name
-
-        fileInfoDict[name] = filename: filename, klass: klass
-
-    files = []
-    for name, fileInfo of fileInfoDict
-
-        { klass, filename } = fileInfo
-        continue if filename in files
-
-        ParentClass = Object.getPrototypeOf(klass::).constructor
-
-        if typeof ParentClass.getName is 'function' and pntFileName = fileInfoDict[ParentClass.getName()]?.filename
-
-            files.push pntFileName unless pntFileName in files
-
-        files.push filename
-
-    return files
-
-
-
-throwError = ->
-    throw new Error """
-        dirname must be passed.
-
-        browserify -t [ base-domain/ify --dirname dirname ]
-
-    """
+module.exports = BaseDomainify

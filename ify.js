@@ -8,4 +8,9 @@
  */
 
 require('coffee-script/register');
-module.exports = require('./src/base-domainify.coffee');
+var BaseDomainify = require('./src/base-domainify.coffee');
+var baseDomainify = new BaseDomainify()
+
+module.exports = function(file, options) {
+    return baseDomainify.run(file, options);
+};

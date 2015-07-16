@@ -26,9 +26,8 @@ class Fixture
         debugMode = options.debug ? !!@facade.debug
         if debugMode
             require('debug').enable('base-domain:fixture')
-            debug = require('debug')('base-domain:fixture')
-        else
-            debug = ->
+
+        debug = require('debug')('base-domain:fixture')
 
         # loading model files
         @fxModelMap = {}

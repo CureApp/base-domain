@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Fixture</title>
+    <title>src/base-domainify.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -95,240 +95,142 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>Fixture Class</h1>
-<div class="box meta">
+<h1 class="file-heading">File: src/base-domainify.coffee</h1>
 
+<div class="file">
+    <pre class="code prettyprint linenums">
 
-        <div class="foundat">
-            Defined in: <a href="../files/src_lib_fixture.coffee.html#l7"><code>src&#x2F;lib&#x2F;fixture.coffee:7</code></a>
-        </div>
+through = require &#x27;through&#x27;
+fs      = require &#x27;fs&#x27;
+coffee  = require &#x27;coffee-script&#x27;
 
-            Module: <a href="../modules/base-domain.html">base-domain</a>
+class BaseDomainify
 
-</div>
+    @moduleName = &#x27;base-domain&#x27;
 
+    constructor: -&gt;
 
-<div class="box intro">
-    <p>load data from directory and generates fixtures
-only available in Node.js</p>
+        @initialCodeGenerated = false
 
-</div>
 
+    ###*
+    get CoffeeScript code of adding addClass methods to all domain files
 
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
+    @method run
+    @public
+    @return {String} code CoffeeScript code
+    ###
+    run: (file, options = {}) -&gt;
 
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-    </ul>
+        @dirname = options.dirname
 
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
+        @throwError() if not @dirname
 
-                <div class="index-section methods">
-                    <h3>Methods</h3>
+        return through() if @initialCodeGenerated
 
-                    <ul class="index-list methods">
-                            <li class="index-item method">
-                                <a href="#method_addToDataPool">addToDataPool</a>
+        initialCode = @getInitialCode(options.dirname)
 
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_insert">insert</a>
+        @initialCodeGenerated = true
 
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_resolveDependencies">resolveDependencies</a>
+        data = &#x27;&#x27;
+        write = (buf) -&gt; data += buf
+        end = -&gt; @queue val for val in [initialCode, data, null]
 
-                            </li>
-                    </ul>
-                </div>
+        return through write, end
 
 
 
-        </div>
+    ###*
+    get CoffeeScript code of adding addClass methods to all domain files
 
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
+    @method getInitialCode
+    @private
+    @return {String} code CoffeeScript code
+    ###
+    getInitialCode: -&gt;
 
-<div id="method_addToDataPool" class="method item">
-    <h3 class="name"><code>addToDataPool</code></h3>
+        basename = require(&#x27;path&#x27;).basename @dirname
+        _ = &#x27; &#x27; # spacer for indent
 
-        <span class="paren">()</span>
+        coffeeCode = &quot;&quot;&quot;
+            Facade = require &#x27;#{@constructor.moduleName}&#x27;
 
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
+            Facade::init = -&gt;
+            #{_}return unless @dirname.match &#x27;#{basename}&#x27;\n
+        &quot;&quot;&quot;
 
+        for filename in @getFiles()
 
+            path = @dirname + &#x27;/&#x27; + filename
+            name = filename.split(&#x27;.&#x27;)[0]
 
+            coffeeCode += &quot;&quot;&quot;
+                #{_}@addClass &#x27;#{name}&#x27;, require(&#x27;#{path}&#x27;)\n
+            &quot;&quot;&quot;
 
 
+        coffeeCode += &quot;#{_}return\n&quot;
 
+        return coffee.compile(coffeeCode, bare: true)
 
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_fixture.coffee.html#l66"><code>src&#x2F;lib&#x2F;fixture.coffee:66</code></a>
-        </p>
 
 
+    ###*
+    get domain files to load
 
-    </div>
+    @method getFiles
+    @private
+    @return {Array} filenames
+    ###
+    getFiles: -&gt;
 
-    <div class="description">
-        <p>add data to pool for model&#39;s data</p>
+        fileInfoDict = {}
 
-    </div>
+        for filename in fs.readdirSync(@dirname)
 
+            klass = require @dirname + &#x27;/&#x27; + filename
+            [ name, ext ] = filename.split(&#x27;.&#x27;)
 
-        <div class="returns">
-            <h4>Returns:</h4>
+            continue if typeof klass.getName isnt &#x27;function&#x27;
+            continue if klass.getName() isnt name
 
-            <div class="returns-description">
-                        <span class="type">Object</span>:
-            </div>
-        </div>
+            fileInfoDict[name] = filename: filename, klass: klass
 
+        files = []
+        for name, fileInfo of fileInfoDict
 
-</div>
-<div id="method_insert" class="method item">
-    <h3 class="name"><code>insert</code></h3>
+            { klass, filename } = fileInfo
+            continue if filename in files
 
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>names</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
+            ParentClass = Object.getPrototypeOf(klass::).constructor
 
-        <span class="returns-inline">
-            <span class="type">Promise</span>
-        </span>
+            if typeof ParentClass.getName is &#x27;function&#x27; and pntFileName = fileInfoDict[ParentClass.getName()]?.filename
 
+                files.push pntFileName unless pntFileName in files
 
+            files.push filename
 
+        return files
 
 
+    ###*
+    throw error
 
+    @method throwError
+    @private
+    ###
+    throwError:  -&gt;
+        throw new Error &quot;&quot;&quot;
+            dirname must be passed.
 
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_fixture.coffee.html#l77"><code>src&#x2F;lib&#x2F;fixture.coffee:77</code></a>
-        </p>
+            browserify -t [ base-domain/ify --dirname dirname ]
 
+        &quot;&quot;&quot;
 
 
-    </div>
+module.exports = BaseDomainify
 
-    <div class="description">
-        <p>inserts data to datasource</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">names</code>
-                        <span class="type">Array</span>
-
-
-                    <div class="param-description">
-                        <p>list of fixture models to insert data</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Promise</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_resolveDependencies" class="method item private">
-    <h3 class="name"><code>resolveDependencies</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>names</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Array</span>
-        </span>
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_lib_fixture.coffee.html#l118"><code>src&#x2F;lib&#x2F;fixture.coffee:118</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>adds dependent models, topological sort</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">names</code>
-                        <span class="type">Array</span>
-
-
-                    <div class="param-description">
-                        <p>list of fixture models to insert data</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Array</span>:
-                    <p>model names</p>
-
-            </div>
-        </div>
-
-
-</div>
-            </div>
-
-
-
-    </div>
+    </pre>
 </div>
                     </div>
                 </div>

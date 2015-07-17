@@ -174,6 +174,13 @@
             },
             "fors": {},
             "namespaces": {}
+        },
+        "src/base-domainify.coffee": {
+            "name": "src/base-domainify.coffee",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
         }
     },
     "modules": {
@@ -383,7 +390,7 @@
             "module": "base-domain",
             "namespace": "",
             "file": "src/lib/fixture.coffee",
-            "line": 176
+            "line": 177
         },
         "Includer": {
             "name": "Includer",
@@ -623,6 +630,22 @@
         {
             "file": "src/lib/base-dict.coffee",
             "line": 116,
+            "description": "turn on/off the value",
+            "itemtype": "method",
+            "name": "toggle",
+            "params": [
+                {
+                    "name": "item",
+                    "description": "",
+                    "type": "BaseModel"
+                }
+            ],
+            "class": "BaseDict",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-dict.coffee",
+            "line": 131,
             "description": "return submodel of the given key",
             "itemtype": "method",
             "name": "get",
@@ -644,7 +667,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 128,
+            "line": 143,
             "description": "add new submodel to item(s)",
             "itemtype": "method",
             "name": "get",
@@ -662,7 +685,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 145,
+            "line": 160,
             "description": "remove submodel from items\nboth acceptable, keys and submodels",
             "itemtype": "method",
             "name": "remove",
@@ -680,7 +703,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 170,
+            "line": 185,
             "description": "set ids.",
             "itemtype": "method",
             "name": "setIds",
@@ -696,7 +719,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 199,
+            "line": 214,
             "description": "set items from dic object\nupdate to new key",
             "itemtype": "method",
             "name": "setItems",
@@ -712,7 +735,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 216,
+            "line": 231,
             "description": "returns item is Entity",
             "itemtype": "method",
             "name": "containsEntity",
@@ -728,7 +751,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 232,
+            "line": 247,
             "description": "export models to Array",
             "itemtype": "method",
             "name": "toArray",
@@ -739,7 +762,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 242,
+            "line": 257,
             "description": "create plain dict.\nif this dict contains entities, returns their ids\nif this dict contains non-entity models, returns their plain objects",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -752,7 +775,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 271,
+            "line": 286,
             "description": "on addEventlisteners for 'loaded'",
             "itemtype": "method",
             "name": "on",
@@ -763,7 +786,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 287,
+            "line": 302,
             "description": "tell listeners emit loaded",
             "itemtype": "method",
             "name": "emitLoaded",
@@ -2406,7 +2429,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 65,
+            "line": 66,
             "description": "add data to pool for model's data",
             "itemtype": "method",
             "name": "addToDataPool",
@@ -2419,7 +2442,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 76,
+            "line": 77,
             "description": "inserts data to datasource",
             "params": [
                 {
@@ -2439,7 +2462,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 117,
+            "line": 118,
             "description": "adds dependent models, topological sort",
             "access": "private",
             "tagname": "",
@@ -2461,14 +2484,14 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 182,
+            "line": 183,
             "is_constructor": 1,
             "class": "FixtureModel",
             "module": "base-domain"
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 192,
+            "line": 193,
             "description": "inserts data to datasource",
             "itemtype": "method",
             "name": "insert",
@@ -2481,7 +2504,7 @@
         },
         {
             "file": "src/lib/fixture.coffee",
-            "line": 235,
+            "line": 236,
             "description": "read TSV, returns model data",
             "itemtype": "method",
             "name": "readTSV",
@@ -3366,6 +3389,62 @@
             },
             "class": "Util",
             "module": "base-domain"
+        },
+        {
+            "file": "src/base-domainify.coffee",
+            "line": 15,
+            "description": "get CoffeeScript code of adding addClass methods to all domain files",
+            "itemtype": "method",
+            "name": "run",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "code CoffeeScript code",
+                "type": "String"
+            },
+            "class": "",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/base-domainify.coffee",
+            "line": 42,
+            "description": "get CoffeeScript code of adding addClass methods to all domain files",
+            "itemtype": "method",
+            "name": "getInitialCode",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "code CoffeeScript code",
+                "type": "String"
+            },
+            "class": "",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/base-domainify.coffee",
+            "line": 77,
+            "description": "get domain files to load",
+            "itemtype": "method",
+            "name": "getFiles",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "filenames",
+                "type": "Array"
+            },
+            "class": "",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/base-domainify.coffee",
+            "line": 115,
+            "description": "throw error",
+            "itemtype": "method",
+            "name": "throwError",
+            "access": "private",
+            "tagname": "",
+            "class": "",
+            "module": "base-domain"
         }
     ],
     "warnings": [
@@ -3447,7 +3526,7 @@
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/fixture.coffee:182"
+            "line": " src/lib/fixture.coffee:183"
         },
         {
             "message": "Missing item type",

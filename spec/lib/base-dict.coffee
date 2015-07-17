@@ -407,3 +407,37 @@ describe 'BaseDict', ->
 
         it 'do nothing if no key exists', ->
             @hobbyDict.remove('xxx')
+
+
+    describe 'toggle', ->
+
+        beforeEach ->
+            class HobbyDict extends BaseDict
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+                @key: (item) -> item.name
+
+            @hobbyDict = new HobbyDict(items: hobbies)
+            @factory = @hobbyDict.itemFactory
+
+        it 'adds if not exist', ->
+
+            h = @factory.createFromObject
+                name        : 'skiing'
+
+            @hobbyDict.toggle h
+
+            expect(@hobbyDict.has 'skiing').to.be.true
+
+
+        it 'removes if exists', ->
+
+            h = @factory.createFromObject
+                name        : 'skiing'
+
+            @hobbyDict.add h
+            @hobbyDict.toggle h
+            expect(@hobbyDict.has 'skiing').to.be.false
+
+

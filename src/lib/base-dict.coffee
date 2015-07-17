@@ -114,6 +114,21 @@ class BaseDict extends ValueObject
 
 
     ###*
+    turn on/off the value
+
+    @method toggle
+    @param {BaseModel} item
+    ###
+    toggle: (item) ->
+        key = @constructor.key item
+        if @has key
+            @remove item
+        else
+            @add item
+
+
+
+    ###*
     return submodel of the given key
 
     @method get

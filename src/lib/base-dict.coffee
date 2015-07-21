@@ -143,7 +143,7 @@ class BaseDict extends ValueObject
     ###*
     add new submodel to item(s)
 
-    @method get
+    @method add
     @public
     @param {BaseModel} item
     ###

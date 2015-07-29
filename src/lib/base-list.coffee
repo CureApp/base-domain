@@ -142,7 +142,7 @@ class BaseList extends ValueObject
 
         @items.push item for item in models when item instanceof ItemClass
 
-        @items.sort(@sort)
+        @items.sort(@sort) if @sort
 
         @loaded = true
         @emitLoaded()
@@ -168,9 +168,12 @@ class BaseList extends ValueObject
 
     @method sort
     @protected
+    @abstract
+    @param modelA
+    @param modelB
+    @return {Number}
     ###
-    sort: (modelA, modelB) ->
-        if modelA.id > modelB.id then 1 else -1
+    #sort: (modelA, modelB) ->
 
 
     ###*

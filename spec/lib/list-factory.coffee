@@ -90,6 +90,6 @@ describe 'ListFactory', ->
                 Hobby = facade.getModel 'hobby'
                 expect(list.items).to.have.length 2
                 expect(list.items[0]).to.be.instanceof Hobby
-                expect(list.ids).to.eql [2,3]
+                expect(list.ids).to.eql [3, 2]
                 done()
 

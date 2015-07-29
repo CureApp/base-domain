@@ -97,7 +97,7 @@ describe 'BaseList', ->
 
     describe 'constructor', ->
 
-        it 'sorts model by id', ->
+        it 'sorts model when sort function is defined', ->
 
             hobbyIds = (hobby.id for hobby in hobbies)
             expect(hobbyIds).to.deep.equal [3, 2, 1]
@@ -106,6 +106,8 @@ describe 'BaseList', ->
                 @getFacade: -> facade
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
+
+                sort: (a, b) -> a.id - b.id
 
             hobbyList = new HobbyList(items: hobbies)
 
@@ -137,7 +139,7 @@ describe 'BaseList', ->
         it 'get array of ids when the item is Entity', ->
 
             hobbyList = new HobbyList(items: hobbies)
-            expect(hobbyList.ids).to.deep.equal [1, 2, 3]
+            expect(hobbyList.ids).to.deep.equal [3, 2, 1]
 
 
 
@@ -152,7 +154,7 @@ describe 'BaseList', ->
 
             hobbyList = new HobbyList(items: hobbies)
 
-            expect(hobbyList.first()).to.equal hobbies[2]
+            expect(hobbyList.first()).to.equal hobbies[0]
 
 
 
@@ -167,7 +169,7 @@ describe 'BaseList', ->
 
             hobbyList = new HobbyList(items: hobbies)
 
-            expect(hobbyList.last()).to.equal hobbies[0]
+            expect(hobbyList.last()).to.equal hobbies[2]
 
 
     describe 'toArray', ->
@@ -289,7 +291,7 @@ describe 'BaseList', ->
 
             hobbyList.add new Hobby(id: 0, name: 'abc'), new Hobby(id: 100, name: 'xyz')
 
-            expect(hobbyList.first()).to.have.property 'name', 'abc'
+            expect(hobbyList.first()).to.have.property 'name', 'keyboard'
             expect(hobbyList.last()).to.have.property 'name', 'xyz'
 
 

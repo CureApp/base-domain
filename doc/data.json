@@ -670,7 +670,7 @@
             "line": 143,
             "description": "add new submodel to item(s)",
             "itemtype": "method",
-            "name": "get",
+            "name": "add",
             "access": "public",
             "tagname": "",
             "params": [
@@ -1212,12 +1212,27 @@
             "name": "sort",
             "access": "protected",
             "tagname": "",
+            "abstract": "",
+            "params": [
+                {
+                    "name": "modelA",
+                    "description": ""
+                },
+                {
+                    "name": "modelB",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
             "class": "BaseList",
             "module": "base-domain"
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 176,
+            "line": 179,
             "description": "first item",
             "itemtype": "method",
             "name": "first",
@@ -1228,7 +1243,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 189,
+            "line": 192,
             "description": "last item",
             "itemtype": "method",
             "name": "last",
@@ -1239,7 +1254,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 202,
+            "line": 205,
             "description": "export models to Array",
             "itemtype": "method",
             "name": "toArray",
@@ -1250,7 +1265,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 212,
+            "line": 215,
             "description": "create plain list.\nif this list contains entities, returns their ids\nif this list contains non-entity models, returns their plain objects",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -1263,7 +1278,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 241,
+            "line": 244,
             "description": "on addEventListeners for 'loaded'",
             "itemtype": "method",
             "name": "on",
@@ -1274,7 +1289,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 257,
+            "line": 260,
             "description": "tell listeners emit loaded",
             "itemtype": "method",
             "name": "emitLoaded",
@@ -3391,6 +3406,32 @@
             "module": "base-domain"
         },
         {
+            "file": "src/lib/util.coffee",
+            "line": 74,
+            "description": "in Titanium, \"A instanceof B\" sometimes fails.\nthis is the alternative.",
+            "itemtype": "method",
+            "name": "isInstance",
+            "static": 1,
+            "params": [
+                {
+                    "name": "instance",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "class",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "A is instance of B",
+                "type": "Boolean"
+            },
+            "class": "Util",
+            "module": "base-domain"
+        },
+        {
             "file": "src/base-domainify.coffee",
             "line": 15,
             "description": "get CoffeeScript code of adding addClass methods to all domain files",
@@ -3455,6 +3496,10 @@
         {
             "message": "unknown tag: abstract",
             "line": " src/lib/base-factory.coffee:285"
+        },
+        {
+            "message": "unknown tag: abstract",
+            "line": " src/lib/base-list.coffee:166"
         },
         {
             "message": "unknown tag: abstract",

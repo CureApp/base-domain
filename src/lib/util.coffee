@@ -70,4 +70,33 @@ class Util
             throw new Error("#{path}: no such file.")
 
 
+
+    ###*
+    in Titanium, "A instanceof B" sometimes fails.
+    this is the alternative.
+
+    @method isInstance
+    @static
+    @param {Object} instance
+    @param {Function} class
+    @return {Boolean} A is instance of B
+    ###
+    @isInstance: (instance, Class) ->
+
+        if not Ti?
+            return instance instanceof Class
+
+        return false if not instance?.constructor
+        return true if Class is Object
+
+        className = Class.name
+
+        until instance.constructor is Object
+
+            return true if instance.constructor.name is className
+
+            instance = Object.getPrototypeOf instance
+
+        return false
+
 module.exports = Util

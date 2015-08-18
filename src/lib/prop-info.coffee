@@ -70,6 +70,7 @@ class PropInfo
         # private
         @entityDic = {}
         @modelDic = {}
+        @foreignIdDic = {}
 
 
         @build props, facade
@@ -106,6 +107,7 @@ class PropInfo
                     if facade.getModel(typeInfo.model).isEntity
                         @entityProps.push prop
                         @entityDic[prop] = true
+                        @foreignIdDic[typeInfo.idPropName] = prop
                     else
                         @nonEntityProps.push prop
 
@@ -134,6 +136,26 @@ class PropInfo
     getTypeInfo: (prop) ->
         return @dic[prop]
 
+
+    ###*
+    check if the given prop is foreign id
+
+    @method isForeignIdProp
+    @param {String} prop
+    @return {Boolean}
+    ###
+    isForeignIdProp: (prop) ->
+        return @foreignIdDic[prop]?
+
+    ###*
+    provide prop name of a model whose idProp is foreignIdProp
+
+    @method isForeignIdProp
+    @param {String} foreignIdProp
+    @return {String}
+    ###
+    getModelPropNameByIdProp: (foreignIdProp) ->
+        return @foreignIdDic[foreignIdProp]
 
     ###*
     check if the given prop is model prop

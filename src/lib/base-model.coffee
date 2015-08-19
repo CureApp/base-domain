@@ -210,9 +210,33 @@ class BaseModel extends Base
     @return {BaseModel} this
     ###
     inherit: (anotherModel) ->
-        for own k, v of anotherModel
-            if v?
-                @[k] = v
+
+        return @ if anotherModel not instanceof @constructor
+
+        propInfo = @constructor.getPropInfo()
+
+        for own prop, value of anotherModel
+
+            continue if propInfo.isEntityProp prop # entity prop is set in the section below (isForeignIdProp)
+
+            if propInfo.isForeignIdProp prop
+                modelProp = propInfo.getModelPropNameByIdProp(prop)
+
+                if @[prop] is value and @[modelProp] instanceof BaseModel
+                    @[modelProp].inherit anotherModel[modelProp]
+                else
+                    @[prop] = value
+                    @[modelProp] = anotherModel[modelProp]
+
+            else if propInfo.isModelProp prop # only value-objects come here
+
+                if @[prop] instanceof BaseModel
+                    @[prop].inherit value
+                else
+                    @[prop] = value
+
+            else
+                @[prop] = value
 
         return @
 

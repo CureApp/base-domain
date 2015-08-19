@@ -1,13 +1,12 @@
 
 facade = require('../create-facade').create('domain')
 
-BaseModel = facade.constructor.BaseModel
-Entity    = facade.constructor.Entity
-BaseList  = facade.constructor.BaseList
+{ ValueObject, BaseModel, Entity, BaseList } = facade.constructor
 
 Diary  = facade.getModel 'diary'
 Member = facade.getModel 'member'
 Hobby  = facade.getModel 'hobby'
+
 memberFactory = facade.createFactory('member')
 diaryFactory = facade.createFactory('diary')
 hobbyFactory = facade.createFactory('hobby')
@@ -186,4 +185,149 @@ describe 'BaseModel', ->
                 done()
             .catch (e) ->
                 done e
+
+
+
+    describe 'inherit', ->
+
+        beforeEach ->
+
+            @f = require('../create-facade').create()
+
+            class Patient extends Entity
+                @properties:
+                    name       : @TYPES.STRING
+                    hospital   : @TYPES.MODEL 'hospital'
+                    medication : @TYPES.MODEL 'medication'
+
+            class Hospital extends Entity
+                @properties:
+                    name: @TYPES.STRING
+
+            class Medication extends ValueObject
+                @properties:
+                    name: @TYPES.STRING
+
+            @f.addClass 'patient', Patient
+            @f.addClass 'hospital', Hospital
+            @f.addClass 'medication', Medication
+
+            @pFactory = @f.createFactory('patient', true)
+            @hFactory = @f.createFactory('hospital', true)
+            @mFactory = @f.createFactory('medication', true)
+
+            @tokyoHp = @hFactory.createFromObject(id: 'tokyo', name: 'Tokyo Hp.')
+            @osakaHp = @hFactory.createFromObject(id: 'osaka', name: 'Osaka Hp.')
+
+            @medicationD = @mFactory.createFromObject(name: 'vitamin D')
+            @medicationE = @mFactory.createFromObject(name: 'vitamin E')
+
+            @patient = @pFactory.createFromObject
+                name: 'Shin Suzuki'
+                hospital: @tokyoHp
+                medication: @medicationD
+
+            @yokoyama = @pFactory.createFromObject
+                name: 'Ken Yokoyama'
+                hospital: @osakaHp
+                medication: @medicationE
+
+
+        it 'changes no properties when null is given', ->
+
+            ret = @patient.inherit(null)
+
+            expect(ret).to.equal @patient
+
+            expect(@patient.name).to.equal 'Shin Suzuki'
+
+            expect(@patient.hospital).to.equal @tokyoHp
+            expect(@patient.hospital.id).to.equal 'tokyo'
+            expect(@patient.hospital.name).to.equal 'Tokyo Hp.'
+            expect(@patient.hospitalId).to.equal 'tokyo'
+
+            expect(@patient.medication).to.equal @medicationD
+            expect(@patient.medication.name).to.equal 'vitamin D'
+
+
+        it 'changes no properties when non-base-model object is given', ->
+
+            ret = @patient.inherit(name: 'Ken Yokoyama')
+
+            expect(ret).to.equal @patient
+
+            expect(@patient.name).to.equal 'Shin Suzuki'
+
+
+
+        it 'changes properties of non-model prop', ->
+
+            ret = @patient.inherit(@yokoyama)
+            expect(ret).to.equal @patient
+
+            expect(@patient.name).to.equal 'Ken Yokoyama'
+
+
+        it 'changes properties of entity prop, overwriting when foreign id is different', ->
+
+            ret = @patient.inherit(@yokoyama)
+            expect(ret).to.equal @patient
+
+            expect(@patient.hospital).to.equal @osakaHp
+            expect(@patient.hospital).to.not.equal @tokyoHp
+            expect(@patient.hospital.id).to.equal 'osaka'
+            expect(@patient.hospital.name).to.equal 'Osaka Hp.'
+            expect(@patient.hospitalId).to.equal 'osaka'
+
+
+        it 'changes properties of entity prop, inheriting the existing instance when foreign id is same', ->
+
+            @osakaHp.id = 'tokyo'
+
+            @yokoyama.set 'hospital', @osakaHp
+
+            ret = @patient.inherit(@yokoyama)
+            expect(ret).to.equal @patient
+
+            expect(@patient.hospital).to.not.equal @osakaHp
+            expect(@patient.hospital).to.equal @tokyoHp
+            expect(@patient.hospital.id).to.equal 'tokyo'
+            expect(@patient.hospital.name).to.equal 'Osaka Hp.'
+            expect(@patient.hospitalId).to.equal 'tokyo'
+
+
+        it 'set properties of entity prop to null when foreign id is different and new foreign model is not given', ->
+
+            delete @yokoyama.hospital
+
+            ret = @patient.inherit(@yokoyama)
+            expect(ret).to.equal @patient
+
+            expect(@patient.hospital).to.not.exist
+            expect(@patient.hospitalId).to.equal 'osaka'
+
+
+        it 'does not remove properties of entity prop when foreign id is same and new foreign model is not given', ->
+
+            delete @yokoyama.hospital
+            @yokoyama.hospitalId = 'tokyo'
+
+            ret = @patient.inherit(@yokoyama)
+            expect(ret).to.equal @patient
+
+            expect(@patient.hospital).to.equal @tokyoHp
+            expect(@patient.hospital.id).to.equal 'tokyo'
+            expect(@patient.hospital.name).to.equal 'Tokyo Hp.'
+            expect(@patient.hospitalId).to.equal 'tokyo'
+
+
+        it 'changes properties of non-entity prop, setting the existing instance to the new values', ->
+
+            ret = @patient.inherit(@yokoyama)
+            expect(ret).to.equal @patient
+
+            expect(@patient.medication).to.not.equal @medicationE
+            expect(@patient.medication).to.equal @medicationD
+            expect(@patient.medication.name).to.equal 'vitamin E'
+
 

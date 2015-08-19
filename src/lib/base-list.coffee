@@ -148,6 +148,19 @@ class BaseList extends ValueObject
         @emitLoaded()
         return @
 
+
+    ###*
+    make items empty
+
+    @method 
+    ###
+    resetItems: ->
+        @items.pop() while @items.length
+        @loaded = false
+        return
+
+
+
     ###*
     returns item is Entity
 
@@ -210,6 +223,31 @@ class BaseList extends ValueObject
     ###
     toArray: ->
         @items.slice()
+
+
+    ###*
+    inherit value of anotherModel
+
+    @method inherit
+    @param {BaseList} anotherList
+    @return {BaseList} this
+    ###
+    inherit: (anotherList) ->
+
+        return @ if anotherList not instanceof @constructor
+
+        super
+
+        @resetItems()
+
+        if anotherList.loaded
+            @setItems anotherList.items
+
+        else
+            anotherList.on 'loaded', =>
+                @setItems anotherList.items
+
+        return @
 
 
     ###*

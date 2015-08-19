@@ -22,7 +22,6 @@ describe 'BaseList', ->
             @modelName: 'hobby'
 
 
-
         facade.addClass 'hobby', Hobby
         facade.addClass 'non-entity', NonEntity
         facade.addClass('hobby-repository', HobbyRepository)
@@ -359,5 +358,119 @@ describe 'BaseList', ->
                 expect(list.items).to.have.length 2
                 expect(list).to.have.length 2
 
+                done()
+
+
+    describe 'inherit', ->
+
+        beforeEach ->
+            @f = require('../create-facade').create()
+
+            class FooList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'foo'
+                @properties:
+                    name: @TYPES.STRING
+
+            class Foo extends Facade.ValueObject
+                @properties:
+                    name: @TYPES.STRING
+
+            class BarList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'bar'
+                @properties:
+                    name: @TYPES.STRING
+
+            class Bar extends Facade.Entity
+                @properties:
+                    name: @TYPES.STRING
+
+
+            @f.addClass 'foo', Foo
+            @f.addClass 'foo-list', FooList
+            @f.addClass 'bar', Bar
+            @f.addClass 'bar-list', BarList
+
+
+        it 'sets new items with list of ValueObject', ->
+
+            FooList = @f.getModel 'foo-list'
+            Foo = @f.getModel 'foo'
+
+            foos = [ new Foo(name : 'ab'), new Foo(name: 'cd') ]
+            newFoos = [ new Foo(name : 'zy'), new Foo(name: 'xw') ]
+
+            list = new FooList(items: foos)
+
+            anotherList = new FooList(items: newFoos)
+
+            ret = list.inherit anotherList
+
+            expect(ret).to.equal list
+            expect(list.loaded).to.be.true
+            expect(list).to.have.length 2
+            expect(list.first()).to.equal newFoos[0]
+            expect(list.last()).to.equal newFoos[1]
+
+
+        it 'sets new items with list of Entity when the given list is loaded', ->
+
+            BarList = @f.getModel 'bar-list'
+            Bar = @f.getModel 'bar'
+
+            bars = [ new Bar(name : 'ab'), new Bar(name: 'cd') ]
+            newBars = [ new Bar(id: 1, name : 'zy'), new Bar(id: 2, name: 'xw') ]
+
+            list = new BarList(items: bars)
+
+            anotherList = new BarList(items: newBars)
+
+            ret = list.inherit anotherList
+
+            expect(ret).to.equal list
+            expect(list.loaded).to.be.true
+            expect(list).to.have.length 2
+            expect(list.first()).to.equal newBars[0]
+            expect(list.last()).to.equal newBars[1]
+            expect(list.ids).to.eql [1, 2]
+
+
+
+        it 'sets new ids when the given list is not loaded', (done) ->
+
+            BarList = @f.getModel 'bar-list'
+            Bar = @f.getModel 'bar'
+
+            class BarRepository extends Facade.BaseRepository
+
+                query: (params) ->
+
+                    ids = params.where.id.inq 
+
+                    Promise.resolve (new Bar(id: id, name: id + 'xx') for id in ids)
+
+            @f.addClass('bar-repository', BarRepository)
+
+            bars = [ new Bar(id: 1, name : 'ab'), new Bar(id: 2, name: 'cd') ]
+
+            list = new BarList(items: bars)
+
+            anotherList = new BarList(ids: [3, 4])
+
+            ret = list.inherit anotherList
+
+            expect(ret).to.equal list
+            expect(list.loaded).to.be.false
+            expect(list).to.have.length 0
+            expect(list.ids).to.have.length 0
+
+            list.on 'loaded', ->
+                expect(list).to.have.length 2
+                expect(list.first()).to.have.property 'id', 3
+                expect(list.last()).to.have.property 'id', 4
+                expect(list.ids).to.eql [3, 4]
                 done()
 

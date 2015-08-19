@@ -228,6 +228,18 @@ class BaseDict extends ValueObject
         return @
 
 
+
+    ###*
+    make items empty
+
+    @method 
+    ###
+    resetItems: ->
+        @remove @toArray()...
+        @loaded = false
+        return
+
+
     ###*
     returns item is Entity
 
@@ -252,6 +264,32 @@ class BaseDict extends ValueObject
     ###
     toArray: ->
         (item for key, item of @items)
+
+
+    ###*
+    inherit value of anotherModel
+
+    @method inherit
+    @param {BaseDict} anotherDict
+    @return {BaseDict} this
+    ###
+    inherit: (anotherDict) ->
+
+        return @ if anotherDict not instanceof @constructor
+
+        super
+
+        @resetItems()
+
+        if anotherDict.loaded
+            @setItems anotherDict.items
+
+        else
+            anotherDict.on 'loaded', =>
+                @setItems anotherDict.items
+
+        return @
+
 
 
     ###*

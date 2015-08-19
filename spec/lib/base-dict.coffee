@@ -91,7 +91,7 @@ describe 'BaseDict', ->
 
 
 
-    describe '@keys', ->
+    describe '@key', ->
 
         it 'originally returns item.id', ->
 
@@ -100,9 +100,7 @@ describe 'BaseDict', ->
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            dict = new HobbyDict().setItems(hobbies)
-
-            expect(dict.ids).to.eql [1,2,3]
+            expect(HobbyDict.key(id: 1)).to.equal 1
 
 
     describe 'ids', ->
@@ -440,4 +438,116 @@ describe 'BaseDict', ->
             @hobbyDict.toggle h
             expect(@hobbyDict.has 'skiing').to.be.false
 
+
+
+    describe 'inherit', ->
+
+        beforeEach ->
+            @f = require('../create-facade').create()
+
+            class FooDict extends BaseDict
+                @itemModelName: 'foo'
+                @properties:
+                    name: @TYPES.STRING
+                @key: (item) -> item.name
+
+            class Foo extends Facade.ValueObject
+                @properties:
+                    name: @TYPES.STRING
+
+            class BarDict extends BaseDict
+                @itemModelName: 'bar'
+                @properties:
+                    name: @TYPES.STRING
+
+            class Bar extends Facade.Entity
+                @properties:
+                    name: @TYPES.STRING
+
+
+            @f.addClass 'foo', Foo
+            @f.addClass 'foo-dict', FooDict
+            @f.addClass 'bar', Bar
+            @f.addClass 'bar-dict', BarDict
+
+
+        it 'sets new items with dict of ValueObject', ->
+
+            FooDict = @f.getModel 'foo-dict'
+            Foo = @f.getModel 'foo'
+
+            foos = [ new Foo(name : 'ab'), new Foo(name: 'cd') ]
+            newFoos = [ new Foo(name : 'zy'), new Foo(name: 'xw') ]
+
+            dict = new FooDict(name: '123', items: foos)
+
+            anotherDict = new FooDict(name: '456', items: newFoos)
+
+            ret = dict.inherit anotherDict
+
+            expect(ret).to.equal dict
+            expect(dict.loaded).to.be.true
+            expect(dict.toArray()).to.have.length 2
+            expect(dict.name).to.equal '456'
+            expect(dict.contains newFoos[0]).to.be.true
+            expect(dict.contains newFoos[1]).to.be.true
+
+
+        it 'sets new items with dict of Entity when the given dict is loaded', ->
+
+            BarDict = @f.getModel 'bar-dict'
+            Bar = @f.getModel 'bar'
+
+            bars = [ new Bar(name : 'ab'), new Bar(name: 'cd') ]
+            newBars = [ new Bar(id: 1, name : 'zy'), new Bar(id: 2, name: 'xw') ]
+
+            dict = new BarDict(items: bars)
+
+            anotherDict = new BarDict(items: newBars)
+
+            ret = dict.inherit anotherDict
+
+            expect(ret).to.equal dict
+            expect(dict.loaded).to.be.true
+            expect(dict.toArray()).to.have.length 2
+            expect(dict.contains newBars[0]).to.be.true
+            expect(dict.contains newBars[1]).to.be.true
+            expect(dict.ids).to.eql [1, 2]
+
+
+
+        it 'sets new ids when the given dict is not loaded', (done) ->
+
+            BarDict = @f.getModel 'bar-dict'
+            Bar = @f.getModel 'bar'
+
+            class BarRepository extends Facade.BaseRepository
+
+                query: (params) ->
+
+                    ids = params.where.id.inq 
+
+                    Promise.resolve (new Bar(id: id, name: id + 'xx') for id in ids)
+
+            @f.addClass('bar-repository', BarRepository)
+
+            bars = [ new Bar(id: 1, name : 'ab'), new Bar(id: 2, name: 'cd') ]
+
+            dict = new BarDict(items: bars)
+
+            anotherDict = new BarDict(ids: [3, 4])
+
+            ret = dict.inherit anotherDict
+
+            expect(ret).to.equal dict
+            expect(dict.loaded).to.be.false
+            expect(dict.toArray()).to.have.length 0
+            expect(dict.ids).to.have.length 0
+
+            dict.on 'loaded', ->
+                expect(dict.toArray()).to.have.length 2
+                expect(dict.has 3).to.be.true
+                expect(dict.has 4).to.be.true
+                expect(dict.ids).to.eql [3, 4]
+                done()
 

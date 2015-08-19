@@ -190,6 +190,18 @@ class BaseDict extends ValueObject
 
 
     ###*
+    the number of items
+
+    @property length
+    @type number
+    @public
+    ###
+    Object.defineProperty @::, &#x27;length&#x27;,
+        get: -&gt;
+            return Object.keys(@items).length
+
+
+    ###*
     check if the model has submodel of the given key or not
 
     @method has
@@ -329,6 +341,18 @@ class BaseDict extends ValueObject
         return @
 
 
+
+    ###*
+    make items empty
+
+    @method 
+    ###
+    resetItems: -&gt;
+        @remove @toArray()...
+        @loaded = false
+        return
+
+
     ###*
     returns item is Entity
 
@@ -353,6 +377,32 @@ class BaseDict extends ValueObject
     ###
     toArray: -&gt;
         (item for key, item of @items)
+
+
+    ###*
+    inherit value of anotherModel
+
+    @method inherit
+    @param {BaseDict} anotherDict
+    @return {BaseDict} this
+    ###
+    inherit: (anotherDict) -&gt;
+
+        return @ if anotherDict not instanceof @constructor
+
+        super
+
+        @resetItems()
+
+        if anotherDict.loaded
+            @setItems anotherDict.items
+
+        else
+            anotherDict.on &#x27;loaded&#x27;, =&gt;
+                @setItems anotherDict.items
+
+        return @
+
 
 
     ###*

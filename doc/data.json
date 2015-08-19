@@ -586,6 +586,18 @@
         {
             "file": "src/lib/base-dict.coffee",
             "line": 91,
+            "description": "the number of items",
+            "itemtype": "property",
+            "name": "length",
+            "type": "number",
+            "access": "public",
+            "tagname": "",
+            "class": "BaseDict",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-dict.coffee",
+            "line": 103,
             "description": "check if the model has submodel of the given key or not",
             "itemtype": "method",
             "name": "has",
@@ -607,7 +619,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 102,
+            "line": 114,
             "description": "check if the model contains the given submodel or not",
             "itemtype": "method",
             "name": "contains",
@@ -629,7 +641,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 116,
+            "line": 128,
             "description": "turn on/off the value",
             "itemtype": "method",
             "name": "toggle",
@@ -645,7 +657,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 131,
+            "line": 143,
             "description": "return submodel of the given key",
             "itemtype": "method",
             "name": "get",
@@ -667,7 +679,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 143,
+            "line": 155,
             "description": "add new submodel to item(s)",
             "itemtype": "method",
             "name": "add",
@@ -685,7 +697,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 160,
+            "line": 172,
             "description": "remove submodel from items\nboth acceptable, keys and submodels",
             "itemtype": "method",
             "name": "remove",
@@ -703,7 +715,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 185,
+            "line": 197,
             "description": "set ids.",
             "itemtype": "method",
             "name": "setIds",
@@ -719,7 +731,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 214,
+            "line": 226,
             "description": "set items from dic object\nupdate to new key",
             "itemtype": "method",
             "name": "setItems",
@@ -735,7 +747,16 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 231,
+            "line": 244,
+            "description": "make items empty",
+            "itemtype": "method",
+            "name": "",
+            "class": "BaseDict",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-dict.coffee",
+            "line": 255,
             "description": "returns item is Entity",
             "itemtype": "method",
             "name": "containsEntity",
@@ -751,7 +772,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 247,
+            "line": 271,
             "description": "export models to Array",
             "itemtype": "method",
             "name": "toArray",
@@ -762,7 +783,27 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 257,
+            "line": 281,
+            "description": "inherit value of anotherModel",
+            "itemtype": "method",
+            "name": "inherit",
+            "params": [
+                {
+                    "name": "anotherDict",
+                    "description": "",
+                    "type": "BaseDict"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "BaseDict"
+            },
+            "class": "BaseDict",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-dict.coffee",
+            "line": 307,
             "description": "create plain dict.\nif this dict contains entities, returns their ids\nif this dict contains non-entity models, returns their plain objects",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -775,7 +816,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 286,
+            "line": 336,
             "description": "on addEventlisteners for 'loaded'",
             "itemtype": "method",
             "name": "on",
@@ -786,7 +827,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 302,
+            "line": 352,
             "description": "tell listeners emit loaded",
             "itemtype": "method",
             "name": "emitLoaded",
@@ -1190,7 +1231,16 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 151,
+            "line": 152,
+            "description": "make items empty",
+            "itemtype": "method",
+            "name": "",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 164,
             "description": "returns item is Entity",
             "itemtype": "method",
             "name": "containsEntity",
@@ -1206,7 +1256,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 166,
+            "line": 179,
             "description": "sort items in constructor",
             "itemtype": "method",
             "name": "sort",
@@ -1232,7 +1282,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 179,
+            "line": 192,
             "description": "first item",
             "itemtype": "method",
             "name": "first",
@@ -1243,7 +1293,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 192,
+            "line": 205,
             "description": "last item",
             "itemtype": "method",
             "name": "last",
@@ -1254,7 +1304,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 205,
+            "line": 218,
             "description": "export models to Array",
             "itemtype": "method",
             "name": "toArray",
@@ -1265,7 +1315,27 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 215,
+            "line": 228,
+            "description": "inherit value of anotherModel",
+            "itemtype": "method",
+            "name": "inherit",
+            "params": [
+                {
+                    "name": "anotherList",
+                    "description": "",
+                    "type": "BaseList"
+                }
+            ],
+            "return": {
+                "description": "this",
+                "type": "BaseList"
+            },
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 253,
             "description": "create plain list.\nif this list contains entities, returns their ids\nif this list contains non-entity models, returns their plain objects",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -1278,7 +1348,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 244,
+            "line": 282,
             "description": "on addEventListeners for 'loaded'",
             "itemtype": "method",
             "name": "on",
@@ -1289,7 +1359,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 260,
+            "line": 298,
             "description": "tell listeners emit loaded",
             "itemtype": "method",
             "name": "emitLoaded",
@@ -1505,7 +1575,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 220,
+            "line": 244,
             "description": "create plain object without relational entities\ndescendants of Entity are removed, but not descendants of BaseModel\ndescendants of Entity in descendants of BaseModel are removed ( = recursive)",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -1518,7 +1588,7 @@
         },
         {
             "file": "src/lib/base-model.coffee",
-            "line": 258,
+            "line": 282,
             "description": "include all relational models if not set",
             "itemtype": "method",
             "name": "include",
@@ -2915,7 +2985,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 78,
+            "line": 79,
             "description": "classify each prop by type",
             "itemtype": "method",
             "name": "build",
@@ -2926,7 +2996,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 117,
+            "line": 119,
             "description": "check if the given prop is entity prop",
             "itemtype": "method",
             "name": "isEntityProp",
@@ -2946,7 +3016,7 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 127,
+            "line": 129,
             "description": "get typeInfo by prop",
             "itemtype": "method",
             "name": "getTypeInfo",
@@ -2966,7 +3036,47 @@
         },
         {
             "file": "src/lib/prop-info.coffee",
-            "line": 138,
+            "line": 140,
+            "description": "check if the given prop is foreign id",
+            "itemtype": "method",
+            "name": "isForeignIdProp",
+            "params": [
+                {
+                    "name": "prop",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 150,
+            "description": "provide prop name of a model whose idProp is foreignIdProp",
+            "itemtype": "method",
+            "name": "isForeignIdProp",
+            "params": [
+                {
+                    "name": "foreignIdProp",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "PropInfo",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/prop-info.coffee",
+            "line": 160,
             "description": "check if the given prop is model prop",
             "itemtype": "method",
             "name": "isModelProp",
@@ -3499,7 +3609,7 @@
         },
         {
             "message": "unknown tag: abstract",
-            "line": " src/lib/base-list.coffee:166"
+            "line": " src/lib/base-list.coffee:179"
         },
         {
             "message": "unknown tag: abstract",

@@ -149,7 +149,7 @@ class TypeInfo
 
         new TypeInfo &#x27;MODEL&#x27;,
             model      : modelName
-            idPropName : idPropName ?  camelize(modelName, true) + &#x27;Id&#x27;
+            idPropName : idPropName ? camelize(modelName, true) + &#x27;Id&#x27; # TODO remove the prop when model is not entity
 
 
     ###*

@@ -89,6 +89,18 @@ class BaseDict extends ValueObject
 
 
     ###*
+    the number of items
+
+    @property length
+    @type number
+    @public
+    ###
+    Object.defineProperty @::, 'length',
+        get: ->
+            return Object.keys(@items).length
+
+
+    ###*
     check if the model has submodel of the given key or not
 
     @method has

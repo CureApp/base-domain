@@ -129,6 +129,20 @@ describe 'BaseDict', ->
             expect(hobbyDict.ids).to.deep.equal [1, 2, 3]
 
 
+    describe 'length', ->
+
+        it 'returns the number of items', ->
+
+            class HobbyDict extends BaseDict
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyDict = new HobbyDict(items: hobbies)
+            expect(hobbyDict).to.have.length 3
+
+
+
     describe 'toArray', ->
 
         it 'returns deeply-equal array to items', ->
@@ -487,7 +501,7 @@ describe 'BaseDict', ->
 
             expect(ret).to.equal dict
             expect(dict.loaded).to.be.true
-            expect(dict.toArray()).to.have.length 2
+            expect(dict).to.have.length 2
             expect(dict.name).to.equal '456'
             expect(dict.contains newFoos[0]).to.be.true
             expect(dict.contains newFoos[1]).to.be.true
@@ -509,7 +523,7 @@ describe 'BaseDict', ->
 
             expect(ret).to.equal dict
             expect(dict.loaded).to.be.true
-            expect(dict.toArray()).to.have.length 2
+            expect(dict).to.have.length 2
             expect(dict.contains newBars[0]).to.be.true
             expect(dict.contains newBars[1]).to.be.true
             expect(dict.ids).to.eql [1, 2]
@@ -541,11 +555,11 @@ describe 'BaseDict', ->
 
             expect(ret).to.equal dict
             expect(dict.loaded).to.be.false
-            expect(dict.toArray()).to.have.length 0
+            expect(dict).to.have.length 0
             expect(dict.ids).to.have.length 0
 
             dict.on 'loaded', ->
-                expect(dict.toArray()).to.have.length 2
+                expect(dict).to.have.length 2
                 expect(dict.has 3).to.be.true
                 expect(dict.has 4).to.be.true
                 expect(dict.ids).to.eql [3, 4]

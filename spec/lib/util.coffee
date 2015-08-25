@@ -140,3 +140,60 @@ describe 'Util', ->
                 expect(Util.isInstance(o, Object)).to.be.true
                 expect(Util.isInstance(n, Object)).to.be.false
                 expect(Util.isInstance(u, Object)).to.be.false
+
+
+    describe 'requireFile', ->
+
+        it 'just requires a file', ->
+
+            abc = Util.requireFile(__dirname + '/sample-files/abc')
+            expect(abc).to.equal 'abc'
+
+
+        describe 'in Titanium environment', ->
+
+            beforeEach ->
+                getGlobal = -> @
+                getGlobal().Ti =
+                    Platform:
+                        name: 'android'
+                    Filesystem:
+                        getFile: (a, b) ->
+                        resourcesDirectory: 'Resources'
+
+            afterEach ->
+                getGlobal = -> @
+                getGlobal().Ti = undefined
+                expect(Ti).not.to.exist
+
+
+            it 'just adds suffix ".js" and requires the path when platform is android', ->
+
+                Ti.Filesystem.getFile = -> throw new Error 'this must not be called'
+
+                abc = Util.requireFile(__dirname + '/sample-files/abc')
+                expect(abc).to.equal 'abc'
+
+
+            it 'adds suffix ".js", checkes existence and requires when platform is not android', ->
+
+                Ti.Platform.name = 'iPhone'
+
+                Ti.Filesystem.getFile = (a, b) ->
+                    exists: -> true
+
+                abc = Util.requireFile(__dirname + '/sample-files/abc')
+                expect(abc).to.equal 'abc'
+
+
+            it 'adds suffix ".js", checkes existence and throws an error when platform is not android and file does not exist', ->
+
+                Ti.Platform.name = 'iPhone'
+
+                Ti.Filesystem.getFile = (a, b) ->
+
+                    exists: -> false
+
+                expect(-> Util.requireFile(__dirname + '/sample-files/abc')).to.throw Error
+
+

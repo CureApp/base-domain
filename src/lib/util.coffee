@@ -49,6 +49,7 @@ class Util
     requires js file
     in Titanium, file-not-found-like-exception occurred in require function cannot be caught.
     Thus, before require function is called, check the existence of the file.
+    Only in iOS this check occurs.
     File extension must be '.js' in Titanium.
 
     @method requireFile
@@ -62,6 +63,10 @@ class Util
 
         # in Titanium
         path = file + '.js'
+
+        if Ti.Platform.name is 'android'
+            return require file
+
         fileInfo = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, path)
 
         if fileInfo.exists()

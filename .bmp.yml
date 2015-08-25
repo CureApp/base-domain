@@ -1,5 +1,5 @@
 ---
-version: 1.9.2
+version: 1.9.3
 files:
   package.json: '"version": "%.%.%",'
   Gruntfile.coffee: currentVersion = 'v%.%.%'

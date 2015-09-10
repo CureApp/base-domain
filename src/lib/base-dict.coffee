@@ -197,6 +197,20 @@ class BaseDict extends ValueObject
 
 
     ###*
+    removes all items
+
+    @method clear
+    ###
+    clear: ->
+
+        for key of @items
+            delete @items[key]
+
+        return
+
+
+
+    ###*
     set ids.
 
     @method setIds

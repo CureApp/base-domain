@@ -412,6 +412,33 @@ describe 'BaseDict', ->
             @hobbyDict.remove('xxx')
 
 
+
+    describe 'clear', ->
+
+        it 'removes all items', ->
+
+            class HobbyDict extends BaseDict
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyDict = new HobbyDict(items: hobbies)
+
+            expect(hobbyDict).to.have.length 3
+            expect(hobbyDict.ids).to.have.length 3
+
+            hobbyDict.clear()
+
+            expect(hobbyDict).to.have.length 0
+            expect(hobbyDict.ids).to.have.length 0
+
+            hobbyDict.clear()
+
+            expect(hobbyDict).to.have.length 0
+            expect(hobbyDict.ids).to.have.length 0
+
+
+
     describe 'toggle', ->
 
         beforeEach ->

@@ -148,6 +148,22 @@ class BaseList extends ValueObject
         @emitLoaded()
         return @
 
+
+    ###*
+    clear all models
+
+    @method clear
+    ###
+    clear: ->
+
+        len = @length
+
+        @items.pop() for i in [0...len] 
+
+        return
+
+
+
     ###*
     returns item is Entity
 

@@ -42,6 +42,20 @@ class BaseDict extends ValueObject
             return null if not @constructor.containsEntity()
             return (item.id for key, item of @items)
 
+
+    ###*
+    the number of items
+
+    @property length
+    @type number
+    @public
+    ###
+    Object.defineProperty @::, 'length',
+        get: ->
+            return Object.keys(@items).length
+
+
+
     ###*
     items: dictionary of keys - models 
 
@@ -176,6 +190,20 @@ class BaseDict extends ValueObject
             else
                 key = arg
 
+            delete @items[key]
+
+        return
+
+
+
+    ###*
+    removes all items
+
+    @method clear
+    ###
+    clear: ->
+
+        for key of @items
             delete @items[key]
 
         return

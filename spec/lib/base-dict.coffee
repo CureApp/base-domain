@@ -142,6 +142,8 @@ describe 'BaseDict', ->
 
             hobbyDict = new HobbyDict(items: hobbies)
 
+            expect(hobbyDict).to.have.length 3
+
             arr = hobbyDict.toArray()
             expect(arr).to.have.length 3
 
@@ -162,6 +164,7 @@ describe 'BaseDict', ->
             hobbyDict = new HobbyDict(ids: ['dummy'])
             expect(hobbyDict.loaded).to.be.false
             expect(hobbyDict.items).not.to.have.property 'dummy'
+            expect(hobbyDict).to.have.length 0
             expect(hobbyDict.ids).to.have.length 0
 
             hobbyDict.on 'loaded', ->

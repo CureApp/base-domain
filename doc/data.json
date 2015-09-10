@@ -548,7 +548,19 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 45,
+            "line": 46,
+            "description": "the number of items",
+            "itemtype": "property",
+            "name": "length",
+            "type": "number",
+            "access": "public",
+            "tagname": "",
+            "class": "BaseDict",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-dict.coffee",
+            "line": 59,
             "description": "items: dictionary of keys - models",
             "itemtype": "property",
             "name": "items",
@@ -558,7 +570,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 52,
+            "line": 66,
             "description": "loaded: is data loaded or not",
             "itemtype": "property",
             "name": "loaded",
@@ -568,7 +580,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 59,
+            "line": 73,
             "description": "itemFactory: instance of factory which creates item models",
             "itemtype": "property",
             "name": "itemFactory",
@@ -578,14 +590,14 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 66,
+            "line": 80,
             "is_constructor": 1,
             "class": "BaseDict",
             "module": "base-domain"
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 91,
+            "line": 105,
             "description": "check if the model has submodel of the given key or not",
             "itemtype": "method",
             "name": "has",
@@ -607,7 +619,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 102,
+            "line": 116,
             "description": "check if the model contains the given submodel or not",
             "itemtype": "method",
             "name": "contains",
@@ -629,7 +641,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 116,
+            "line": 130,
             "description": "turn on/off the value",
             "itemtype": "method",
             "name": "toggle",
@@ -645,7 +657,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 131,
+            "line": 145,
             "description": "return submodel of the given key",
             "itemtype": "method",
             "name": "get",
@@ -667,7 +679,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 143,
+            "line": 157,
             "description": "add new submodel to item(s)",
             "itemtype": "method",
             "name": "add",
@@ -685,7 +697,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 160,
+            "line": 174,
             "description": "remove submodel from items\nboth acceptable, keys and submodels",
             "itemtype": "method",
             "name": "remove",
@@ -703,7 +715,16 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 185,
+            "line": 199,
+            "description": "removes all items",
+            "itemtype": "method",
+            "name": "clear",
+            "class": "BaseDict",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-dict.coffee",
+            "line": 213,
             "description": "set ids.",
             "itemtype": "method",
             "name": "setIds",
@@ -719,7 +740,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 214,
+            "line": 242,
             "description": "set items from dic object\nupdate to new key",
             "itemtype": "method",
             "name": "setItems",
@@ -735,7 +756,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 231,
+            "line": 259,
             "description": "returns item is Entity",
             "itemtype": "method",
             "name": "containsEntity",
@@ -751,7 +772,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 247,
+            "line": 275,
             "description": "export models to Array",
             "itemtype": "method",
             "name": "toArray",
@@ -762,7 +783,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 257,
+            "line": 285,
             "description": "create plain dict.\nif this dict contains entities, returns their ids\nif this dict contains non-entity models, returns their plain objects",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -775,7 +796,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 286,
+            "line": 314,
             "description": "on addEventlisteners for 'loaded'",
             "itemtype": "method",
             "name": "on",
@@ -786,7 +807,7 @@
         },
         {
             "file": "src/lib/base-dict.coffee",
-            "line": 302,
+            "line": 330,
             "description": "tell listeners emit loaded",
             "itemtype": "method",
             "name": "emitLoaded",
@@ -1190,7 +1211,16 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 151,
+            "line": 152,
+            "description": "clear all models",
+            "itemtype": "method",
+            "name": "clear",
+            "class": "BaseList",
+            "module": "base-domain"
+        },
+        {
+            "file": "src/lib/base-list.coffee",
+            "line": 167,
             "description": "returns item is Entity",
             "itemtype": "method",
             "name": "containsEntity",
@@ -1206,7 +1236,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 166,
+            "line": 182,
             "description": "sort items in constructor",
             "itemtype": "method",
             "name": "sort",
@@ -1232,7 +1262,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 179,
+            "line": 195,
             "description": "first item",
             "itemtype": "method",
             "name": "first",
@@ -1243,7 +1273,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 192,
+            "line": 208,
             "description": "last item",
             "itemtype": "method",
             "name": "last",
@@ -1254,7 +1284,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 205,
+            "line": 221,
             "description": "export models to Array",
             "itemtype": "method",
             "name": "toArray",
@@ -1265,7 +1295,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 215,
+            "line": 231,
             "description": "create plain list.\nif this list contains entities, returns their ids\nif this list contains non-entity models, returns their plain objects",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -1278,7 +1308,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 244,
+            "line": 260,
             "description": "on addEventListeners for 'loaded'",
             "itemtype": "method",
             "name": "on",
@@ -1289,7 +1319,7 @@
         },
         {
             "file": "src/lib/base-list.coffee",
-            "line": 260,
+            "line": 276,
             "description": "tell listeners emit loaded",
             "itemtype": "method",
             "name": "emitLoaded",
@@ -3387,7 +3417,7 @@
         {
             "file": "src/lib/util.coffee",
             "line": 48,
-            "description": "requires js file\nin Titanium, file-not-found-like-exception occurred in require function cannot be caught.\nThus, before require function is called, check the existence of the file.\nFile extension must be '.js' in Titanium.",
+            "description": "requires js file\nin Titanium, file-not-found-like-exception occurred in require function cannot be caught.\nThus, before require function is called, check the existence of the file.\nOnly in iOS this check occurs.\nFile extension must be '.js' in Titanium.",
             "itemtype": "method",
             "name": "requireFile",
             "static": 1,
@@ -3407,7 +3437,7 @@
         },
         {
             "file": "src/lib/util.coffee",
-            "line": 74,
+            "line": 79,
             "description": "in Titanium, \"A instanceof B\" sometimes fails.\nthis is the alternative.",
             "itemtype": "method",
             "name": "isInstance",
@@ -3499,7 +3529,7 @@
         },
         {
             "message": "unknown tag: abstract",
-            "line": " src/lib/base-list.coffee:166"
+            "line": " src/lib/base-list.coffee:182"
         },
         {
             "message": "unknown tag: abstract",
@@ -3527,7 +3557,7 @@
         },
         {
             "message": "Missing item type",
-            "line": " src/lib/base-dict.coffee:66"
+            "line": " src/lib/base-dict.coffee:80"
         },
         {
             "message": "Missing item type\nconstructor",

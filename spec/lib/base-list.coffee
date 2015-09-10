@@ -295,6 +295,29 @@ describe 'BaseList', ->
             expect(hobbyList.last()).to.have.property 'name', 'xyz'
 
 
+    describe 'clear', ->
+
+        it 'clears all models', ->
+
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(items: hobbies)
+
+            expect(hobbyList).to.have.length 3
+
+            hobbyList.clear()
+
+            expect(hobbyList).to.have.length 0
+            expect(hobbyList.ids).to.have.length 0
+
+            hobbyList.clear()
+
+            expect(hobbyList).to.have.length 0
+            expect(hobbyList.ids).to.have.length 0
 
 
     describe 'setIds', ->

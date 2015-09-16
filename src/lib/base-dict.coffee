@@ -166,7 +166,7 @@ class BaseDict extends ValueObject
         itemModelName = @getItemModelName()
 
         ItemClass = @getFacade().getModel itemModelName
-        for prevKey, item of items when item instanceof ItemClass
+        for item in items when item instanceof ItemClass
             key = @constructor.key item
             @items[key] = item
 
@@ -240,7 +240,7 @@ class BaseDict extends ValueObject
 
 
     ###*
-    set items from dic object
+    set items from dict object
     update to new key
 
     @method setItems
@@ -249,6 +249,7 @@ class BaseDict extends ValueObject
     setItems: (models = {}) ->
 
         items = (item for prevKey, item of models)
+
         @add items...
 
         @loaded = true
@@ -299,12 +300,11 @@ class BaseDict extends ValueObject
             delete plain.items
 
         else
-            plainItems = {}
-            for key, item of @items
+            plainItems = for key, item of @items
                 if typeof item.toPlainObject is 'function'
-                    plainItems[key] = item.toPlainObject()
+                    item.toPlainObject()
                 else
-                    plainItems[key] = item
+                    item
 
             plain.items = plainItems
 

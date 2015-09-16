@@ -26,12 +26,23 @@ describe 'DictFactory', ->
             @itemModelName: 'hobby'
             @key: (item) -> item.name
 
+        class NonEntityDict extends Facade.BaseDict
+            @properties:
+                ne: @TYPES.MODEL 'non-entity'
+                st: @TYPES.STRING
+
+            @itemModelName: 'non-entity'
+            @key: (item) -> item.name
+
+
         facade.addClass('hobby', Hobby)
         facade.addClass('non-entity', NonEntity)
         facade.addClass('hobby-dict', HobbyDict)
         facade.addClass('hobby-repository', HobbyRepository)
+        facade.addClass('non-entity-dict', NonEntityDict)
 
         @hobbyFactory = facade.createFactory('hobby', true)
+        @neFactory = facade.createFactory('non-entity', true)
 
 
     describe 'createEmpty', ->
@@ -95,6 +106,26 @@ describe 'DictFactory', ->
             expect(dict.str).to.equal 'awesome hobbies'
             expect(dict.items).to.have.property 'programming'
             expect(dict.items).to.have.property 'keyboard'
+
+
+
+        it 'restores original object from plain object', ->
+
+            obj =
+                ne:
+                    name: 'non-entity-prop'
+                str: 'awesome hobbies'
+                items:
+                    keyboard    : name : 'keyboard'
+                    programming : name : 'programming'
+
+            neDictFactory = DictFactory.create('non-entity-dict', @neFactory)
+
+            dict = neDictFactory.createFromObject(obj)
+            dict2 = neDictFactory.createFromObject dict.toPlainObject()
+
+            expect(dict).to.deep.equal dict2
+
 
 
 

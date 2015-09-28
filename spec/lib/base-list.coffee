@@ -384,3 +384,23 @@ describe 'BaseList', ->
 
                 done()
 
+    describe 'remove', ->
+
+        it 'removes an item by index', ->
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(items: hobbies)
+
+            expect(hobbyList).to.have.length 3
+
+            hobbyList.remove(1)
+
+            expect(hobbyList).to.have.length 2
+            expect(hobbyList.ids).to.have.length 2
+
+            expect(hobbyList.ids).to.eql [3, 1]
+

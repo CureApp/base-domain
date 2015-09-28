@@ -163,6 +163,17 @@ class BaseList extends ValueObject
         return
 
 
+    ###*
+    remove item by index
+
+    @method remove
+    @param {Number} index
+    ###
+    remove: (index) ->
+
+        @items.splice(index, 1)
+
+
 
     ###*
     returns item is Entity

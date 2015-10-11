@@ -1,5 +1,7 @@
 
 
+Util = require '../util'
+
 BaseModel = require './base-model'
 
 ###*
@@ -12,5 +14,16 @@ Base model class without "id" column
 class ValueObject extends BaseModel
 
     @isEntity: false
+
+    ###*
+    check equality
+
+    @method equals
+    @param {ValueObject} vo
+    @return {Boolean}
+    ###
+    equals: (vo) ->
+        super(vo) and Util.deepEqual(@, vo)
+
 
 module.exports = ValueObject

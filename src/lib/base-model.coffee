@@ -252,6 +252,17 @@ class BaseModel extends Base
 
         return plainObject
 
+    ###*
+    check equality
+
+    @method equals
+    @param {BaseModel} model
+    @return {Boolean}
+    ###
+    equals: (model) ->
+        model? and @constructor is model.constructor
+
+
 
     ###*
     include all relational models if not set

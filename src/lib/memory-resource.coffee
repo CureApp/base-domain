@@ -1,4 +1,6 @@
 
+Util = require '../util'
+
 ###*
 sync memory storage, implements ResourceClientInterface
 
@@ -42,7 +44,7 @@ class MemoryResource
     create: (data = {}) ->
         data.id ?= @generateId()
 
-        @pool[data.id] = clone data
+        @pool[data.id] = Util.clone data
 
 
     ###*
@@ -67,7 +69,7 @@ class MemoryResource
     @return {Object}
     ###
     findById: (id) ->
-        clone @pool[id]
+        Util.clone @pool[id]
 
 
 
@@ -84,7 +86,7 @@ class MemoryResource
 
         { where } = filter
 
-        return (clone(obj) for id, obj of @pool) if not where
+        return (Util.clone(obj) for id, obj of @pool) if not where
 
         throw new Error '"find" method with "where" is currently unimplemented.'
 
@@ -140,19 +142,7 @@ class MemoryResource
 
         @pool[id] = pooledData
 
-        return clone pooledData
+        return Util.clone pooledData
 
-
-# clone
-clone = (val) ->
-
-    return val.map(clone) if Array.isArray val
-
-    return val if not val? or typeof val isnt 'object' 
-
-    ret = {}
-    ret[k] = clone(v) for own k, v of val
-
-    return ret
 
 module.exports = MemoryResource

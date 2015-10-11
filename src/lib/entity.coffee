@@ -22,6 +22,21 @@ class Entity extends BaseModel
     ###
     id: null
 
+
+    ###*
+    check equality
+
+    @method equals
+    @param {Entity} entity
+    @return {Boolean}
+    ###
+    equals: (entity) ->
+
+        return false if not @id?
+
+        super(entity) and @id.equals entity.id
+
+
     ###*
     set model prop
     @return {Entity} this

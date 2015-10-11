@@ -19,6 +19,8 @@ class Id
 
     equals: (id) ->
 
+        return false if not id?
+
         id.toString() is @toString()
 
 

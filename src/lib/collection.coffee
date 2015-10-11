@@ -138,7 +138,7 @@ class Collection extends ValueObject
         @add items...
 
         @loaded = true
-        process.nextTick => @emit('loaded')
+        @emitNext('loaded')
         return @
 
 

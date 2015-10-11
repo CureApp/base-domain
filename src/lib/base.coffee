@@ -30,6 +30,13 @@ class Base extends EventEmitter
             to attach them getFacade() method.
         """
 
+    ###*
+    emit event at next tick
+    @method emitNext
+    ###
+    emitNext: (args...) ->
+        process.nextTick => @emit args...
+
 
     ###*
     get facade

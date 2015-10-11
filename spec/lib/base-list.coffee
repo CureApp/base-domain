@@ -2,7 +2,7 @@
 facade = require('../create-facade').create()
 Facade = facade.constructor
 
-BaseList = facade.constructor.BaseList
+{ Ids, BaseList } = facade.constructor
 
 hobbies = null
 
@@ -100,7 +100,6 @@ describe 'BaseList', ->
         it 'sorts model when sort function is defined', ->
 
             hobbyIds = (hobby.id for hobby in hobbies)
-            expect(hobbyIds).to.deep.equal [3, 2, 1]
 
             class HobbyList extends BaseList
                 @getFacade: -> facade
@@ -111,9 +110,9 @@ describe 'BaseList', ->
 
             hobbyList = new HobbyList(items: hobbies)
 
-            hobbyIdsSorted = (hobby.id for hobby in hobbyList.items)
+            hobbyIdsSorted = (hobby.id.toString() for hobby in hobbyList.items)
 
-            expect(hobbyIdsSorted).to.deep.equal [1, 2, 3]
+            expect(hobbyIdsSorted).to.deep.equal new Ids([1, 2, 3]).toPlainObject()
 
 
     describe 'ids', ->
@@ -131,6 +130,7 @@ describe 'BaseList', ->
         it 'get array when the item is Entity', ->
             hobbyList = new HobbyList()
             expect(hobbyList.ids).to.be.instanceof Array
+            expect(hobbyList.ids).to.be.instanceof Ids
 
         it 'get null when the item is not Entity', ->
             nonEntityList = new NonEntityList()
@@ -139,7 +139,7 @@ describe 'BaseList', ->
         it 'get array of ids when the item is Entity', ->
 
             hobbyList = new HobbyList(items: hobbies)
-            expect(hobbyList.ids).to.deep.equal [3, 2, 1]
+            expect(hobbyList.ids).to.deep.equal new Ids [3, 2, 1]
 
 
 
@@ -402,5 +402,5 @@ describe 'BaseList', ->
             expect(hobbyList).to.have.length 2
             expect(hobbyList.ids).to.have.length 2
 
-            expect(hobbyList.ids).to.eql [3, 1]
+            expect(hobbyList.ids).to.eql new Ids [3, 1]
 

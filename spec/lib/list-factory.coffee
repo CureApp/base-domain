@@ -1,7 +1,7 @@
 
 facade = require('../create-facade').create()
 Facade = facade.constructor
-ListFactory = Facade.ListFactory
+{ Ids, ListFactory } = Facade
 
 describe 'ListFactory', ->
 
@@ -90,6 +90,6 @@ describe 'ListFactory', ->
                 Hobby = facade.getModel 'hobby'
                 expect(list.items).to.have.length 2
                 expect(list.items[0]).to.be.instanceof Hobby
-                expect(list.ids).to.eql [3, 2]
+                expect(list.ids).to.eql new Ids [3, 2]
                 done()
 

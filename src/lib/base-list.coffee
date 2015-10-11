@@ -1,5 +1,6 @@
 
 ValueObject = require './value-object'
+Ids = require './ids'
 
 ###*
 list class of DDD pattern.
@@ -31,7 +32,7 @@ class BaseList extends ValueObject
     Object.defineProperty @::, 'ids',
         get: ->
             return null if not @constructor.containsEntity()
-            return (item.id for item in @items)
+            return new Ids(item.id for key, item of @items)
 
 
     ###*
@@ -255,7 +256,7 @@ class BaseList extends ValueObject
         plain = super()
 
         if @constructor.containsEntity()
-            plain.ids = @ids
+            plain.ids = @ids.toPlainObject()
             delete plain.items
 
         else

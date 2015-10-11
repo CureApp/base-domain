@@ -80,7 +80,7 @@ describe 'BaseFactory', ->
             mFactory = facade.createFactory('member')
 
             member = mFactory.createFromObject
-                id: 12
+                id: '12'
                 firstName: 'Shin'
                 age: 29
                 registeredAt: new Date()
@@ -98,7 +98,7 @@ describe 'BaseFactory', ->
                 author: member
                 date  : new Date()
 
-            expect(diary).to.have.property 'memberId', 12 # not "authorId"
+            expect(diary.memberId.toString()).to.equal '12' # not authorId
 
 
         it 'creates empty list', ->
@@ -195,7 +195,7 @@ describe 'BaseFactory', ->
             factory.fetchEntityProp(diary, 'author', diary.getTypeInfo('author'))
 
             expect(diary.author).to.be.instanceof Member
-            expect(diary.author.id).to.equal 'dummy'
+            expect(diary.author.id.toString()).to.equal 'dummy'
 
 
     describe 'createDict', ->

@@ -74,7 +74,7 @@ describe 'BaseRepository', ->
             memberFactory = facade.createFactory('member')
 
             member = memberFactory.createFromObject
-                id: 12
+                id: '12'
                 firstName: 'Shin'
                 age: 29
                 registeredAt: new Date()
@@ -95,8 +95,9 @@ describe 'BaseRepository', ->
 
             dRepo = facade.createRepository('diary')
             dRepo.save(diary).then (model) =>
-                expect(model).to.have.property('memberId', 12)
+                expect(model.memberId.toString()).to.equal '12'
                 done()
+            .catch done
 
 
      describe 'get', ->

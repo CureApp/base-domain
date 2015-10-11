@@ -7,8 +7,18 @@ id
 ###
 class Id
 
-    constructor: (@v) ->
+    constructor: (@val) ->
 
-    toString: -> @v.toString()
+
+    toString: ->
+        @val.toString()
+
+
+    toPlainObject: -> @toString()
+
+    equals: (id) ->
+
+        id.toString() is @toString()
+
 
 module.exports = Id

@@ -2,7 +2,7 @@
 facade = require('../create-facade').create()
 Facade = facade.constructor
 
-BaseDict = facade.constructor.BaseDict
+{ Ids, BaseDict } = facade.constructor
 
 hobbies = null
 
@@ -102,7 +102,7 @@ describe 'BaseDict', ->
 
             dict = new HobbyDict().setItems(hobbies)
 
-            expect(dict.ids).to.eql [1,2,3]
+            expect(dict.ids).to.eql new Ids [1,2,3]
 
 
     describe 'ids', ->
@@ -120,6 +120,7 @@ describe 'BaseDict', ->
         it 'get array when the item is Entity', ->
             hobbyDict = new HobbyDict()
             expect(hobbyDict.ids).to.be.instanceof Array
+            expect(hobbyDict.ids).to.be.instanceof Ids
 
         it 'get null when the item is not Entity', ->
             nonEntityDict = new NonEntityDict()
@@ -128,7 +129,7 @@ describe 'BaseDict', ->
         it 'get array of ids when the item is Entity', ->
 
             hobbyDict = new HobbyDict(items: hobbies)
-            expect(hobbyDict.ids).to.deep.equal [1, 2, 3]
+            expect(hobbyDict.ids).to.deep.equal new Ids [1, 2, 3]
 
 
     describe 'toArray', ->

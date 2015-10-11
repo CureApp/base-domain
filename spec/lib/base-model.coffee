@@ -1,9 +1,7 @@
 
 facade = require('../create-facade').create('domain')
 
-BaseModel = facade.constructor.BaseModel
-Entity    = facade.constructor.Entity
-BaseList  = facade.constructor.BaseList
+{ BaseModel, Entity, BaseList, Id } = facade.constructor
 
 Diary  = facade.getModel 'diary'
 Member = facade.getModel 'member'
@@ -65,7 +63,8 @@ describe 'BaseModel', ->
         h = new Hospital(id: 123)
         p.set 'hospital', h
 
-        expect(p.type).to.equal 123
+        expect(p.type).to.be.instanceof Id
+        expect(p.type.equals 123).to.be.true
 
 
 
@@ -96,10 +95,10 @@ describe 'BaseModel', ->
             plainMember = member.toPlainObject()
 
             expect(plainMember.registeredAt).to.be.instanceof Date
-            expect(plainMember.id).to.equal 12
+            expect(plainMember.id).to.equal '12'
             expect(plainMember.firstName).to.equal 'Shin'
             expect(plainMember.age).to.equal 29
-            expect(plainMember.hobbies.ids).to.eql [1,2,3]
+            expect(plainMember.hobbies.ids).to.eql ['1','2','3']
 
         it 'returns plain object without relational models (has one / belongs to)', ->
             diary = diaryFactory.createFromObject
@@ -115,7 +114,7 @@ describe 'BaseModel', ->
             expect(plainDiary.date).to.eql diary.date
             expect(plainDiary.author).not.to.exist
             expect(plainDiary.authorId).not.to.exist
-            expect(plainDiary.memberId).to.equal 12
+            expect(plainDiary.memberId).to.equal '12'
 
         it 'returns plain object without tmp values', ->
 
@@ -152,7 +151,8 @@ describe 'BaseModel', ->
             diary.setEntityProp('coauthor', member)
 
             expect(diary.coauthor).to.equal member
-            expect(diary.coauthorId).to.equal 12
+            expect(diary.coauthorId).to.be.instanceof Id
+            expect(diary.coauthorId.equals '12').to.be.true
 
 
 

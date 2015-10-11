@@ -1,5 +1,6 @@
 
 ValueObject = require './value-object'
+Ids = require './ids'
 
 ###*
 dictionary-structured data model
@@ -34,13 +35,13 @@ class BaseDict extends ValueObject
     ids: get ids of items
 
     @property ids
-    @type Array
+    @type Ids
     @public
     ###
     Object.defineProperty @::, 'ids',
         get: ->
             return null if not @constructor.containsEntity()
-            return (item.id for key, item of @items)
+            return new Ids(item.id for key, item of @items)
 
 
     ###*
@@ -296,7 +297,7 @@ class BaseDict extends ValueObject
         plain = super()
 
         if @constructor.containsEntity()
-            plain.ids = @ids
+            plain.ids = @ids.toPlainObject()
             delete plain.items
 
         else

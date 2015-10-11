@@ -1,7 +1,7 @@
 
 facade = require('../create-facade').create()
 Facade = facade.constructor
-DictFactory = Facade.DictFactory
+{ Ids, DictFactory } = Facade
 
 describe 'DictFactory', ->
 
@@ -151,6 +151,6 @@ describe 'DictFactory', ->
                 expect(Object.keys dict.items).to.have.length 2
                 expect(dict.items.keyboard).to.be.instanceof Hobby
                 expect(dict.items.sailing).to.be.instanceof Hobby
-                expect(dict.ids).to.eql [3,2]
+                expect(dict.ids).to.eql new Ids [3,2]
                 done()
 

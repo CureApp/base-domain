@@ -231,6 +231,7 @@ class BaseModel extends Base
 
         plainObject = {}
 
+
         for own prop, value of @
             # remove entities
             if @isEntityProp prop
@@ -240,17 +241,14 @@ class BaseModel extends Base
 
             continue if typeInfo?.tmp
 
-            # set non-model properties
-            if not typeInfo?.model?
-                plainObject[prop] = value
-                continue
-
-            # plainize submodels, lists
+            # plainize submodels, lists, ids
             if typeof value?.toPlainObject is 'function'
                 plainObject[prop] = value.toPlainObject()
 
+             # set non-model properties
             else
                 plainObject[prop] = value
+
 
         return plainObject
 

@@ -167,27 +167,6 @@ describe 'BaseFactory', ->
 
 
 
-
-
-    describe 'fetchEntityProp', ->
-
-        before ->
-            facade.createRepository('member').save(id: 'dummy')
-
-
-        it 'set submodel by id', ->
-
-            factory = facade.createFactory('diary')
-
-            diary = new Diary()
-            diary.memberId = 'dummy'
-
-            factory.fetchEntityProp(diary, 'author', diary.getTypeInfo('author'))
-
-            expect(diary.author).to.be.instanceof Member
-            expect(diary.author.id.toString()).to.equal 'dummy'
-
-
     describe 'createDict', ->
 
         before ->

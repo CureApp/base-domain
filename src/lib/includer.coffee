@@ -23,12 +23,20 @@ class Includer
     @method include
     @public
     @param {Object} options
+    @param {Boolean} [async=true] get async values
     @param {Boolean} [recursive=false] recursively include or not
+    @param {Array(String)} [props] include only given props
     @return {Promise}
     ###
-    include: (options = {}) ->
+    include: (@options = {}) ->
+
+        @options.async ?= true
 
         entityProps = @ModelClass.getEntityProps() 
+
+        if @options.props
+            entityProps = (p for p in entityProps when p in @options.props)
+
 
         promises = []
 
@@ -40,7 +48,7 @@ class Includer
 
         Promise.all(promises).then =>
 
-            if options.recursive
+            if @options.recursive
                 return @doRecursively()
 
             return @model
@@ -66,7 +74,7 @@ class Includer
             continue if subModel not instanceof BaseModel
 
             includer = new Includer(subModel, @modelPool)
-            promises.push includer.include(recursive: true)
+            promises.push includer.include(@options)
 
         return Promise.all(promises).then => @model
 
@@ -91,11 +99,21 @@ class Includer
             @model.set(entityProp, sub)
             return
 
-        repo = @model.getFacade().createRepository(propInfo.model)
+        Repository = @model.getFacade().getRepository(propInfo.model)
 
-        return repo.get(subId).then (subModel) =>
+        repo = new Repository()
+
+        if Repository.isSync
+            subModel = repo.get(subId)
             @model.set entityProp, subModel 
-        .catch (e) ->
+            return Promise.resolve subModel
+
+        else
+            return unless @options.async
+
+            return repo.get(subId).then (subModel) =>
+                @model.set entityProp, subModel 
+            .catch (e) ->
 
 
     ###*

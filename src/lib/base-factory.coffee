@@ -81,10 +81,14 @@ class BaseFactory extends Base
     @method createFromObject
     @public
     @param {Object} obj
-    @param {BaseModel} baseModel fallback properties
+    @param {Object} [options={}]
+    @param {Object} [options.include] options to pass to Includer
+    @param {Object} [options.include.async=false] include submodels asynchronously
+    @param {Boolean} [options.include.recursive=false] recursively include or not
+    @param {Array(String)} [options.include.props] include submodels of given props
     @return {BaseModel} model
     ###
-    createFromObject: (obj) ->
+    createFromObject: (obj, options = {}) ->
 
         ModelClass = @getModelClass()
 
@@ -106,7 +110,29 @@ class BaseFactory extends Base
             continue if model[prop]? or obj.hasOwnProperty prop
             @setEmptyValueToModel model, prop, propInfo
 
+        @include(model, options.include)
+
         return @afterCreateModel model
+
+
+    ###*
+    include submodels
+
+    @method include
+    @private
+    @param {BaseModel} model
+    @param {Object} [includeOptions]
+    @param {Object} [includeOptions.async=false] include submodels asynchronously
+    @param {Boolean} [options.include.recursive=false] recursively include or not
+    @param {Array(String)} [includeOptions.props] include submodels of given props
+    ###
+    include: (model, includeOptions = {}) ->
+
+        includeOptions.async ?= false
+
+        return if not includeOptions
+
+        model.include includeOptions
 
 
     ###*
@@ -148,7 +174,7 @@ class BaseFactory extends Base
 
             when 'MODEL'
                 if propInfo.isEntityProp(prop)
-                    @fetchEntityProp(model, prop, typeInfo) # trying to get entity by id
+                    return # if submodel is entity, load it at include() section
 
                 else
                     @createEmptyNonEntityProp(model, prop, typeInfo)
@@ -228,29 +254,6 @@ class BaseFactory extends Base
         model.setNonEntityProp prop, dict
 
         return
-
-
-    ###*
-    fetch submodel(s) by id
-    available only when repository of submodel implements 'getByIdSync'
-    (MasterRepository implements one)
-
-    @method fetchEntityProp
-    @private
-    ###
-    fetchEntityProp: (model, prop, typeInfo) ->
-
-        idPropName = typeInfo.idPropName
-
-        Repository = @getFacade().getRepository typeInfo.model
-
-        return if not Repository.isSync
-
-        repository = new Repository()
-
-        id = model[idPropName]
-        subModel = repository.get(id)
-        model.setEntityProp(prop, subModel) if subModel
 
 
     ###*

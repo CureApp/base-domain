@@ -1,5 +1,5 @@
 
-Util = require '../../src/lib/util'
+Util = require '../../src/util'
 
 
 describe 'Util', ->

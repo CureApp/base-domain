@@ -1,5 +1,5 @@
 
-{ hyphenize } = require './util'
+{ hyphenize } = require '../util'
 
 EventEmitter = require 'eventemitter3'
 

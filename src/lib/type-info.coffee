@@ -1,5 +1,5 @@
 
-{ camelize } = require './util'
+{ camelize } = require '../util'
 
 ###*
 type of model's property 

@@ -2,7 +2,7 @@
 require('es6-promise').polyfill()
 copy = require('copy-class').copy
 
-{ camelize, requireFile } = require './util'
+{ camelize, requireFile } = require '../util'
 
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__

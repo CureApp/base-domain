@@ -56,12 +56,6 @@ class Collection extends ValueObject
     @type Boolean
     ###
 
-    ###*
-    itemFactory: instance of factory which creates item models
-
-    @property itemFactory
-    @type BaseFactory
-    ###
 
     ###*
     @constructor
@@ -70,12 +64,7 @@ class Collection extends ValueObject
 
         itemModelName = @getItemModelName()
 
-        # loaded and itemFactory are hidden properties
-        _itemFactory = null
-        Object.defineProperties @, 
-            loaded      : value: false, writable: true
-            itemFactory : get: ->
-                _itemFactory ?= @getFacade().createFactory(itemModelName, true)
+        Object.defineProperty @, 'loaded', value: false, writable: true
 
         if props.items
             @setItems props.items
@@ -215,7 +204,7 @@ class Collection extends ValueObject
     @return {BaseModel}
     ###
     getItemModel: ->
-        @itemFactory.getModelClass()
+        @getFacade().getModel(@getItemModelName())
 
 
 

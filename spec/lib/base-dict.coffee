@@ -47,7 +47,7 @@ describe 'BaseDict', ->
         )
 
 
-    it '"loaded" and "itemFactory" are hidden properties whereas items is explicit', ->
+    it '"loaded" is a hidden property whereas items is explicit', ->
 
         class HobbyDict extends BaseDict
             @getFacade: -> facade
@@ -61,23 +61,6 @@ describe 'BaseDict', ->
         expect(explicitKeys).to.have.length 1
         expect(explicitKeys).to.contain 'items'
         expect(explicitKeys).not.to.contain 'loaded'
-        expect(explicitKeys).not.to.contain 'itemFactory'
-
-
-
-    it 'itemFactory is hidden properties, created once referred', ->
-
-        class HobbyDict extends BaseDict
-            @getFacade: -> facade
-            getFacade:  -> facade
-            @itemModelName: 'hobby'
-
-        hobbyDict = new HobbyDict(items: hobbies)
-
-        itemFactory = hobbyDict.itemFactory
-
-        expect(itemFactory).to.be.instanceof Facade.BaseFactory
-        expect(itemFactory).to.equal hobbyDict.itemFactory
 
 
     it 'can contain custom properties', ->
@@ -232,7 +215,7 @@ describe 'BaseDict', ->
                 getFacade:  -> facade
                 @itemModelName: 'non-entity'
 
-            nonEntityFactory = facade.createFactory('non-entity', true)
+            nonEntityFactory = facade.createFactory('non-entity')
             nonEntities = (for name, i in ['keyboard', 'jogging', 'cycling']
                 nonEntityFactory.createFromObject id: 3 - i, name: name
             )
@@ -445,7 +428,7 @@ describe 'BaseDict', ->
                 @key: (item) -> item.name
 
             @hobbyDict = new HobbyDict(items: hobbies)
-            @factory = @hobbyDict.itemFactory
+            @factory = facade.createFactory('hobby')
 
         it 'adds if not exist', ->
 

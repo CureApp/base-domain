@@ -6,7 +6,7 @@ Hobby  = facade.getModel 'hobby'
 Member = facade.getModel 'member'
 Diary  = facade.getModel 'diary'
 
-{ BaseSyncRepository, BaseList } = facade.constructor
+{ BaseSyncRepository, BaseList, BaseDict } = facade.constructor
 
 describe 'BaseFactory', ->
 
@@ -30,12 +30,12 @@ describe 'BaseFactory', ->
 
 
 
-    describe 'createEmptyModel', ->
+    describe 'createEmpty', ->
 
         it 'returns instance of model', ->
             factory = facade.createFactory('hobby')
 
-            model = factory.createEmptyModel()
+            model = factory.createEmpty()
             expect(model).to.be.instanceof Hobby
             expect(model).to.have.property 'id', null
 
@@ -69,10 +69,6 @@ describe 'BaseFactory', ->
             for hobby in model.hobbies.items
                 expect(hobby).to.be.instanceof Hobby
                 expect(hobby).to.have.property 'name'
-
-                # testing "beforeCreateFromObject", "afterCreateModel"
-                expect(hobby).to.have.property 'isUnique', true
-                expect(hobby).to.have.property 'isAwesomeHobby', true
 
 
         it 'returns instance of model with relational model', ->
@@ -166,48 +162,36 @@ describe 'BaseFactory', ->
             expect(member.hobbies).not.to.exist
 
 
+    describe 'createList', ->
+
+        it 'creates list', ->
+
+            class SuperDiaryList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'diary'
+
+            facade.addClass 'super-diary-list', SuperDiaryList
+
+            factory = facade.createFactory('diary')
+
+            list = factory.createList('super-diary-list', {})
+            expect(list).to.be.instanceof facade.getModel('super-diary-list')
+
 
     describe 'createDict', ->
 
-        before ->
-            @DictFactory = Facade.DictFactory
+        it 'creates dict', ->
 
-        after ->
-            Facade.DictFactory = @DictFactory
+            class SuperDiaryDict extends BaseDict
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'diary'
 
-
-        it 'invoke DictFactory and call createFromObject() of it', (done) ->
-
-            factory = facade.createFactory('diary')
-
-            Facade.DictFactory = create: (dictModelName, itemFactory) ->
-                expect(dictModelName).to.equal 'super-diary-dict'
-                expect(itemFactory).to.equal factory
-
-                return createFromObject: -> done()
-
-            factory.createDict('super-diary-dict', {})
-
-
-
-    describe 'createList', ->
-
-        before ->
-            @ListFactory = Facade.ListFactory
-
-        after ->
-            Facade.ListFactory = @ListFactory
-
-
-        it 'invoke ListFactory and call createFromObject() of it', (done) ->
+            facade.addClass 'super-diary-dict', SuperDiaryDict
 
             factory = facade.createFactory('diary')
 
-            Facade.ListFactory = create: (listModelName, itemFactory) ->
-                expect(listModelName).to.equal 'super-diary-list'
-                expect(itemFactory).to.equal factory
-
-                return createFromObject: -> done()
-
-            factory.createList('super-diary-list', {})
+            dict = factory.createDict('super-diary-dict', {})
+            expect(dict).to.be.instanceof facade.getModel('super-diary-dict')
 

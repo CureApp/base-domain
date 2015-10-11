@@ -1,9 +1,13 @@
 
-facade = require('../create-facade').create()
-Facade = facade.constructor
-{ Ids, ListFactory, MemoryResource } = Facade
+CollectionFactory = require '../../src/lib/collection-factory'
 
-describe 'ListFactory', ->
+facade = require('../create-facade').create()
+
+Facade = facade.constructor
+
+{ Ids, MemoryResource } = Facade
+
+describe 'CollectionFactory', ->
 
     before ->
         class Hobby extends Facade.Entity
@@ -34,7 +38,7 @@ describe 'ListFactory', ->
     describe 'createEmpty', ->
 
         before ->
-            hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
+            hobbyListFactory = new CollectionFactory('hobby-list', facade)
             @hobbyList = hobbyListFactory.createEmpty()
 
         it 'creates list', ->
@@ -54,7 +58,7 @@ describe 'ListFactory', ->
 
             obj = items: [ {name: 'keyboard'}, {name: 'programming'} ]
 
-            hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
+            hobbyListFactory = new CollectionFactory('hobby-list', facade)
             list = hobbyListFactory.createFromObject(obj)
             expect(list.items).to.have.length 2
 
@@ -63,7 +67,7 @@ describe 'ListFactory', ->
 
             obj = ids: ['abc']
 
-            hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
+            hobbyListFactory = new CollectionFactory('hobby-list', facade)
             list = hobbyListFactory.createFromObject(obj)
 
             list.on 'loaded', ->
@@ -74,7 +78,7 @@ describe 'ListFactory', ->
     describe 'createFromArray', ->
 
         it 'regards string array as id list', (done) ->
-            hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
+            hobbyListFactory = new CollectionFactory('hobby-list', facade)
             list = hobbyListFactory.createFromArray(['abc'])
 
             list.on 'loaded', ->
@@ -85,7 +89,7 @@ describe 'ListFactory', ->
 
             data = [ {id: 3, name: 'keyboard'}, {id: 2, name: 'sailing'} ]
 
-            hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
+            hobbyListFactory = new CollectionFactory('hobby-list', facade)
             list = hobbyListFactory.createFromArray(data)
 
             list.on 'loaded', ->

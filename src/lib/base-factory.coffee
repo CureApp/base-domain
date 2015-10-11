@@ -1,16 +1,15 @@
 
 
-Base  = require './base'
+Base = require './base'
+GeneralFactory = require './general-factory'
 
 ###*
 Base factory class of DDD pattern.
 
 create instance of model
 
-the parent "Base" class just simply gives a @getFacade() method.
-
 @class BaseFactory
-@extends Base
+@extends GeneralFactory
 @module base-domain
 ###
 class BaseFactory extends Base
@@ -27,51 +26,27 @@ class BaseFactory extends Base
 
 
     ###*
-    get anonymous factory class
-
-    @method getAnonymousClass
-    @param {String} modelName
-    @return {Function}
-    ###
-    @getAnonymousClass: (modelName) ->
-
-        class AnonymousFactory extends BaseFactory
-            @modelName  : modelName
-            @isAnonymous: true
-
-        return AnonymousFactory
-
-
-    ###*
     constructor
 
     @constructor
     ###
     constructor: ->
-
-
-
-    ###*
-    get model class this factory handles
-
-    @method getModelClass
-    @return {Function}
-    ###
-    @_ModelClass: undefined
-    getModelClass: ->
         modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-factory'.length)
-        @_ModelClass ?= @getFacade().getModel(modelName)
+        @gf = new GeneralFactory(modelName, @getFacade())
 
+
+    @_ModelClass
+    getModelClass: ->
+        @_ModelClass ?= @gf.getModelClass()
 
     ###*
     create empty model instance
 
-    @method createEmptyModel
+    @method createEmpty
     @return {BaseModel}
     ###
-    createEmptyModel: ->
-        @createFromObject({})
-    createEmpty: -> @createFromObject({})
+    createEmpty: -> @gf.createEmpty()
+
 
     ###*
     create instance of model class by plain object
@@ -88,212 +63,7 @@ class BaseFactory extends Base
     @param {Array(String)} [options.include.props] include submodels of given props
     @return {BaseModel} model
     ###
-    createFromObject: (obj, options = {}) ->
-
-        ModelClass = @getModelClass()
-
-        return obj if obj instanceof ModelClass
-
-        obj = @beforeCreateFromObject obj
-
-        if not obj? or typeof obj isnt 'object'
-            return null
-
-        model = new ModelClass()
-
-        for own prop, value of obj
-            @setValueToModel model, prop, value
-
-        propInfo = ModelClass.getPropInfo()
-
-        for prop of propInfo.dic
-            continue if model[prop]? or obj.hasOwnProperty prop
-            @setEmptyValueToModel model, prop, propInfo
-
-        @include(model, options.include)
-
-        return @afterCreateModel model
-
-
-    ###*
-    include submodels
-
-    @method include
-    @private
-    @param {BaseModel} model
-    @param {Object} [includeOptions]
-    @param {Object} [includeOptions.async=false] include submodels asynchronously
-    @param {Boolean} [options.include.recursive=false] recursively include or not
-    @param {Array(String)} [includeOptions.props] include submodels of given props
-    ###
-    include: (model, includeOptions = {}) ->
-
-        includeOptions.async ?= false
-
-        return if not includeOptions
-
-        model.include includeOptions
-
-
-    ###*
-    set value to model in creation
-
-    @method setValueToModel
-    @private
-    ###
-    setValueToModel: (model, prop, value) ->
-
-        typeInfo = model.getTypeInfo(prop)
-
-        switch typeInfo?.name
-
-            when 'MODEL_LIST'
-                @setSubModelListToModel(model, prop, value)
-
-            when 'MODEL'
-                @setSubModelToModel(model, prop, value)
-
-            when 'MODEL_DICT'
-                @setSubModelDictToModel(model, prop, value)
-
-            else # set normal props
-                model.setNonEntityProp(prop, value)
-
-
-    ###*
-    set empty values to model in creation
-
-    @method setEmptyValueToModel
-    @private
-    ###
-    setEmptyValueToModel: (model, prop, propInfo) ->
-
-        typeInfo = propInfo.getTypeInfo(prop)
-
-        switch typeInfo.name
-
-            when 'MODEL'
-                if propInfo.isEntityProp(prop)
-                    return # if submodel is entity, load it at include() section
-
-                else
-                    @createEmptyNonEntityProp(model, prop, typeInfo)
-
-            when 'MODEL_LIST'
-                @setSubModelListToModel(model, prop, [])
-
-            when 'MODEL_DICT'
-                @setSubModelDictToModel(model, prop, {})
-
-            else
-                model[prop] = undefined
-
-
-
-    ###*
-    creates list and set it to the model
-
-    @method setSubModelListToModel
-    @private
-    ###
-    setSubModelListToModel: (model, prop, value) ->
-
-        typeInfo = model.getTypeInfo(prop)
-        subModelName = typeInfo.model
-        subModelFactory = @getFacade().createFactory(subModelName, on)
-        listModelName = typeInfo.listName
-
-        list = subModelFactory.createList(listModelName, value)
-
-        model.setNonEntityProp prop, list
-
-        return
-
-
-
-    ###*
-    set submodel to the prop
-
-    @method setSubModelToModel
-    @private
-    ###
-    setSubModelToModel: (model, prop, value) ->
-
-        subModelName = model.getTypeInfo(prop).model
-
-        useAnonymousFactory = on # if no factory is declared, altered one is used 
-        subModelFactory = @getFacade().createFactory(subModelName, useAnonymousFactory)
-        SubModel = subModelFactory.getModelClass()
-
-        if value not instanceof SubModel
-            value = subModelFactory.createFromObject(value)
-
-        if SubModel.isEntity
-            model.setEntityProp(prop, value)
-        else
-            model.setNonEntityProp(prop, value)
-
-        return
-
-
-    ###*
-    set submodel dict to the prop
-
-    @method setSubModelToModel
-    @private
-    ###
-    setSubModelDictToModel: (model, prop, value) ->
-
-        typeInfo = model.getTypeInfo(prop)
-        subModelName = typeInfo.model
-        subModelFactory = @getFacade().createFactory(subModelName, on)
-        dictModelName = typeInfo.dictName
-
-        dict = subModelFactory.createDict(dictModelName, value)
-
-        model.setNonEntityProp prop, dict
-
-        return
-
-
-    ###*
-    create empty non-entity model and set to the prop
-
-    @method createEmptyNonEntityProp
-    @private
-    ###
-    createEmptyNonEntityProp: (model, prop, typeInfo) ->
-
-        factory = @getFacade().createFactory typeInfo.model, true
-        submodel = factory.createEmpty()
-        model.setNonEntityProp(prop, submodel)
-
-
-    ###*
-    modify plain object before @createFromObject(obj)
-
-    @method beforeCreateFromObject
-    @protected
-    @abstract
-    @param {Object} obj
-    @return {Object} obj
-    ###
-    beforeCreateFromObject: (obj) ->
-
-        return obj
-
-    ###*
-    modify model after createFromObject(obj), createEmptyModel()
-
-    @method afterCreateModel
-    @protected
-    @abstract
-    @param {BaseModel} model
-    @return {BaseModel} model
-    ###
-    afterCreateModel: (model) ->
-
-        return model
+    createFromObject: (obj, options = {}) -> @gf.createFromObject(obj, options)
 
 
     ###*
@@ -305,14 +75,7 @@ class BaseFactory extends Base
     @param {any} obj
     @return {BaseList} list
     ###
-    createList: (listModelName, obj) ->
-
-        return null if obj is null
-
-        ListFactory = @getFacade().constructor.ListFactory
-
-        listFactory = ListFactory.create(listModelName, @)
-        return listFactory.createFromObject obj
+    createList: (listModelName, obj) -> @gf.createList(listModelName, obj)
 
 
     ###*
@@ -324,14 +87,6 @@ class BaseFactory extends Base
     @param {any} obj
     @return {BaseDict} dict
     ###
-    createDict: (dictModelName, obj) ->
-
-        return null if obj is null
-
-        DictFactory = @getFacade().constructor.DictFactory
-
-        dictFactory = DictFactory.create(dictModelName, @)
-        return dictFactory.createFromObject obj
-
+    createDict: (dictModelName, obj) -> @gf.createDict(dictModelName, obj)
 
 module.exports = BaseFactory

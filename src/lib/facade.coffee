@@ -4,6 +4,7 @@ copy = require('copy-class').copy
 
 { camelize, requireFile } = require '../util'
 
+GeneralFactory = require './general-factory'
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
 
@@ -68,18 +69,10 @@ class Facade
 
     @method getFactory
     @param {String} name
-    @param {Boolean} [useAnonymousWhenFailed=false]
     @return {Function}
     ###
-    getFactory: (name, useAnonymousWhenFailed = off) ->
-        try
-            return @require("#{name}-factory")
-        catch e
-            throw e if not useAnonymousWhenFailed
-
-            AnonymousFactory = Facade.BaseFactory.getAnonymousClass(name)
-
-            @addClass("#{name}-factory", AnonymousFactory, true)
+    getFactory: (name) ->
+        @require("#{name}-factory")
 
 
     ###*
@@ -90,7 +83,7 @@ class Facade
     @return {Class}
     ###
     getRepository: (name) ->
-        return @require("#{name}-repository")
+        @require("#{name}-repository")
 
 
     ###*
@@ -98,12 +91,16 @@ class Facade
 
     @method createFactory
     @param {String} name
-    @param {Boolean} [useAnonymousWhenFailed=false]
     @return {BaseFactory}
     ###
-    createFactory: (name, useAnonymousWhenFailed = off) ->
-        FactoryClass = @getFactory(name, useAnonymousWhenFailed)
-        return new FactoryClass()
+    createFactory: (name) ->
+        try
+            FactoryClass = @getFactory(name)
+            return new FactoryClass()
+
+        catch e
+            return new GeneralFactory(name, @)
+
 
 
     ###*
@@ -277,8 +274,6 @@ class Facade
     @BaseList            : require './base-list'
     @BaseDict            : require './base-dict'
     @BaseFactory         : require './base-factory'
-    @ListFactory         : require './list-factory'
-    @DictFactory         : require './dict-factory'
     @BaseRepository      : require './base-repository'
     @BaseSyncRepository  : require './base-sync-repository'
     @BaseAsyncRepository : require './base-async-repository'

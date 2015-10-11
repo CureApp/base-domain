@@ -35,9 +35,6 @@ describe 'Facade', ->
         it 'returns true to class "BaseList"', ->
             expect(Facade.isBaseClass Facade.BaseList).to.be.true
 
-        it 'returns true to class "ListFactory"', ->
-            expect(Facade.isBaseClass Facade.ListFactory).to.be.true
-
         it 'returns true to class "BaseRepository"', ->
             expect(Facade.isBaseClass Facade.BaseRepository).to.be.true
 
@@ -180,16 +177,7 @@ describe 'Facade', ->
             expect(FactoryClass.xxx).to.equal 'yyy'
             expect(FactoryClass.isAnonymous).not.to.exist
 
-        it 'returns AnonymousFactory when no factory found and second argument is true', ->
-
-            f = Facade.createInstance()
-            FactoryClass = f.getFactory('abc', true)
-
-            expect(FactoryClass.modelName).to.equal 'abc'
-            expect(FactoryClass.isAnonymous).to.be.true
-
-
-        it 'throws error when no factory found and second argument is false', ->
+        it 'throws error when no factory found', ->
 
             f = Facade.createInstance()
             expect(-> f.getFactory('abc')).to.throw Error

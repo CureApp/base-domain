@@ -70,11 +70,10 @@ class Collection extends ValueObject
 
         itemModelName = @getItemModelName()
 
-        # loaded and listeners are hidden properties
+        # loaded and itemFactory are hidden properties
         _itemFactory = null
         Object.defineProperties @, 
             loaded      : value: false, writable: true
-            listeners   : value: []
             itemFactory : get: ->
                 _itemFactory ?= @getFacade().createFactory(itemModelName, true)
 
@@ -139,7 +138,7 @@ class Collection extends ValueObject
         @add items...
 
         @loaded = true
-        @emitLoaded()
+        process.nextTick => @emit('loaded')
         return @
 
 
@@ -196,33 +195,6 @@ class Collection extends ValueObject
             plain.items = plainItems
 
         return plain
-
-
-    ###*
-    on addEventlisteners for 'loaded'
-
-    @method on
-    @public
-    ###
-    on: (evtname, fn) ->
-        return if evtname isnt 'loaded'
-
-        if @loaded
-            process.nextTick fn
-        else if typeof fn is 'function'
-            @listeners.push fn
-        return
-
-
-    ###*
-    tell listeners emit loaded
-    @method emitLoaded
-    @private
-    ###
-    emitLoaded: ->
-        while fn = @listeners.shift()
-            process.nextTick fn
-        return
 
 
     ###*

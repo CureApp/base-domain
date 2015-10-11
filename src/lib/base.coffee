@@ -1,7 +1,7 @@
 
 { hyphenize } = require '../util'
 
-EventEmitter = require 'eventemitter3'
+{ EventEmitter } = require 'events'
 
 ###*
 parent class of model, factory and repository.

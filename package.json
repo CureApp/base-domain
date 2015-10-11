@@ -32,7 +32,6 @@
     "deep-eql": "^0.1.3",
     "ect": "^0.5.9",
     "es6-promise": "^2.0.1",
-    "eventemitter3": "^1.1.1",
     "through": "^2.3.7"
   },
   "devDependencies": {

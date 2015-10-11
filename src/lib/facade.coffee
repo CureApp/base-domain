@@ -280,18 +280,20 @@ class Facade
     @registerBaseClass: (klass) -> @[klass.name] = klass
 
 
-    @Base             : require './base'
-    @BaseModel        : require './base-model'
-    @ValueObject      : require './value-object'
-    @Entity           : require './entity'
-    @BaseList         : require './base-list'
-    @BaseDict         : require './base-dict'
-    @BaseFactory      : require './base-factory'
-    @ListFactory      : require './list-factory'
-    @DictFactory      : require './dict-factory'
-    @BaseRepository   : require './base-repository'
-    @MasterRepository : require './master-repository'
-    @DomainError      : require './domain-error'
+    @Base               : require './base'
+    @BaseModel          : require './base-model'
+    @ValueObject        : require './value-object'
+    @Entity             : require './entity'
+    @BaseList           : require './base-list'
+    @BaseDict           : require './base-dict'
+    @BaseFactory        : require './base-factory'
+    @ListFactory        : require './list-factory'
+    @DictFactory        : require './dict-factory'
+    @BaseRepository     : require './base-repository'
+    @BaseSyncRepository : require './base-sync-repository'
+    @MasterRepository   : require './master-repository'
+    @DomainError        : require './domain-error'
+    @MemoryResource     : require './memory-resource'
 
 
 module.exports = Facade

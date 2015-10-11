@@ -276,6 +276,8 @@ class BaseModel extends Base
     ###
     include: (options = {}) ->
 
-        new Includer(@).include(options)
+        new Includer(@).include(options).then =>
+            @emit('included')
+            return @
 
 module.exports = BaseModel

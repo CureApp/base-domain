@@ -212,7 +212,7 @@ class FixtureModel
 
         useAnonymousFactory = on # if no factory is declared, altered one is used 
         factory = @fx.facade.createFactory(@name, useAnonymousFactory)
-        repository = @fx.facade.createRepository(@name, debug: false)
+        repository = @fx.facade.createRepository(@name)
 
         do insert = =>
 
@@ -222,11 +222,9 @@ class FixtureModel
             dataName = dataNames.shift()
             data = modelDataMap[dataName]
 
-
-
             model = factory.createFromObject data
 
-            repository.save(model).then (savedModel) =>
+            Promise.resolve(repository.save(model)).then (savedModel) =>
 
                 @fx.addToDataPool(@name, dataName, savedModel)
                 insert()

@@ -40,7 +40,7 @@ class BaseRepository extends Base
     @protected
     @type ResourceClientInterface
     ###
-    client: new ResourceClientInterface()
+    client: null
 
 
     ###*
@@ -49,7 +49,10 @@ class BaseRepository extends Base
     @constructor
     @return
     ###
-    constructor: ->
+    constructor: (client) ->
+
+        @client = client if client?
+
         modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-repository'.length)
 
         facade = @getFacade()
@@ -71,13 +74,27 @@ class BaseRepository extends Base
 
 
     ###*
+    returns Promise or the result of given function
+    @return {any}
+    @protected
+    ###
+    resolve: (result, fn) ->
+
+        if result instanceof Promise
+            return result.then (obj) => fn.call(@, obj)
+
+        else
+            return fn.call(@, result)
+
+
+    ###*
     Update or insert a model instance
 
     @method save
     @public
     @param {Entity|Object} entity
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise(Entity)} entity (the same instance from input, if entity given,)
+    @return {Entity|Promise(Entity)} entity (the same instance from input, if entity given,)
     ###
     save: (entity, client) ->
         if entity not instanceof Entity
@@ -89,25 +106,25 @@ class BaseRepository extends Base
         data = entity.toPlainObject()
         @appendTimeStamp(data)
 
-        client.upsert(data).then (obj) =>
+        @resolve client.upsert(data), (obj) ->
+
             newEntity = @factory.createFromObject(obj)
-            return entity.inherit newEntity
+            entity.inherit newEntity
 
 
     ###*
-    get object by ID.
+    get entity by ID.
 
     @method get
     @public
     @param {any} id
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise(Entity)} entity
+    @return {Entity|Promise(Entity)} entity
     ###
     get: (id, client) ->
         client ?= @client
-        client.findById(id).then (obj) =>
+        @resolve client.findById(id), (obj) ->
             return @factory.createFromObject(obj)
-
 
 
     ###*
@@ -117,11 +134,39 @@ class BaseRepository extends Base
     @public
     @param {any} id
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise(Entity)} entity
+    @return {Entity|Promise(Entity)} entity
     ###
     getById: (id, client) ->
         @get(id, client)
 
+
+
+    ###*
+    get entities by ID.
+
+    @method getByIds
+    @public
+    @param {Array} ids
+    @param {ResourceClientInterface} [client=@client]
+    @return {Array(Entity)|Promise(Array(Entity))} entities
+    ###
+    getByIds: (ids, client) ->
+
+        results = (@get(id, client) for id in ids)
+
+        if results[0] instanceof Promise
+            return Promise.all results
+        else
+            return results
+
+    ###*
+    get all entities
+
+    @method getAll
+    @return {Array(Entity)|Promise(Array(Entity))} array of entities
+    ###
+    getAll: ->
+        @query({})
 
 
     ###*
@@ -131,11 +176,11 @@ class BaseRepository extends Base
     @public
     @param {Object} [params] query parameters
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise(Array(Entity))} array of entities
+    @return {Array(Entity)|Promise(Array(Entity))} array of entities
     ###
     query: (params, client) ->
         client ?= @client
-        client.find(params).then (objs) =>
+        @resolve client.find(params), (objs) ->
             return (@factory.createFromObject(obj) for obj in objs)
 
 
@@ -146,11 +191,11 @@ class BaseRepository extends Base
     @public
     @param {Object} [params] query parameters
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise(Entity)} entity
+    @return {Entity|Promise(Entity)} entity
     ###
     singleQuery: (params, client) ->
         client ?= @client
-        client.findOne(params).then (obj) =>
+        @resolve client.findOne(params), (obj) ->
             return @factory.createFromObject(obj)
 
 
@@ -162,11 +207,11 @@ class BaseRepository extends Base
     @public
     @param {Entity} entity
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise(Boolean)} isDeleted
+    @return {Boolean|Promise(Boolean)} isDeleted
     ###
     delete: (entity, client) ->
         client ?= @client
-        client.destroy(entity).then =>
+        @resolve client.destroy(entity), ->
             return true
 
 
@@ -178,7 +223,7 @@ class BaseRepository extends Base
     @param {any} id id of the entity to update
     @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
     @param {ResourceClientInterface} [client=@client]
-    @return {Promise(Entity)} updated entity
+    @return {Entity|Promise(Entity)} updated entity
     ###
     update: (id, data, client) ->
         if data instanceof Entity
@@ -190,7 +235,7 @@ class BaseRepository extends Base
         client ?= @client
         @appendTimeStamp(data, isUpdate = true)
 
-        client.updateAttributes(id, data).then (obj) =>
+        @resolve client.updateAttributes(id, data), (obj) ->
             return @factory.createFromObject(obj)
 
 

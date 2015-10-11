@@ -3,7 +3,7 @@ facade = require('../create-facade').create('domain')
 
 Hobby = facade.getModel 'hobby'
 
-describe 'BaseRepository', ->
+xdescribe 'BaseRepository', ->
 
     describe 'factory', ->
 

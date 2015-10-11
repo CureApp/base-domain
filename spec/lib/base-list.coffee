@@ -2,7 +2,7 @@
 facade = require('../create-facade').create()
 Facade = facade.constructor
 
-{ Ids, BaseList } = facade.constructor
+{ Ids, BaseList, MemoryResource } = facade.constructor
 
 hobbies = null
 
@@ -18,19 +18,30 @@ describe 'BaseList', ->
             @properties:
                 name: @TYPES.STRING
 
-        class HobbyRepository extends Facade.MasterRepository
+        class HobbyRepository extends Facade.BaseSyncRepository
             @modelName: 'hobby'
+            client: new MemoryResource()
 
+        class Diary extends Facade.Entity
+            @properties:
+                name: @TYPES.STRING
 
+        class DiaryRepository extends Facade.BaseAsyncRepository
+            @modelName: 'diary'
+            client: new MemoryResource()
 
         facade.addClass 'hobby', Hobby
         facade.addClass 'non-entity', NonEntity
-        facade.addClass('hobby-repository', HobbyRepository)
+        facade.addClass 'hobby-repository', HobbyRepository
+        facade.addClass 'diary', Diary
+        facade.addClass 'diary-repository', DiaryRepository
 
         hobbyFactory = facade.createFactory('hobby', true)
+        hobbyRepo    = facade.createRepository('hobby')
 
         hobbies = (for name, i in ['keyboard', 'jogging', 'cycling']
-            hobbyFactory.createFromObject id: 3 - i, name: name
+            hobby = hobbyFactory.createFromObject id: 3 - i, name: name
+            hobbyRepo.save hobby
         )
 
 
@@ -188,24 +199,31 @@ describe 'BaseList', ->
 
     describe "on('loaded')", ->
 
+        before (done) ->
+
+            facade.createRepository('diary').save(id: 'abc', name: 'xxx').then -> done()
+
+
         it 'loaded after loaded when ids is given in constructor', (done) ->
 
-            class HobbyList extends BaseList
+            class DiaryList extends BaseList
                 @getFacade: -> facade
                 getFacade:  -> facade
-                @itemModelName: 'hobby'
+                @itemModelName: 'diary'
 
 
-            hobbyList = new HobbyList(ids: ['dummy'])
-            expect(hobbyList.loaded).to.be.false
-            expect(hobbyList.items).to.have.length 0
-            expect(hobbyList).to.have.length 0
-            expect(hobbyList.ids).to.have.length 0
+            diaryList = new DiaryList(ids: ['abc'])
+            expect(diaryList.loaded).to.be.false
+            expect(diaryList.items).to.have.length 0
+            expect(diaryList).to.have.length 0
+            expect(diaryList.ids).to.have.length 0
 
-            hobbyList.on 'loaded', ->
-                expect(hobbyList.loaded).to.be.true
-                expect(hobbyList.items).to.have.length 1
-                expect(hobbyList).to.have.length 1
+            diaryList.on 'loaded', ->
+                expect(diaryList.loaded).to.be.true
+                expect(diaryList).to.have.length 1
+                expect(diaryList.items).to.have.length 1
+                expect(diaryList.ids).to.have.length 1
+                expect(diaryList.ids[0].equals 'abc').to.be.true
                 done()
 
         it 'executed after event registered when array is given in constructor', (done) ->
@@ -338,7 +356,7 @@ describe 'BaseList', ->
         facade.addClass('commodity-repository', CommodityRepository)
 
 
-        it 'can load data by ids synchronously from MasterRepository', (done) ->
+        it 'can load data by ids synchronously from BaseSyncRepository', ->
 
             class HobbyList extends BaseList
                 @getFacade: -> facade
@@ -347,30 +365,25 @@ describe 'BaseList', ->
 
 
             HobbyRepository = facade.getRepository 'hobby'
-            HobbyRepository.load().then ->
 
-                list = new HobbyList()
+            list = new HobbyList()
 
-                list.setIds(['dummy'])
+            list.setIds(['1', '3'])
 
-                expect(list.loaded).to.be.true
-                expect(list.items).to.have.length.above 0
-
-                done()
-
-            .catch done
+            expect(list.loaded).to.be.true
+            expect(list.items).to.have.length 2
 
 
-        it 'loads data by ids asynchronously from non-MasterRepository', (done) ->
+        it 'loads data by ids asynchronously from BaseAsyncRepository', (done) ->
 
-            class CommodityList extends BaseList
+            class DiaryList extends BaseList
                 @getFacade: -> facade
                 getFacade:  -> facade
-                @itemModelName: 'commodity'
+                @itemModelName: 'diary'
 
-            list = new CommodityList()
+            list = new DiaryList()
 
-            list.setIds([2, 3])
+            list.setIds(['abc'])
 
             expect(list.loaded).to.be.false
             expect(list.items).to.have.length 0
@@ -379,8 +392,8 @@ describe 'BaseList', ->
             list.on 'loaded', ->
 
                 expect(list.loaded).to.be.true
-                expect(list.items).to.have.length 2
-                expect(list).to.have.length 2
+                expect(list.items).to.have.length 1
+                expect(list).to.have.length 1
 
                 done()
 

@@ -12,8 +12,7 @@ see https://github.com/CureApp/loopback-promised
 ###
 class ResourceClientInterface
 
-    constructor: ->
-        @current_id = 0
+    # this file is just a concept and no implementation here.
 
     ###*
     Create new instance of Model class, saved in database
@@ -21,12 +20,8 @@ class ResourceClientInterface
     @method create
     @public
     @param {Object} data
-    @return {Promise(Object)}
+    @return {Object|Promise(Object)}
     ###
-    create: (data = {}) ->
-        data.id = ++@current_id
-        return Promise.resolve(data)
-
 
     ###*
     Update or insert a model instance
@@ -35,12 +30,8 @@ class ResourceClientInterface
     @method upsert
     @public
     @param {Object} data
-    @return {Promise(Object)}
+    @return {Object|Promise(Object)}
     ###
-    upsert: (data = {}) ->
-        data.id ?= ++@current_id
-        return Promise.resolve(data)
-
 
     ###*
     Find object by ID.
@@ -48,12 +39,8 @@ class ResourceClientInterface
     @method findById
     @public
     @param {String} id
-    @return {Promise(Object)}
+    @return {Object|Promise(Object)}
     ###
-    findById: (id) ->
-        @mock(id)
-
-
 
     ###*
     Find all model instances that match filter specification.
@@ -61,10 +48,8 @@ class ResourceClientInterface
     @method find
     @public
     @param {Object} filter
-    @return {Promise(Array(Object))}
+    @return {Array(Object)|Promise(Array(Object))}
     ###
-    find: (filter) ->
-        return Promise.resolve([{id: 'dummy', mock: true}])
 
     ###*
     Find one model instance that matches filter specification. Same as find, but limited to one result
@@ -72,11 +57,8 @@ class ResourceClientInterface
     @method findOne
     @public
     @param {Object} filter
-    @return {Promise(Object)}
+    @return {Object|Promise(Object)}
     ###
-    findOne: (filter) ->
-        @mock(filter)
-
 
     ###*
     Destroy model instance
@@ -84,11 +66,7 @@ class ResourceClientInterface
     @method destroyById
     @public
     @param {Object} data
-    @return {Promise}
     ###
-    destroy: (data) ->
-        Promise.resolve({})
-
 
     ###*
     Destroy model instance with the specified ID.
@@ -96,11 +74,7 @@ class ResourceClientInterface
     @method destroyById
     @public
     @param {String} id
-    @return {Promise}
     ###
-    destroyById: (id) ->
-        Promise.resolve({})
-
 
     ###*
     Update set of attributes.
@@ -108,21 +82,7 @@ class ResourceClientInterface
     @method updateAttributes
     @public
     @param {Object} data
-    @return {Promise(Object)}
+    @return {Object|Promise(Object)}
     ###
-    updateAttributes: (id, data) ->
-        @mock(id, data)
-
-
-
-    ###*
-    return Promise object as mock
-
-    @method mock
-    @private
-    ###
-    mock: (arg1, arg2) ->
-        return Promise.resolve(id: 'dummy', mock: true, arg1: arg1, arg2: arg2)
-
 
 module.exports = ResourceClientInterface

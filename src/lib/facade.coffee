@@ -50,16 +50,6 @@ class Facade
 
 
     ###*
-    load master tables
-
-    @method loadMasterTables
-    @return {Promise}
-    ###
-    loadMasterTables: (modelNames...) ->
-        Promise.all (@getRepository(modelName).load?() for modelName in modelNames)
-
-
-    ###*
     get a model class
 
     @method getModel
@@ -280,22 +270,22 @@ class Facade
     @registerBaseClass: (klass) -> @[klass.name] = klass
 
 
-    @Base               : require './base'
-    @BaseModel          : require './base-model'
-    @ValueObject        : require './value-object'
-    @Entity             : require './entity'
-    @BaseList           : require './base-list'
-    @BaseDict           : require './base-dict'
-    @BaseFactory        : require './base-factory'
-    @ListFactory        : require './list-factory'
-    @DictFactory        : require './dict-factory'
-    @BaseRepository     : require './base-repository'
-    @BaseSyncRepository : require './base-sync-repository'
-    @MasterRepository   : require './master-repository'
-    @DomainError        : require './domain-error'
-    @MemoryResource     : require './memory-resource'
-    @Id                 : require './id'
-    @Ids                : require './ids'
+    @Base                : require './base'
+    @BaseModel           : require './base-model'
+    @ValueObject         : require './value-object'
+    @Entity              : require './entity'
+    @BaseList            : require './base-list'
+    @BaseDict            : require './base-dict'
+    @BaseFactory         : require './base-factory'
+    @ListFactory         : require './list-factory'
+    @DictFactory         : require './dict-factory'
+    @BaseRepository      : require './base-repository'
+    @BaseSyncRepository  : require './base-sync-repository'
+    @BaseAsyncRepository : require './base-async-repository'
+    @DomainError         : require './domain-error'
+    @MemoryResource      : require './memory-resource'
+    @Id                  : require './id'
+    @Ids                 : require './ids'
 
 
 module.exports = Facade

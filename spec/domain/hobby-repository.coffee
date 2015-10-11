@@ -1,9 +1,13 @@
 
-BaseRepository = require('../base-domain').BaseRepository
 
+{ MemoryResource, BaseAsyncRepository } = require('../base-domain')
 
-class HobbyRepository extends BaseRepository
+memory = new MemoryResource()
+
+class HobbyRepository extends BaseAsyncRepository
 
     @modelName: 'hobby'
+
+    client: memory
 
 module.exports = HobbyRepository

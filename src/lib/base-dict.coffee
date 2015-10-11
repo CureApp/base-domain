@@ -228,13 +228,13 @@ class BaseDict extends ValueObject
 
         repo = new ItemRepository()
 
-        if ItemRepository.storeMasterTable and ItemRepository.loaded()
+        if ItemRepository.isSync
 
-            subModels = (repo.getByIdSync(id) for id in ids)
+            subModels = repo.getByIds(ids)
             @setItems(subModels)
 
         else
-            repo.query(where: id: inq: ids).then (subModels) =>
+            repo.getByIds(ids).then (subModels) =>
                 @setItems(subModels)
 
         return @

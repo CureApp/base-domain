@@ -23,6 +23,7 @@ class Ids extends Array
 
         (item.toString() for item in @)
 
+
     equals: (ids) ->
 
         @toString() is @ids.toString()

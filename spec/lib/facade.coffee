@@ -41,8 +41,11 @@ describe 'Facade', ->
         it 'returns true to class "BaseRepository"', ->
             expect(Facade.isBaseClass Facade.BaseRepository).to.be.true
 
-        it 'returns true to class "MasterRepository"', ->
-            expect(Facade.isBaseClass Facade.MasterRepository).to.be.true
+        it 'returns true to class "BaseSyncRepository"', ->
+            expect(Facade.isBaseClass Facade.BaseSyncRepository).to.be.true
+
+        it 'returns true to class "BaseAsyncRepository"', ->
+            expect(Facade.isBaseClass Facade.BaseAsyncRepository).to.be.true
 
         it 'returns true to class "DomainError"', ->
             expect(Facade.isBaseClass Facade.DomainError).to.be.true
@@ -161,38 +164,6 @@ describe 'Facade', ->
             class Hobby extends Facade.BaseModel
             f.addClass('hobby', Hobby)
             expect(f.hasClass('hobby')).to.be.true
-
-
-    describe 'loadMasterTables', ->
-
-        it 'loads master tables', (done) ->
-
-            class ChildFacade extends Facade
-
-            class MastrRepository extends Facade.MasterRepository
-                @modelName: 'mastr'
-
-            class Mastr extends Facade.Entity
-                @modelName: 'mastr'
-
-            class NonMastrRepository extends Facade.BaseRepository
-                @modelName: 'non-mastr'
-
-            f = ChildFacade.createInstance()
-
-            f.addClass 'mastr-repository', MastrRepository
-            f.addClass 'mastr', Mastr
-            f.addClass 'non-mastr-repository', NonMastrRepository
-
-            f.loadMasterTables('mastr', 'non-mastr').then ->
-                models = f.getRepository('mastr').modelsById
-                expect(models).to.be.an 'object'
-
-                expect(f.getRepository('non-mastr').modelsById).not.to.exist
-
-                done()
-
-            .catch done
 
 
     describe 'getFactory', ->

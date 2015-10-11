@@ -242,17 +242,14 @@ class BaseFactory extends Base
 
         idPropName = typeInfo.idPropName
 
-        try
-            Repository = @getFacade().getRepository typeInfo.model
-            return if not Repository.storeMasterTable
+        Repository = @getFacade().getRepository typeInfo.model
 
-            repository = new Repository()
-            return if not repository.getByIdSync
-        catch e
-            return
+        return if not Repository.isSync
+
+        repository = new Repository()
 
         id = model[idPropName]
-        subModel = repository.getByIdSync(id)
+        subModel = repository.get(id)
         model.setEntityProp(prop, subModel) if subModel
 
 

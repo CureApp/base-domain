@@ -2,7 +2,7 @@
 facade = require('../create-facade').create()
 Facade = facade.constructor
 
-{ Ids, BaseDict } = facade.constructor
+{ Ids, BaseDict, MemoryResource } = facade.constructor
 
 hobbies = null
 
@@ -10,6 +10,7 @@ hobbies = null
 describe 'BaseDict', ->
 
     before ->
+
         class Hobby extends Facade.Entity
             @properties:
                 name: @TYPES.STRING
@@ -18,17 +19,31 @@ describe 'BaseDict', ->
             @properties:
                 name: @TYPES.STRING
 
-        class HobbyRepository extends Facade.MasterRepository
+        class HobbyRepository extends Facade.BaseSyncRepository
             @modelName: 'hobby'
+            client: new MemoryResource()
+
+        class Diary extends Facade.Entity
+            @properties:
+                name: @TYPES.STRING
+
+        class DiaryRepository extends Facade.BaseAsyncRepository
+            @modelName: 'diary'
+            client: new MemoryResource()
+
 
         facade.addClass 'hobby', Hobby
         facade.addClass 'non-entity', NonEntity
-        facade.addClass('hobby-repository', HobbyRepository)
+        facade.addClass 'hobby-repository', HobbyRepository
+        facade.addClass 'diary', Diary
+        facade.addClass 'diary-repository', DiaryRepository
 
         hobbyFactory = facade.createFactory('hobby', true)
+        hobbyRepo    = facade.createRepository('hobby')
 
         hobbies = (for name, i in ['keyboard', 'jogging', 'cycling']
-            hobbyFactory.createFromObject id: 3 - i, name: name
+            hobby = hobbyFactory.createFromObject id: 3 - i, name: name
+            hobbyRepo.save hobby
         )
 
 
@@ -154,23 +169,28 @@ describe 'BaseDict', ->
 
     describe "on('loaded')", ->
 
+        before (done) ->
+
+            facade.createRepository('diary').save(id: 'abc', name: 'xxx').then -> done()
+
         it 'loaded after loaded when ids is given in constructor', (done) ->
 
-            class HobbyDict extends BaseDict
+            class DiaryDict extends BaseDict
                 @getFacade: -> facade
                 getFacade:  -> facade
-                @itemModelName: 'hobby'
+                @itemModelName: 'diary'
 
+            diaryDict = new DiaryDict(ids: ['abc'])
 
-            hobbyDict = new HobbyDict(ids: ['dummy'])
-            expect(hobbyDict.loaded).to.be.false
-            expect(hobbyDict.items).not.to.have.property 'dummy'
-            expect(hobbyDict).to.have.length 0
-            expect(hobbyDict.ids).to.have.length 0
+            expect(diaryDict.loaded).to.be.false
+            expect(diaryDict).to.have.length 0
+            expect(diaryDict.ids).to.have.length 0
 
-            hobbyDict.on 'loaded', ->
-                expect(hobbyDict.loaded).to.be.true
-                expect(hobbyDict.items).to.have.property 'dummy'
+            diaryDict.on 'loaded', ->
+                expect(diaryDict.loaded).to.be.true
+                expect(diaryDict).to.have.length 1
+                expect(diaryDict.ids).to.have.length 1
+                expect(diaryDict.ids[0].equals 'abc').to.be.true
                 done()
 
         it 'executed after event registered when array is given in constructor', (done) ->
@@ -244,55 +264,35 @@ describe 'BaseDict', ->
 
     describe 'setIds', ->
 
-        class Commodity extends Facade.Entity
-            @properties:
-                name: @TYPES.STRING
-
-        class CommodityRepository extends Facade.BaseRepository
-            @modelName: 'commodity'
-
-            query: (params) ->
-                ids = params.where.id.inq
-                items = [{id: 1, name: 'pencil'}, {id: 2, name: 'toothbrush'}, {id: 3, name: 'potatochips'}]
-                Promise.resolve (@factory.createFromObject(item) for item in items when item.id in ids)
-
-        facade.addClass('commodity', Commodity)
-        facade.addClass('commodity-repository', CommodityRepository)
-
-
-        it 'can load data by ids synchronously from MasterRepository', (done) ->
+        it 'can load data by ids synchronously from BaseSyncRepository', ->
 
             class HobbyDict extends BaseDict
                 @getFacade: -> facade
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
+                @properties:
+                    annualCost: @TYPES.NUMBER
+
+            dict = new HobbyDict()
+
+            dict.setIds(['1', '3'])
+
+            expect(dict.loaded).to.be.true
+            expect(dict.length).to.equal 2
+            expect(dict.items).to.have.property '1'
+            expect(dict.items).to.have.property '3'
 
 
-            HobbyRepository = facade.getRepository 'hobby'
-            HobbyRepository.load().then ->
+        it 'loads data by ids asynchronously from BaseAsyncRepository', (done) ->
 
-                dict = new HobbyDict()
-
-                dict.setIds(['dummy'])
-
-                expect(dict.loaded).to.be.true
-                expect(dict.items).to.have.property 'dummy'
-
-                done()
-
-            .catch done
-
-
-        it 'loads data by ids asynchronously from non-MasterRepository', (done) ->
-
-            class CommodityDict extends BaseDict
+            class DiaryDict extends BaseDict
                 @getFacade: -> facade
                 getFacade:  -> facade
-                @itemModelName: 'commodity'
+                @itemModelName: 'diary'
 
-            dict = new CommodityDict()
+            dict = new DiaryDict()
 
-            dict.setIds([2, 3])
+            dict.setIds(['abc'])
 
             expect(dict.loaded).to.be.false
             expect(dict.items).to.eql {}
@@ -300,9 +300,7 @@ describe 'BaseDict', ->
             dict.on 'loaded', ->
 
                 expect(dict.loaded).to.be.true
-                expect(dict.items).not.to.have.property 1
-                expect(dict.items).to.have.property 2
-                expect(dict.items).to.have.property 3
+                expect(dict.items).to.have.property 'abc'
 
                 done()
 

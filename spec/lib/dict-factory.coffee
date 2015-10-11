@@ -1,7 +1,8 @@
 
 facade = require('../create-facade').create()
 Facade = facade.constructor
-{ Ids, DictFactory } = Facade
+{ Ids, DictFactory, MemoryResource } = Facade
+
 
 describe 'DictFactory', ->
 
@@ -15,8 +16,9 @@ describe 'DictFactory', ->
             @properties:
                 name: @TYPES.STRING
 
-        class HobbyRepository extends Facade.MasterRepository
+        class HobbyRepository extends Facade.BaseSyncRepository
             @modelName: 'hobby'
+            client: new MemoryResource()
 
         class HobbyDict extends Facade.BaseDict
             @properties:
@@ -43,6 +45,8 @@ describe 'DictFactory', ->
 
         @hobbyFactory = facade.createFactory('hobby', true)
         @neFactory = facade.createFactory('non-entity', true)
+
+        facade.createRepository('hobby').save(id: 'abc', name: 'camping')
 
 
     describe 'createEmpty', ->
@@ -79,13 +83,13 @@ describe 'DictFactory', ->
 
         it 'regards arg as dict object when arg has ids', (done) ->
 
-            obj = ids: ['dummy']
+            obj = ids: ['abc']
 
             hobbyDictFactory = DictFactory.create('hobby-dict', @hobbyFactory)
             dict = hobbyDictFactory.createFromObject(obj)
 
             dict.on 'loaded', ->
-                expect(Object.keys dict.items).to.have.length.above 0
+                expect(Object.keys dict.items).to.have.length 1
                 done()
 
 
@@ -133,10 +137,10 @@ describe 'DictFactory', ->
 
         it 'regards string array as id dic', (done) ->
             hobbyDictFactory = DictFactory.create('hobby-dict', @hobbyFactory)
-            dict = hobbyDictFactory.createFromArray(['dummy'])
+            dict = hobbyDictFactory.createFromArray(['abc'])
 
             dict.on 'loaded', ->
-                expect(Object.keys dict.items).to.have.length.above 0
+                expect(Object.keys dict.items).to.have.length 1
                 done()
 
         it 'regards object array as pre-model dict', (done) ->

@@ -7,7 +7,8 @@ id
 ###
 class Id
 
-    constructor: (@val) ->
+    constructor: (val) ->
+        @val = val.toString()
 
 
     toString: ->

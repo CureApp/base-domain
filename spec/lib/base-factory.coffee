@@ -5,8 +5,8 @@ Facade = facade.constructor
 Hobby  = facade.getModel 'hobby'
 Member = facade.getModel 'member'
 Diary  = facade.getModel 'diary'
-BaseList = facade.constructor.BaseList
-MasterRepository = facade.constructor.MasterRepository
+
+{ BaseSyncRepository, BaseList } = facade.constructor
 
 describe 'BaseFactory', ->
 
@@ -171,19 +171,9 @@ describe 'BaseFactory', ->
 
     describe 'fetchEntityProp', ->
 
-        before (done) ->
+        before ->
+            facade.createRepository('member').save(id: 'dummy')
 
-            class MemberRepository extends MasterRepository
-                getFacade: -> facade
-
-            MemberRepository.load().then -> done()
-
-            @originalGetRepository = facade.getRepository
-
-            facade.getRepository = (name) -> MemberRepository
-
-        after ->
-            facade.getRepository = @originalCreateRepository
 
         it 'set submodel by id', ->
 

@@ -1,9 +1,9 @@
 
 ###*
-sync memory storage
+sync memory storage, implements ResourceClientInterface
 
 @class MemoryResource
-@implements SyncResourceClientInterface
+@implements ResourceClientInterface
 ###
 class MemoryResource
 
@@ -41,8 +41,8 @@ class MemoryResource
     ###
     create: (data = {}) ->
         data.id ?= @generateId()
-        @pool[data.id] = data
-        return data
+
+        @pool[data.id] = clone data
 
 
     ###*
@@ -67,7 +67,7 @@ class MemoryResource
     @return {Object}
     ###
     findById: (id) ->
-        @pool[id]
+        clone @pool[id]
 
 
 
@@ -80,8 +80,13 @@ class MemoryResource
     @param {Object} filter
     @return {Array(Object)}
     ###
-    find: (filter) ->
-        throw new Error '"find" method is unimplemented.'
+    find: (filter = {}) ->
+
+        { where } = filter
+
+        return (clone(obj) for id, obj of @pool) if not where
+
+        throw new Error '"find" method with "where" is currently unimplemented.'
 
     ###*
     Find one model instance that matches filter specification. Same as find, but limited to one result
@@ -92,7 +97,9 @@ class MemoryResource
     @return {Object}
     ###
     findOne: (filter) ->
-        throw new Error '"findOne" method is unimplemented.'
+
+        @find(filter)[0]
+
 
 
     ###*
@@ -133,7 +140,19 @@ class MemoryResource
 
         @pool[id] = pooledData
 
-        return pooledData
+        return clone pooledData
 
+
+# clone
+clone = (val) ->
+
+    return val.map(clone) if Array.isArray val
+
+    return val if not val? or typeof val isnt 'object' 
+
+    ret = {}
+    ret[k] = clone(v) for own k, v of val
+
+    return ret
 
 module.exports = MemoryResource

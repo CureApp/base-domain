@@ -1,7 +1,7 @@
 
 facade = require('../create-facade').create()
 Facade = facade.constructor
-{ Ids, ListFactory } = Facade
+{ Ids, ListFactory, MemoryResource } = Facade
 
 describe 'ListFactory', ->
 
@@ -14,8 +14,9 @@ describe 'ListFactory', ->
             @properties:
                 name: @TYPES.STRING
 
-        class HobbyRepository extends Facade.MasterRepository
+        class HobbyRepository extends Facade.BaseSyncRepository
             @modelName: 'hobby'
+            client: new MemoryResource()
 
         class HobbyList extends Facade.BaseList
             @itemModelName: 'hobby'
@@ -28,6 +29,7 @@ describe 'ListFactory', ->
 
         @hobbyFactory = facade.createFactory('hobby', on)
 
+        facade.createRepository('hobby').save(id: 'abc', name: 'camping')
 
     describe 'createEmpty', ->
 
@@ -59,7 +61,7 @@ describe 'ListFactory', ->
 
         it 'regards arg as list object when arg has ids', (done) ->
 
-            obj = ids: ['dummy']
+            obj = ids: ['abc']
 
             hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
             list = hobbyListFactory.createFromObject(obj)
@@ -73,7 +75,7 @@ describe 'ListFactory', ->
 
         it 'regards string array as id list', (done) ->
             hobbyListFactory = ListFactory.create('hobby-list', @hobbyFactory)
-            list = hobbyListFactory.createFromArray(['dummy'])
+            list = hobbyListFactory.createFromArray(['abc'])
 
             list.on 'loaded', ->
                 expect(list.items).to.have.length.above 0

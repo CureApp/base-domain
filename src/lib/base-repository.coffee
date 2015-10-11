@@ -117,11 +117,12 @@ class BaseRepository extends Base
 
     @method get
     @public
-    @param {any} id
+    @param {Id|String} id
     @param {ResourceClientInterface} [client=@client]
     @return {Entity|Promise(Entity)} entity
     ###
     get: (id, client) ->
+        id = id.toString()
         client ?= @client
         @resolve client.findById(id), (obj) ->
             return @factory.createFromObject(obj)
@@ -132,7 +133,7 @@ class BaseRepository extends Base
 
     @method getById
     @public
-    @param {any} id
+    @param {Id|String} id
     @param {ResourceClientInterface} [client=@client]
     @return {Entity|Promise(Entity)} entity
     ###
@@ -154,10 +155,12 @@ class BaseRepository extends Base
 
         results = (@get(id, client) for id in ids)
 
+        existence = (val) -> val?
+
         if results[0] instanceof Promise
-            return Promise.all results
+            return Promise.all(results).then (models) -> models.filter existence
         else
-            return results
+            return results.filter existence
 
     ###*
     get all entities
@@ -220,7 +223,7 @@ class BaseRepository extends Base
 
     @method update
     @public
-    @param {any} id id of the entity to update
+    @param {Id|String} id id of the entity to update
     @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
     @param {ResourceClientInterface} [client=@client]
     @return {Entity|Promise(Entity)} updated entity
@@ -232,6 +235,7 @@ class BaseRepository extends Base
                 use BaseRepository#save(entity) instead
             """
 
+        id = id.toString()
         client ?= @client
         @appendTimeStamp(data, isUpdate = true)
 

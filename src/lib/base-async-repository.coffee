@@ -34,7 +34,8 @@ class BaseAsyncRepository extends BaseRepository
     ###
     getByIds: (ids, client) ->
 
-        Promise.all (@get(id, client) for id in ids)
+        Promise.all((@get(id, client) for id in ids)).then (models) ->
+            models.filter (model) -> model?
 
 
     # following are all comments, for yuidoc

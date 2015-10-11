@@ -34,7 +34,7 @@ class BaseSyncRepository extends BaseRepository
     ###
     getByIds: (ids, client) ->
 
-        (@get(id, client) for id in ids)
+        (@get(id, client) for id in ids).filter (model) -> model?
 
 
     # following are all comments, for yuidoc

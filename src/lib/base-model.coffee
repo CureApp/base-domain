@@ -270,10 +270,12 @@ class BaseModel extends Base
     @method include
     @param {Object} [options]
     @param {Boolean} [options.recursive] recursively include models or not
+    @param {Boolean} [options.async=true] get async values
+    @param {Array(String)} [options.props] include only given props
     @return {Promise(BaseModel)} self
     ###
     include: (options = {}) ->
 
-        new Includer(@).include(recursive: options.recursive)
+        new Includer(@).include(options)
 
 module.exports = BaseModel

@@ -1,6 +1,8 @@
 
 { hyphenize } = require './util'
 
+EventEmitter = require 'eventemitter3'
+
 ###*
 parent class of model, factory and repository.
 
@@ -9,7 +11,7 @@ gives them @getFacade() method.
 @class Base
 @module base-domain
 ###
-class Base
+class Base extends EventEmitter
 
     ###*
     get facade

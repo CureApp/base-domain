@@ -25,7 +25,7 @@ class BaseList extends ValueObject
     ids: get ids of items
 
     @property ids
-    @type Array
+    @type Array(Id)
     @public
     ###
     Object.defineProperty @::, 'ids',
@@ -105,6 +105,9 @@ class BaseList extends ValueObject
         @loaded = false
         itemModelName = @getItemModelName()
         ItemRepository = @getFacade().getRepository(itemModelName)
+
+        if ItemRepository.aggreate
+            pntRepo = new ItemRepository.aggregate
 
         repo = new ItemRepository()
 

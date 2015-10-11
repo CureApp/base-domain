@@ -1,7 +1,6 @@
 
 
 Base  = require './base'
-ResourceClientInterface = require './resource-client-interface'
 Entity = require './entity'
 
 ###*

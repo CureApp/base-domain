@@ -15,7 +15,7 @@ class CollectionFactory extends GeneralFactory
     ###
     constructor: ->
         super
-        @itemFactory = @facade.createFactory(@getModelClass().itemModelName)
+        @itemFactory = @root.createFactory(@getModelClass().itemModelName)
 
 
     ###*

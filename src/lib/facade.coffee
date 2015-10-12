@@ -1,10 +1,12 @@
 
 require('es6-promise').polyfill()
-copy = require('copy-class').copy
+
+{ copy } = require('copy-class')
 
 { camelize, requireFile } = require '../util'
 
 GeneralFactory = require './general-factory'
+MemoryResource = require './memory-resource'
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
 
@@ -33,6 +35,11 @@ class Facade
         Constructor = @
         return new Constructor(options) 
 
+    ###*
+    key: modelName, value: MemoryResource
+
+    @property {Object(MemoryResource)} memories
+    ###
 
     ###*
     constructor
@@ -43,6 +50,7 @@ class Facade
     ###
     constructor: (options) ->
         @classes = {}
+        @memories = {}
         @dirname = options.dirname ? '.'
         @init()
 
@@ -55,11 +63,11 @@ class Facade
     get a model class
 
     @method getModel
-    @param {String} name
-    @return {Class}
+    @param {String} modelName
+    @return {Function}
     ###
-    getModel: (name) ->
-        return @require(name)
+    getModel: (getName) ->
+        return @require(getName)
 
 
 
@@ -85,7 +93,6 @@ class Facade
     ###
     getRepository: (name) ->
         @require("#{name}-repository")
-
 
 
     ###*
@@ -119,7 +126,6 @@ class Facade
             return new GeneralFactory(modelName, @)
 
 
-
     ###*
     create a repository instance
 
@@ -130,6 +136,19 @@ class Facade
     ###
     createRepository: (modelName, root) ->
         @create("#{modelName}-repository", root)
+
+
+
+    ###*
+    get or create a memory resource to save to @memories
+
+    @method useMemoryResource
+    @param {String} modelName
+    @return {MemoryResource}
+    ###
+    useMemoryResource: (modelName) ->
+
+        @memories[modelName] ?= @constructor.MemoryResource()
 
 
     ###*
@@ -273,6 +292,7 @@ class Facade
         (klass is @[klass.name]) or
         (klass is @DomainError) or
         (@[klass.name]?.toString() is klass.toString())
+
 
     ###*
     registers the given class as a base class

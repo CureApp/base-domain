@@ -15,9 +15,9 @@ class GeneralFactory
 
     @constructor
     @param {String} modelName
-    @param {Facade} facade
+    @param {RootInterface} root 
     ###
-    constructor: (@modelName, @facade) ->
+    constructor: (@modelName, @root) ->
         @modelProps = @getModelClass().getModelProps()
 
 
@@ -28,7 +28,7 @@ class GeneralFactory
     @return {Function}
     ###
     getModelClass: ->
-        @facade.getModel(@modelName)
+        @root.getModel(@modelName)
 
 
     ###*
@@ -153,7 +153,7 @@ class GeneralFactory
     createSubCollection: (prop, value) ->
 
         typeInfo = @modelProps.getTypeInfo(prop)
-        itemModelFactory = @facade.createFactory(typeInfo.itemModel)
+        itemModelFactory = @root.createFactory(typeInfo.itemModel)
 
         return itemModelFactory.createCollection(typeInfo.model, value)
 
@@ -166,7 +166,7 @@ class GeneralFactory
     ###
     createSubModel: (prop, value) ->
 
-        subModelFactory = @facade.createFactory(@modelProps.getTypeInfo(prop).model)
+        subModelFactory = @root.createFactory(@modelProps.getTypeInfo(prop).model)
         SubModel = subModelFactory.getModelClass()
 
         return value if value instanceof SubModel
@@ -184,7 +184,7 @@ class GeneralFactory
 
         typeInfo = @modelProps.getTypeInfo(prop)
 
-        @facade.createFactory(typeInfo.model).createEmpty()
+        @root.createFactory(typeInfo.model).createEmpty()
 
 
     ###*
@@ -230,7 +230,7 @@ class GeneralFactory
 
         CollectionFactory = require './collection-factory'
 
-        new CollectionFactory(collModelName, @facade).createFromObject val
+        new CollectionFactory(collModelName, @root).createFromObject val
 
 
 module.exports = GeneralFactory

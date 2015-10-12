@@ -66,8 +66,7 @@ class BaseRepository extends Base
     @return {Class}
     ###
     getModelClass: ->
-        modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-repository'.length)
-        @getFacade().getModel(modelName)
+        @factory.getModelClass()
 
 
 

@@ -10,15 +10,17 @@ MemoryResource = require './memory-resource'
 ###
 class AggregateRoot extends Entity
 
-    @descendants: []
+    ###*
+    key: modelName, value: MemoryResource
+
+    @property {Object(MemoryResource)} memories
+    ###
 
     constructor: ->
+
+        Object.defineProperty @, 'memories', value: {}
+
         super
-
-        @clients = {}
-
-        for modelName in @constructor.descendants
-            @clients[modelName] = new MemoryResource()
 
         @root = @
 
@@ -48,6 +50,18 @@ class AggregateRoot extends Entity
 
 
     ###*
+    get a model class
+
+    @method getModel
+    @param {String} modelName
+    @return {Function}
+    ###
+    getModel: (modelName) ->
+
+        @getFacade().getModel modelName
+
+
+    ###*
     create an instance of the given modelName using obj
 
     @method createModel
@@ -59,6 +73,18 @@ class AggregateRoot extends Entity
     createModel: (modelName, obj, options) ->
 
         @createFactory(modelName).createFromObject(obj, options)
+
+
+    ###*
+    get or create a memory resource to save to @memories
+
+    @method useMemoryResource
+    @param {String} modelName
+    @return {MemoryResource}
+    ###
+    useMemoryResource: (modelName) ->
+
+        @memories[modelName] ?= MemoryResource()
 
 
 

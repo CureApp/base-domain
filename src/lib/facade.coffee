@@ -6,7 +6,6 @@ require('es6-promise').polyfill()
 { camelize, requireFile } = require '../util'
 
 GeneralFactory = require './general-factory'
-MemoryResource = require './memory-resource'
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
 
@@ -97,6 +96,7 @@ class Facade
 
     ###*
     create an instance of the given modelName using obj
+    if obj is null or undefined, empty object will be created.
 
     @method createModel
     @param {String} modelName
@@ -106,7 +106,7 @@ class Facade
     ###
     createModel: (modelName, obj, options) ->
 
-        @createFactory(modelName).createFromObject(obj, options)
+        @createFactory(modelName).createFromObject(obj ? {}, options)
 
 
     ###*
@@ -152,7 +152,7 @@ class Facade
     ###
     useMemoryResource: (modelName) ->
 
-        @memories[modelName] ?= @constructor.MemoryResource()
+        @memories[modelName] ?= new @constructor.MemoryResource()
 
 
     ###*
@@ -298,12 +298,14 @@ class Facade
     @BaseModel           : require './base-model'
     @ValueObject         : require './value-object'
     @Entity              : require './entity'
+    @AggregateRoot       : require './aggregate-root'
     @BaseList            : require './base-list'
     @BaseDict            : require './base-dict'
     @BaseFactory         : require './base-factory'
     @BaseRepository      : require './base-repository'
     @BaseSyncRepository  : require './base-sync-repository'
     @BaseAsyncRepository : require './base-async-repository'
+    @LocalRepository     : require './local-repository'
     @DomainError         : require './domain-error'
     @MemoryResource      : require './memory-resource'
     @Id                  : require './id'

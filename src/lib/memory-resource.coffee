@@ -9,6 +9,17 @@ sync memory storage, implements ResourceClientInterface
 ###
 class MemoryResource
 
+    @restore: (obj) ->
+
+        { pool, currentIdNum } = obj
+
+        memoryResource = new MemoryResource()
+        memoryResource.pool = pool
+        memoryResource.currentIdNum = currentIdNum
+
+        return memoryResource
+
+
     constructor: ->
         @currentIdNum = 1
         @pool = {}
@@ -144,5 +155,15 @@ class MemoryResource
 
         return Util.clone pooledData
 
+
+    ###*
+    create plain object
+
+    @method toPlainObject
+    @return {Object} plainObject
+    ###
+    toPlainObject: ->
+        pool         : Util.clone @pool
+        currentIdNum : @currentIdNum
 
 module.exports = MemoryResource

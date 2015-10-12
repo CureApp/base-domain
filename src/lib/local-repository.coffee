@@ -1,5 +1,5 @@
 
-{ BaseSyncRepository } = require './base-sync-repository'
+BaseSyncRepository = require './base-sync-repository'
 
 class LocalRepository extends BaseSyncRepository
 
@@ -9,5 +9,4 @@ class LocalRepository extends BaseSyncRepository
 
         @client = @root.useMemoryResource(@constructor.modelName)
 
-
-module.exports = AggregateRepository
+module.exports = LocalRepository

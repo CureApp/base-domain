@@ -59,10 +59,15 @@ class Collection extends ValueObject
 
     ###*
     @constructor
+    @params {any} props
+    @params {RootInterface} root
     ###
-    constructor: (props = {}) ->
+    constructor: (props = {}, root) ->
 
-        itemModelName = @getItemModelName()
+        if not @constructor.itemModelName? 
+            throw @getFacade().error "@itemModelName is not set, in class #{@constructor.name}"
+
+        super(props, root)
 
         Object.defineProperty @, 'loaded', value: false, writable: true
 
@@ -71,8 +76,6 @@ class Collection extends ValueObject
 
         if props.ids
             @setIds props.ids
-
-        super(props)
 
 
     ###*
@@ -92,16 +95,13 @@ class Collection extends ValueObject
     ###
     setIds: (ids = []) ->
 
-        itemModelName = @getItemModelName()
-
         return if not @constructor.containsEntity()
 
         @loaded = false
-        ItemRepository = @getFacade().getRepository(itemModelName)
 
-        repo = new ItemRepository()
+        repo = @root.createRepository(@constructor.itemModelName)
 
-        if ItemRepository.isSync
+        if repo.constructor.isSync
 
             subModels = repo.getByIds(ids)
             @setItems(subModels)
@@ -140,10 +140,8 @@ class Collection extends ValueObject
     @return {Boolean}
     ###
     @containsEntity: ->
-        if not @itemModelName? 
-            throw @getFacade().error "@itemModelName is not set, in class #{@name}"
 
-        return @getFacade().getModel(@itemModelName).isEntity
+        @getFacade().getModel(@itemModelName).isEntity
 
 
 
@@ -187,24 +185,12 @@ class Collection extends ValueObject
 
 
     ###*
-    get item model name
-    @method getItemModelName
-    @return {String}
-    ###
-    getItemModelName: ->
-        if not @constructor.itemModelName? 
-            throw @getFacade().error "@itemModelName is not set, in class #{@constructor.name}"
-
-        return @constructor.itemModelName
-
-
-    ###*
     get item model
     @method getItemModel
     @return {BaseModel}
     ###
     getItemModel: ->
-        @getFacade().getModel(@getItemModelName())
+        @getFacade().getModel(@constructor.itemModelName)
 
 
 

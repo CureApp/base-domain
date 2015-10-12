@@ -15,6 +15,7 @@ Facade class of DDD pattern.
 - create instance of repositories
 
 @class Facade
+@implements RootInterface
 @module base-domain
 ###
 class Facade
@@ -105,16 +106,17 @@ class Facade
     create a factory instance
 
     @method createFactory
-    @param {String} name
+    @param {String} modelName
+    @params {RootInterface} root
     @return {BaseFactory}
     ###
-    createFactory: (name) ->
+    createFactory: (modelName, root) ->
         try
-            FactoryClass = @getFactory(name)
-            return new FactoryClass()
+            FactoryClass = @getFactory(modelName)
+            return new FactoryClass(root)
 
         catch e
-            return new GeneralFactory(name, @)
+            return new GeneralFactory(modelName, @)
 
 
 
@@ -122,12 +124,12 @@ class Facade
     create a repository instance
 
     @method createRepository
-    @param {String} name
-    @param {Object} [options]
+    @param {String} modelName
+    @params {RootInterface} root
     @return {BaseRepository}
     ###
-    createRepository: (name, options) ->
-        @create("#{name}-repository", options)
+    createRepository: (modelName, root) ->
+        @create("#{modelName}-repository", root)
 
 
     ###*

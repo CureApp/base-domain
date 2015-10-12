@@ -46,17 +46,17 @@ class BaseRepository extends Base
     constructor
 
     @constructor
+    @params {ResourceClientInterface} client
+    @params {RootInterface} root
     @return
     ###
-    constructor: (client) ->
+    constructor: (root) ->
 
-        @client = client if client?
+        super(root)
 
         modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-repository'.length)
 
-        facade = @getFacade()
-
-        @factory = facade.createFactory(modelName)
+        @factory = @root.createFactory(modelName)
 
 
     ###*

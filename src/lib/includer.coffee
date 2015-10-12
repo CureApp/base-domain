@@ -99,11 +99,9 @@ class Includer
             @model.set(entityProp, subModel)
             return
 
-        Repository = @model.getFacade().getRepository(typeInfo.model)
+        repo = @model.root.createRepository(typeInfo.model)
 
-        repo = new Repository()
-
-        if Repository.isSync
+        if repo.constructor.isSync
             subModel = repo.get(subId)
             @model.set(entityProp, subModel)
             return Promise.resolve subModel

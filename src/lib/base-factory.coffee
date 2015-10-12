@@ -29,8 +29,12 @@ class BaseFactory extends Base
     constructor
 
     @constructor
+    @params {RootInterface} root
     ###
-    constructor: ->
+    constructor: (root) ->
+
+        super(root)
+
         modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-factory'.length)
         @gf = new GeneralFactory(modelName, @getFacade())
 

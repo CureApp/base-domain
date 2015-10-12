@@ -41,14 +41,16 @@ class BaseDict extends Collection
 
     ###*
     @constructor
+    @params {any} props
+    @params {RootInterface} root
     ###
-    constructor: (props = {}) ->
+    constructor: (props = {}, root) ->
 
         Object.defineProperty @, 'items',
             value: {}
             enumerable: true
 
-        super(props)
+        super(props, root)
 
 
     ###*

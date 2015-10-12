@@ -13,6 +13,18 @@ gives them @getFacade() method.
 ###
 class Base extends EventEmitter
 
+
+    ###*
+    @property {RootInterface} root
+    ###
+    constructor: (root) ->
+
+        Object.defineProperty @, 'root',
+            value: root ? @getFacade()
+            writable: true
+
+
+
     ###*
     get facade
 
@@ -64,7 +76,6 @@ class Base extends EventEmitter
     @return {String}
     ###
     @getName: -> hyphenize @name
-
 
 
 module.exports = Base

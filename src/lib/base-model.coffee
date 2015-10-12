@@ -18,6 +18,7 @@ the parent "Base" class just simply gives a @getFacade() method.
 ###
 class BaseModel extends Base
 
+
     @isEntity: false
 
     ###*
@@ -97,10 +98,14 @@ class BaseModel extends Base
 
     ###*
     @constructor
+    @params {any} obj
+    @params {RootInterface} root
     ###
-    constructor: (obj) ->
-        @set obj if obj
+    constructor: (obj, root) ->
 
+        super(root)
+
+        @set obj if obj
 
 
     ###*

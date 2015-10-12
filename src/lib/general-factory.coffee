@@ -107,18 +107,13 @@ class GeneralFactory
     ###
     setValueToModel: (model, prop, value) ->
 
-        typeInfo = @modelProps.getTypeInfo(prop)
-
-        switch typeInfo?.name
-
-            when 'MODEL_LIST'
-                @setSubModelListToModel(model, prop, value)
+        switch @modelProps.getTypeInfo(prop)?.name
 
             when 'MODEL'
-                @setSubModelToModel(model, prop, value)
+                model.set(prop, @createSubModel(prop, value))
 
-            when 'MODEL_DICT'
-                @setSubModelDictToModel(model, prop, value)
+            when 'MODEL_LIST', 'MODEL_DICT'
+                model.set(prop, @createSubCollection(prop, value))
 
             else # set normal props
                 model.set(prop, value)
@@ -132,96 +127,64 @@ class GeneralFactory
     ###
     setEmptyValueToModel: (model, prop) ->
 
-        typeInfo = @modelProps.getTypeInfo(prop)
-
-        switch typeInfo.name
+        switch @modelProps.getTypeInfo(prop).name
 
             when 'MODEL'
                 if @modelProps.isEntity(prop)
                     return # if submodel is entity, load it at include() section
 
                 else
-                    @createEmptyNonEntityProp(model, prop, typeInfo)
+                    model.set(prop, @createEmptyModel(prop))
 
-            when 'MODEL_LIST'
-                @setSubModelListToModel(model, prop, [])
-
-            when 'MODEL_DICT'
-                @setSubModelDictToModel(model, prop, {})
+            when 'MODEL_LIST', 'MODEL_DICT'
+                model.set(prop, @createSubCollection(prop, []))
 
             else
-                model[prop] = undefined
+                model.set(prop, undefined)
 
 
     ###*
-    creates list and set it to the model
+    create collection by prop name and value
 
-    @method setSubModelListToModel
+    @method createSubCollection
     @private
+    @return {Collection}
     ###
-    setSubModelListToModel: (model, prop, value) ->
+    createSubCollection: (prop, value) ->
 
         typeInfo = @modelProps.getTypeInfo(prop)
         itemModelFactory = @facade.createFactory(typeInfo.itemModel)
 
-        list = itemModelFactory.createList(typeInfo.model, value)
-
-        model.set(prop, list)
-
-        return
-
+        return itemModelFactory.createCollection(typeInfo.model, value)
 
 
     ###*
-    set submodel to the prop
+    create submodel by prop name and value
 
-    @method setSubModelToModel
+    @method createSubModel
     @private
     ###
-    setSubModelToModel: (model, prop, value) ->
+    createSubModel: (prop, value) ->
 
-        subModelName = @modelProps.getTypeInfo(prop).model
-
-        subModelFactory = @facade.createFactory(subModelName)
+        subModelFactory = @facade.createFactory(@modelProps.getTypeInfo(prop).model)
         SubModel = subModelFactory.getModelClass()
 
-        if value not instanceof SubModel
-            value = subModelFactory.createFromObject(value)
+        return value if value instanceof SubModel
 
-        model.set(prop, value)
-
-        return
+        return subModelFactory.createFromObject(value)
 
 
     ###*
-    set submodel dict to the prop
+    create empty model and set to the prop
 
-    @method setSubModelToModel
+    @method createEmptyModel
     @private
     ###
-    setSubModelDictToModel: (model, prop, value) ->
+    createEmptyModel: (prop) ->
 
         typeInfo = @modelProps.getTypeInfo(prop)
-        itemModelFactory = @facade.createFactory(typeInfo.itemModel)
 
-        dict = itemModelFactory.createDict(typeInfo.model, value)
-
-        model.set(prop, dict)
-
-        return
-
-
-    ###*
-    create empty non-entity model and set to the prop
-
-    @method createEmptyNonEntityProp
-    @private
-    ###
-    createEmptyNonEntityProp: (model, prop, typeInfo) ->
-
-        factory = @facade.createFactory typeInfo.model
-        submodel = factory.createEmpty()
-        model.set(prop, submodel)
+        @facade.createFactory(typeInfo.model).createEmpty()
 
 
     ###*
@@ -256,7 +219,7 @@ class GeneralFactory
     create collection
 
     @method createCollection
-    @private
+    @public
     @param {String} collModelName model name of collection
     @param {any} val 
     @return {BaseDict} dict

@@ -75,7 +75,7 @@ class BaseFactory extends Base
     @param {any} obj
     @return {BaseList} list
     ###
-    createList: (listModelName, obj) -> @gf.createList(listModelName, obj)
+    createList: (listModelName, obj) -> @createCollection(listModelName, obj)
 
 
     ###*
@@ -87,6 +87,21 @@ class BaseFactory extends Base
     @param {any} obj
     @return {BaseDict} dict
     ###
-    createDict: (dictModelName, obj) -> @gf.createDict(dictModelName, obj)
+    createDict: (dictModelName, obj) -> @createCollection(dictModelName, obj)
+
+
+    ###*
+    create collection
+
+    @method createCollection
+    @public
+    @param {String} modelName model name of collection
+    @param {any} obj
+    @return {Collection} coll
+    ###
+    createCollection: (modelName, obj) ->
+
+        @gf.createCollection(modelName, obj)
+
 
 module.exports = BaseFactory

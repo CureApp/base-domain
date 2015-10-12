@@ -118,12 +118,14 @@ class Facade
     @return {BaseFactory}
     ###
     createFactory: (modelName, root) ->
+        root = undefined if typeof root isnt 'object' # for backward compatibility
+
         try
-            FactoryClass = @getFactory(modelName)
-            return new FactoryClass(root)
+            Factory = @getFactory(modelName)
+            return new Factory(root)
 
         catch e
-            return new GeneralFactory(modelName, @)
+            return new GeneralFactory(modelName, root ? @)
 
 
     ###*
@@ -135,7 +137,9 @@ class Facade
     @return {BaseRepository}
     ###
     createRepository: (modelName, root) ->
-        @create("#{modelName}-repository", root)
+
+        Repository = @getRepository(modelName)
+        return new Repository(root)
 
 
 
@@ -219,20 +223,6 @@ class Facade
         Class.getFacade  = -> facade
         Class::getFacade = -> facade
         @classes[name] = Class
-
-
-    ###*
-    read a file and returns the instance of the file's class
-
-    @method create
-    @private
-    @param {String} name
-    @param {Object} [options]
-    @return {BaseFactory}
-    ###
-    create: (name, options) ->
-        DomainClass = @require(name)
-        return new DomainClass(options)
 
 
     ###*

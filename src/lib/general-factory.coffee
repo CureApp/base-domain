@@ -64,7 +64,7 @@ class GeneralFactory
         if not obj? or typeof obj isnt 'object'
             return null
 
-        model = new ModelClass()
+        model = @create()
 
         for own prop, value of obj
             @setValueToModel model, prop, value
@@ -231,6 +231,17 @@ class GeneralFactory
         CollectionFactory = require './collection-factory'
 
         new CollectionFactory(collModelName, @root).createFromObject val
+
+
+    ###*
+    create an empty model
+
+    @protected
+    @return {BaseModel}
+    ###
+    create: ->
+        Model = @getModelClass()
+        return new Model(null, @root)
 
 
 module.exports = GeneralFactory

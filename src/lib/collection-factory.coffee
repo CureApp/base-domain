@@ -64,8 +64,6 @@ class CollectionFactory extends GeneralFactory
     ###
     createFromArray: (arr) ->
 
-        Collection = @getModelClass()
-
         firstValue = arr[0]
 
         if not firstValue?
@@ -73,10 +71,10 @@ class CollectionFactory extends GeneralFactory
 
         if typeof firstValue is 'object'
             items = (@createItemFromObject obj for obj in arr)
-            return new Collection().setItems items
+            return @create().setItems items
 
-        if Collection.containsEntity()
-            return new Collection().setIds arr
+        if @getModelClass().containsEntity()
+            return @create().setIds arr
 
         throw new Error "cannot create #{@modelName} with arr\n [#{arr.toString()}]"
 
@@ -90,8 +88,7 @@ class CollectionFactory extends GeneralFactory
     ###
     createEmpty: ->
 
-        Collection = @getModelClass()
-        return new Collection().setItems() # setItems to emit "loaded" event
+        @create().setItems() # setItems to emit "loaded" event
 
 
     ###*

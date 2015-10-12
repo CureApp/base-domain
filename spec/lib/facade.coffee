@@ -175,7 +175,6 @@ describe 'Facade', ->
             f.addClass('abc-factory', AbcFactory)
             FactoryClass = f.getFactory('abc')
             expect(FactoryClass.xxx).to.equal 'yyy'
-            expect(FactoryClass.isAnonymous).not.to.exist
 
         it 'throws error when no factory found', ->
 

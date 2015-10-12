@@ -210,8 +210,7 @@ class FixtureModel
 
         debug("inserting #{dataNames.length} data into #{@name}")
 
-        useAnonymousFactory = on # if no factory is declared, altered one is used 
-        factory = @fx.facade.createFactory(@name, useAnonymousFactory)
+        factory = @fx.facade.createFactory(@name)
         repository = @fx.facade.createRepository(@name)
 
         do insert = =>

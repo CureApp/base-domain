@@ -56,8 +56,7 @@ class BaseRepository extends Base
 
         facade = @getFacade()
 
-        useAnonymousFactory = on
-        @factory = facade.createFactory(modelName, useAnonymousFactory)
+        @factory = facade.createFactory(modelName)
 
 
     ###*

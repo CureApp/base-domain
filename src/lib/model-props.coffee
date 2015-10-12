@@ -55,6 +55,7 @@ class ModelProps
         @entityDic = {}
         @modelDic  = {}
         @tmpDic    = {}
+        @idDic     = {}
 
 
         @build properties, facade
@@ -94,6 +95,7 @@ class ModelProps
                     if facade.getModel(typeInfo.model).isEntity
                         @entities.push prop
                         @entityDic[prop] = true
+                        @idDic[typeInfo.idPropName] = prop
                     else
                         @nonEntities.push prop
 
@@ -117,6 +119,10 @@ class ModelProps
     ###
     isEntity: (prop) ->
         return @entityDic[prop]?
+
+
+    isId: (prop) ->
+        return @idDic[prop]?
 
     ###*
     get typeInfo by prop

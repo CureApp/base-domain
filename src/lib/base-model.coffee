@@ -4,6 +4,7 @@ TypeInfo = require './type-info'
 ModelProps = require './model-props'
 Base  = require './base'
 Includer = require './includer'
+Id = require './id'
 
 ###*
 Base model class of DDD pattern.
@@ -117,7 +118,10 @@ class BaseModel extends Base
 
         if modelProps.isEntity(prop)
             typeInfo = modelProps.getTypeInfo(prop)
-            @[typeInfo.idPropName] = value?.id
+            @[typeInfo.idPropName] = new Id(value?.id)
+
+        else if modelProps.isId(prop)
+            @[prop] = new Id(value)
 
         return @
 

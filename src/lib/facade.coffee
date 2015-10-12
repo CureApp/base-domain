@@ -86,6 +86,21 @@ class Facade
         @require("#{name}-repository")
 
 
+
+    ###*
+    create an instance of the given modelName using obj
+
+    @method createModel
+    @param {String} modelName
+    @param {Object} obj
+    @param {Object} [options]
+    @return {BaseModel}
+    ###
+    createModel: (modelName, obj, options) ->
+
+        @createFactory(modelName).createFromObject(obj, options)
+
+
     ###*
     create a factory instance
 

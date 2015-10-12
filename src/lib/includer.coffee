@@ -13,6 +13,7 @@ class Includer
     constructor: (@model, @modelPool = {}) ->
 
         @ModelClass = @model.constructor
+        @modelProps = @ModelClass.getModelProps()
 
         @cache(@ModelClass.getName(), @model) if @ModelClass.isEntity
 
@@ -32,7 +33,7 @@ class Includer
 
         @options.async ?= true
 
-        entityProps = @ModelClass.getEntityProps() 
+        entityProps = @modelProps.entities
 
         if @options.props
             entityProps = (p for p in entityProps when p in @options.props)
@@ -64,10 +65,9 @@ class Includer
     doRecursively: ->
 
         promises = []
-        subModelProps = @ModelClass.getModelProps(includeList: true)
-        BaseModel = @model.getFacade().constructor.BaseModel
+        { BaseModel } = @model.getFacade().constructor
 
-        for modelProp in subModelProps
+        for modelProp in @modelProps.models
 
             subModel = @model[modelProp]
 
@@ -89,30 +89,30 @@ class Includer
     ###
     setSubEntity: (entityProp) ->
 
-        propInfo = @model.getTypeInfo entityProp
+        typeInfo = @modelProps.getTypeInfo entityProp
 
-        subId = @model[propInfo.idPropName]
+        subId = @model[typeInfo.idPropName]
 
         return if not subId?
 
-        if sub = @cached(propInfo.model, subId)
-            @model.set(entityProp, sub)
+        if subModel = @cached(typeInfo.model, subId)
+            @model.set(entityProp, subModel)
             return
 
-        Repository = @model.getFacade().getRepository(propInfo.model)
+        Repository = @model.getFacade().getRepository(typeInfo.model)
 
         repo = new Repository()
 
         if Repository.isSync
             subModel = repo.get(subId)
-            @model.set entityProp, subModel 
+            @model.set(entityProp, subModel)
             return Promise.resolve subModel
 
         else
             return unless @options.async
 
             return repo.get(subId).then (subModel) =>
-                @model.set entityProp, subModel 
+                @model.set(entityProp, subModel)
             .catch (e) ->
 
 

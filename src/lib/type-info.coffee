@@ -57,17 +57,17 @@ class TypeInfo
     @method createModelListType
     @private
     @static
-    @param {String} modelName
-    @param {String} [options.name] name of list model, by default: xxx-yyy-list when modelName is xxx-yyy
+    @param {String} itemModelName
+    @param {String} [options.name] name of list model, by default: xxx-yyy-list when itemModelName is xxx-yyy
     @return {TypeInfo} type
     ###
-    @createModelListType: (modelName, options = {}) -> 
+    @createModelListType: (itemModelName, options = {}) -> 
         if typeof options is 'string'
             options = name: options
 
         new TypeInfo 'MODEL_LIST',
-            model      : modelName
-            listName   : options.name ? "#{modelName}-list"
+            itemModel  : itemModelName
+            model      : options.name ? "#{itemModelName}-list"
 
 
     ###*
@@ -76,17 +76,17 @@ class TypeInfo
     @method createModelDictType
     @private
     @static
-    @param {String} modelName
-    @param {String} [options.name] name of dict model, by default: xxx-yyy-dict when modelName is xxx-yyy
+    @param {String} itemModelName
+    @param {String} [options.name] name of dict model, by default: xxx-yyy-dict when itemModelName is xxx-yyy
     @return {TypeInfo} type
     ###
-    @createModelDictType: (modelName, options = {}) -> 
+    @createModelDictType: (itemModelName, options = {}) -> 
         if typeof options is 'string'
             options = name: options
 
         new TypeInfo 'MODEL_DICT',
-            model    : modelName
-            dictName : options.name ? "#{modelName}-dict"
+            itemModel : itemModelName
+            model     : options.name ? "#{itemModelName}-dict"
 
 
     ###*

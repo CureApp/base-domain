@@ -1,19 +1,65 @@
 
 facade = require('../create-facade').create()
 Facade = facade.constructor
+{ ValueObject, Entity, BaseAsyncRepository, BaseSyncRepository, MemoryResource } = facade.constructor
+
 
 Includer = require '../../src/lib/includer'
 
 
 describe 'Includer', ->
 
+    before (done) ->
+
+        class A extends ValueObject
+            @properties:
+                b: @TYPES.MODEL 'b'
+                c: @TYPES.MODEL 'c'
+
+        class B extends Entity
+            @properties:
+                c: @TYPES.MODEL 'c'
+                name: @TYPES.STRING
+
+        class BRepository extends BaseAsyncRepository
+            client: new MemoryResource()
+
+        class CRepository extends BaseSyncRepository
+            client: new MemoryResource()
+
+        class C extends Entity
+            @properties:
+                name: @TYPES.STRING
+
+        facade.addClass('a', A)
+        facade.addClass('b', B)
+        facade.addClass('c', C)
+        facade.addClass('b-repository', BRepository)
+        facade.addClass('c-repository', CRepository)
+
+        bRepo = facade.createRepository('b')
+        cRepo = facade.createRepository('c')
+
+        cRepo.save(id: 'xxx', name: 'shin')
+        cRepo.save(id: 'yyy', name: 'satake')
+
+        Promise.all([
+            bRepo.save(id: 'xxx', name: 'shin', cId: 'xxx')
+            bRepo.save(id: 'yyy', name: 'satake', cId: 'yyy')
+        ]).then -> done()
+
+
+    beforeEach ->
+
+        @a = facade.createFactory('a').createFromObject { bId: 'xxx', cId: 'xxx' }, include: null
+
     describe 'constructor', ->
 
         it 'receives modelPool object at 2nd argument', ->
 
-            modelPool = mock: true
+            modelPool = {}
 
-            includer = new Includer({}, modelPool) 
+            includer = new Includer(@a, modelPool) 
 
             expect(includer.modelPool).to.equal modelPool
 
@@ -22,9 +68,7 @@ describe 'Includer', ->
 
         it 'caches model by its model name', ->
 
-            model = {}
-
-            includer = new Includer(model)
+            includer = new Includer(@a)
 
             includer.cache('hoge', id: 'abc', mock: true)
 
@@ -36,9 +80,7 @@ describe 'Includer', ->
 
         it 'returns cached model by model name and id', ->
 
-            model = {}
-
-            includer = new Includer(model)
+            includer = new Includer(@a)
 
             includer.cache('hoge', id: 'abc', mock: true)
 
@@ -47,9 +89,7 @@ describe 'Includer', ->
 
         it 'returns undefined when unknown model name is given', ->
 
-            model = {}
-
-            includer = new Includer(model)
+            includer = new Includer(@a)
 
             includer.cache('hoge', id: 'abc', mock: true)
 
@@ -57,9 +97,7 @@ describe 'Includer', ->
 
         it 'returns undefined when unknown id is given', ->
 
-            model = {}
-
-            includer = new Includer(model)
+            includer = new Includer(@a)
 
             includer.cache('hoge', id: 'abc', mock: true)
 

@@ -38,15 +38,17 @@ class Entity extends BaseModel
 
 
     ###*
-    set model prop
+    set value to prop
     @return {Entity} this
     ###
-    setNonEntityProp: (prop, value) ->
+    set: (prop, value) ->
 
         if prop isnt 'id'
             return super
 
         @[prop] = new Id(value)
+
+        return @
 
 
 module.exports = Entity

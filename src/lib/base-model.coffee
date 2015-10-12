@@ -1,7 +1,7 @@
 
 
 TypeInfo = require './type-info'
-PropInfo = require './prop-info'
+ModelProps = require './model-props'
 Base  = require './base'
 Includer = require './includer'
 
@@ -56,18 +56,6 @@ class BaseModel extends Base
 
 
     ###*
-    get an instance of PropInfo, which summarizes properties of this class
-
-    @method getPropInfo
-    @public
-    @return {PropInfo}
-    ###
-    @_pi: null
-    @getPropInfo: ->
-        @_pi ?= new PropInfo @properties, @getFacade()
-
-
-    ###*
     extend @properties of Parent class
 
     @example
@@ -89,38 +77,21 @@ class BaseModel extends Base
     @static
     @return {Object}
     ###
-    @withParentProps: (props = {}) ->
-        props[k] ?= v for k, v of @properties # @properties === parent's properties
-        return props
+    @withParentProps: (properties = {}) ->
+        properties[k] ?= v for k, v of @properties # @properties === parent's properties
+        return properties
 
 
     ###*
-    get list of properties which contains entity
-
-    @method getEntityProps
-    @public
-    @static
-    @return {Array}
-    ###
-    @getEntityProps: ->
-        @getPropInfo().entityProps
-
-    ###*
-    get list of properties which contains relational model
+    get an instance of ModelProps, which summarizes properties of this class
 
     @method getModelProps
     @public
-    @static
-    @param {Object} [options]
-    @param {Boolean} [options.includeList] include props of BaseList
-    @return {Array}
+    @return {ModelProps}
     ###
-    @getModelProps: (options = {}) ->
-        propInfo = @getPropInfo()
-        ret = propInfo.modelProps.slice()
-        ret.concat propInfo.listProps if options.includeList
-
-        return ret
+    @_props: null
+    @getModelProps: ->
+        @_props ?= new ModelProps @properties, @getFacade()
 
 
     ###*
@@ -131,12 +102,6 @@ class BaseModel extends Base
 
 
 
-    getTypeInfo: (prop) ->
-        @constructor.getPropInfo().dic[prop]
-
-    isEntityProp: (prop) ->
-        @constructor.getPropInfo().isEntityProp prop
-
     ###*
     set value to prop
     @return {BaseModel} this
@@ -146,58 +111,33 @@ class BaseModel extends Base
             @set(k, v) for k, v of prop
             return @
 
-        typeInfo = @getTypeInfo prop
-
-        if typeInfo?.model and @isEntityProp prop
-            @setEntityProp(prop, value)
-        else
-            @setNonEntityProp(prop, value)
-
-        return @
-
-
-    ###*
-    set model prop
-    @return {BaseModel} this
-    ###
-    setNonEntityProp: (prop, value) ->
         @[prop] = value
 
+        modelProps = @constructor.getModelProps()
 
-    ###*
-    set related model(s)
-
-    @method setEntityProp
-    @param {String} prop property name of the related model
-    @param {Entity|Array<Entity>} submodel
-    @return {BaseModel} this
-    ###
-    setEntityProp: (prop, submodel) ->
-
-        typeInfo = @getTypeInfo prop
-        modelName = typeInfo.model
-
-        @[prop] = submodel
-
-        idPropName = typeInfo.idPropName
-
-        @[idPropName] = submodel?.id
+        if modelProps.isEntity(prop)
+            typeInfo = modelProps.getTypeInfo(prop)
+            @[typeInfo.idPropName] = value?.id
 
         return @
 
 
     ###*
-    unset related model(s)
+    unset property
 
-    @param {String} prop property name of the related models
+    @method unset
+    @param {String} prop property name
     @return {BaseModel} this
-    @method unsetEntityProp
     ###
-    unsetEntityProp: (prop) ->
+    unset: (prop) ->
 
-        typeInfo = @getTypeInfo(prop)
         @[prop] = undefined
-        @[typeInfo.idPropName] = undefined
+
+        modelProps = @constructor.getModelProps()
+
+        if modelProps.isEntity(prop)
+            typeInfo = modelProps.getTypeInfo(prop)
+            @[typeInfo.idPropName] = undefined
 
         return @
 
@@ -227,30 +167,22 @@ class BaseModel extends Base
     ###
     toPlainObject: ->
 
-        facade = @getFacade()
-
         plainObject = {}
 
+        modelProps = @constructor.getModelProps()
 
         for own prop, value of @
-            # remove entities
-            if @isEntityProp prop
-                continue
 
-            typeInfo = @getTypeInfo prop
+            continue if modelProps.isEntity(prop) or modelProps.isTmp(prop)
 
-            continue if typeInfo?.tmp
-
-            # plainize submodels, lists, ids
             if typeof value?.toPlainObject is 'function'
                 plainObject[prop] = value.toPlainObject()
 
-             # set non-model properties
             else
                 plainObject[prop] = value
 
-
         return plainObject
+
 
     ###*
     check equality
@@ -261,7 +193,6 @@ class BaseModel extends Base
     ###
     equals: (model) ->
         model? and @constructor is model.constructor
-
 
 
     ###*
@@ -279,5 +210,6 @@ class BaseModel extends Base
         new Includer(@).include(options).then =>
             @emit('included')
             return @
+
 
 module.exports = BaseModel

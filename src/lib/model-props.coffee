@@ -2,77 +2,62 @@
 ###*
 parses model properties and classifies them
 
-@class PropInfo
+@class ModelProps
 @module base-domain
 ###
-class PropInfo
+class ModelProps
 
-    constructor: (props, facade) ->
+    constructor: (properties, facade) ->
 
         ###*
         property whose type is CREATED_AT
-        @property createdAt
-        @type String
+        @property {String} createdAt
         ###
         @createdAt = null
 
         ###*
         property whose type is UPDATED_AT
-        @property updatedAt
-        @type String
+        @property {String} updatedAt
         ###
         @updatedAt = null
 
         ###*
-        properties whose type is MODEL
-        @property modelProps
-        @type Array
+        properties whose type is MODEL, MODEL_LIST, MODEL_DICT
+        @property {Array(String)} models
         ###
-        @modelProps  = []
-
-        ###*
-        properties whose type is MODEL_LIST
-        @property listProps
-        @type Array
-        ###
-        @listProps  = []
+        @models = []
 
         ###*
         properties whose type is MODEL and the model extends Entity
-        @property entityProps
-        @type Array
+        @property {Array(String)} entities
         ###
-        @entityProps = []
+        @entities = []
 
         ###*
         properties whose type is DATE, CREATED_AT and UPDATED_AT
-        @property dateProps
-        @type Array
+        @property {Array(String)} dates
         ###
-        @dateProps = []
-
+        @dates = []
 
         ###*
         properties whose type is MODEL and the model does not extend Entity
-        @property nonEntityProps
-        @type Array
+        @property {Array(String)} nonEntities
         ###
-        @nonEntityProps = []
+        @nonEntities = []
 
         ###*
         key value pairs of (property => TypeInfo)
-        @property dic
-        @type Object
+        @property {Object(TypeInfo)} dic
         ###
         @dic = {}
 
-
         # private
         @entityDic = {}
-        @modelDic = {}
+        @modelDic  = {}
+        @tmpDic    = {}
 
 
-        @build props, facade
+        @build properties, facade
 
 
     ###*
@@ -81,47 +66,56 @@ class PropInfo
     @method build
     @private
     ###
-    build: (props, facade) ->
+    build: (properties, facade) ->
 
-        for prop, typeInfo of props
+        for prop, typeInfo of properties
 
             @dic[prop] = typeInfo
 
+            if typeInfo.tmp
+                @tmpDic[prop] = true
+
             switch typeInfo.name
                 when 'DATE'
-                    @dateProps.push prop
+                    @dates.push prop
 
                 when 'CREATED_AT'
                     @createdAt = prop
-                    @dateProps.push prop
+                    @dates.push prop
 
                 when 'UPDATED_AT'
                     @updatedAt = prop
-                    @dateProps.push prop
+                    @dates.push prop
 
-                when 'MODEL'
-                    @modelProps.push prop
+                when 'MODEL', 'MODEL_LIST', 'MODEL_DICT'
+                    @models.push prop
                     @modelDic[prop] = true
 
                     if facade.getModel(typeInfo.model).isEntity
-                        @entityProps.push prop
+                        @entities.push prop
                         @entityDic[prop] = true
                     else
-                        @nonEntityProps.push prop
-
-                when 'MODEL_LIST'
-                    @listProps.push prop
+                        @nonEntities.push prop
 
         return
+
+
+    names: ->
+        Object.keys @dic
+
+
+    types: ->
+        (typeInfo for prop, typeInfo of @dic)
+
 
     ###*
     check if the given prop is entity prop
 
-    @method isEntityProp
+    @method isEntity
     @param {String} prop
     @return {Boolean}
     ###
-    isEntityProp: (prop) ->
+    isEntity: (prop) ->
         return @entityDic[prop]?
 
     ###*
@@ -138,11 +132,22 @@ class PropInfo
     ###*
     check if the given prop is model prop
 
-    @method isModelProp
+    @method isModel
     @param {String} prop
     @return {Boolean}
     ###
-    isModelProp: (prop) ->
+    isModel: (prop) ->
         return @modelDic[prop]?
 
-module.exports = PropInfo
+    ###*
+    check if the given prop is tmp prop
+
+    @method isTmp
+    @param {String} prop
+    @return {Boolean}
+    ###
+    isTmp: (prop) ->
+        return @tmpDic[prop]?
+
+
+module.exports = ModelProps

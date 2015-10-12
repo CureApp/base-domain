@@ -141,32 +141,4 @@ class BaseSyncRepository extends BaseRepository
             return @factory.createFromObject(obj)
 
 
-    ###*
-    add createdAt, updatedAt to given data
-    - createdAt will not be overriden if already set.
-    - updatedAt will be overriden for each time
-
-    @method appendTimeStamp
-    @protected
-    @param {Object} data 
-    @param {Boolean} isUpdate true when updating
-    @return {Object} data
-    ###
-    appendTimeStamp: (data, isUpdate = false) ->
-        Model = @getModelClass()
-
-        propCreatedAt = Model.getPropInfo().createdAt
-        propUpdatedAt = Model.getPropInfo().updatedAt
-
-        now = new Date().toISOString()
-
-        if propCreatedAt and not isUpdate
-            data[propCreatedAt] ?= now
-
-        if propUpdatedAt
-            data[propUpdatedAt] = now
-
-        return data
-
-
 module.exports = BaseSyncRepository

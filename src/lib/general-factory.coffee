@@ -18,6 +18,7 @@ class GeneralFactory
     @param {Facade} facade
     ###
     constructor: (@modelName, @facade) ->
+        @modelProps = @getModelClass().getModelProps()
 
 
     ###*
@@ -68,13 +69,12 @@ class GeneralFactory
         for own prop, value of obj
             @setValueToModel model, prop, value
 
-        propInfo = ModelClass.getPropInfo()
-
-        for prop of propInfo.dic
+        for prop in @modelProps.names()
             continue if model[prop]? or obj.hasOwnProperty prop
-            @setEmptyValueToModel model, prop, propInfo
+            @setEmptyValueToModel model, prop
 
-        @include(model, options.include)
+        if options.include isnt null # skip @include when null is set. By default it's undefined, so @include will be executed
+            @include(model, options.include)
 
         return model
 
@@ -107,7 +107,7 @@ class GeneralFactory
     ###
     setValueToModel: (model, prop, value) ->
 
-        typeInfo = model.getTypeInfo(prop)
+        typeInfo = @modelProps.getTypeInfo(prop)
 
         switch typeInfo?.name
 
@@ -121,7 +121,7 @@ class GeneralFactory
                 @setSubModelDictToModel(model, prop, value)
 
             else # set normal props
-                model.setNonEntityProp(prop, value)
+                model.set(prop, value)
 
 
     ###*
@@ -130,14 +130,14 @@ class GeneralFactory
     @method setEmptyValueToModel
     @private
     ###
-    setEmptyValueToModel: (model, prop, propInfo) ->
+    setEmptyValueToModel: (model, prop) ->
 
-        typeInfo = propInfo.getTypeInfo(prop)
+        typeInfo = @modelProps.getTypeInfo(prop)
 
         switch typeInfo.name
 
             when 'MODEL'
-                if propInfo.isEntityProp(prop)
+                if @modelProps.isEntity(prop)
                     return # if submodel is entity, load it at include() section
 
                 else
@@ -161,14 +161,12 @@ class GeneralFactory
     ###
     setSubModelListToModel: (model, prop, value) ->
 
-        typeInfo = model.getTypeInfo(prop)
-        subModelName = typeInfo.model
-        subModelFactory = @facade.createFactory(subModelName)
-        listModelName = typeInfo.listName
+        typeInfo = @modelProps.getTypeInfo(prop)
+        itemModelFactory = @facade.createFactory(typeInfo.itemModel)
 
-        list = subModelFactory.createList(listModelName, value)
+        list = itemModelFactory.createList(typeInfo.model, value)
 
-        model.setNonEntityProp prop, list
+        model.set(prop, list)
 
         return
 
@@ -182,7 +180,7 @@ class GeneralFactory
     ###
     setSubModelToModel: (model, prop, value) ->
 
-        subModelName = model.getTypeInfo(prop).model
+        subModelName = @modelProps.getTypeInfo(prop).model
 
         subModelFactory = @facade.createFactory(subModelName)
         SubModel = subModelFactory.getModelClass()
@@ -190,10 +188,7 @@ class GeneralFactory
         if value not instanceof SubModel
             value = subModelFactory.createFromObject(value)
 
-        if SubModel.isEntity
-            model.setEntityProp(prop, value)
-        else
-            model.setNonEntityProp(prop, value)
+        model.set(prop, value)
 
         return
 
@@ -206,14 +201,12 @@ class GeneralFactory
     ###
     setSubModelDictToModel: (model, prop, value) ->
 
-        typeInfo = model.getTypeInfo(prop)
-        subModelName = typeInfo.model
-        subModelFactory = @facade.createFactory(subModelName)
-        dictModelName = typeInfo.dictName
+        typeInfo = @modelProps.getTypeInfo(prop)
+        itemModelFactory = @facade.createFactory(typeInfo.itemModel)
 
-        dict = subModelFactory.createDict(dictModelName, value)
+        dict = itemModelFactory.createDict(typeInfo.model, value)
 
-        model.setNonEntityProp prop, dict
+        model.set(prop, dict)
 
         return
 
@@ -228,7 +221,7 @@ class GeneralFactory
 
         factory = @facade.createFactory typeInfo.model
         submodel = factory.createEmpty()
-        model.setNonEntityProp(prop, submodel)
+        model.set(prop, submodel)
 
 
     ###*

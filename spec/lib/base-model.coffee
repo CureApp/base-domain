@@ -92,6 +92,7 @@ describe 'BaseModel', ->
     describe 'toPlainObject', ->
 
         it 'returns plain object without relational models (has many)', ->
+
             plainMember = member.toPlainObject()
 
             expect(plainMember.registeredAt).to.be.instanceof Date
@@ -141,14 +142,15 @@ describe 'BaseModel', ->
 
 
 
-    describe 'setEntityProp', ->
-        it 'set relation and its ids (has one / belongs to)', ->
+    describe 'set', ->
+
+        it 'set relation and its ids (has one / belongs to) when entity prop is given', ->
             diary = diaryFactory.createFromObject
                 title : 'crazy about room335'
                 comment: 'progression of room335 is wonderful'
                 date  : new Date()
 
-            diary.setEntityProp('coauthor', member)
+            diary.set('coauthor', member)
 
             expect(diary.coauthor).to.equal member
             expect(diary.coauthorId).to.be.instanceof Id
@@ -156,9 +158,9 @@ describe 'BaseModel', ->
 
 
 
-    describe 'unsetEntityProp', ->
+    describe 'unset', ->
 
-        it 'unset relation and its id', ->
+        it 'unset relation and its id when entity prop is given', ->
 
             diary = diaryFactory.createFromObject
                 title : 'crazy about room335'
@@ -166,7 +168,7 @@ describe 'BaseModel', ->
                 date  : new Date()
                 author : member
 
-            diary.unsetEntityProp('author')
+            diary.unset('author')
 
             expect(diary.author).not.to.exist
             expect(diary.memberId).not.to.exist

@@ -121,8 +121,26 @@ class ModelProps
         return @entityDic[prop]?
 
 
+    ###*
+    check if the given prop is submodel's id
+
+    @method isId
+    @param {String} prop
+    @return {Boolean}
+    ###
     isId: (prop) ->
         return @idDic[prop]?
+
+
+    ###*
+    get submodel prop of the given idPropName
+
+    @method submodelOf
+    @param {String} idPropName
+    @return {String} submodelProp
+    ###
+    submodelOf: (idPropName) ->
+        return @idDic[idPropName]
 
     ###*
     get typeInfo by prop

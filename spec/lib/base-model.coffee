@@ -177,9 +177,10 @@ describe 'BaseModel', ->
     describe 'include', ->
 
         it 'includes all submodels', (done) ->
+
             mem = memberFactory.createFromObject
                 id: 11
-                hobbies: ids: [1,2,3]
+                hobbies: [1,2,3]
 
             mem.include(recursive: true).then (model) ->
                 expect(mem).to.equal model
@@ -188,4 +189,41 @@ describe 'BaseModel', ->
                 done()
             .catch (e) ->
                 done e
+
+
+    describe 'inherit', ->
+
+        it 'overrides values', ->
+
+            mem = memberFactory.createFromObject
+                id: 11
+                hobbies: [1,2,3]
+                age: 30
+
+            mem.inherit(foo: 0, bar: 'bar', age: 29, hobbies: null)
+
+            expect(mem).to.have.property 'foo', 0
+            expect(mem).to.have.property 'bar', 'bar'
+            expect(mem).to.have.property 'age', 29
+            expect(mem.hobbies).to.exist
+
+
+        it 'overrides values', ->
+
+            mem = facade.createModel 'member',
+                id: 'shin'
+                hobbies: [1,2,3]
+                age: 30
+
+            diary = facade.createModel 'diary',
+                id: '2015/1/12'
+                comment: 'sample'
+                author: mem
+
+            diary.inherit(memberId: '123')
+
+            expect(diary.memberId).to.be.instanceof Id
+            expect(diary.memberId.equals '123').to.be.true
+            expect(diary.author).to.not.exist
+
 

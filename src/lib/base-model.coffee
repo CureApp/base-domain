@@ -116,12 +116,19 @@ class BaseModel extends Base
 
         modelProps = @constructor.getModelProps()
 
+        # set entity prop
         if modelProps.isEntity(prop)
             typeInfo = modelProps.getTypeInfo(prop)
             @[typeInfo.idPropName] = new Id(value?.id)
 
+        # set submodel id prop
         else if modelProps.isId(prop)
             @[prop] = new Id(value)
+            submodelProp = modelProps.submodelOf(prop)
+
+            # if new submodel id is set and old one exists, delete old one
+            if @[submodelProp]? and not @[prop].equals @[submodelProp].id
+                @[submodelProp] = undefined
 
         return @
 
@@ -154,9 +161,8 @@ class BaseModel extends Base
     @return {BaseModel} this
     ###
     inherit: (anotherModel) ->
-        for own k, v of anotherModel
-            if v?
-                @[k] = v
+
+        @set(k, v) for own k, v of anotherModel when v?
 
         return @
 

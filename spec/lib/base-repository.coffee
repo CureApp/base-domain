@@ -95,7 +95,7 @@ xdescribe 'BaseRepository', ->
 
             dRepo = facade.createRepository('diary')
             dRepo.save(diary).then (model) =>
-                expect(model.memberId.toString()).to.equal '12'
+                expect(model.memberId).to.equal '12'
                 done()
             .catch done
 

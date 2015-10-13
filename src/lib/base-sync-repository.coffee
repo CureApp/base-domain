@@ -28,7 +28,7 @@ class BaseSyncRepository extends BaseRepository
 
     @method getByIds
     @public
-    @param {Array} ids
+    @param {Array(String|Number)} ids
     @param {ResourceClientInterface} [client=@client]
     @return {Array(Entity)} entities
     ###
@@ -50,11 +50,11 @@ class BaseSyncRepository extends BaseRepository
     ###
 
     ###*
-    get object by ID.
+    get object by id.
 
     @method get
     @public
-    @param {any} id
+    @param {String|Number} id
     @param {ResourceClientInterface} [client=@client]
     @return {Entity} entity
     ###
@@ -64,7 +64,7 @@ class BaseSyncRepository extends BaseRepository
 
     @method getById
     @public
-    @param {any} id
+    @param {String|Number} id
     @param {ResourceClientInterface} [client=@client]
     @return {Entity} entity
     ###
@@ -122,7 +122,7 @@ class BaseSyncRepository extends BaseRepository
 
     @method update
     @public
-    @param {any} id id of the entity to update
+    @param {String|Number} id of the entity to update
     @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
     @param {ResourceClientInterface} [client=@client]
     @return {Entity} updated entity

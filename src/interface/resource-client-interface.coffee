@@ -38,7 +38,7 @@ class ResourceClientInterface
 
     @method findById
     @public
-    @param {String} id
+    @param {String|Number} id
     @return {Object|Promise(Object)}
     ###
 
@@ -73,7 +73,7 @@ class ResourceClientInterface
 
     @method destroyById
     @public
-    @param {String} id
+    @param {String|Number} id
     ###
 
     ###*

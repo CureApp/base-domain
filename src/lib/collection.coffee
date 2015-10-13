@@ -1,6 +1,5 @@
 
 ValueObject = require './value-object'
-Ids = require './ids'
 
 ###*
 collection model of one model
@@ -25,12 +24,12 @@ class Collection extends ValueObject
     ###*
     ids: get ids of items
 
-    @property {Ids} ids
+    @property {Array(String|Number)} ids
     ###
     Object.defineProperty @::, 'ids',
         get: ->
             return null if not @constructor.containsEntity()
-            return new Ids(item.id for key, item of @items)
+            return (item.id for key, item of @items)
 
 
     ###*
@@ -91,7 +90,7 @@ class Collection extends ValueObject
     set ids.
 
     @method setIds
-    @param {Ids|Array(String|Number)} ids 
+    @param {Array(String|Number)} ids 
     ###
     setIds: (ids = []) ->
 
@@ -169,7 +168,7 @@ class Collection extends ValueObject
         plain = super()
 
         if @constructor.containsEntity()
-            plain.ids = @ids.toPlainObject()
+            plain.ids = @ids.slice()
             delete plain.items
 
         else

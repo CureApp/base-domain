@@ -110,16 +110,15 @@ class BaseRepository extends Base
 
 
     ###*
-    get entity by ID.
+    get entity by id.
 
     @method get
     @public
-    @param {Id|String} id
+    @param {String|Number} id
     @param {ResourceClientInterface} [client=@client]
     @return {Entity|Promise(Entity)} entity
     ###
     get: (id, client) ->
-        id = id.toString()
         client ?= @client
         @resolve client.findById(id), (obj) ->
             return @factory.createFromObject(obj)
@@ -130,7 +129,7 @@ class BaseRepository extends Base
 
     @method getById
     @public
-    @param {Id|String} id
+    @param {String|Number} id
     @param {ResourceClientInterface} [client=@client]
     @return {Entity|Promise(Entity)} entity
     ###
@@ -140,11 +139,11 @@ class BaseRepository extends Base
 
 
     ###*
-    get entities by ID.
+    get entities by id.
 
     @method getByIds
     @public
-    @param {Array} ids
+    @param {Array|(String|Number)} ids
     @param {ResourceClientInterface} [client=@client]
     @return {Array(Entity)|Promise(Array(Entity))} entities
     ###
@@ -220,7 +219,7 @@ class BaseRepository extends Base
 
     @method update
     @public
-    @param {Id|String} id id of the entity to update
+    @param {String|Number} id id of the entity to update
     @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
     @param {ResourceClientInterface} [client=@client]
     @return {Entity|Promise(Entity)} updated entity
@@ -232,7 +231,6 @@ class BaseRepository extends Base
                 use BaseRepository#save(entity) instead
             """
 
-        id = id.toString()
         client ?= @client
         @appendTimeStamp(data, isUpdate = true)
 

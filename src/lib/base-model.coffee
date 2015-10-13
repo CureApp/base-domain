@@ -4,7 +4,6 @@ TypeInfo = require './type-info'
 ModelProps = require './model-props'
 Base  = require './base'
 Includer = require './includer'
-Id = require './id'
 
 ###*
 Base model class of DDD pattern.
@@ -124,15 +123,15 @@ class BaseModel extends Base
         # set entity prop
         if modelProps.isEntity(prop)
             typeInfo = modelProps.getTypeInfo(prop)
-            @[typeInfo.idPropName] = new Id(value?.id)
+            @[typeInfo.idPropName] = value?.id
 
         # set submodel id prop
-        else if modelProps.isId(prop)
-            @[prop] = new Id(value)
+        else if modelProps.isId(prop) and value?
+            @[prop] = value
             submodelProp = modelProps.submodelOf(prop)
 
             # if new submodel id is set and old one exists, delete old one
-            if @[submodelProp]? and not @[prop].equals @[submodelProp].id
+            if @[submodelProp]? and @[prop] isnt @[submodelProp].id
                 @[submodelProp] = undefined
 
         return @

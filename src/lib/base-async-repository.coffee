@@ -28,7 +28,7 @@ class BaseAsyncRepository extends BaseRepository
 
     @method getByIds
     @public
-    @param {Array} ids
+    @param {Array(String|Number)} ids
     @param {ResourceClientInterface} [client=@client]
     @return {Promise(Array(Entity))} entities
     ###
@@ -51,11 +51,11 @@ class BaseAsyncRepository extends BaseRepository
     ###
 
     ###*
-    get object by ID.
+    get object by id.
 
     @method get
     @public
-    @param {any} id
+    @param {String|Number} id
     @param {ResourceClientInterface} [client=@client]
     @return {Promise(Entity)} entity
     ###
@@ -65,7 +65,7 @@ class BaseAsyncRepository extends BaseRepository
 
     @method getById
     @public
-    @param {any} id
+    @param {String|Number} id
     @param {ResourceClientInterface} [client=@client]
     @return {Promise(Entity)} entity
     ###
@@ -112,7 +112,7 @@ class BaseAsyncRepository extends BaseRepository
 
     @method update
     @public
-    @param {any} id id of the entity to update
+    @param {String|Number} id of the entity to update
     @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
     @param {ResourceClientInterface} [client=@client]
     @return {Promise(Entity)} updated entity

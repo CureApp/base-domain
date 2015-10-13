@@ -2,7 +2,7 @@
 facade = require('../create-facade').create()
 Facade = facade.constructor
 
-{ Ids, BaseList, MemoryResource } = facade.constructor
+{ BaseList, MemoryResource } = facade.constructor
 
 hobbies = null
 
@@ -102,9 +102,9 @@ describe 'BaseList', ->
 
             hobbyList = new HobbyList(items: hobbies)
 
-            hobbyIdsSorted = (hobby.id.toString() for hobby in hobbyList.items)
+            hobbyIdsSorted = (hobby.id for hobby in hobbyList.items)
 
-            expect(hobbyIdsSorted).to.deep.equal new Ids([1, 2, 3]).toPlainObject()
+            expect(hobbyIdsSorted).to.deep.equal [1, 2, 3]
 
 
     describe 'ids', ->
@@ -122,7 +122,6 @@ describe 'BaseList', ->
         it 'get array when the item is Entity', ->
             hobbyList = new HobbyList()
             expect(hobbyList.ids).to.be.instanceof Array
-            expect(hobbyList.ids).to.be.instanceof Ids
 
         it 'get null when the item is not Entity', ->
             nonEntityList = new NonEntityList()
@@ -131,7 +130,7 @@ describe 'BaseList', ->
         it 'get array of ids when the item is Entity', ->
 
             hobbyList = new HobbyList(items: hobbies)
-            expect(hobbyList.ids).to.deep.equal new Ids [3, 2, 1]
+            expect(hobbyList.ids).to.deep.equal [3, 2, 1]
 
 
 
@@ -204,7 +203,7 @@ describe 'BaseList', ->
                 expect(diaryList).to.have.length 1
                 expect(diaryList.items).to.have.length 1
                 expect(diaryList.ids).to.have.length 1
-                expect(diaryList.ids[0].equals 'abc').to.be.true
+                expect(diaryList.ids[0]).to.equal 'abc'
                 done()
 
         it 'executed after event registered when array is given in constructor', (done) ->
@@ -396,5 +395,5 @@ describe 'BaseList', ->
             expect(hobbyList).to.have.length 2
             expect(hobbyList.ids).to.have.length 2
 
-            expect(hobbyList.ids).to.eql new Ids [3, 1]
+            expect(hobbyList.ids).to.eql [3, 1]
 

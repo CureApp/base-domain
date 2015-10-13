@@ -308,8 +308,6 @@ class Facade
     @LocalRepository     : require './local-repository'
     @DomainError         : require './domain-error'
     @MemoryResource      : require './memory-resource'
-    @Id                  : require './id'
-    @Ids                 : require './ids'
 
 
 module.exports = Facade

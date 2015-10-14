@@ -91,7 +91,7 @@ class BaseModel extends Base
     ###
     @_props: null
     @getModelProps: ->
-        @_props ?= new ModelProps @properties, @getFacade()
+        @_props ?= new ModelProps @properties, @::getFacade()
 
 
     ###*

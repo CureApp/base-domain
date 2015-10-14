@@ -30,7 +30,7 @@ class Facade
     @param {Object} [options]
     @return {Facade}
     ###
-    @createInstance: (options= {}) ->
+    @createInstance: (options = {}) ->
         Constructor = @
         return new Constructor(options) 
 
@@ -191,7 +191,7 @@ class Facade
     add copied class to facade.
     the class is acquired by @require(name)
 
-    attaches getFacade() method (for both class and instance)
+    attaches getFacade() method to model intstances
 
     @method addClass
     @private
@@ -220,7 +220,6 @@ class Facade
             Class = copy(klass, camelCasedName, CopiedParentClass)
 
         facade = @
-        Class.getFacade  = -> facade
         Class::getFacade = -> facade
         @classes[name] = Class
 

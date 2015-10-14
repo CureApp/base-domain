@@ -226,7 +226,7 @@ class BaseRepository extends Base
     ###
     update: (id, data, client) ->
         if data instanceof Entity
-            throw @getFacade().error """
+            throw @error 'base-domain:updateWithModelInhihited', """
                 update entity with BaseRepository#update() is not allowed.
                 use BaseRepository#save(entity) instead
             """

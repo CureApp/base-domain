@@ -93,9 +93,12 @@ describe 'CollectionFactory', ->
             list = hobbyListFactory.createFromArray(data)
 
             list.on 'loaded', ->
-                Hobby = facade.getModel 'hobby'
-                expect(list.items).to.have.length 2
-                expect(list.items[0]).to.be.instanceof Hobby
-                expect(list.ids).to.eql [3, 2]
-                done()
+                try
+                    Hobby = facade.getModel 'hobby'
+                    expect(list.items).to.have.length 2
+                    expect(list.items[0]).to.be.instanceof Hobby
+                    expect(list.ids).to.eql [3, 2]
+                    done()
+                catch e
+                    done(e)
 

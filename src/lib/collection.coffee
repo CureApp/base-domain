@@ -28,7 +28,7 @@ class Collection extends ValueObject
     ###
     Object.defineProperty @::, 'ids',
         get: ->
-            return null if not @constructor.containsEntity()
+            return null if not @isItemEntity
             return (item.id for key, item of @items)
 
 
@@ -64,11 +64,14 @@ class Collection extends ValueObject
     constructor: (props = {}, root) ->
 
         if not @constructor.itemModelName? 
-            throw @getFacade().error "@itemModelName is not set, in class #{@constructor.name}"
+            throw @error 'base-domain:itemModelNameRequired', "@itemModelName is not set, in class #{@constructor.name}"
 
         super(props, root)
 
         Object.defineProperty @, 'loaded', value: false, writable: true
+
+        isItemEntity = @root.getModel(@constructor.itemModelName).isEntity
+        Object.defineProperty @, 'isItemEntity', value: isItemEntity, writable: false
 
         if props.items
             @setItems props.items
@@ -94,7 +97,7 @@ class Collection extends ValueObject
     ###
     setIds: (ids = []) ->
 
-        return if not @constructor.containsEntity()
+        return if not @isItemEntity
 
         @loaded = false
 
@@ -130,18 +133,6 @@ class Collection extends ValueObject
         return @
 
 
-    ###*
-    returns item is Entity
-
-    @method containsEntity
-    @static
-    @public
-    @return {Boolean}
-    ###
-    @containsEntity: ->
-
-        @root.getModel(@itemModelName).isEntity
-
 
 
     ###*
@@ -167,7 +158,7 @@ class Collection extends ValueObject
 
         plain = super()
 
-        if @constructor.containsEntity()
+        if @isItemEntity
             plain.ids = @ids.slice()
             delete plain.items
 

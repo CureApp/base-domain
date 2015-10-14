@@ -1,3 +1,4 @@
+DomainError = require './domain-error'
 
 { hyphenize } = require '../util'
 
@@ -24,7 +25,6 @@ class Base extends EventEmitter
             writable: true
 
 
-
     ###*
     get facade
 
@@ -36,7 +36,7 @@ class Base extends EventEmitter
     @return {Facade}
     ###
     @getFacade : ->
-        throw new Error """
+        throw new DomainError 'base-domain:facadeNotRegistered', """
             Facade is not created yet, or you required domain classes not from Facade.
             Require domain classes by facade.getModel(), facade.getFactory(), facade.getRepository()
             to attach them getFacade() method.
@@ -50,6 +50,8 @@ class Base extends EventEmitter
         process.nextTick => @emit args...
 
 
+    error: ->
+
     ###*
     get facade
 
@@ -60,7 +62,7 @@ class Base extends EventEmitter
     @return {Facade}
     ###
     getFacade : ->
-        throw new Error """
+        throw new DomainError 'base-domain:facadeNotRegistered', """
             Facade is not created yet, or you required domain classes not from Facade.
             Require domain classes by facade.getModel(), facade.getFactory(), facade.getRepository()
             to attach them getFacade() method.
@@ -76,6 +78,19 @@ class Base extends EventEmitter
     @return {String}
     ###
     @getName: -> hyphenize @name
+
+
+    ###*
+    create instance of DomainError
+
+    @method error
+    @param {String} reason reason of the error
+    @param {String} [message]
+    @return {Error}
+    ###
+    error: (reason, message) ->
+
+        new DomainError(reason, message)
 
 
 module.exports = Base

@@ -1,4 +1,5 @@
 
+DomainError = require './domain-error'
 debug = null
 
 { normalize } = require('path')
@@ -138,7 +139,7 @@ class Fixture
                 fxModel = @fxModelMap[name]
 
                 unless fxModel
-                    throw new Error("model '#{name}' is not found. It might be written in some 'dependencies' property.")
+                    throw new DomainError('base-domain:modelNotFound', "model '#{name}' is not found. It might be written in some 'dependencies' property.")
 
                 add(depname) for depname in fxModel.dependencies
 
@@ -162,7 +163,7 @@ class Fixture
                 for depname in fxModel.dependencies
 
                     if depname in ancestors
-                        throw new Error('dependency chain is making loop')
+                        throw new DomainError('base-domain:dependencyLoop', 'dependency chain is making loop')
 
 
                     visit(depname, ancestors.slice())

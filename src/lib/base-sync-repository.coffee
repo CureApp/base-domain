@@ -95,12 +95,6 @@ class BaseSyncRepository extends BaseRepository
     @param {ResourceClientInterface} [client=@client]
     @return {Entity|} entity
     ###
-    singleQuery: (params, client) ->
-        client ?= @client
-        @resolve client.findOne(params), (obj) ->
-            return @factory.createFromObject(obj)
-
-
 
     ###*
     Destroy the given entity (which must have "id" value)
@@ -111,11 +105,6 @@ class BaseSyncRepository extends BaseRepository
     @param {ResourceClientInterface} [client=@client]
     @return {Boolean} isDeleted
     ###
-    delete: (entity, client) ->
-        client ?= @client
-        @resolve client.destroy(entity), ->
-            return true
-
 
     ###*
     Update set of attributes.
@@ -127,18 +116,5 @@ class BaseSyncRepository extends BaseRepository
     @param {ResourceClientInterface} [client=@client]
     @return {Entity} updated entity
     ###
-    update: (id, data, client) ->
-        if data instanceof Entity
-            throw @getFacade().error """
-                update entity with BaseRepository#update() is not allowed.
-                use BaseRepository#save(entity) instead
-            """
-
-        client ?= @client
-        @appendTimeStamp(data, isUpdate = true)
-
-        @resolve client.updateAttributes(id, data), (obj) ->
-            return @factory.createFromObject(obj)
-
 
 module.exports = BaseSyncRepository

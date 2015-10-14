@@ -207,7 +207,7 @@ class Facade
 
         else
             if klass.getName() isnt name
-                throw @error """given class should be named '#{klass.getName()}',
+                throw @error 'base-domain:classNameInvalid', """given class should be named '#{klass.getName()}',
                                 but '#{name}' given."""
             camelCasedName = klass.name
 

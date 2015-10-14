@@ -1,4 +1,5 @@
 
+DomainError    = require './domain-error'
 GeneralFactory = require './general-factory'
 
 ###*
@@ -16,6 +17,7 @@ class CollectionFactory extends GeneralFactory
     constructor: ->
         super
         @itemFactory = @root.createFactory(@getModelClass().itemModelName)
+        @isItemEntity = @itemFactory.getModelClass().isEntity
 
 
     ###*
@@ -44,7 +46,7 @@ class CollectionFactory extends GeneralFactory
             coll = super(obj).setItems items
             obj.items = items
 
-        else if Collection.containsEntity()
+        else if @isItemEntity
             delete obj.ids
             coll = super(obj).setIds ids
             obj.ids = ids
@@ -73,10 +75,10 @@ class CollectionFactory extends GeneralFactory
             items = (@createItemFromObject obj for obj in arr)
             return @create().setItems items
 
-        if @getModelClass().containsEntity()
+        if @isItemEntity
             return @create().setIds arr
 
-        throw new Error "cannot create #{@modelName} with arr\n [#{arr.toString()}]"
+        throw new DomainError 'base-domain:invalidParamsToCreateFromArray', "cannot create #{@modelName} with arr\n [#{arr.toString()}]"
 
 
     ###*

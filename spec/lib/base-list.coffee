@@ -45,7 +45,7 @@ describe 'BaseList', ->
         )
 
 
-    it '"loaded" is a hidden property whereas items is explicit', ->
+    it '"loaded", "isItemEntity" are hidden properties whereas items is explicit', ->
 
         class HobbyList extends BaseList
             @getFacade: -> facade
@@ -59,6 +59,7 @@ describe 'BaseList', ->
         expect(explicitKeys).to.have.length 1
         expect(explicitKeys).to.contain 'items'
         expect(explicitKeys).not.to.contain 'loaded'
+        expect(explicitKeys).not.to.contain 'isItemEntity'
 
 
     it 'can contain custom properties', ->

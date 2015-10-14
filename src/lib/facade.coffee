@@ -295,6 +295,7 @@ class Facade
 
     @Base                : require './base'
     @BaseModel           : require './base-model'
+    @BaseService         : require './base-service'
     @ValueObject         : require './value-object'
     @Entity              : require './entity'
     @AggregateRoot       : require './aggregate-root'

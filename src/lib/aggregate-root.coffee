@@ -11,6 +11,13 @@ MemoryResource = require '../memory-resource'
 class AggregateRoot extends Entity
 
     ###*
+    is root (to identify RootInterface)
+    @property {Boolean} isRoot
+    @static
+    ###
+    @isRoot: true
+
+    ###*
     key: modelName, value: MemoryResource
 
     @property {Object(MemoryResource)} memories
@@ -74,6 +81,19 @@ class AggregateRoot extends Entity
     createModel: (modelName, obj, options) ->
 
         @createFactory(modelName).createFromObject(obj ? {}, options)
+
+
+    ###*
+    create a service instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the service
+
+    @method createService
+    @param {String} name
+    @return {BaseRepository}
+    ###
+    createService: (name, params...) ->
+
+        @getFacade().createService(modelName, params..., @)
 
 
     ###*

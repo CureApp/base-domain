@@ -22,6 +22,13 @@ Facade class of DDD pattern.
 ###
 class Facade
 
+    ###*
+    is root (to identify RootInterface)
+    @property {Boolean} isRoot
+    @static
+    ###
+    @isRoot: true
+
 
     ###*
     create instance of Facade
@@ -86,23 +93,26 @@ class Facade
         @createFactory(modelName).createFromObject(obj ? {}, options)
 
 
+
     ###*
     create a factory instance
 
     @method createFactory
     @param {String} modelName
-    @params {RootInterface} root
+    @param {RootInterface} root
     @return {BaseFactory}
     ###
     createFactory: (modelName, root) ->
-        root = undefined if typeof root isnt 'object' # for backward compatibility
+
+        root = @getRoot root
 
         try
             Factory = @require("#{modelName}-factory")
             return new Factory(root)
 
         catch e
-            return new GeneralFactory(modelName, root ? @)
+            return new GeneralFactory(modelName, root)
+
 
 
     ###*
@@ -110,15 +120,35 @@ class Facade
 
     @method createRepository
     @param {String} modelName
-    @params {RootInterface} root
+    @param {RootInterface} root
     @return {BaseRepository}
     ###
     createRepository: (modelName, root) ->
+
+        root = @getRoot root
 
         Repository = @require("#{modelName}-repository")
 
         return new Repository(root)
 
+
+
+    ###*
+    create a service instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the service
+
+    @method createService
+    @param {String} name
+    @param {RootInterface} root
+    @return {BaseRepository}
+    ###
+    createService: (name, params..., root) ->
+
+        root = @getRoot root
+
+        Service = @require("#{name}-service")
+
+        return new Service(params..., root)
 
 
     ###*
@@ -151,6 +181,21 @@ class Facade
             throw @error('modelNotFound', "model '#{name}' is not found")
 
         @addClass name, klass
+
+
+    ###*
+    get root: returns the given argument if it's root, otherwise returns self
+
+    @method getRoot
+    @private
+    @param {any} rootCandidate
+    @return {RootInterface} root self or the given argument
+    ###
+    getRoot: (rootCandidate) ->
+
+        return rootCandidate if rootCandidate?.constructor.isRoot
+
+        return @
 
 
     ###*

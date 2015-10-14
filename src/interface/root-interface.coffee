@@ -10,6 +10,12 @@ class RootInterface
    # this file is just a concept and no implementation here.
 
     ###*
+    is root (to identify RootInterface)
+    @property {Boolean} isRoot
+    @static
+    ###
+
+    ###*
     key: modelName, value: MemoryResource
 
     @property {Object(MemoryResource)} memories
@@ -28,6 +34,15 @@ class RootInterface
 
     @method createRepository
     @param {String} modelName
+    @return {BaseRepository}
+    ###
+
+    ###*
+    create a service instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the service
+
+    @method createService
+    @param {String} name
     @return {BaseRepository}
     ###
 

@@ -1,7 +1,8 @@
 
 facade = require('../create-facade').create()
 Facade = facade.constructor
-{ ValueObject, Entity, BaseAsyncRepository, BaseSyncRepository, MemoryResource } = facade.constructor
+{ ValueObject, Entity, BaseAsyncRepository, BaseSyncRepository } = facade.constructor
+MemoryResource = require '../../src/memory-resource'
 
 
 Includer = require '../../src/lib/includer'

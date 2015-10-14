@@ -5,7 +5,7 @@ facade = require('../create-facade').create()
 
 Facade = facade.constructor
 
-{ MemoryResource } = Facade
+MemoryResource = require '../../src/memory-resource'
 
 describe 'CollectionFactory', ->
 

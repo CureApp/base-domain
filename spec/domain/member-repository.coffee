@@ -1,5 +1,6 @@
 
-{ BaseSyncRepository, MemoryResource }  = require('../base-domain')
+{ BaseSyncRepository }  = require('../base-domain')
+MemoryResource = require '../../src/memory-resource'
 
 ###*
 repository of member

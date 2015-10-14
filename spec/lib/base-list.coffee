@@ -2,7 +2,9 @@
 facade = require('../create-facade').create()
 Facade = facade.constructor
 
-{ BaseList, MemoryResource } = facade.constructor
+MemoryResource = require '../../src/memory-resource'
+
+{ BaseList } = facade.constructor
 
 hobbies = null
 

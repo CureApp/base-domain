@@ -1,6 +1,5 @@
 
-Util = require '../util'
-DomainError = require './domain-error'
+Util = require './util'
 
 ###*
 sync memory storage, implements ResourceClientInterface
@@ -100,7 +99,7 @@ class MemoryResource
 
         return (Util.clone(obj) for id, obj of @pool) if not where
 
-        throw new DomainError 'base-domain:findNotImplemented', '"find" method with "where" is currently unimplemented.'
+        throw new Error '"find" method with "where" is currently unimplemented.'
 
     ###*
     Find one model instance that matches filter specification. Same as find, but limited to one result
@@ -148,7 +147,7 @@ class MemoryResource
     ###
     updateAttributes: (id, data) ->
         pooledData = @pool[id]
-        throw new DomainError('base-domain:invalidId', "id #{id} is not found") if pooledData
+        throw new Error("id #{id} is not found") if pooledData
             for k, v of data
                 pooledData[k] = v
 

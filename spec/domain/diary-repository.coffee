@@ -1,7 +1,5 @@
 
-{ MemoryResource, BaseAsyncRepository } = require('../base-domain')
-
-memory = new MemoryResource()
+{ BaseAsyncRepository } = require('../base-domain')
 
 ###*
 repository of diary

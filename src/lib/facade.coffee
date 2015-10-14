@@ -6,6 +6,7 @@ require('es6-promise').polyfill()
 { camelize, requireFile } = require '../util'
 
 GeneralFactory = require './general-factory'
+MemoryResource = require '../memory-resource'
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
 
@@ -129,7 +130,7 @@ class Facade
     ###
     useMemoryResource: (modelName) ->
 
-        @memories[modelName] ?= new @constructor.MemoryResource()
+        @memories[modelName] ?= new MemoryResource()
 
 
     ###*
@@ -287,7 +288,6 @@ class Facade
     @BaseAsyncRepository : require './base-async-repository'
     @LocalRepository     : require './local-repository'
     @DomainError         : require './domain-error'
-    @MemoryResource      : require './memory-resource'
 
 
 module.exports = Facade

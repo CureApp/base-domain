@@ -1,6 +1,6 @@
 
 Entity = require './entity'
-MemoryResource = require './memory-resource'
+MemoryResource = require '../memory-resource'
 
 ###*
 

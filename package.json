@@ -2,7 +2,7 @@
   "name": "base-domain",
   "version": "2.0.1",
   "description": "simple module to help build Domain-Driven Design",
-  "main": "index.js",
+  "main": "dist/lib/facade.js",
   "scripts": {
     "test": "grunt"
   },

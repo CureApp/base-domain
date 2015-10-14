@@ -9,7 +9,7 @@ xdescribe 'BaseRepository', ->
 
         it 'is created by the model name', ->
             repo = facade.createRepository('hobby')
-            HobbyFactory = facade.getFactory('hobby')
+            HobbyFactory = facade.require('hobby-factory')
             expect(repo.factory).to.be.instanceof HobbyFactory
 
 

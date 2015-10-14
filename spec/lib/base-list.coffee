@@ -344,9 +344,6 @@ describe 'BaseList', ->
                 getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-
-            HobbyRepository = facade.getRepository 'hobby'
-
             list = new HobbyList()
 
             list.setIds(['1', '3'])

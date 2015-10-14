@@ -32,14 +32,19 @@ class Base extends EventEmitter
 
 
     @method getFacade
-    @static
     @return {Facade}
     ###
-    @getFacade : ->
+    getFacade : ->
         throw new DomainError 'base-domain:facadeNotRegistered', """
             Facade is not created yet, or you required domain classes not from Facade.
-            Require domain classes by facade.getModel(), facade.getFactory(), facade.getRepository()
-            to attach them getFacade() method.
+            Require domain classes, instances by
+
+                facade.getModel()
+                facade.createModel()
+                facade.createFactory()
+                facade.createRepository()
+
+            to attach getFacade() method to them.
         """
 
     ###*
@@ -51,22 +56,6 @@ class Base extends EventEmitter
 
 
     error: ->
-
-    ###*
-    get facade
-
-    the implementation is in Facade#requre()
-
-
-    @method getFacade
-    @return {Facade}
-    ###
-    getFacade : ->
-        throw new DomainError 'base-domain:facadeNotRegistered', """
-            Facade is not created yet, or you required domain classes not from Facade.
-            Require domain classes by facade.getModel(), facade.getFactory(), facade.getRepository()
-            to attach them getFacade() method.
-        """
 
     ###*
     ClassName -> class-name

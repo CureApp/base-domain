@@ -34,6 +34,7 @@ class Facade
         Constructor = @
         return new Constructor(options) 
 
+
     ###*
     key: modelName, value: MemoryResource
 
@@ -69,31 +70,6 @@ class Facade
         return @require(getName)
 
 
-
-    ###*
-    get a factory class
-
-    ISSUE: user will never know load failure
-
-    @method getFactory
-    @param {String} name
-    @return {Function}
-    ###
-    getFactory: (name) ->
-        @require("#{name}-factory")
-
-
-    ###*
-    get a repository class
-
-    @method getRepository
-    @param {String} name
-    @return {Class}
-    ###
-    getRepository: (name) ->
-        @require("#{name}-repository")
-
-
     ###*
     create an instance of the given modelName using obj
     if obj is null or undefined, empty object will be created.
@@ -121,7 +97,7 @@ class Facade
         root = undefined if typeof root isnt 'object' # for backward compatibility
 
         try
-            Factory = @getFactory(modelName)
+            Factory = @require("#{modelName}-factory")
             return new Factory(root)
 
         catch e
@@ -138,7 +114,8 @@ class Facade
     ###
     createRepository: (modelName, root) ->
 
-        Repository = @getRepository(modelName)
+        Repository = @require("#{modelName}-repository")
+
         return new Repository(root)
 
 
@@ -167,7 +144,10 @@ class Facade
         return @classes[name] if @classes[name]?
 
         file = "#{@dirname}/#{name}"
-        klass = requireFile file
+        try
+            klass = requireFile file
+        catch e
+            throw @error('modelNotFound', "model '#{name}' is not found")
 
         @addClass name, klass
 

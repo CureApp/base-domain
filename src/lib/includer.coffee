@@ -1,4 +1,6 @@
 
+BaseModel = require './base-model'
+
 ###*
 include submodels
 
@@ -65,7 +67,6 @@ class Includer
     doRecursively: ->
 
         promises = []
-        { BaseModel } = @model.getFacade().constructor
 
         for modelProp in @modelProps.models
 

@@ -2,8 +2,7 @@
 
 TypeInfo = require './type-info'
 ModelProps = require './model-props'
-Base  = require './base'
-Includer = require './includer'
+Base = require './base'
 
 ###*
 Base model class of DDD pattern.
@@ -220,6 +219,8 @@ class BaseModel extends Base
     @return {Promise(BaseModel)} self
     ###
     include: (options = {}) ->
+
+        Includer = require './includer'
 
         new Includer(@).include(options).then =>
             @emit('included')

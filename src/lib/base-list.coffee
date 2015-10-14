@@ -52,7 +52,7 @@ class BaseList extends Collection
     ###
     add: (models...) ->
 
-        ItemClass = @getItemModel()
+        ItemClass = @getItemModelClass()
 
         @items.push item for item in models when item instanceof ItemClass
 

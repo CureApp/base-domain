@@ -140,7 +140,7 @@ class Collection extends ValueObject
     ###
     @containsEntity: ->
 
-        @getFacade().getModel(@itemModelName).isEntity
+        @root.getModel(@itemModelName).isEntity
 
 
 
@@ -185,11 +185,11 @@ class Collection extends ValueObject
 
     ###*
     get item model
-    @method getItemModel
+    @method getItemModelClass
     @return {BaseModel}
     ###
-    getItemModel: ->
-        @getFacade().getModel(@constructor.itemModelName)
+    getItemModelClass: ->
+        @root.getModel(@constructor.itemModelName)
 
 
 

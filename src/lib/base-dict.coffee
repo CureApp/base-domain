@@ -113,7 +113,7 @@ class BaseDict extends Collection
     ###
     add: (items...) ->
 
-        ItemClass = @getItemModel()
+        ItemClass = @getItemModelClass()
 
         for item in items when item instanceof ItemClass
             key = @constructor.key item
@@ -130,7 +130,7 @@ class BaseDict extends Collection
     ###
     remove: (args...) ->
 
-        ItemClass = @getItemModel()
+        ItemClass = @getItemModelClass()
 
         for arg in args
             if arg instanceof ItemClass

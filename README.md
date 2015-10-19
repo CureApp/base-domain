@@ -30,7 +30,9 @@ base-domain helps easier practice of Domain-Driven Design.
 - BaseModel
 - BaseFactory
 - BaseRepository
+- BaseService
 - Entity
+- AggregateRoot
 - ValueObject
 - BaseList
 - BaseDict
@@ -83,6 +85,10 @@ base-domain helps easier practice of Domain-Driven Design.
 - instance of Entity has id
 - Entity.isEntity is true
 
+#### AggregateRoot
+[API Doc](http://cureapp.github.io/base-domain/doc/classes/AggregateRoot.html)
+- AggregateRoot is child of Entity
+- AggregateRoot implements RootInterface, thus it can create other models, factories and repositories.
 
 #### BaseList
 [API Doc](http://cureapp.github.io/base-domain/doc/classes/BaseList.html)

@@ -101,7 +101,11 @@ class Collection extends ValueObject
 
         @loaded = false
 
-        repo = @root.createRepository(@constructor.itemModelName)
+        Includer = require './includer'
+
+        repo = new Includer(@).createRepository(@constructor.itemModelName)
+
+        return @ if not repo?
 
         if repo.constructor.isSync
 

@@ -16,7 +16,6 @@ the parent "Base" class just simply gives a @getFacade() method.
 ###
 class BaseModel extends Base
 
-
     @isEntity: false
 
     ###*

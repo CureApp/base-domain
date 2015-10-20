@@ -55,7 +55,21 @@ class Base extends EventEmitter
         process.nextTick => @emit args...
 
 
-    error: ->
+    ###*
+    get parent class if it is not BaseClass
+    @method getCustomParent
+    @return {Function}
+    ###
+    @getCustomParent: ->
+        Facade = require './facade'
+        ParentClass = @__super__
+
+        if Facade.isBaseClass ParentClass
+            return null
+
+        return ParentClass
+
+
 
     ###*
     ClassName -> class-name

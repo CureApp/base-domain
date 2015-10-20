@@ -17,6 +17,8 @@ class Includer
         @ModelClass = @model.constructor
         @modelProps = @ModelClass.getModelProps()
 
+        { @root } = @model
+
         @cache(@ModelClass.getName(), @model) if @ModelClass.isEntity
 
 
@@ -100,7 +102,9 @@ class Includer
             @model.set(entityProp, subModel)
             return
 
-        repo = @model.root.createRepository(typeInfo.model)
+        repo = @createRepository(typeInfo.model)
+
+        return if not repo?
 
         if repo.constructor.isSync
             subModel = repo.get(subId)
@@ -113,6 +117,29 @@ class Includer
             return repo.get(subId).then (subModel) =>
                 @model.set(entityProp, subModel)
             .catch (e) ->
+
+
+
+    ###*
+    Get instance of repository.
+    If not found, checks parent class's repository
+
+    @method createRepository
+    @return {BaseRepository}
+    ###
+    createRepository: (modelName) ->
+
+        loop
+            try
+                return @root.createRepository(modelName)
+
+            catch e
+                ParentClass = @root.getModel(modelName).getCustomParent()
+
+                return null if not ParentClass?
+
+                modelName = ParentClass.getName()
+
 
 
     ###*

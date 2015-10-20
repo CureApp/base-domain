@@ -4,7 +4,16 @@
   "description": "simple module to help build Domain-Driven Design",
   "main": "dist/lib/facade.js",
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "bmp": "cc-bmp",
+    "bmp-p": "cc-bmp -p",
+    "bmp-m": "cc-bmp -m",
+    "bmp-j": "cc-bmp -j",
+    "circle": "cc-generate-yml",
+    "post-dependencies": "echo post-dependencies",
+    "pre-release": "grunt build",
+    "post-release": "echo postrelease",
+    "gh-pages": "grunt yuidoc"
   },
   "bin": {
     "base-domain": "./bin/generate"
@@ -38,6 +47,17 @@
     "grunt": "^0.4.5",
     "grunt-contrib-coffee": "^0.13.0",
     "grunt-contrib-yuidoc": "^0.7.0",
-    "grunt-mocha-chai-sinon": "0.0.9"
+    "grunt-mocha-chai-sinon": "0.0.9",
+    "node-circleci-autorelease": "^1.5.6"
+  },
+  "node-circleci-autorelease": {
+    "config": {
+      "git-user-name": "CircleCI",
+      "git-user-email": "circleci@cureapp.jp",
+      "version-prefix": "v",
+      "create-branch": false,
+      "create-gh-pages": true,
+      "gh-pages-dir": "doc"
+    }
   }
 }

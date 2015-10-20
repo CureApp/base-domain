@@ -1,0 +1,8 @@
+node_modules
+.editorconfig
+spec
+.releaseignore
+.bmp.yml
+npm-debug.log
+base-domain-classes.png
+README.md

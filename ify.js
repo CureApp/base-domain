@@ -7,8 +7,7 @@
  * browserify -t [ base-domain/ify --dirname /path/to/domain/dir ]
  */
 
-require('coffee-script/register');
-var BaseDomainify = require('./src/base-domainify.coffee');
+var BaseDomainify = require('./dist/base-domainify');
 var baseDomainify = new BaseDomainify()
 
 module.exports = function(file, options) {

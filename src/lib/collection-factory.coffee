@@ -16,7 +16,7 @@ class CollectionFactory extends GeneralFactory
     ###
     constructor: ->
         super
-        @itemFactory = @root.createFactory(@getModelClass().itemModelName)
+        @itemFactory = @constructor.create(@getModelClass().itemModelName, @root)
         @isItemEntity = @itemFactory.getModelClass().isEntity
 
 

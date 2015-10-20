@@ -2,6 +2,7 @@
 
 Base  = require './base'
 Entity = require './entity'
+GeneralFactory = require './general-factory'
 
 ###*
 Base repository class of DDD pattern.
@@ -56,7 +57,12 @@ class BaseRepository extends Base
 
         modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-repository'.length)
 
-        @factory = @root.createFactory(modelName)
+        ###*
+        factory
+
+        @property {FactoryInterface} factory
+        ###
+        @factory = GeneralFactory.create(modelName, @root)
 
 
     ###*

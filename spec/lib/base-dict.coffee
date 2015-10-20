@@ -40,11 +40,10 @@ describe 'BaseDict', ->
         facade.addClass 'diary', Diary
         facade.addClass 'diary-repository', DiaryRepository
 
-        hobbyFactory = facade.createFactory('hobby', true)
         hobbyRepo    = facade.createRepository('hobby')
 
         hobbies = (for name, i in ['keyboard', 'jogging', 'cycling']
-            hobby = hobbyFactory.createFromObject id: 3 - i, name: name
+            hobby = facade.createModel 'hobby', id: 3 - i, name: name
             hobbyRepo.save hobby
         )
 
@@ -217,9 +216,8 @@ describe 'BaseDict', ->
                 getFacade:  -> facade
                 @itemModelName: 'non-entity'
 
-            nonEntityFactory = facade.createFactory('non-entity')
             nonEntities = (for name, i in ['keyboard', 'jogging', 'cycling']
-                nonEntityFactory.createFromObject id: 3 - i, name: name
+                facade.createModel 'non-entity', id: 3 - i, name: name
             )
 
             nonEntityDict = new NonEntityDict(items: nonEntities)
@@ -320,11 +318,11 @@ describe 'BaseDict', ->
             expect(@hobbyDict.contains(hobbies[0])).to.be.true
 
         it 'returns false when item does not exist', ->
-            newHobby = facade.createFactory('hobby').createFromObject id: 4, name: 'xxx'
+            newHobby = facade.createModel('hobby', id: 4, name: 'xxx')
             expect(@hobbyDict.has(newHobby)).to.be.false
 
         it 'returns false when item with same key exists but these two are different', ->
-            newHobby = facade.createFactory('hobby').createFromObject id: 4, name: 'keyboard'
+            newHobby = facade.createModel('hobby', id: 4, name: 'keyboard')
             expect(@hobbyDict.has(newHobby)).to.be.false
 
 
@@ -358,7 +356,7 @@ describe 'BaseDict', ->
             @hobbyDict = new HobbyDict(items: hobbies)
 
         it 'add item model', ->
-            newHobby = facade.createFactory('hobby').createFromObject id: 4, name: 'xxx'
+            newHobby = facade.createModel('hobby', d: 4, name: 'xxx')
             @hobbyDict.add(newHobby)
             expect(@hobbyDict.items.xxx).to.be.instanceof facade.getModel 'hobby'
 
@@ -430,11 +428,10 @@ describe 'BaseDict', ->
                 @key: (item) -> item.name
 
             @hobbyDict = new HobbyDict(items: hobbies)
-            @factory = facade.createFactory('hobby')
 
         it 'adds if not exist', ->
 
-            h = @factory.createFromObject
+            h = facade.createModel 'hobby',
                 name        : 'skiing'
 
             @hobbyDict.toggle h
@@ -444,7 +441,7 @@ describe 'BaseDict', ->
 
         it 'removes if exists', ->
 
-            h = @factory.createFromObject
+            h = facade.createModel 'hobby',
                 name        : 'skiing'
 
             @hobbyDict.add h

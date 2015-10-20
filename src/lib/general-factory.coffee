@@ -5,9 +5,32 @@ general factory class
 create instance of model
 
 @class GeneralFactory
+@implements FactoryInterface
 @module base-domain
 ###
 class GeneralFactory
+
+
+
+    ###*
+    create a factory.
+    If specific factory is defined, return the instance.
+    Otherwise, return instance of GeneralFactory.
+
+    @method create
+    @static
+    @param {String} modelName
+    @param {RootInterface} root
+    @return {FactoryInterface}
+    ###
+    @create: (modelName, root) ->
+
+        try
+            root.createFactory(modelName)
+
+        catch e
+            return new GeneralFactory(modelName, root)
+
 
 
     ###*
@@ -153,7 +176,7 @@ class GeneralFactory
     createSubCollection: (prop, value) ->
 
         typeInfo = @modelProps.getTypeInfo(prop)
-        itemModelFactory = @root.createFactory(typeInfo.itemModel)
+        itemModelFactory = @constructor.create(typeInfo.itemModel, @root)
 
         return itemModelFactory.createCollection(typeInfo.model, value)
 
@@ -166,7 +189,7 @@ class GeneralFactory
     ###
     createSubModel: (prop, value) ->
 
-        subModelFactory = @root.createFactory(@modelProps.getTypeInfo(prop).model)
+        subModelFactory = @constructor.create(@modelProps.getTypeInfo(prop).model, @root)
         SubModel = subModelFactory.getModelClass()
 
         return value if value instanceof SubModel
@@ -184,7 +207,7 @@ class GeneralFactory
 
         typeInfo = @modelProps.getTypeInfo(prop)
 
-        @root.createFactory(typeInfo.model).createEmpty()
+        @constructor.create(typeInfo.model, @root).createEmpty()
 
 
     ###*

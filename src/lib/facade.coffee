@@ -90,7 +90,7 @@ class Facade
     ###
     createModel: (modelName, obj, options) ->
 
-        @createFactory(modelName).createFromObject(obj ? {}, options)
+        GeneralFactory.create(modelName, @getRoot()).createFromObject(obj ? {}, options)
 
 
 
@@ -106,12 +106,8 @@ class Facade
 
         root = @getRoot root
 
-        try
-            Factory = @require("#{modelName}-factory")
-            return new Factory(root)
-
-        catch e
-            return new GeneralFactory(modelName, root)
+        Factory = @require("#{modelName}-factory")
+        return new Factory(root)
 
 
 
@@ -333,6 +329,7 @@ class Facade
     @BaseAsyncRepository : require './base-async-repository'
     @LocalRepository     : require './local-repository'
     @DomainError         : require './domain-error'
+    @GeneralFactory      : require './general-factory'
 
 
 module.exports = Facade

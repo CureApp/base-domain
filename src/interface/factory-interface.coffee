@@ -1,19 +1,14 @@
-
-
-Base = require './base'
-GeneralFactory = require './general-factory'
-
 ###*
-Base factory class of DDD pattern.
+interface of factory
 
-create instance of model
-
-@class BaseFactory
-@extends Base
-@implements FactoryInterface
+@class FactoryInterface
 @module base-domain
 ###
-class BaseFactory extends Base
+
+class FactoryInterface
+
+
+    # this file is just a concept and no implementation here.
 
     ###*
     model name to handle
@@ -23,26 +18,7 @@ class BaseFactory extends Base
     @protected
     @type String
     ###
-    @modelName: null
 
-
-    ###*
-    constructor
-
-    @constructor
-    @params {RootInterface} root
-    ###
-    constructor: (root) ->
-
-        super(root)
-
-        modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-factory'.length)
-        @gf = new GeneralFactory(modelName, @root)
-
-
-    @_ModelClass
-    getModelClass: ->
-        @_ModelClass ?= @gf.getModelClass()
 
     ###*
     create empty model instance
@@ -50,7 +26,6 @@ class BaseFactory extends Base
     @method createEmpty
     @return {BaseModel}
     ###
-    createEmpty: -> @gf.createEmpty()
 
 
     ###*
@@ -68,7 +43,6 @@ class BaseFactory extends Base
     @param {Array(String)} [options.include.props] include submodels of given props
     @return {BaseModel} model
     ###
-    createFromObject: (obj, options = {}) -> @gf.createFromObject(obj, options)
 
 
     ###*
@@ -80,7 +54,6 @@ class BaseFactory extends Base
     @param {any} obj
     @return {BaseList} list
     ###
-    createList: (listModelName, obj) -> @createCollection(listModelName, obj)
 
 
     ###*
@@ -92,7 +65,6 @@ class BaseFactory extends Base
     @param {any} obj
     @return {BaseDict} dict
     ###
-    createDict: (dictModelName, obj) -> @createCollection(dictModelName, obj)
 
 
     ###*
@@ -104,9 +76,6 @@ class BaseFactory extends Base
     @param {any} obj
     @return {Collection} coll
     ###
-    createCollection: (modelName, obj) ->
-
-        @gf.createCollection(modelName, obj)
 
 
-module.exports = BaseFactory
+module.exports = FactoryInterface

@@ -1,6 +1,5 @@
 
 Facade = require('../base-domain')
-GeneralFactory = require '../../src/lib/general-factory'
 
 describe 'Facade', ->
 
@@ -180,13 +179,13 @@ describe 'Facade', ->
             factory = f.createFactory('abc')
             expect(factory.constructor.xxx).to.equal 'yyy'
 
-        it 'returns general factory when no specific factory is found', ->
+        it 'throws error when no specific factory is found', ->
 
             class Abc extends Facade.ValueObject
 
             f = Facade.createInstance()
             f.addClass('abc', Abc)
-            expect(f.createFactory('abc')).to.be.instanceof GeneralFactory
+            expect(-> f.createFactory('abc')).to.throw Error
 
 
 

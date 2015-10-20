@@ -211,7 +211,6 @@ class FixtureModel
 
         debug("inserting #{dataNames.length} data into #{@name}")
 
-        factory = @fx.facade.createFactory(@name)
         repository = @fx.facade.createRepository(@name)
 
         do insert = =>
@@ -222,9 +221,7 @@ class FixtureModel
             dataName = dataNames.shift()
             data = modelDataMap[dataName]
 
-            model = factory.createFromObject data
-
-            Promise.resolve(repository.save(model)).then (savedModel) =>
+            Promise.resolve(repository.save(data)).then (savedModel) =>
 
                 @fx.addToDataPool(@name, dataName, savedModel)
                 insert()

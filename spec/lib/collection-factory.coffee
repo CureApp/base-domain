@@ -31,8 +31,6 @@ describe 'CollectionFactory', ->
         facade.addClass('hobby-list', HobbyList)
         facade.addClass('hobby-repository', HobbyRepository)
 
-        @hobbyFactory = facade.createFactory('hobby', on)
-
         facade.createRepository('hobby').save(id: 'abc', name: 'camping')
 
     describe 'createEmpty', ->

@@ -52,7 +52,7 @@ describe 'Includer', ->
 
     beforeEach ->
 
-        @a = facade.createFactory('a').createFromObject { bId: 'xxx', cId: 'xxx' }, include: null
+        @a = facade.createModel('a', { bId: 'xxx', cId: 'xxx' }, include: null)
 
     describe 'constructor', ->
 
@@ -121,7 +121,7 @@ describe 'Includer', ->
             class SubItemRepository extends Facade.BaseRepository
                 @modelName: 'sub-item'
                 get: (id) ->
-                    item = @getFacade().createFactory('sub-item', true).createFromObject {id: id, name: 'mock'}
+                    item = @getFacade().createModel('sub-item', {id: id, name: 'mock'})
                     return Promise.resolve item
 
 
@@ -132,7 +132,7 @@ describe 'Includer', ->
 
         it 'includes subEntities', (done) ->
 
-            main = @f.createFactory('main', true).createFromObject
+            main = @f.createModel 'main',
                 name: 'xxx'
                 subId: 'abc'
 

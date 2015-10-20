@@ -1,6 +1,7 @@
 
 Entity = require './entity'
 MemoryResource = require '../memory-resource'
+GeneralFactory = require './general-factory'
 
 ###*
 
@@ -80,7 +81,7 @@ class AggregateRoot extends Entity
     ###
     createModel: (modelName, obj, options) ->
 
-        @createFactory(modelName).createFromObject(obj ? {}, options)
+        GeneralFactory.create(modelName, @).createFromObject(obj ? {}, options)
 
 
     ###*

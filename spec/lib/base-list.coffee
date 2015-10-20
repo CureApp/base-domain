@@ -38,11 +38,10 @@ describe 'BaseList', ->
         facade.addClass 'diary', Diary
         facade.addClass 'diary-repository', DiaryRepository
 
-        hobbyFactory = facade.createFactory('hobby', true)
         hobbyRepo    = facade.createRepository('hobby')
 
         hobbies = (for name, i in ['keyboard', 'jogging', 'cycling']
-            hobby = hobbyFactory.createFromObject id: 3 - i, name: name
+            hobby = facade.createModel 'hobby', id: 3 - i, name: name
             hobbyRepo.save hobby
         )
 
@@ -248,9 +247,8 @@ describe 'BaseList', ->
                 getFacade:  -> facade
                 @itemModelName: 'non-entity'
 
-            nonEntityFactory = facade.createFactory('non-entity', true)
             nonEntities = (for name, i in ['keyboard', 'jogging', 'cycling']
-                nonEntityFactory.createFromObject id: 3 - i, name: name
+                facade.createModel 'non-entity', id: 3 - i, name: name
             )
 
             nonEntityList = new NonEntityList(items: nonEntities)

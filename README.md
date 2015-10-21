@@ -5,7 +5,7 @@
 
 framework for Domain-Driven Design in JavaScript (or CoffeeScript, recommended.)
 
-[latest API documentation Page](http://cureapp.github.io/base-domain/doc/index.html)
+[latest API documentation Page](http://cureapp.github.io/base-domain/index.html)
 
 
 ## installation
@@ -40,31 +40,31 @@ base-domain helps easier practice of Domain-Driven Design.
 ![class relations](https://github.com/CureApp/base-domain/blob/master/base-domain-classes.png "base-domain-classes")
 
 #### Base
-[API Doc](http://cureapp.github.io/base-domain/doc/classes/Base.html)
+[API Doc](http://cureapp.github.io/base-domain/classes/Base.html)
 - Base is an origin of all classes
 - Base has Facade
 - Base does not have any other properties or methods
 
 #### Facade
-[API Doc](http://cureapp.github.io/base-domain/doc/classes/Facade.html)
+[API Doc](http://cureapp.github.io/base-domain/classes/Facade.html)
 - Facade is the gate of all classes
 - Facade knows all classes
 - Facade is module-exported in base-domain: require('base-domain') returns Facade class
 
 #### BaseModel
-[API Doc](http://cureapp.github.io/base-domain/doc/classes/BaseModel.html)
+[API Doc](http://cureapp.github.io/base-domain/classes/BaseModel.html)
 - BaseModel is a base class of model
 - essential methods for model are defined
 - BaseModel is a child of Base
 
 #### BaseFactory
-[API Doc](http://cureapp.github.io/base-domain/doc/classes/BaseFactory.html)
+[API Doc](http://cureapp.github.io/base-domain/classes/BaseFactory.html)
 - BaseFactory is a base class of factory
 - BaseFactory creates specific BaseModel instance
 - BaseFactory is a child of Base
 
 #### BaseRepository
-[API Doc](http://cureapp.github.io/base-domain/doc/classes/BaseRepository.html)
+[API Doc](http://cureapp.github.io/base-domain/classes/BaseRepository.html)
 - BaseRepository is a base class of repository
 - BaseRepository connects to database, filesystem or other external data resources (settings needed).
 - BaseRepository saves specific BaseModel to data resources
@@ -73,31 +73,31 @@ base-domain helps easier practice of Domain-Driven Design.
 
 
 #### ValueObject
-[API Doc](http://cureapp.github.io/base-domain/doc/classes/ValueObject.html)
+[API Doc](http://cureapp.github.io/base-domain/classes/ValueObject.html)
 - ValueObject is child of BaseModel
 - instance of ValueObject does not have id
 - ValueObject.isEntity is false
 - that's all of ValueObject
 
 #### Entity
-[API Doc](http://cureapp.github.io/base-domain/doc/classes/Entity.html)
+[API Doc](http://cureapp.github.io/base-domain/classes/Entity.html)
 - Entity is child of BaseModel
 - instance of Entity has id
 - Entity.isEntity is true
 
 #### AggregateRoot
-[API Doc](http://cureapp.github.io/base-domain/doc/classes/AggregateRoot.html)
+[API Doc](http://cureapp.github.io/base-domain/classes/AggregateRoot.html)
 - AggregateRoot is child of Entity
 - AggregateRoot implements RootInterface, thus it can create other models, factories and repositories.
 
 #### BaseList
-[API Doc](http://cureapp.github.io/base-domain/doc/classes/BaseList.html)
+[API Doc](http://cureapp.github.io/base-domain/classes/BaseList.html)
 - BaseList is child of ValueObject
 - BaseList has many BaseModels as items
 - BaseList#items is array of specific BaseModel
 
 #### BaseDict
-[API Doc](http://cureapp.github.io/base-domain/doc/classes/BaseDict.html)
+[API Doc](http://cureapp.github.io/base-domain/classes/BaseDict.html)
 - BaseDict is child of ValueObject
 - BaseDict has many BaseModels as items
 - BaseDict#items is dictionary of key => specific BaseModel

@@ -69,7 +69,7 @@ base-domain helps easier practice of Domain-Driven Design.
 - BaseRepository connects to database, filesystem or other external data resources (settings needed).
 - BaseRepository saves specific BaseModel to data resources
 - BaseRepository read BaseModels from data resources
-- BaseRepository base BaseFactory (to generate BaseModel from data resources)
+- BaseRepository has BaseFactory (to generate BaseModel from data resources)
 
 
 #### ValueObject
@@ -105,24 +105,6 @@ base-domain helps easier practice of Domain-Driven Design.
 
 
 ## usage
-
-### generate base files
-
-```bash
-MODEL_NAME='foo-bar'
-DIR_NAME='.'
-$ base-domain $MODEL_NAME $DIR_NAME
-```
-- ./foo-bar.coffee
-- ./foo-bar-factory.coffee
-- ./foo-bar-repository.coffee
-
-are generated.
-
-- foo-bar.coffee defines and exports class FooBar extends Entity
-- foo-bar-factory.coffee defines and exports class FooBarFactory extends BaseFactory
-- foo-bar-repository.coffee defines and exports class FooBarRepository extends BaseRepository
-
 
 ### model definition
 model is classified into "Entity" and "ValueObject"

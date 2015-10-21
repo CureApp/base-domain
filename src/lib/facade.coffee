@@ -6,6 +6,7 @@ require('es6-promise').polyfill()
 { camelize, requireFile } = require '../util'
 
 GeneralFactory = require './general-factory'
+Collection     = require './collection'
 MemoryResource = require '../memory-resource'
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
@@ -86,11 +87,17 @@ class Facade
     @param {String} modelName
     @param {Object} obj
     @param {Object} [options]
+    @param {RootInterface} [root]
     @return {BaseModel}
     ###
-    createModel: (modelName, obj, options) ->
+    createModel: (modelName, obj, options, root) ->
+        Model = @getModel(modelName)
 
-        GeneralFactory.create(modelName, @getRoot()).createFromObject(obj ? {}, options)
+        if (Model::) instanceof Collection
+            return GeneralFactory.create(Model.itemModelName, @getRoot(root)).createCollection(obj, options)
+
+
+        return GeneralFactory.create(modelName, @getRoot(root)).createFromObject(obj ? {}, options)
 
 
 
@@ -99,7 +106,7 @@ class Facade
 
     @method createFactory
     @param {String} modelName
-    @param {RootInterface} root
+    @param {RootInterface} [root]
     @return {BaseFactory}
     ###
     createFactory: (modelName, root) ->
@@ -116,7 +123,7 @@ class Facade
 
     @method createRepository
     @param {String} modelName
-    @param {RootInterface} root
+    @param {RootInterface} [root]
     @return {BaseRepository}
     ###
     createRepository: (modelName, root) ->
@@ -135,7 +142,7 @@ class Facade
 
     @method createService
     @param {String} name
-    @param {RootInterface} root
+    @param {RootInterface} [root]
     @return {BaseRepository}
     ###
     createService: (name, params..., root) ->

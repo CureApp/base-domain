@@ -81,7 +81,7 @@ class AggregateRoot extends Entity
     ###
     createModel: (modelName, obj, options) ->
 
-        GeneralFactory.create(modelName, @).createFromObject(obj ? {}, options)
+        @getFacade().createModel modelName, obj, options, @
 
 
     ###*

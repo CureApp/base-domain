@@ -7,6 +7,7 @@ MemoryResource = require '../memory-resource'
 @class AggregateRoot
 @implements RootInterface
 @extends Entity
+@module base-domain
 ###
 class AggregateRoot extends Entity
 

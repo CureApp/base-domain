@@ -47,7 +47,6 @@ class BaseRepository extends Base
     constructor
 
     @constructor
-    @params {ResourceClientInterface} client
     @params {RootInterface} root
     @return
     ###
@@ -254,7 +253,7 @@ class BaseRepository extends Base
 
     @method appendTimeStamp
     @protected
-    @param {Object} data 
+    @param {Object} data
     @param {Boolean} isUpdate true when updating
     @return {Object} data
     ###

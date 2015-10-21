@@ -1,7 +1,6 @@
 
 Entity = require './entity'
 MemoryResource = require '../memory-resource'
-GeneralFactory = require './general-factory'
 
 ###*
 

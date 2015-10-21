@@ -1,4 +1,7 @@
 
+BaseList = require './base-list'
+BaseDict = require './base-dict'
+
 ###*
 general factory class
 
@@ -10,12 +13,11 @@ create instance of model
 ###
 class GeneralFactory
 
-
-
     ###*
     create a factory.
     If specific factory is defined, return the instance.
     Otherwise, return instance of GeneralFactory.
+    This method is not suitable for creating collections, thus only called by Repository, which handles Entity (= non-collection).
 
     @method create
     @static
@@ -26,11 +28,42 @@ class GeneralFactory
     @create: (modelName, root) ->
 
         try
-            root.createFactory(modelName)
+            return root.createFactory(modelName)
 
         catch e
             return new GeneralFactory(modelName, root)
 
+
+    ###*
+    create an instance of the given modelName using obj
+    if obj is null, return null
+    if obj is undefined, empty object is created.
+
+    @method createModel
+    @param {String} modelName
+    @param {Object} obj
+    @param {Object} [options]
+    @param {Object} [options.include] options to pass to Includer
+    @param {Object} [options.include.async=false] include sub-entities asynchronously if true.
+    @param {Boolean} [options.include.recursive=false] recursively include or not
+    @param {Array(String)} [options.include.props] include sub-entities of given props
+    @param {RootInterface} root
+    @return {BaseModel}
+    ###
+    @createModel: (modelName, obj, options, root) ->
+
+        return null if obj is null
+
+        Model = root.getModel(modelName)
+
+        if (Model::) instanceof BaseList
+            return @create(Model.itemModelName, root).createList(modelName, obj, options)
+
+        else if (Model::) instanceof BaseDict
+            return @create(Model.itemModelName, root).createDict(modelName, obj, options)
+
+        else
+            return @create(modelName, root).createFromObject(obj ? {}, options)
 
 
     ###*
@@ -73,9 +106,9 @@ class GeneralFactory
     @param {Object} obj
     @param {Object} [options={}]
     @param {Object} [options.include] options to pass to Includer
-    @param {Object} [options.include.async=false] include submodels asynchronously
+    @param {Object} [options.include.async=false] include sub-entities asynchronously if true.
     @param {Boolean} [options.include.recursive=false] recursively include or not
-    @param {Array(String)} [options.include.props] include submodels of given props
+    @param {Array(String)} [options.include.props] include sub-entities of given props
     @return {BaseModel} model
     ###
     createFromObject: (obj, options = {}) ->
@@ -89,13 +122,26 @@ class GeneralFactory
 
         model = @create()
 
+        # setting values to the model
         for own prop, value of obj
-            @setValueToModel model, prop, value
 
+            if subModelName = @modelProps.getTypeInfo(prop)?.model
+                value = @constructor.createModel(subModelName, value, options, @root)
+            model.set(prop, value)
+
+        # adding empty values to the model
         for prop in @modelProps.names()
             continue if model[prop]? or obj.hasOwnProperty prop
-            @setEmptyValueToModel model, prop
 
+            if subModelName = @modelProps.getTypeInfo(prop).model
+                continue if @modelProps.isEntity(prop) # entity will be loaded at include() section
+
+                model.set(prop, @constructor.createModel(subModelName, undefined, options, @root))
+
+            else
+                model.set(prop, undefined)
+
+        # loading entities by id
         if options.include isnt null # skip @include when null is set. By default it's undefined, so @include will be executed
             @include(model, options.include)
 
@@ -123,105 +169,20 @@ class GeneralFactory
 
 
     ###*
-    set value to model in creation
-
-    @method setValueToModel
-    @private
-    ###
-    setValueToModel: (model, prop, value) ->
-
-        switch @modelProps.getTypeInfo(prop)?.name
-
-            when 'MODEL'
-                model.set(prop, @createSubModel(prop, value))
-
-            when 'MODEL_LIST', 'MODEL_DICT'
-                model.set(prop, @createSubCollection(prop, value))
-
-            else # set normal props
-                model.set(prop, value)
-
-
-    ###*
-    set empty values to model in creation
-
-    @method setEmptyValueToModel
-    @private
-    ###
-    setEmptyValueToModel: (model, prop) ->
-
-        switch @modelProps.getTypeInfo(prop).name
-
-            when 'MODEL'
-                if @modelProps.isEntity(prop)
-                    return # if submodel is entity, load it at include() section
-
-                else
-                    model.set(prop, @createEmptyModel(prop))
-
-            when 'MODEL_LIST', 'MODEL_DICT'
-                model.set(prop, @createSubCollection(prop, []))
-
-            else
-                model.set(prop, undefined)
-
-
-    ###*
-    create collection by prop name and value
-
-    @method createSubCollection
-    @private
-    @return {Collection}
-    ###
-    createSubCollection: (prop, value) ->
-
-        typeInfo = @modelProps.getTypeInfo(prop)
-        itemModelFactory = @constructor.create(typeInfo.itemModel, @root)
-
-        return itemModelFactory.createCollection(typeInfo.model, value)
-
-
-    ###*
-    create submodel by prop name and value
-
-    @method createSubModel
-    @private
-    ###
-    createSubModel: (prop, value) ->
-
-        subModelFactory = @constructor.create(@modelProps.getTypeInfo(prop).model, @root)
-        SubModel = subModelFactory.getModelClass()
-
-        return value if value instanceof SubModel
-
-        return subModelFactory.createFromObject(value)
-
-
-    ###*
-    create empty model and set to the prop
-
-    @method createEmptyModel
-    @private
-    ###
-    createEmptyModel: (prop) ->
-
-        typeInfo = @modelProps.getTypeInfo(prop)
-
-        @constructor.create(typeInfo.model, @root).createEmpty()
-
-
-    ###*
     create model list
 
     @method createList
     @public
     @param {String} listModelName model name of list
     @param {any} val
+    @param {Object} [options]
+    @param {Object} [options.include] options to pass to Includer
+    @param {Object} [options.include.async=false] include sub-entities asynchronously if true.
+    @param {Boolean} [options.include.recursive=false] recursively include or not
+    @param {Array(String)} [options.include.props] include sub-entities of given props
     @return {BaseList} list
     ###
-    createList: (listModelName, val) ->
-
-        @createCollection listModelName, val 
+    createList: (listModelName, val, options) -> @createCollection listModelName, val, options
 
 
     ###*
@@ -231,29 +192,33 @@ class GeneralFactory
     @public
     @param {String} dictModelName model name of dict
     @param {any} val 
+    @param {Object} [options]
+    @param {Object} [options.include] options to pass to Includer
+    @param {Object} [options.include.async=false] include sub-entities asynchronously if true.
+    @param {Boolean} [options.include.recursive=false] recursively include or not
+    @param {Array(String)} [options.include.props] include sub-entities of given props
     @return {BaseDict} dict
     ###
-    createDict: (dictModelName, val) ->
-
-        @createCollection dictModelName, val
+    createDict: (dictModelName, val, options) -> @createCollection dictModelName, val, options
 
 
     ###*
     create collection
 
     @method createCollection
-    @public
+    @private
     @param {String} collModelName model name of collection
     @param {any} val 
+    @param {Object} [options]
     @return {BaseDict} dict
     ###
-    createCollection: (collModelName, val) ->
+    createCollection: (collModelName, val, options) ->
 
         return null if val is null
 
         CollectionFactory = require './collection-factory'
 
-        new CollectionFactory(collModelName, @root).createFromObject val
+        new CollectionFactory(collModelName, @root).createFromObject val, options
 
 
     ###*

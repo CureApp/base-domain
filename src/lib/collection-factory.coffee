@@ -36,8 +36,6 @@ class CollectionFactory extends GeneralFactory
         if Array.isArray obj
             return @createFromArray(obj)
 
-        Collection = @getModelClass()
-
         { ids, items } = obj
 
         if items

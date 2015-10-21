@@ -58,11 +58,14 @@ class BaseRepository extends Base
         modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-repository'.length)
 
         ###*
-        factory
+        factory of the entity.
 
         @property {FactoryInterface} factory
         ###
         @factory = GeneralFactory.create(modelName, @root)
+
+        if (@factory.getModelClass()::) not instanceof Entity
+            @error('base-domain:repositoryWithNonEntity', "cannot define repository to non-entity: '#{modelName}'")
 
 
     ###*

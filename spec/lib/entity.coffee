@@ -29,8 +29,6 @@ describe 'Entity', ->
             date = new Date()
 
             scheduleA = new Schedule(id: 'abc', title: 'abc', date: date, visited: false)
-
-            console.log scheduleA
             scheduleB = new Schedule(id: 'abcd', title: 'abc', date: date, visited: false)
             scheduleC = new Schedule(id: 'abc', title: 'abcd', date: date, visited: false)
 

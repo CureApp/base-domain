@@ -6,7 +6,6 @@ require('es6-promise').polyfill()
 { camelize, requireFile } = require '../util'
 
 GeneralFactory = require './general-factory'
-Collection     = require './collection'
 MemoryResource = require '../memory-resource'
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
@@ -91,14 +90,7 @@ class Facade
     @return {BaseModel}
     ###
     createModel: (modelName, obj, options, root) ->
-        Model = @getModel(modelName)
-
-        if (Model::) instanceof Collection
-            return GeneralFactory.create(Model.itemModelName, @getRoot(root)).createCollection(obj, options)
-
-
-        return GeneralFactory.create(modelName, @getRoot(root)).createFromObject(obj ? {}, options)
-
+        GeneralFactory.createModel(modelName, obj, options, @getRoot(root))
 
 
     ###*

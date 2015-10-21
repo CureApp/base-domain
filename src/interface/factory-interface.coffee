@@ -52,6 +52,11 @@ class FactoryInterface
     @public
     @param {String} listModelName model name of list
     @param {any} obj
+    @param {Object} [options={}]
+    @param {Object} [options.include] options to pass to Includer
+    @param {Object} [options.include.async=false] include submodels asynchronously
+    @param {Boolean} [options.include.recursive=false] recursively include or not
+    @param {Array(String)} [options.include.props] include submodels of given props
     @return {BaseList} list
     ###
 
@@ -63,18 +68,12 @@ class FactoryInterface
     @public
     @param {String} dictModelName model name of dict
     @param {any} obj
+    @param {Object} [options={}]
+    @param {Object} [options.include] options to pass to Includer
+    @param {Object} [options.include.async=false] include submodels asynchronously
+    @param {Boolean} [options.include.recursive=false] recursively include or not
+    @param {Array(String)} [options.include.props] include submodels of given props
     @return {BaseDict} dict
-    ###
-
-
-    ###*
-    create collection
-
-    @method createCollection
-    @public
-    @param {String} modelName model name of collection
-    @param {any} obj
-    @return {Collection} coll
     ###
 
 

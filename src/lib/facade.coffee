@@ -90,41 +90,41 @@ class Facade
     @return {BaseModel}
     ###
     createModel: (modelName, obj, options, root) ->
-        GeneralFactory.createModel(modelName, obj, options, @getRoot(root))
+        GeneralFactory.createModel(modelName, obj, options, root ? @)
 
 
     ###*
     create a factory instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createFactory
     @param {String} modelName
-    @param {RootInterface} [root]
     @return {BaseFactory}
     ###
-    createFactory: (modelName, root) ->
+    createFactory: (modelName, params...) ->
+        @__createFactory(modelName, params..., @)
 
-        root = @getRoot root
+    __createFactory: (modelName, params..., root) ->
 
         Factory = @require("#{modelName}-factory")
-        return new Factory(root)
-
+        return new Factory(params..., root ? @)
 
 
     ###*
     create a repository instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createRepository
     @param {String} modelName
-    @param {RootInterface} [root]
     @return {BaseRepository}
     ###
-    createRepository: (modelName, root) ->
+    createRepository: (modelName, params...) ->
+        @__createRepository(modelName, params..., @)
 
-        root = @getRoot root
+    __createRepository: (modelName, params..., root) ->
 
         Repository = @require("#{modelName}-repository")
-
-        return new Repository(root)
+        return new Repository(params..., root ? @)
 
 
 
@@ -134,16 +134,16 @@ class Facade
 
     @method createService
     @param {String} name
-    @param {RootInterface} [root]
     @return {BaseRepository}
     ###
-    createService: (name, params..., root) ->
+    createService: (name, params...) ->
+        @__createService(name, params..., @)
 
-        root = @getRoot root
+    __createService: (name, params..., root) ->
 
         Service = @require("#{name}-service")
 
-        return new Service(params..., root)
+        return new Service(params..., root ? @)
 
 
     ###*
@@ -176,21 +176,6 @@ class Facade
             throw @error('modelNotFound', "model '#{name}' is not found")
 
         @addClass name, klass
-
-
-    ###*
-    get root: returns the given argument if it's root, otherwise returns self
-
-    @method getRoot
-    @private
-    @param {any} rootCandidate
-    @return {RootInterface} root self or the given argument
-    ###
-    getRoot: (rootCandidate) ->
-
-        return rootCandidate if rootCandidate?.constructor.isRoot
-
-        return @
 
 
     ###*

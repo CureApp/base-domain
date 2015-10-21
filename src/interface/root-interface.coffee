@@ -23,6 +23,7 @@ class RootInterface
 
     ###*
     create a factory instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createFactory
     @param {String} modelName
@@ -31,6 +32,7 @@ class RootInterface
 
     ###*
     create a repository instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createRepository
     @param {String} modelName

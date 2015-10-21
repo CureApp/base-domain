@@ -34,26 +34,28 @@ class AggregateRoot extends Entity
 
     ###*
     create a factory instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createFactory
     @param {String} modelName
     @return {BaseFactory}
     ###
-    createFactory: (modelName) ->
+    createFactory: (modelName, params...) ->
 
-        @getFacade().createFactory(modelName, @)
+        @getFacade().__createFactory(modelName, params..., @)
 
 
     ###*
     create a repository instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createRepository
     @param {String} modelName
     @return {BaseRepository}
     ###
-    createRepository: (modelName) ->
+    createRepository: (modelName, params...) ->
 
-        @getFacade().createRepository(modelName, @)
+        @getFacade().__createRepository(modelName, params..., @)
 
 
     ###*
@@ -93,7 +95,7 @@ class AggregateRoot extends Entity
     ###
     createService: (name, params...) ->
 
-        @getFacade().createService(modelName, params..., @)
+        @getFacade().__createService(modelName, params..., @)
 
 
     ###*

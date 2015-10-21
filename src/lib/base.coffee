@@ -20,6 +20,13 @@ class Base extends EventEmitter
     ###
     constructor: (root) ->
 
+        if root and not root.constructor.isRoot
+            console.error("""
+                base-domain: [warning] constructor of '#{@constructor.name}' is given non-root object.
+                    Use Facade instead.
+            """)
+            root = null
+
         Object.defineProperty @, 'root',
             value: root ? @getFacade()
             writable: true

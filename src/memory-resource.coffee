@@ -28,7 +28,7 @@ class MemoryResource
     ###*
     Generate id
 
-    @method create
+    @method generateId
     @public
     @param {Object} data
     @return {String}

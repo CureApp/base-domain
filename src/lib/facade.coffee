@@ -7,6 +7,7 @@ require('es6-promise').polyfill()
 
 GeneralFactory = require './general-factory'
 MemoryResource = require '../memory-resource'
+MasterDataResource = require '../master-data-resource'
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
 
@@ -40,7 +41,7 @@ class Facade
     ###
     @createInstance: (options = {}) ->
         Constructor = @
-        return new Constructor(options) 
+        return new Constructor(options)
 
 
     ###*
@@ -55,11 +56,32 @@ class Facade
     @constructor
     @param {String} [options]
     @param {String} [options.dirname="."] path where domain definition files are included
+    @param {String|Boolean} [options.master] if given, MasterDataResource is available.
+    if the it's string, it is parsed as a path to the master-data directory
     ###
-    constructor: (options) ->
+    constructor: (options = {}) ->
         @classes = {}
         @memories = {}
         @dirname = options.dirname ? '.'
+
+        if options.master
+
+            if typeof options.master is 'string'
+                masterPath = options.master
+
+            else
+                masterPath = @dirname + '/master-data'
+
+            ###*
+            instance of MasterDataResource
+            Exist only when "master" property is given to Facade's option
+
+            @property {MasterDataResource} master
+            @optional
+            @readOnly
+            ###
+            @master = new MasterDataResource(masterPath)
+
         @init()
 
 
@@ -312,6 +334,7 @@ class Facade
     @BaseSyncRepository  : require './base-sync-repository'
     @BaseAsyncRepository : require './base-async-repository'
     @LocalRepository     : require './local-repository'
+    @MasterRepository    : require './master-repository'
     @DomainError         : require './domain-error'
     @GeneralFactory      : require './general-factory'
 

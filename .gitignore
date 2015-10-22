@@ -20,3 +20,6 @@ npm-debug.log
 dist
 bower_components
 doc
+
+# master data
+all.json

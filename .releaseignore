@@ -10,3 +10,6 @@ circle.yml
 doc
 Gruntfile.coffee
 README.md
+
+# master data
+all.json

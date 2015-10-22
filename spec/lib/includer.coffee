@@ -60,7 +60,7 @@ describe 'Includer', ->
 
             modelPool = {}
 
-            includer = new Includer(@a, modelPool) 
+            includer = new Includer(@a, modelPool)
 
             expect(includer.modelPool).to.equal modelPool
 
@@ -125,7 +125,7 @@ describe 'Includer', ->
                     return Promise.resolve item
 
 
-            @f = Facade.createInstance()
+            @f = require('../create-facade').create()
             @f.addClass('main', Main)
             @f.addClass('sub-item', SubItem)
             @f.addClass('sub-item-repository', SubItemRepository)

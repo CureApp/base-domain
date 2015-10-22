@@ -1,3 +1,5 @@
+
+facade = require('../create-facade').create()
 Facade = require('../base-domain')
 GeneralFactory = require '../../src/lib/general-factory'
 
@@ -9,7 +11,6 @@ describe 'GeneralFactory', ->
 
             class Abc extends Facade.ValueObject
 
-            f = Facade.createInstance()
-            f.addClass('abc', Abc)
-            expect(GeneralFactory.create('abc', f)).to.be.instanceof GeneralFactory
+            facade.addClass('abc', Abc)
+            expect(GeneralFactory.create('abc', facade)).to.be.instanceof GeneralFactory
 

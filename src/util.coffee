@@ -77,6 +77,28 @@ class Util
 
 
     ###*
+    Parse a file as JSON format.
+    In Titanium, requiring JSON does not work.
+
+    @method requireJSON
+    @static
+    @param {String} path
+    @return {any} required value
+    ###
+    @requireJSON: (path) ->
+        if not Ti?
+            return require path
+
+        fileInfo = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, path)
+
+        if fileInfo.exists()
+            return JSON.parse fileInfo.read().getText()
+        else
+            throw new Error("#{path}: no such file.")
+
+
+
+    ###*
     in Titanium, "A instanceof B" sometimes fails.
     this is the alternative.
 

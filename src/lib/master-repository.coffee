@@ -46,7 +46,7 @@ class MasterRepository extends BaseSyncRepository
         if not memoryResource?
             throw @error('masterDataNotFound', """
                 No master data of '#{@constructor.modelName}' at #{@constructor.getName()}.
-                Check the contents of #{@getFacade().master.getMasterJSONPath()}.
+                Check the contents of #{@getFacade().master.masterJSONPath}.
             """)
 
         @client = memoryResource

@@ -9,8 +9,8 @@ getGlobal = -> @ # for setting global variable
 describe 'MasterDataResource', ->
 
     before ->
-        @dir = __dirname + '/master-data'
-        @allJSON = @dir + '/all.json'
+        @dir = __dirname + '/empty'
+        @allJSON = @dir + '/master-data/all.json'
 
         if fs.existsSync @allJSON
             fs.unlinkSync @allJSON
@@ -20,7 +20,7 @@ describe 'MasterDataResource', ->
 
         expect(fs.existsSync @allJSON).to.be.false
 
-        master = new MasterDataResource(@dir)
+        master = new MasterDataResource(@dir).init()
 
         expect(master.memories.device).to.be.instanceof MemoryResource
 
@@ -42,13 +42,13 @@ describe 'MasterDataResource', ->
 
         it 'loads from JSON file', ->
 
-            master = new MasterDataResource(@dir)
+            master = new MasterDataResource(@dir).init()
 
             expect(master.memories.device).to.not.exist
 
             master.build()
 
-            master2 = new MasterDataResource(@dir)
+            master2 = new MasterDataResource(@dir).init()
             expect(master2.memories.device).to.be.instanceof MemoryResource
 
         after ->

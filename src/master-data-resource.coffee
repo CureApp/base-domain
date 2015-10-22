@@ -14,15 +14,30 @@ class MasterDataResource
 
     @constructor
     ###
-    constructor: (@masterDirPath) ->
+    constructor: (domainPath) ->
 
+        @masterDirPath = domainPath + '/master-data'
+        @masterJSONPath = @masterDirPath + '/all.json'
         @memories = {}
+
+
+
+    ###*
+    load data from directory(Node.js) or JSON (other environments)
+
+    @method init
+    @public
+    @chainable
+    ###
+    init: ->
 
         if not Ti? and not window? # = Node.js is expected
             @build()
 
         else
             @loadFromJSON()
+
+        @
 
 
     ###*
@@ -34,26 +49,15 @@ class MasterDataResource
     loadFromJSON: ->
 
         try
-            memories = Util.requireJSON @getMasterJSONPath()
+            memories = Util.requireJSON @masterJSONPath
 
             for modelName, plainMemory of memories
                 @memories[modelName] = MemoryResource.restore(plainMemory)
 
         catch e
             console.error("""
-                base-domain: [warning] MasterDataResource could not load from path '#{@getMasterJSONPath()}'
+                base-domain: [warning] MasterDataResource could not load from path '#{@masterJSONPath}'
             """)
-
-
-    ###*
-    Get path of the JSON file containing all master data
-
-    @method getMasterJSONPath
-    @return {String} path
-    ###
-    getMasterJSONPath: ->
-        @masterDirPath + '/all.json'
-
 
 
     ###*
@@ -81,7 +85,7 @@ class MasterDataResource
                 memory.create(value)
 
         fs = require 'fs'
-        fs.writeFileSync @getMasterJSONPath(), JSON.stringify @toPlainObject(), null, 1
+        fs.writeFileSync @masterJSONPath, JSON.stringify @toPlainObject(), null, 1
 
 
     ###*

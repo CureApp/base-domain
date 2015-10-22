@@ -57,8 +57,6 @@ class Facade
 
         if options.master
 
-            masterPath = @dirname + '/master-data'
-
             ###*
             instance of MasterDataResource
             Exist only when "master" property is given to Facade's option
@@ -67,7 +65,7 @@ class Facade
             @optional
             @readOnly
             ###
-            @master = new MasterDataResource(masterPath)
+            @master = new MasterDataResource(@dirname).init()
 
         @init()
 

@@ -6,7 +6,6 @@ require('es6-promise').polyfill()
 { camelize, requireFile } = require '../util'
 
 GeneralFactory = require './general-factory'
-MemoryResource = require '../memory-resource'
 MasterDataResource = require '../master-data-resource'
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
@@ -45,12 +44,6 @@ class Facade
 
 
     ###*
-    key: modelName, value: MemoryResource
-
-    @property {Object(MemoryResource)} memories
-    ###
-
-    ###*
     constructor
 
     @constructor
@@ -61,7 +54,6 @@ class Facade
     ###
     constructor: (options = {}) ->
         @classes = {}
-        @memories = {}
         @dirname = options.dirname ? '.'
 
         if options.master
@@ -166,18 +158,6 @@ class Facade
         Service = @require("#{name}-service")
 
         return new Service(params..., root ? @)
-
-
-    ###*
-    get or create a memory resource to save to @memories
-
-    @method useMemoryResource
-    @param {String} modelName
-    @return {MemoryResource}
-    ###
-    useMemoryResource: (modelName) ->
-
-        @memories[modelName] ?= new MemoryResource()
 
 
     ###*

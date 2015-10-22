@@ -23,6 +23,7 @@ describe 'AggregateRoot', ->
 
     class CardRepository extends LocalRepository
         @modelName: 'card'
+        @aggregateRoot: 'game'
 
     class Player extends Entity
         @properties:
@@ -33,6 +34,7 @@ describe 'AggregateRoot', ->
 
     class PlayerRepository extends LocalRepository
         @modelName: 'player'
+        @aggregateRoot: 'game'
 
 
     facade.addClass('game', Game)

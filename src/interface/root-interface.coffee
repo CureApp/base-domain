@@ -16,12 +16,6 @@ class RootInterface
     ###
 
     ###*
-    key: modelName, value: MemoryResource
-
-    @property {Object(MemoryResource)} memories
-    ###
-
-    ###*
     create a factory instance
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
@@ -66,12 +60,5 @@ class RootInterface
     @return {BaseModel}
     ###
 
-    ###*
-    get or create a memory resource to save to @memories
-
-    @method useMemoryResource
-    @param {String} modelName
-    @return {MemoryResource}
-    ###
 
 module.exports = RootInterface

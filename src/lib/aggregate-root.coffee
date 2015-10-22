@@ -101,6 +101,7 @@ class AggregateRoot extends Entity
 
     ###*
     get or create a memory resource to save to @memories
+    Only called from LocalRepository
 
     @method useMemoryResource
     @param {String} modelName

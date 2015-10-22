@@ -244,8 +244,9 @@ module.exports = HospitalDict
 # use in browser with browserify
 [browserify](http://browserify.org/) is a tool for packing a js project into one file for web browsers
 
-to enable base-domain's requiring system in browsers, use 'base-domain/ify' transformer.
+To enable base-domain's requiring system in browsers, use 'base-domain/ify' transformer.
 
 ```bash
 browserify -t [ base-domain/ify --dirname /path/to/domain/dir ] <entry-file>
+```
 

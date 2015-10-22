@@ -49,8 +49,7 @@ class Facade
     @constructor
     @param {String} [options]
     @param {String} [options.dirname="."] path where domain definition files are included
-    @param {String|Boolean} [options.master] if given, MasterDataResource is available.
-    if the it's string, it is parsed as a path to the master-data directory
+    @param {Boolean} [options.master] if true, MasterDataResource is enabled.
     ###
     constructor: (options = {}) ->
         @classes = {}
@@ -58,11 +57,7 @@ class Facade
 
         if options.master
 
-            if typeof options.master is 'string'
-                masterPath = options.master
-
-            else
-                masterPath = @dirname + '/master-data'
+            masterPath = @dirname + '/master-data'
 
             ###*
             instance of MasterDataResource

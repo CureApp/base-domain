@@ -8,8 +8,8 @@ describe 'MasterRepository', ->
     beforeEach ->
 
         @f = Facade.createInstance
-            master:  __dirname + '/../master-data'
-            dirname: __dirname + '/empty'
+            master:  true
+            dirname: __dirname + '/../empty'
 
         class Device extends Entity
             @properties:

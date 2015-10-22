@@ -6,6 +6,8 @@ module.exports = (grunt) ->
             spec:
                 src: [
                     'spec/lib/*.coffee'
+                    'spec/util.coffee'
+                    'spec/master-data-resource.coffee'
                 ]
                 options:
                     ui: 'bdd'

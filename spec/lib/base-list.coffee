@@ -4,7 +4,7 @@ Facade = facade.constructor
 
 MemoryResource = require '../../src/memory-resource'
 
-{ BaseList } = facade.constructor
+{ GeneralFactory, BaseList } = facade.constructor
 
 hobbies = null
 
@@ -38,15 +38,26 @@ describe 'BaseList', ->
         facade.addClass 'diary', Diary
         facade.addClass 'diary-repository', DiaryRepository
 
-        hobbyRepo    = facade.createRepository('hobby')
+        hobbyRepo = facade.createRepository('hobby')
 
         hobbies = (for name, i in ['keyboard', 'jogging', 'cycling']
             hobby = facade.createModel 'hobby', id: 3 - i, name: name
             hobbyRepo.save hobby
         )
 
+    it 'has itemFactory', ->
 
-    it '"loaded", "isItemEntity" are hidden properties whereas items is explicit', ->
+        class HobbyList extends BaseList
+            @getFacade: -> facade
+            getFacade:  -> facade
+            @itemModelName: 'hobby'
+
+        hobbyList = new HobbyList(items: hobbies)
+
+        expect(hobbyList.itemFactory).to.be.instanceof GeneralFactory
+
+
+    it '"loaded", "isItemEntity" and "itemFactory" are hidden properties whereas items is explicit', ->
 
         class HobbyList extends BaseList
             @getFacade: -> facade
@@ -61,6 +72,7 @@ describe 'BaseList', ->
         expect(explicitKeys).to.contain 'items'
         expect(explicitKeys).not.to.contain 'loaded'
         expect(explicitKeys).not.to.contain 'isItemEntity'
+        expect(explicitKeys).not.to.contain 'itemFactory'
 
 
     it 'can contain custom properties', ->
@@ -290,6 +302,25 @@ describe 'BaseList', ->
 
             hobbyList.add new Hobby(id: 0, name: 'abc'), new Hobby(id: 100, name: 'xyz')
 
+            expect(hobbyList.first()).to.have.property 'name', 'keyboard'
+            expect(hobbyList.last()).to.have.property 'name', 'xyz'
+
+
+        it 'appends plain objects', ->
+
+            class HobbyList extends BaseList
+                @getFacade: -> facade
+                getFacade:  -> facade
+                @itemModelName: 'hobby'
+                @properties:
+                    annualCost: @TYPES.NUMBER
+
+            hobbyList = new HobbyList(items: hobbies, annualCost: 2000)
+            Hobby = facade.getModel 'hobby'
+
+            hobbyList.add {id: 0, name: 'abc'}, {id: 100, name: 'xyz'}
+
+            expect(hobbyList).to.have.length 5
             expect(hobbyList.first()).to.have.property 'name', 'keyboard'
             expect(hobbyList.last()).to.have.property 'name', 'xyz'
 

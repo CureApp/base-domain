@@ -53,8 +53,11 @@ class BaseList extends Collection
     add: (models...) ->
 
         ItemClass = @getItemModelClass()
+        factory = @itemFactory
 
-        @items.push item for item in models when item instanceof ItemClass
+        for item in models
+            item = factory.createFromObject item if item not instanceof ItemClass
+            @items.push item
 
         @items.sort(@sort) if @sort
 
@@ -65,7 +68,7 @@ class BaseList extends Collection
     @method clear
     ###
     clear: ->
-        @items.pop() for i in [0...@length] 
+        @items.pop() for i in [0...@length]
         return
 
 

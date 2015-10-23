@@ -4,7 +4,7 @@ Facade = facade.constructor
 
 MemoryResource = require '../../src/memory-resource'
 
-{ BaseDict } = facade.constructor
+{ GeneralFactory, BaseDict } = facade.constructor
 
 hobbies = null
 
@@ -48,7 +48,18 @@ describe 'BaseDict', ->
         )
 
 
-    it '"loaded", "isItemEntity" are hidden properties whereas items is explicit', ->
+    it 'has itemFactory', ->
+
+        class HobbyDict extends BaseDict
+            @getFacade: -> facade
+            getFacade:  -> facade
+            @itemModelName: 'hobby'
+
+        hobbyDict = new HobbyDict(items: hobbies)
+
+        expect(hobbyDict.itemFactory).to.be.instanceof GeneralFactory
+
+    it '"loaded", "isItemEntity" and "itemFactory" are hidden properties whereas items is explicit', ->
 
         class HobbyDict extends BaseDict
             @getFacade: -> facade
@@ -63,6 +74,7 @@ describe 'BaseDict', ->
         expect(explicitKeys).to.contain 'items'
         expect(explicitKeys).not.to.contain 'loaded'
         expect(explicitKeys).not.to.contain 'isItemEntity'
+        expect(explicitKeys).not.to.contain 'itemFactory'
 
 
     it 'can contain custom properties', ->
@@ -361,10 +373,10 @@ describe 'BaseDict', ->
             expect(@hobbyDict.items.xxx).to.be.instanceof facade.getModel 'hobby'
 
 
-        it 'does not add non-item model', ->
+        it 'adds non-item model', ->
             newHobby = id: 4, name: 'yyyy'
             @hobbyDict.add(newHobby)
-            expect(@hobbyDict.items.yyyy).not.to.exist
+            expect(@hobbyDict.items.yyyy).to.be.instanceof facade.getModel 'hobby'
 
 
     describe 'remove', ->

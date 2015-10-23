@@ -33,7 +33,7 @@ class BaseDict extends Collection
 
 
     ###*
-    items: dictionary of keys - models 
+    items: dictionary of keys - models
 
     @property items
     @type Objects
@@ -114,8 +114,10 @@ class BaseDict extends Collection
     add: (items...) ->
 
         ItemClass = @getItemModelClass()
+        factory = @itemFactory
 
-        for item in items when item instanceof ItemClass
+        for item in items
+            item = factory.createFromObject item if item not instanceof ItemClass
             key = @constructor.key item
             @items[key] = item
 

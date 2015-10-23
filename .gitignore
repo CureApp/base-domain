@@ -26,3 +26,4 @@ all.json
 
 # test
 !test/base-domainify/node_modules
+test/base-domainify/packed.js

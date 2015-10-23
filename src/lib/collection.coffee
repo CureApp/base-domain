@@ -48,12 +48,6 @@ class Collection extends ValueObject
     ###
     items: null
 
-    ###*
-    loaded: is data loaded or not
-
-    @property loaded
-    @type Boolean
-    ###
 
 
     ###*
@@ -63,15 +57,37 @@ class Collection extends ValueObject
     ###
     constructor: (props = {}, root) ->
 
-        if not @constructor.itemModelName? 
+        if not @constructor.itemModelName?
             throw @error 'base-domain:itemModelNameRequired', "@itemModelName is not set, in class #{@constructor.name}"
 
         super(props, root)
 
-        Object.defineProperty @, 'loaded', value: false, writable: true
 
+        _itemFactory = null
         isItemEntity = @root.getModel(@constructor.itemModelName).isEntity
-        Object.defineProperty @, 'isItemEntity', value: isItemEntity, writable: false
+
+        Object.defineProperties @,
+            ###*
+            item factory
+            Created only one time. Be careful that @root is not changed even the collection's root is changed.
+
+            @property {FactoryInterface} itemFactory
+            ###
+            itemFactory:
+                get: -> _itemFactory ?= require('./general-factory').create(@constructor.itemModelName, @root)
+
+            ###*
+            loaded: is data loaded or not
+
+            @property loaded
+            @type Boolean
+            ###
+            loaded:
+                value: false, writable: true
+
+            isItemEntity:
+                value: isItemEntity, writable: false
+
 
         if props.items
             @setItems props.items
@@ -93,7 +109,7 @@ class Collection extends ValueObject
     set ids.
 
     @method setIds
-    @param {Array(String|Number)} ids 
+    @param {Array(String|Number)} ids
     ###
     setIds: (ids = []) ->
 
@@ -153,7 +169,7 @@ class Collection extends ValueObject
     ###*
     create plain object.
     if this dict contains entities, returns their ids
-    if this dict contains non-entity models, returns their plain objects 
+    if this dict contains non-entity models, returns their plain objects
 
     @method toPlainObject
     @return {Object} plainObject

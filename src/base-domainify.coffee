@@ -9,9 +9,8 @@ MasterDataResource = require './master-data-resource'
 
 class BaseDomainify
 
-    @moduleName = 'base-domain'
 
-    constructor: ->
+    constructor: (@moduleName = 'base-domain')->
 
         @initialCodeGenerated = false
 
@@ -63,7 +62,7 @@ class BaseDomainify
         _ = ' ' # spacer for indent
 
         coffeeCode = """
-            Facade = require '#{@constructor.moduleName}'
+            Facade = require '#{@moduleName}'
 
             Facade::init = ->
             #{_}return unless @dirname.match '#{basename}'\n

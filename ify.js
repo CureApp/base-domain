@@ -13,3 +13,5 @@ var baseDomainify = new BaseDomainify()
 module.exports = function(file, options) {
     return baseDomainify.run(file, options);
 };
+
+module.exports.BaseDomainify = BaseDomainify;

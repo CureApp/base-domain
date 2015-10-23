@@ -1,6 +1,7 @@
 node_modules
 .editorconfig
 spec
+test
 .releaseignore
 .bmp.yml
 npm-debug.log

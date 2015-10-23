@@ -23,3 +23,6 @@ doc
 
 # master data
 all.json
+
+# test
+!test/base-domainify/node_modules

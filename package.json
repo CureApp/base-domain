@@ -4,7 +4,8 @@
   "description": "simple module to help build Domain-Driven Design",
   "main": "dist/lib/facade.js",
   "scripts": {
-    "test": "grunt",
+    "test": "grunt && grunt build && npm run base-domainify-test",
+    "base-domainify-test": "cd test/base-domainify; ./test.sh; cd ../..",
     "bmp": "cc-bmp",
     "bmp-p": "cc-bmp -p",
     "bmp-m": "cc-bmp -m",
@@ -40,6 +41,8 @@
     "through": "^2.3.7"
   },
   "devDependencies": {
+    "browserify": "^11.2.0",
+    "coffeeify": "^1.1.0",
     "grunt": "^0.4.5",
     "grunt-contrib-coffee": "^0.13.0",
     "grunt-contrib-yuidoc": "^0.7.0",

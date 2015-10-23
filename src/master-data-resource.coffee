@@ -31,17 +31,22 @@ class MasterDataResource
     ###
     init: ->
 
-        if not Ti? and not window? # = Node.js is expected
+        if not Ti? and not window?
             @build()
 
         else
-            @loadFromJSON()
+            plainMemories = @loadFromJSON()
+
+            for modelName, plainMemory of plainMemories
+                @memories[modelName] = MemoryResource.restore(plainMemory)
 
         @
 
 
     ###*
     load data from JSON file
+    This implementation is mainly for Titanium.
+    Overwritten by base-domainify when browserify packs into one package.
 
     @method loadFromJSON
     @private
@@ -49,10 +54,7 @@ class MasterDataResource
     loadFromJSON: ->
 
         try
-            memories = Util.requireJSON @masterJSONPath
-
-            for modelName, plainMemory of memories
-                @memories[modelName] = MemoryResource.restore(plainMemory)
+            return Util.requireJSON @masterJSONPath
 
         catch e
             console.error("""

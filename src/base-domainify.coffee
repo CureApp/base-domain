@@ -1,7 +1,11 @@
 
 through = require 'through'
 fs      = require 'fs'
+path    = require 'path'
 coffee  = require 'coffee-script'
+require('coffee-script/register')
+
+MasterDataResource = require './master-data-resource'
 
 class BaseDomainify
 
@@ -21,11 +25,19 @@ class BaseDomainify
     ###
     run: (file, options = {}) ->
 
-        @dirname = options.dirname
-
-        @throwError() if not @dirname
-
         return through() if @initialCodeGenerated
+
+        { dirname } = options
+
+        @throwError() if not dirname
+
+        if path.isAbsolute dirname
+            @absolutePath = dirname
+        else
+            @absolutePath = process.cwd() + '/' + dirname
+
+        dir = path.dirname(file)
+        @relativePath = path.relative(dir, dirname)
 
         initialCode = @getInitialCode(options.dirname)
 
@@ -38,7 +50,6 @@ class BaseDomainify
         return through write, end
 
 
-
     ###*
     get CoffeeScript code of adding addClass methods to all domain files
 
@@ -48,7 +59,7 @@ class BaseDomainify
     ###
     getInitialCode: ->
 
-        basename = require('path').basename @dirname
+        basename = require('path').basename @relativePath
         _ = ' ' # spacer for indent
 
         coffeeCode = """
@@ -58,19 +69,48 @@ class BaseDomainify
             #{_}return unless @dirname.match '#{basename}'\n
         """
 
+        if masterJSONPath = @getMasterJSONPath()
+            coffeeCode += """
+                #{_}@master?.loadFromJSON = -> require('#{masterJSONPath}')\n
+            """
+
         for filename in @getFiles()
 
-            path = @dirname + '/' + filename
+            path = @relativePath + '/' + filename
             name = filename.split('.')[0]
 
             coffeeCode += """
                 #{_}@addClass '#{name}', require('#{path}')\n
             """
 
-
         coffeeCode += "#{_}return\n"
 
         return coffee.compile(coffeeCode, bare: true)
+
+
+    ###*
+    @method getCodeOfMasterData
+    @private
+    @return {String} path
+    ###
+    getMasterJSONPath: ->
+
+        master = new MasterDataResource(@absolutePath)
+
+        try
+            master.build()
+
+            { masterJSONPath } = master
+
+            return '' if not fs.existsSync(masterJSONPath)
+
+            relPath = new MasterDataResource(@relativePath).masterJSONPath
+
+            return relPath
+
+        catch e
+            return ''
+
 
 
 
@@ -85,10 +125,12 @@ class BaseDomainify
 
         fileInfoDict = {}
 
-        for filename in fs.readdirSync(@dirname)
+        for filename in fs.readdirSync(@absolutePath)
 
-            klass = require @dirname + '/' + filename
             [ name, ext ] = filename.split('.')
+            continue if ext not in ['js', 'coffee']
+
+            klass = require @absolutePath + '/' + filename
 
             continue if typeof klass.getName isnt 'function'
             continue if klass.getName() isnt name

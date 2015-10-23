@@ -65,9 +65,10 @@ class Facade
             @optional
             @readOnly
             ###
-            @master = new MasterDataResource(@dirname).init()
+            @master = new MasterDataResource(@dirname)
 
         @init()
+        @master?.init()
 
 
     # for base-domainify. keep it empty

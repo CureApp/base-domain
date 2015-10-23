@@ -197,7 +197,7 @@ class Collection extends ValueObject
     ###*
     get item model
     @method getItemModelClass
-    @return {BaseModel}
+    @return {Function}
     ###
     getItemModelClass: ->
         @root.getModel(@constructor.itemModelName)

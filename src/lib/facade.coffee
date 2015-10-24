@@ -158,7 +158,7 @@ class Facade
 
     @method createService
     @param {String} name
-    @return {BaseRepository}
+    @return {BaseService}
     ###
     createService: (name, params...) ->
         @__createService(name, params..., @)

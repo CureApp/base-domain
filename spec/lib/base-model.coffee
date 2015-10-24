@@ -1,45 +1,41 @@
 
-facade = require('../create-facade').create('domain')
-
-{ BaseModel, Entity, BaseList } = facade.constructor
-
-Diary  = facade.getModel 'diary'
-Member = facade.getModel 'member'
-Hobby  = facade.getModel 'hobby'
-memberFactory = facade.createFactory('member')
-diaryFactory = facade.createFactory('diary')
-hobbyFactory = facade.createFactory('hobby')
-
-
-member = memberFactory.createFromObject
-    id: 12
-    firstName: 'Shin'
-    age: 29
-    registeredAt: new Date()
-    hobbies: [
-        { id: 1, name: 'keyboard' }
-        { id: 2, name: 'ingress' }
-        { id: 3, name: 'Shogi' }
-    ]
-
+{ BaseModel, Entity, BaseList } = require('../base-domain')
 
 describe 'BaseModel', ->
 
-    it 'is created with object', ->
+    beforeEach ->
+
+        @facade = require('../create-facade').create('domain')
+
+        @member = @facade.createModel 'member',
+            id: 12
+            firstName: 'Shin'
+            age: 29
+            registeredAt: new Date()
+            hobbies: [
+                { id: 1, name: 'keyboard' }
+                { id: 2, name: 'ingress' }
+                { id: 3, name: 'Shogi' }
+            ]
+
+
+    it 'is constructed with object and root(facade)', ->
+
+        facade = require('../create-facade').create()
 
         class Hospital extends BaseModel
-
-            @getFacade: -> facade
-            getFacade : -> facade
 
             @properties:
                 name: @TYPES.STRING
                 beds: @TYPES.NUMBER
 
-        hospital = new Hospital(name: 'shinout clinic')
+        facade.addClass(Hospital)
+
+        hospital = new Hospital(name: 'shinout clinic', facade)
 
         expect(hospital).to.have.property 'name', 'shinout clinic'
         expect(hospital).not.to.have.property 'beds'
+        expect(hospital.root).to.equal facade
 
 
     it 'can define sub entity with idPropName', ->
@@ -49,21 +45,20 @@ describe 'BaseModel', ->
         class Hospital extends Entity
             @properties:
                 name: @TYPES.STRING
-        f.addClass 'hospital', Hospital
+
+        f.addClass Hospital
 
         class Patient extends BaseModel
             @properties:
-                hospital: @TYPES.MODEL 'hospital', 'type'
+                hospital: @TYPES.MODEL 'hospital', 'hospital-id'
+
         f.addClass 'patient', Patient
 
-        Patient  = f.getModel('patient')
-        Hospital = f.getModel('hospital')
+        patient  = new Patient(null, f)
+        hospital = new Hospital(id: 123, f)
+        patient.set 'hospital', hospital
 
-        p = new Patient()
-        h = new Hospital(id: 123)
-        p.set 'hospital', h
-
-        expect(p.type).to.equal 123
+        expect(patient['hospital-id']).to.equal 123
 
 
 
@@ -92,7 +87,7 @@ describe 'BaseModel', ->
 
         it 'returns plain object without relational models (has many)', ->
 
-            plainMember = member.toPlainObject()
+            plainMember = @member.toPlainObject()
 
             expect(plainMember.registeredAt).to.be.instanceof Date
             expect(plainMember.id).to.equal 12
@@ -100,12 +95,15 @@ describe 'BaseModel', ->
             expect(plainMember.age).to.equal 29
             expect(plainMember.hobbies.ids).to.eql [1,2,3]
 
+
+
         it 'returns plain object without relational models (has one / belongs to)', ->
-            diary = diaryFactory.createFromObject
-                title : 'crazy about room335'
-                comment: 'progression of room335 is wonderful'
-                author: member
-                date  : new Date()
+
+            diary = @facade.createModel 'diary',
+                title   : 'crazy about room335'
+                comment : 'progression of room335 is wonderful'
+                author  : @member
+                date    : new Date()
 
             plainDiary = diary.toPlainObject()
 
@@ -116,6 +114,7 @@ describe 'BaseModel', ->
             expect(plainDiary.authorId).not.to.exist
             expect(plainDiary.memberId).to.equal 12
 
+
         it 'returns plain object without tmp values', ->
 
             class Medicine extends BaseModel
@@ -124,10 +123,7 @@ describe 'BaseModel', ->
                     abc : @TYPES.TMP
                     obj : @TYPES.TMP 'OBJECT'
 
-                getFacade: -> facade
-                @getFacade: -> facade
-
-            medicine = new Medicine(name: 'hoge', abc: 'yeah', obj: key: 'value')
+            medicine = new Medicine({ name: 'hoge', abc: 'yeah', obj: key: 'value' }, @facade)
 
             expect(medicine).to.have.property 'name', 'hoge'
             expect(medicine).to.have.property 'abc', 'yeah'
@@ -144,14 +140,15 @@ describe 'BaseModel', ->
     describe 'set', ->
 
         it 'set relation and its ids (has one / belongs to) when entity prop is given', ->
-            diary = diaryFactory.createFromObject
+
+            diary = @facade.createModel 'diary',
                 title : 'crazy about room335'
                 comment: 'progression of room335 is wonderful'
                 date  : new Date()
 
-            diary.set('coauthor', member)
+            diary.set('coauthor', @member)
 
-            expect(diary.coauthor).to.equal member
+            expect(diary.coauthor).to.equal @member
             expect(diary.coauthorId).to.equal 12
 
 
@@ -160,11 +157,11 @@ describe 'BaseModel', ->
 
         it 'unset relation and its id when entity prop is given', ->
 
-            diary = diaryFactory.createFromObject
+            diary = @facade.createModel 'diary',
                 title : 'crazy about room335'
                 comment: 'progression of room335 is wonderful'
                 date  : new Date()
-                author : member
+                author : @member
 
             diary.unset('author')
 
@@ -176,7 +173,7 @@ describe 'BaseModel', ->
 
         it 'includes all submodels', (done) ->
 
-            mem = memberFactory.createFromObject
+            mem = @facade.createModel 'member',
                 id: 11
                 hobbies: [1,2,3]
 
@@ -193,7 +190,7 @@ describe 'BaseModel', ->
 
         it 'overrides values', ->
 
-            mem = memberFactory.createFromObject
+            mem = @facade.createModel 'member',
                 id: 11
                 hobbies: [1,2,3]
                 age: 30
@@ -208,12 +205,12 @@ describe 'BaseModel', ->
 
         it 'overrides values', ->
 
-            mem = facade.createModel 'member',
+            mem = @facade.createModel 'member',
                 id: 'shin'
                 hobbies: [1,2,3]
                 age: 30
 
-            diary = facade.createModel 'diary',
+            diary = @facade.createModel 'diary',
                 id: '2015/1/12'
                 comment: 'sample'
                 author: mem
@@ -222,5 +219,4 @@ describe 'BaseModel', ->
 
             expect(diary.memberId).to.equal '123'
             expect(diary.author).to.not.exist
-
 

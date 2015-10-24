@@ -1,13 +1,17 @@
 
-facade = require('../create-facade').create()
-Facade = facade.constructor
+Facade = require '../base-domain'
+
+{ Entity, ValueObject, BaseList } = Facade
 
 ModelProps = require '../../src/lib/model-props'
 
 describe 'ModelProps', ->
 
-    before ->
-        class A extends Facade.Entity
+    beforeEach ->
+
+        @facade = require('../create-facade').create()
+
+        class A extends Entity
             @properties:
                 str        : @TYPES.STRING
                 num        : @TYPES.NUMBER
@@ -21,16 +25,15 @@ describe 'ModelProps', ->
                 bs         : @TYPES.MODEL_LIST 'b'
                 cs         : @TYPES.MODEL_LIST 'c'
 
-        facade.addClass('a', A)
-        facade.addClass('b', class B extends Facade.Entity)
-        facade.addClass('c', class C extends Facade.ValueObject)
-        facade.addClass('b-list', class BList extends Facade.BaseList)
-        facade.addClass('c-list', class CList extends Facade.BaseList)
+        @facade.addClass('a', A)
+        @facade.addClass('b', class B extends Entity)
+        @facade.addClass('c', class C extends ValueObject)
+        @facade.addClass('b-list', class BList extends BaseList)
+        @facade.addClass('c-list', class CList extends BaseList)
 
-        @prop = facade.getModel('a').properties
-        @facade = facade
+        @prop = @facade.getModel('a').properties
 
-        @modelProps = new ModelProps(A.properties, facade)
+        @modelProps = new ModelProps('a', A.properties, @facade)
 
 
     it 'has dates collecting prop of DATE, CREATED_AT and UPDATED_AT', ->

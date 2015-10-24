@@ -15,7 +15,7 @@ class Includer
     constructor: (@model, @modelPool = {}) ->
 
         @ModelClass = @model.constructor
-        @modelProps = @ModelClass.getModelProps()
+        @modelProps = @model.getFacade().getModelProps(@ModelClass.getName())
 
         { @root } = @model
 

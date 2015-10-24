@@ -53,7 +53,7 @@ describe 'AggregateRoot', ->
             card = game.createModel('card', name: 'road1')
 
             expect(card.root).to.equal game
-            expect(game.root).to.equal game
+            expect(game.root).to.equal facade
 
 
 

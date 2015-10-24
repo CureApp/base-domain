@@ -67,7 +67,7 @@ describe 'Facade', ->
 
     describe 'addClass', ->
 
-        it 'adds copy of the given class', ->
+        it 'registers the given class', ->
 
             f = Facade.createInstance()
             class Hobby extends Facade.Entity
@@ -77,9 +77,22 @@ describe 'Facade', ->
 
             FaHobby = f.getModel('hobby')
 
-            expect(FaHobby).not.to.equal Hobby
-            expect(Hobby.abc).to.be.true
-            expect(FaHobby.abc).to.be.true
+            expect(FaHobby).to.equal Hobby
+            expect(f.classes.hobby).to.equal Hobby
+
+
+        it 'registers the given class, without name', ->
+
+            f = Facade.createInstance()
+            class Hobby extends Facade.Entity
+                @abc: true
+
+            f.addClass(Hobby)
+
+            FaHobby = f.getModel('hobby')
+
+            expect(FaHobby).to.equal Hobby
+            expect(f.classes.hobby).to.equal Hobby
 
 
         it 'cannot register class with the invalid name', ->
@@ -101,51 +114,6 @@ describe 'Facade', ->
             expect(-> f.addClass('xxx', CamelCaseClass, true)).not.to.throw Facade.DomainError
 
             expect(f.getModel('xxx')).to.have.property 'abc', true
-
-
-        it 'also registers custom parent classes', (done) ->
-
-            class A extends Facade.Entity
-            class B extends A
-
-            f = Facade.createInstance()
-
-            originalRequire = f.require
-            f.require = (name) ->
-                f.require = originalRequire
-                if name is 'a' then done() else done('"a" should be required')
-
-            f.addClass('b', B)
-
-
-        it 'copies class which extends its parent class', ->
-
-            class A extends Facade.Entity
-            class B extends A
-
-            f = Facade.createInstance()
-            f.addClass('a', A)
-            f.addClass('b', B)
-
-            CopiedB = f.getModel('b')
-            b = new CopiedB()
-
-            expect(b).to.be.instanceof f.getModel('a')
-            expect(b).not.to.be.instanceof B
-            expect(b).not.to.be.instanceof A
-
-
-        it 'generates class with camelized name when skipNameValidation is true', ->
-
-            class A extends Facade.Entity
-
-            f = Facade.createInstance()
-            f.addClass('awesome-entity', A, true)
-
-            GeneratedClass = f.getModel('awesome-entity')
-            expect(GeneratedClass.name).to.equal 'AwesomeEntity'
-            expect(GeneratedClass.getName()).to.equal 'awesome-entity'
-
 
 
 

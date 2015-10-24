@@ -30,8 +30,6 @@ class AggregateRoot extends Entity
 
         super
 
-        @root = @
-
 
     ###*
     create a factory instance

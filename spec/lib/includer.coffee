@@ -1,16 +1,17 @@
 
-facade = require('../create-facade').create()
-Facade = facade.constructor
-{ ValueObject, Entity, BaseAsyncRepository, BaseSyncRepository } = facade.constructor
+Facade = require '../base-domain'
+
+{ ValueObject, Entity, BaseAsyncRepository, BaseSyncRepository } = Facade
+
 MemoryResource = require '../../src/memory-resource'
-
-
 Includer = require '../../src/lib/includer'
 
 
 describe 'Includer', ->
 
     before (done) ->
+
+        @facade = require('../create-facade').create()
 
         class A extends ValueObject
             @properties:
@@ -32,14 +33,14 @@ describe 'Includer', ->
             @properties:
                 name: @TYPES.STRING
 
-        facade.addClass('a', A)
-        facade.addClass('b', B)
-        facade.addClass('c', C)
-        facade.addClass('b-repository', BRepository)
-        facade.addClass('c-repository', CRepository)
+        @facade.addClass(A)
+        @facade.addClass(B)
+        @facade.addClass(C)
+        @facade.addClass(BRepository)
+        @facade.addClass(CRepository)
 
-        bRepo = facade.createRepository('b')
-        cRepo = facade.createRepository('c')
+        bRepo = @facade.createRepository('b')
+        cRepo = @facade.createRepository('c')
 
         cRepo.save(id: 'xxx', name: 'shin')
         cRepo.save(id: 'yyy', name: 'satake')
@@ -52,7 +53,7 @@ describe 'Includer', ->
 
     beforeEach ->
 
-        @a = facade.createModel('a', { bId: 'xxx', cId: 'xxx' }, include: null)
+        @a = @facade.createModel('a', { bId: 'xxx', cId: 'xxx' }, include: null)
 
     describe 'constructor', ->
 
@@ -109,16 +110,16 @@ describe 'Includer', ->
 
         before ->
 
-            class Main extends Facade.BaseModel
+            class Main extends ValueObject
                 @properties:
                     name: @TYPES.STRING
                     sub: @TYPES.MODEL 'sub-item', 'subId'
 
-            class SubItem extends Facade.Entity
+            class SubItem extends Entity
                 @properties:
                     name: @TYPES.STRING
 
-            class SubItemRepository extends Facade.BaseRepository
+            class SubItemRepository extends BaseAsyncRepository
                 @modelName: 'sub-item'
                 get: (id) ->
                     item = @getFacade().createModel('sub-item', {id: id, name: 'mock'})

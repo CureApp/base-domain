@@ -15,44 +15,43 @@ gives them @getFacade() method.
 class Base extends EventEmitter
 
 
-    ###*
-    @property {RootInterface} root
-    ###
     constructor: (root) ->
 
-        if root and not root.constructor.isRoot
+        if not root?.constructor.isRoot
             console.error("""
-                base-domain: [warning] constructor of '#{@constructor.name}' is given non-root object.
-                    Use Facade instead.
+                base-domain: [warning] constructor of '#{@constructor.name}' was not given RootInterface (e.g. facade).
+                    @root, @getFacade() is unavailable.
             """)
             root = null
 
+        ###*
+        @property {RootInterface} root
+        ###
         Object.defineProperty @, 'root',
-            value: root ? @getFacade()
+            value: root
             writable: true
+
+        # add class to facade, if not registered.
+        if root
+            facade = @getFacade()
+            if not facade.hasClass @constructor.getName()
+                facade.addClass @constructor
 
 
     ###*
-    get facade
-
-    the implementation is in Facade#requre()
-
+    Get facade
 
     @method getFacade
     @return {Facade}
     ###
-    getFacade : ->
-        throw new DomainError 'base-domain:facadeNotRegistered', """
-            Facade is not created yet, or you required domain classes not from Facade.
-            Require domain classes, instances by
+    getFacade: ->
+        if not @root?
+            throw @error 'base-domain:noFacadeAssigned', """'#{@constructor.name}' does not have @root.
+            Give it via constructor or create instance via Facade.
+            """
 
-                facade.getModel()
-                facade.createModel()
-                facade.createFactory()
-                facade.createRepository()
+        @root.getFacade()
 
-            to attach getFacade() method to them.
-        """
 
     ###*
     emit event at next tick

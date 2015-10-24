@@ -7,7 +7,7 @@ parses model properties and classifies them
 ###
 class ModelProps
 
-    constructor: (properties, facade) ->
+    constructor: (@modelName, properties, facade) ->
 
         ###*
         property whose type is CREATED_AT
@@ -91,6 +91,19 @@ class ModelProps
                 when 'MODEL', 'MODEL_LIST', 'MODEL_DICT'
                     @models.push prop
                     @modelDic[prop] = true
+
+                    if not facade?
+
+                        console.error("""
+                            base-domain:ModelProps could not parse property info of '#{prop}'.
+                            (@TYPES.#{typeInfo.name}, model=#{typeInfo.model}.)
+                            Construct original model '#{@modelName}' with RootInterface.
+
+                                new Model(obj, facade)
+                                facade.createModel('#{@modelName}', obj)
+
+                        """)
+                        continue
 
                     if facade.getModel(typeInfo.model).isEntity
                         @entities.push prop

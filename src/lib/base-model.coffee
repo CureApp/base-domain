@@ -1,14 +1,11 @@
 
 
 TypeInfo = require './type-info'
-ModelProps = require './model-props'
 Base = require './base'
+ModelProps = require './model-props'
 
 ###*
 Base model class of DDD pattern.
-
-the parent "Base" class just simply gives a @getFacade() method.
-
 
 @class BaseModel
 @extends Base
@@ -81,16 +78,18 @@ class BaseModel extends Base
         return properties
 
 
-    ###*
-    get an instance of ModelProps, which summarizes properties of this class
 
+    ###*
     @method getModelProps
-    @public
+    @private
     @return {ModelProps}
     ###
-    @_props: null
-    @getModelProps: ->
-        @_props ?= new ModelProps @properties, @::getFacade()
+    getModelProps: ->
+        if @root?
+            @getFacade().getModelProps(@constructor.getName())
+
+        else
+            new ModelProps(@constructor.getName(), @constructor.properties, null)
 
 
     ###*
@@ -116,7 +115,7 @@ class BaseModel extends Base
 
         @[prop] = value
 
-        modelProps = @constructor.getModelProps()
+        modelProps = @getModelProps()
 
         # set entity prop
         if modelProps.isEntity(prop)
@@ -146,7 +145,7 @@ class BaseModel extends Base
 
         @[prop] = undefined
 
-        modelProps = @constructor.getModelProps()
+        modelProps = @getModelProps()
 
         if modelProps.isEntity(prop)
             typeInfo = modelProps.getTypeInfo(prop)
@@ -181,7 +180,7 @@ class BaseModel extends Base
 
         plainObject = {}
 
-        modelProps = @constructor.getModelProps()
+        modelProps = @getModelProps()
 
         for own prop, value of @
 

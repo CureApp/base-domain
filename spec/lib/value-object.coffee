@@ -1,18 +1,11 @@
 
-facade = require('../create-facade').create()
-
-ValueObject = facade.constructor.ValueObject
+{ ValueObject } = require '../base-domain'
 
 describe 'Entity', ->
 
     it 'has isEntity, false', ->
 
         class Schedule extends ValueObject
-
-
-        facade.addClass('schedule', Schedule)
-
-        Schedule = facade.getModel 'schedule'
 
         expect(Schedule).to.have.property 'isEntity', false
 
@@ -21,21 +14,21 @@ describe 'Entity', ->
 
         it 'checks deep equality', ->
 
+            facade = require('../create-facade').create()
+
             class Schedule extends ValueObject
                 @properties:
                     title   : @TYPES.STRING
                     date    : @TYPES.DATE
                     visited : @TYPES.BOOLEAN
 
-            facade.addClass('schedule', Schedule)
-
-            Schedule = facade.getModel 'schedule'
+            facade.addClass(Schedule)
 
             date = new Date()
 
-            scheduleA = new Schedule(title: 'abc', date: date, visited: false)
-            scheduleB = new Schedule(title: 'abc', date: date, visited: false)
-            scheduleC = new Schedule(title: 'abcd', date: date, visited: false)
+            scheduleA = facade.createModel('schedule', title: 'abc', date: date, visited: false)
+            scheduleB = facade.createModel('schedule', title: 'abc', date: date, visited: false)
+            scheduleC = facade.createModel('schedule', title: 'abcd', date: date, visited: false)
 
             expect(scheduleA.equals scheduleB).to.be.true
             expect(scheduleA.equals scheduleC).to.be.false

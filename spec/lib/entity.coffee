@@ -24,13 +24,11 @@ describe 'Entity', ->
 
             facade.addClass('schedule', Schedule)
 
-            Schedule = facade.getModel 'schedule'
-
             date = new Date()
 
-            scheduleA = new Schedule(id: 'abc', title: 'abc', date: date, visited: false)
-            scheduleB = new Schedule(id: 'abcd', title: 'abc', date: date, visited: false)
-            scheduleC = new Schedule(id: 'abc', title: 'abcd', date: date, visited: false)
+            scheduleA = new Schedule(id: 'abc', title: 'abc', date: date, visited: false, facade)
+            scheduleB = new Schedule(id: 'abcd', title: 'abc', date: date, visited: false, facade)
+            scheduleC = new Schedule(id: 'abc', title: 'abcd', date: date, visited: false, facade)
 
             expect(scheduleA.equals scheduleB).to.be.false
             expect(scheduleA.equals scheduleC).to.be.true

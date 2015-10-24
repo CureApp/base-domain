@@ -71,10 +71,10 @@ class GeneralFactory
 
     @constructor
     @param {String} modelName
-    @param {RootInterface} root 
+    @param {RootInterface} root
     ###
     constructor: (@modelName, @root) ->
-        @modelProps = @getModelClass().getModelProps()
+        @modelProps = @root.getFacade().getModelProps(@modelName)
 
 
     ###*
@@ -191,7 +191,7 @@ class GeneralFactory
     @method createDict
     @public
     @param {String} dictModelName model name of dict
-    @param {any} val 
+    @param {any} val
     @param {Object} [options]
     @param {Object} [options.include] options to pass to Includer
     @param {Object} [options.include.async=false] include sub-entities asynchronously if true.
@@ -208,7 +208,7 @@ class GeneralFactory
     @method createCollection
     @private
     @param {String} collModelName model name of collection
-    @param {any} val 
+    @param {any} val
     @param {Object} [options]
     @return {BaseDict} dict
     ###

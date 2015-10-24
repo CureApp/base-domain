@@ -1,105 +1,49 @@
 
-facade = require('../create-facade').create()
-Facade = facade.constructor
+Facade = require '../base-domain'
+
+{ GeneralFactory, BaseDict, Entity, ValueObject,
+    BaseSyncRepository, BaseAsyncRepository } = Facade
 
 MemoryResource = require '../../src/memory-resource'
 
-{ GeneralFactory, BaseDict } = facade.constructor
-
-hobbies = null
-
-
 describe 'BaseDict', ->
 
-    before ->
+    beforeEach ->
 
-        class Hobby extends Facade.Entity
+        @facade = require('../create-facade').create()
+
+        class Hobby extends Entity
             @properties:
                 name: @TYPES.STRING
 
-        class NonEntity extends Facade.ValueObject
+        class NonEntity extends ValueObject
             @properties:
                 name: @TYPES.STRING
 
-        class HobbyRepository extends Facade.BaseSyncRepository
+        class HobbyRepository extends BaseSyncRepository
             @modelName: 'hobby'
             client: new MemoryResource()
 
-        class Diary extends Facade.Entity
+        class Diary extends Entity
             @properties:
                 name: @TYPES.STRING
 
-        class DiaryRepository extends Facade.BaseAsyncRepository
+        class DiaryRepository extends BaseAsyncRepository
             @modelName: 'diary'
             client: new MemoryResource()
 
+        @facade.addClass Hobby
+        @facade.addClass NonEntity
+        @facade.addClass HobbyRepository
+        @facade.addClass Diary
+        @facade.addClass DiaryRepository
 
-        facade.addClass 'hobby', Hobby
-        facade.addClass 'non-entity', NonEntity
-        facade.addClass 'hobby-repository', HobbyRepository
-        facade.addClass 'diary', Diary
-        facade.addClass 'diary-repository', DiaryRepository
+        @hobbyRepo = @facade.createRepository('hobby')
 
-        hobbyRepo    = facade.createRepository('hobby')
-
-        hobbies = (for name, i in ['keyboard', 'jogging', 'cycling']
-            hobby = facade.createModel 'hobby', id: 3 - i, name: name
-            hobbyRepo.save hobby
+        @hobbies = (for name, i in ['keyboard', 'jogging', 'cycling']
+            hobby = @facade.createModel 'hobby', id: 3 - i, name: name
+            @hobbyRepo.save hobby
         )
-
-
-    it 'has itemFactory', ->
-
-        class HobbyDict extends BaseDict
-            @getFacade: -> facade
-            getFacade:  -> facade
-            @itemModelName: 'hobby'
-
-        hobbyDict = new HobbyDict(items: hobbies)
-
-        expect(hobbyDict.itemFactory).to.be.instanceof GeneralFactory
-
-    it '"loaded", "isItemEntity" and "itemFactory" are hidden properties whereas items is explicit', ->
-
-        class HobbyDict extends BaseDict
-            @getFacade: -> facade
-            getFacade:  -> facade
-            @itemModelName: 'hobby'
-
-        hobbyDict = new HobbyDict(items: hobbies)
-
-        explicitKeys = Object.keys(hobbyDict)
-
-        expect(explicitKeys).to.have.length 1
-        expect(explicitKeys).to.contain 'items'
-        expect(explicitKeys).not.to.contain 'loaded'
-        expect(explicitKeys).not.to.contain 'isItemEntity'
-        expect(explicitKeys).not.to.contain 'itemFactory'
-
-
-    it 'can contain custom properties', ->
-
-        class HobbyDict extends BaseDict
-            @getFacade: -> facade
-            getFacade:  -> facade
-            @itemModelName: 'hobby'
-            @properties:
-                annualCost: @TYPES.NUMBER
-
-        hobbyDict = new HobbyDict(items: hobbies, annualCost: 2000)
-
-        expect(hobbyDict).to.have.property 'annualCost', 2000
-
-        explicitKeys = Object.keys(hobbyDict)
-        expect(explicitKeys).to.contain 'annualCost'
-
-    it 'throws error if itemModelName is not set', ->
-        class HobbyDict extends BaseDict
-            @getFacade: -> facade
-            getFacade:  -> facade
-
-        expect(-> new HobbyDict()).to.throw Facade.DomainError
-
 
 
     describe '@keys', ->
@@ -107,40 +51,29 @@ describe 'BaseDict', ->
         it 'originally returns item.id', ->
 
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            dict = new HobbyDict().setItems(hobbies)
-
-            console.log dict.items
+            dict = new HobbyDict(null, @facade).setItems(@hobbies)
 
             expect(dict.ids).to.eql [1,2,3]
 
 
     describe 'ids', ->
 
-        class HobbyDict extends BaseDict
-            @getFacade: -> facade
-            getFacade:  -> facade
-            @itemModelName: 'hobby'
+        beforeEach ->
 
-        class NonEntityDict extends BaseDict
-            @getFacade: -> facade
-            getFacade:  -> facade
-            @itemModelName: 'non-entity'
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
 
-        it 'get array when the item is Entity', ->
-            hobbyDict = new HobbyDict()
-            expect(hobbyDict.ids).to.be.instanceof Array
+            class NonEntityDict extends BaseDict
+                @itemModelName: 'non-entity'
 
-        it 'get null when the item is not Entity', ->
-            nonEntityDict = new NonEntityDict()
-            expect(nonEntityDict.ids).to.be.null
+            @facade.addClass HobbyDict
+            @facade.addClass NonEntityDict
 
         it 'get array of ids when the item is Entity', ->
 
-            hobbyDict = new HobbyDict(items: hobbies)
+            hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
             expect(hobbyDict.ids).to.deep.equal [1, 2, 3]
 
 
@@ -149,11 +82,9 @@ describe 'BaseDict', ->
         it 'returns deeply-equal array to items', ->
 
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            hobbyDict = new HobbyDict(items: hobbies)
+            hobbyDict = new HobbyDict(items: @hobbies, @facade)
 
             expect(hobbyDict).to.have.length 3
 
@@ -161,115 +92,35 @@ describe 'BaseDict', ->
             expect(arr).to.have.length 3
 
             for hobby in arr
-                expect(hobbies).to.include hobby
+                expect(@hobbies).to.include hobby
 
 
-    describe "on('loaded')", ->
+    describe 'length', ->
 
-        before (done) ->
-
-            facade.createRepository('diary').save(id: 'abc', name: 'xxx').then -> done()
-
-        it 'loaded after loaded when ids is given in constructor', (done) ->
-
-            class DiaryDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
-                @itemModelName: 'diary'
-
-            diaryDict = new DiaryDict(ids: ['abc'])
-
-            expect(diaryDict.loaded).to.be.false
-            expect(diaryDict).to.have.length 0
-            expect(diaryDict.ids).to.have.length 0
-
-            diaryDict.on 'loaded', ->
-                expect(diaryDict.loaded).to.be.true
-                expect(diaryDict).to.have.length 1
-                expect(diaryDict.ids).to.have.length 1
-                expect(diaryDict.ids[0]).to.equal 'abc'
-                done()
-
-        it 'executed after event registered when array is given in constructor', (done) ->
+        it 'is the number of items', ->
 
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            hobbyDict = new HobbyDict(items: hobbies)
-
-            hobbyDict.on 'loaded', ->
-                expect(hobbyDict.loaded).to.be.true
-                expect(hobbyDict.items).to.have.property 1
-                expect(hobbyDict.items).to.have.property 2
-                expect(hobbyDict.items).to.have.property 3
-                done()
-
-
-    describe 'toPlainObject', ->
-
-        it 'returns object with ids when item is entity', ->
-
-            class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
-                @itemModelName: 'hobby'
-
-            hobbyDict = new HobbyDict(items: hobbies)
-            plain = hobbyDict.toPlainObject()
-
-            expect(plain).to.have.property 'ids'
-            expect(plain).not.to.have.property 'items'
-
-
-        it 'returns object with items when item is non-entity', ->
-
-            class NonEntityDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
-                @itemModelName: 'non-entity'
-
-            nonEntities = (for name, i in ['keyboard', 'jogging', 'cycling']
-                facade.createModel 'non-entity', id: 3 - i, name: name
-            )
-
-            nonEntityDict = new NonEntityDict(items: nonEntities)
-            plain = nonEntityDict.toPlainObject()
-
-            expect(plain).not.to.have.property 'ids'
-            expect(plain).to.have.property 'items'
-            expect(plain.items).to.be.instanceof Array
-            expect(plain.items).to.have.length 3
-
-
-        it 'returns object with custom properties', ->
-
-            class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
-                @itemModelName: 'hobby'
-                @properties:
-                    annualCost: @TYPES.NUMBER
-
-            hobbyDict = new HobbyDict(items: hobbies, annualCost: 2000)
-
-            expect(hobbyDict.toPlainObject()).to.have.property 'ids'
-            expect(hobbyDict.toPlainObject()).to.have.property 'annualCost'
+            hobbyDict = new HobbyDict(items: @hobbies, @facade)
+            expect(Object.keys(hobbyDict.items)).to.have.length 3
+            expect(hobbyDict).to.have.length 3
 
 
     describe 'setIds', ->
 
+        beforeEach (done) ->
+
+            @facade.createRepository('diary').save(id: 'abc', name: 'xxx').then -> done()
+
         it 'can load data by ids synchronously from BaseSyncRepository', ->
 
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
                 @properties:
                     annualCost: @TYPES.NUMBER
 
-            dict = new HobbyDict()
+            dict = new HobbyDict(null, @facade)
 
             dict.setIds(['1', '3'])
 
@@ -282,11 +133,9 @@ describe 'BaseDict', ->
         it 'loads data by ids asynchronously from BaseAsyncRepository', (done) ->
 
             class DiaryDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'diary'
 
-            dict = new DiaryDict()
+            dict = new DiaryDict(null, @facade)
 
             dict.setIds(['abc'])
 
@@ -300,15 +149,17 @@ describe 'BaseDict', ->
 
                 done()
 
+
     describe 'has', ->
-        before ->
+
+        beforeEach ->
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @hobbyDict = new HobbyDict(items: hobbies)
+            @facade.addClass HobbyDict
+            @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
+
 
         it 'returns true when item exists', ->
             expect(@hobbyDict.has('keyboard')).to.be.true
@@ -319,85 +170,85 @@ describe 'BaseDict', ->
 
     describe 'contains', ->
 
-        before ->
+        beforeEach ->
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @hobbyDict = new HobbyDict(items: hobbies)
+            @facade.addClass HobbyDict
+            @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
+
 
         it 'returns true when item exists', ->
-            expect(@hobbyDict.contains(hobbies[0])).to.be.true
+            expect(@hobbyDict.contains(@hobbies[0])).to.be.true
 
         it 'returns false when item does not exist', ->
-            newHobby = facade.createModel('hobby', id: 4, name: 'xxx')
+            newHobby = @facade.createModel('hobby', id: 4, name: 'xxx')
             expect(@hobbyDict.has(newHobby)).to.be.false
 
         it 'returns false when item with same key exists but these two are different', ->
-            newHobby = facade.createModel('hobby', id: 4, name: 'keyboard')
+            newHobby = @facade.createModel('hobby', id: 4, name: 'keyboard')
             expect(@hobbyDict.has(newHobby)).to.be.false
 
 
     describe 'get', ->
 
-        before ->
+        beforeEach ->
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @hobbyDict = new HobbyDict(items: hobbies)
+            @facade.addClass HobbyDict
+            @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
 
         it 'returns submodel when key exists', ->
-            expect(@hobbyDict.get('keyboard')).to.be.instanceof facade.getModel('hobby')
+            expect(@hobbyDict.get('keyboard')).to.be.instanceof @facade.getModel('hobby')
 
         it 'returns undefined when key does not exist', ->
             expect(@hobbyDict.get('xxx')).to.be.undefined
 
 
+
     describe 'add', ->
 
-        before ->
+        beforeEach ->
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @hobbyDict = new HobbyDict(items: hobbies)
+            @facade.addClass HobbyDict
+            @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
+
 
         it 'add item model', ->
-            newHobby = facade.createModel('hobby', d: 4, name: 'xxx')
+            newHobby = @facade.createModel('hobby', id: 4, name: 'xxx')
             @hobbyDict.add(newHobby)
-            expect(@hobbyDict.items.xxx).to.be.instanceof facade.getModel 'hobby'
+            expect(@hobbyDict.items.xxx).to.be.instanceof @facade.getModel 'hobby'
 
 
         it 'adds non-item model', ->
             newHobby = id: 4, name: 'yyyy'
             @hobbyDict.add(newHobby)
-            expect(@hobbyDict.items.yyyy).to.be.instanceof facade.getModel 'hobby'
+            expect(@hobbyDict.items.yyyy).to.be.instanceof @facade.getModel 'hobby'
 
 
     describe 'remove', ->
 
         beforeEach ->
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @hobbyDict = new HobbyDict(items: hobbies)
+            @facade.addClass HobbyDict
+            @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
+
 
         it 'removes by key', ->
             @hobbyDict.remove('keyboard')
             expect(@hobbyDict.items.keyboard).not.to.exist
 
         it 'removes by item', ->
-            @hobbyDict.remove(hobbies[0])
+            @hobbyDict.remove(@hobbies[0])
             expect(@hobbyDict.items.keyboard).not.to.exist
 
 
@@ -411,11 +262,9 @@ describe 'BaseDict', ->
         it 'removes all items', ->
 
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
 
-            hobbyDict = new HobbyDict(items: hobbies)
+            hobbyDict = new HobbyDict(items: @hobbies, @facade)
 
             expect(hobbyDict).to.have.length 3
             expect(hobbyDict.ids).to.have.length 3
@@ -436,17 +285,14 @@ describe 'BaseDict', ->
 
         beforeEach ->
             class HobbyDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @hobbyDict = new HobbyDict(items: hobbies)
+            @hobbyDict = new HobbyDict(items: @hobbies, @facade)
 
         it 'adds if not exist', ->
 
-            h = facade.createModel 'hobby',
-                name        : 'skiing'
+            h = @facade.createModel 'hobby', name: 'skiing'
 
             @hobbyDict.toggle h
 
@@ -455,8 +301,7 @@ describe 'BaseDict', ->
 
         it 'removes if exists', ->
 
-            h = facade.createModel 'hobby',
-                name        : 'skiing'
+            h = @facade.createModel 'hobby', name: 'skiing'
 
             @hobbyDict.add h
             @hobbyDict.toggle h

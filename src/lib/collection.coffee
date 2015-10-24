@@ -69,7 +69,7 @@ class Collection extends ValueObject
         super(props, root)
 
         _itemFactory = null
-        isItemEntity = @root.getModel(@constructor.itemModelName).isEntity
+        isItemEntity = @getFacade().getModel(@constructor.itemModelName).isEntity
 
         Object.defineProperties @,
             ###*

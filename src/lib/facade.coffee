@@ -1,12 +1,11 @@
 
 require('es6-promise').polyfill()
 
-{ copy } = require('copy-class')
-
 { camelize, requireFile } = require '../util'
 
 GeneralFactory = require './general-factory'
 MasterDataResource = require '../master-data-resource'
+ModelProps = require './model-props'
 
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
 
@@ -31,6 +30,16 @@ class Facade
 
 
     ###*
+    Get facade
+
+    @method getFacade
+    @return {Facade}
+    @chainable
+    ###
+    getFacade: -> @
+
+
+    ###*
     create instance of Facade
 
     @method createInstance
@@ -52,7 +61,14 @@ class Facade
     @param {Boolean} [options.master] if true, MasterDataResource is enabled.
     ###
     constructor: (options = {}) ->
-        @classes = {}
+
+        Object.defineProperties @,
+            classes:
+                value: {}
+
+            modelProps:
+                value: {}
+
         @dirname = options.dirname ? '.'
 
         if options.master
@@ -190,10 +206,8 @@ class Facade
 
 
     ###*
-    add copied class to facade.
+    add class to facade.
     the class is acquired by @require(name)
-
-    attaches getFacade() method to model intstances
 
     @method addClass
     @private
@@ -204,27 +218,34 @@ class Facade
     ###
     addClass: (name, klass, skipNameValidation = false) ->
 
-        if skipNameValidation
-            camelCasedName = camelize name
+        if typeof name is 'function' # first argument can be Class
+            klass = name
+            name = klass.getName()
 
-        else
-            if klass.getName() isnt name
-                throw @error 'base-domain:classNameInvalid', """given class should be named '#{klass.getName()}',
-                                but '#{name}' given."""
-            camelCasedName = klass.name
+        else if not skipNameValidation and klass.getName() isnt name
+            throw @error 'base-domain:classNameInvalid', """given class should be named '#{klass.getName()}',
+                but '#{name}' given."""
 
-        ParentClass = getProto(klass::).constructor
+        @classes[name] = klass
 
-        if @constructor.isBaseClass ParentClass
-            Class = copy(klass, camelCasedName)
-        else
-            CopiedParentClass = @require ParentClass.getName()
-            Class = copy(klass, camelCasedName, CopiedParentClass)
 
-        facade = @
-        Class::getFacade = -> facade
-        @classes[name] = Class
+    ###*
+    Get ModelProps by modelName.
+    ModelProps summarizes properties of this class
 
+    @method getModelProps
+    @param {String} modelName
+    @return {ModelProps}
+    ###
+    getModelProps: (modelName) ->
+
+        if not @modelProps[modelName]?
+
+            Model = @getModel(modelName)
+
+            @modelProps[modelName] = new ModelProps(modelName, Model.properties, @)
+
+        return @modelProps[modelName]
 
     ###*
     create instance of DomainError
@@ -301,6 +322,7 @@ class Facade
     @ValueObject         : require './value-object'
     @Entity              : require './entity'
     @AggregateRoot       : require './aggregate-root'
+    @Collection          : require './collection'
     @BaseList            : require './base-list'
     @BaseDict            : require './base-dict'
     @BaseFactory         : require './base-factory'

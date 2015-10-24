@@ -28,6 +28,9 @@ class BaseRepository extends Base
     @modelName: null
 
 
+    getModelName: ->
+        @constructor.modelName ? @constructor.getName().slice(0, -'-repository'.length)
+
 
     ###*
     client accessing to data resource (RDB, NoSQL, memory, etc...)
@@ -54,7 +57,7 @@ class BaseRepository extends Base
 
         super(root)
 
-        modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-repository'.length)
+        modelName = @getModelName()
 
         ###*
         factory of the entity.
@@ -258,10 +261,10 @@ class BaseRepository extends Base
     @return {Object} data
     ###
     appendTimeStamp: (data, isUpdate = false) ->
-        Model = @getModelClass()
+        modelProps = @getFacade().getModelProps(@getModelName())
 
-        propCreatedAt = Model.getModelProps().createdAt
-        propUpdatedAt = Model.getModelProps().updatedAt
+        propCreatedAt = modelProps.createdAt
+        propUpdatedAt = modelProps.updatedAt
 
         now = new Date().toISOString()
 

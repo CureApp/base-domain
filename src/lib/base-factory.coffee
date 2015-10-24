@@ -26,6 +26,10 @@ class BaseFactory extends Base
     @modelName: null
 
 
+    getModelName: ->
+        @constructor.modelName ? @constructor.getName().slice(0, -'-factory'.length)
+
+
     ###*
     constructor
 
@@ -36,7 +40,7 @@ class BaseFactory extends Base
 
         super(root)
 
-        modelName = @constructor.modelName ? @constructor.getName().slice(0, -'-factory'.length)
+        modelName = @getModelName()
         @gf = new GeneralFactory(modelName, @root)
 
 

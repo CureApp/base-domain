@@ -44,22 +44,28 @@ class BaseList extends Collection
         super(props, root)
 
 
+
     ###*
-    add model(s)
-
-    @method add
-    @param {BaseModel} model
+    @method addItems
+    @param {Array(BaseModel|Object)} items
+    @protected
     ###
-    add: (models...) ->
+    addItems: (items) ->
 
-        ItemClass = @getItemModelClass()
-        factory = @itemFactory
-
-        for item in models
-            item = factory.createFromObject item if item not instanceof ItemClass
-            @items.push item
-
+        super
         @items.sort(@sort) if @sort
+
+
+    ###*
+    add item to @items
+
+    @method addItem
+    @protected
+    @param {BaseModel} item
+    ###
+    addItem: (item) ->
+
+        @items.push item
 
 
     ###*
@@ -118,6 +124,8 @@ class BaseList extends Collection
     @public
     ###
     toArray: -> @items.slice()
+
+
 
 
 module.exports = BaseList

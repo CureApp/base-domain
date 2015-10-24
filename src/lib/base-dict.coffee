@@ -103,23 +103,17 @@ class BaseDict extends Collection
     get: (key) ->
         @items[key]
 
-
     ###*
-    add new submodel to item(s)
+    add item to @items
 
-    @method add
-    @public
+    @method addItem
+    @protected
     @param {BaseModel} item
     ###
-    add: (items...) ->
+    addItem: (item) ->
 
-        ItemClass = @getItemModelClass()
-        factory = @itemFactory
-
-        for item in items
-            item = factory.createFromObject item if item not instanceof ItemClass
-            key = @constructor.key item
-            @items[key] = item
+        key = @constructor.key item
+        @items[key] = item
 
 
     ###*

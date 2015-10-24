@@ -113,6 +113,8 @@ describe 'BaseDict', ->
 
             dict = new HobbyDict().setItems(hobbies)
 
+            console.log dict.items
+
             expect(dict.ids).to.eql [1,2,3]
 
 

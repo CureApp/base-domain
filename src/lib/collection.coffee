@@ -4,6 +4,12 @@ ValueObject = require './value-object'
 ###*
 collection model of one model
 
+
+add      -> addItems -> addItem
+setItems -> addItems -> addItem -> emit loaded event
+
+add() is public and setItems is package-level access
+
 @class Collection
 @extends ValueObject
 @module base-domain
@@ -62,7 +68,6 @@ class Collection extends ValueObject
 
         super(props, root)
 
-
         _itemFactory = null
         isItemEntity = @root.getModel(@constructor.itemModelName).isEntity
 
@@ -97,13 +102,39 @@ class Collection extends ValueObject
 
 
     ###*
-    add model(s)
+    add new submodel to item(s)
 
     @method add
-    @param {BaseModel} model
-    @abstract
+    @public
+    @param {BaseModel|Object} ...items
     ###
-    add: (models...) ->
+    add: (items...) ->
+        @addItems(items)
+
+
+    ###*
+    @method addItems
+    @param {Object|Array(BaseModel|Object)} items
+    @protected
+    ###
+    addItems: (items = []) ->
+
+        factory = @itemFactory
+
+        for key, item of items
+            @addItem(factory.createFromObject item)
+
+
+    ###*
+    add item to @items
+
+    @method addItem
+    @protected
+    @abstract
+    @param {BaseModel} item
+    ###
+    addItem: (item) ->
+
 
     ###*
     set ids.
@@ -136,27 +167,22 @@ class Collection extends ValueObject
 
 
     ###*
-    set items from dict object
-    update to new key
+    set items and emit "loaded" event
 
     @method setItems
-    @param {Object|Array} models
+    @param {Object|Array(BaseModel|Object)} items
     ###
-    setItems: (models = {}) ->
+    setItems: (items = []) ->
 
-        items = (item for prevKey, item of models)
-
-        @add items...
+        @addItems(items)
 
         @loaded = true
         @emitNext('loaded')
         return @
 
 
-
-
     ###*
-    export models to Array
+    export items to Array
 
     @method toArray
     @public

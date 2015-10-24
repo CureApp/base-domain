@@ -226,7 +226,7 @@ class Collection extends ValueObject
     @return {Function}
     ###
     getItemModelClass: ->
-        @root.getModel(@constructor.itemModelName)
+        @getFacade().getModel(@constructor.itemModelName)
 
 
 

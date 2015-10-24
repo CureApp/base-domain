@@ -54,7 +54,9 @@ class GeneralFactory
 
         return null if obj is null
 
-        Model = root.getModel(modelName)
+        facade = root.getFacade()
+
+        Model = facade.getModel(modelName)
 
         if (Model::) instanceof BaseList
             return @create(Model.itemModelName, root).createList(modelName, obj, options)
@@ -74,7 +76,8 @@ class GeneralFactory
     @param {RootInterface} root
     ###
     constructor: (@modelName, @root) ->
-        @modelProps = @root.getFacade().getModelProps(@modelName)
+        @facade = @root.getFacade()
+        @modelProps = @facade.getModelProps(@modelName)
 
 
     ###*
@@ -84,7 +87,7 @@ class GeneralFactory
     @return {Function}
     ###
     getModelClass: ->
-        @root.getModel(@modelName)
+        @facade.getModel(@modelName)
 
 
     ###*

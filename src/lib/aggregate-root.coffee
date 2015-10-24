@@ -58,18 +58,6 @@ class AggregateRoot extends Entity
 
 
     ###*
-    get a model class
-
-    @method getModel
-    @param {String} modelName
-    @return {Function}
-    ###
-    getModel: (modelName) ->
-
-        @getFacade().getModel modelName
-
-
-    ###*
     create an instance of the given modelName using obj
     if obj is null or undefined, empty object will be created.
 

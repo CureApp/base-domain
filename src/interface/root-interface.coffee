@@ -43,12 +43,12 @@ class RootInterface
     ###
 
     ###*
-    get a model class
+    get facade
 
-    @method getModel
-    @param {String} modelName
-    @return {Function}
+    @method getFacade
+    @return {Facade}
     ###
+
     ###*
     create an instance of the given modelName using obj
     if obj is null or undefined, empty object will be created.

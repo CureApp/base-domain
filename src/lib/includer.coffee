@@ -14,8 +14,10 @@ class Includer
     ###
     constructor: (@model, @modelPool = {}) ->
 
+        @facade = @model.getFacade()
+
         @ModelClass = @model.constructor
-        @modelProps = @model.getFacade().getModelProps(@ModelClass.getName())
+        @modelProps = @facade.getModelProps(@ModelClass.getName())
 
         { @root } = @model
 
@@ -134,7 +136,7 @@ class Includer
                 return @root.createRepository(modelName)
 
             catch e
-                ParentClass = @root.getModel(modelName).getCustomParent()
+                ParentClass = @facade.getModel(modelName).getCustomParent()
 
                 return null if not ParentClass?
 

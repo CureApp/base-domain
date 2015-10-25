@@ -126,12 +126,7 @@ class Facade
     @return {BaseFactory}
     ###
     createFactory: (modelName, params...) ->
-        @__createFactory(modelName, params..., @)
-
-    __createFactory: (modelName, params..., root) ->
-
-        Factory = @require("#{modelName}-factory")
-        return new Factory(params..., root ? @)
+        @__create(modelName, 'factory', params, @)
 
 
     ###*
@@ -143,13 +138,7 @@ class Facade
     @return {BaseRepository}
     ###
     createRepository: (modelName, params...) ->
-        @__createRepository(modelName, params..., @)
-
-    __createRepository: (modelName, params..., root) ->
-
-        Repository = @require("#{modelName}-repository")
-        return new Repository(params..., root ? @)
-
+        @__create(modelName, 'repository', params, @)
 
 
     ###*
@@ -161,13 +150,20 @@ class Facade
     @return {BaseService}
     ###
     createService: (name, params...) ->
-        @__createService(name, params..., @)
+        @__create(name, 'service', params, @)
 
-    __createService: (name, params..., root) ->
 
-        Service = @require("#{name}-service")
+    __create: (modelName, type, params, root) ->
+        Class = ClassWithConstructor = @require("#{modelName}-#{type}")
 
-        return new Service(params..., root ? @)
+        while ClassWithConstructor.length is 0 and ClassWithConstructor isnt Object
+            ClassWithConstructor = getProto(ClassWithConstructor::).constructor
+
+        while params.length < ClassWithConstructor.length - 1
+            params.push undefined
+
+        return new Class(params..., root ? @)
+
 
 
     ###*

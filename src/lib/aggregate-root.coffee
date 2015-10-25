@@ -41,7 +41,7 @@ class AggregateRoot extends Entity
     ###
     createFactory: (modelName, params...) ->
 
-        @getFacade().__createFactory(modelName, params..., @)
+        @getFacade().__create(modelName, 'factory', params, @)
 
 
     ###*
@@ -54,7 +54,7 @@ class AggregateRoot extends Entity
     ###
     createRepository: (modelName, params...) ->
 
-        @getFacade().__createRepository(modelName, params..., @)
+        @getFacade().__create(modelName, 'repository', params, @)
 
 
     ###*
@@ -82,7 +82,7 @@ class AggregateRoot extends Entity
     ###
     createService: (name, params...) ->
 
-        @getFacade().__createService(modelName, params..., @)
+        @getFacade().__create(modelName, 'service', params, @)
 
 
     ###*

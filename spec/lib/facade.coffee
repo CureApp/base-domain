@@ -52,18 +52,6 @@ describe 'Facade', ->
             expect(Facade.isBaseClass BaseModel).to.be.false
 
 
-    describe '@registerBaseClass', ->
-
-        it 'registers base class', ->
-
-            class SpecificRepository extends Facade.BaseRepository
-
-            expect(Facade.isBaseClass SpecificRepository).to.be.false
-
-            Facade.registerBaseClass SpecificRepository
-
-            expect(Facade.isBaseClass SpecificRepository).to.be.true
-
 
     describe 'addClass', ->
 

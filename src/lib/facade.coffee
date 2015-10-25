@@ -302,16 +302,6 @@ class Facade
         (@[klass.name]?.toString() is klass.toString())
 
 
-    ###*
-    registers the given class as a base class
-
-    @method registerBaseClass
-    @static
-    @param {Function} klass
-    ###
-    @registerBaseClass: (klass) -> @[klass.name] = klass
-
-
     @Base                : require './base'
     @BaseModel           : require './base-model'
     @BaseService         : require './base-service'

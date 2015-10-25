@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+
+require('coffee-script/register');
+
+var fs = require('fs');
+var path = require('path');
+
+if ( ! path.isAbsolute ) {
+    path.isAbsolute = function (p) { p.charAt(0) === '/' };
+}
+
+var MasterDataResource = require('../dist/master-data-resource');
+
+function run (argv) {
+
+    var dirname = argv[2];
+
+    if (! dirname) {
+        return help(argv);
+    }
+
+    if (! path.isAbsolute(dirname)) {
+        dirname = process.cwd() + '/' + dirname
+    }
+    dirname = path.normalize(dirname);
+
+    console.log('loading ' + dirname);
+
+    if (! fs.existsSync(dirname)) {
+
+        console.error(dirname + ' does not exist.');
+        process.exit(1);
+    }
+
+    var master = new MasterDataResource(dirname);
+
+    if (! fs.existsSync(master.masterDirPath)) {
+        console.error(master.masterDirPath + ' does not exist.');
+        process.exit(1);
+    }
+
+    master.build();
+
+    console.log(master.masterJSONPath + ' is successfully created.');
+}
+
+function help (argv) {
+    var node = path.basename(argv[0]);
+    var exe  = path.basename(argv[1]);
+    console.error('usage:', node, exe, '<domain dir path>');
+}
+
+
+run(process.argv);

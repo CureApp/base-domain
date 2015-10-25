@@ -3,6 +3,9 @@
   "version": "3.0.3",
   "description": "simple module to help build Domain-Driven Design",
   "main": "dist/lib/facade.js",
+  "bin": {
+    "bd-create-master": "bin/create-master-json"
+  },
   "scripts": {
     "test": "grunt && grunt build && npm run base-domainify-test",
     "base-domainify-test": "cd test/base-domainify; ./test.sh; cd ../..",

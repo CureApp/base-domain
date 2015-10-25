@@ -5,6 +5,8 @@ path    = require 'path'
 coffee  = require 'coffee-script'
 require('coffee-script/register')
 
+path.isAbsolute ?= (str) -> str.charAt(0) is '/'
+
 MasterDataResource = require './master-data-resource'
 
 class BaseDomainify

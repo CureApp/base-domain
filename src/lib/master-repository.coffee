@@ -16,10 +16,14 @@ Master data are read-only, so 'save', 'update' and 'delete' methods are not avai
 class MasterRepository extends BaseSyncRepository
 
 
-    @data: null
+    ###*
+    Name of the data in master data.
+    @modelName is used if not set.
 
-
-    @load: ->
+    @property {String} dataName
+    @static
+    ###
+    @dataName: null
 
 
     constructor: ->
@@ -40,12 +44,13 @@ class MasterRepository extends BaseSyncRepository
                 Facade.createInstance(master: '/path/to/master-data-dir')
             """)
 
+        dataName = @constructor.dataName ? @constructor.modelName
 
-        memoryResource = master.getMemoryResource(@constructor.modelName)
+        memoryResource = master.getMemoryResource(dataName)
 
         if not memoryResource?
             throw @error('masterDataNotFound', """
-                No master data of '#{@constructor.modelName}' at #{@constructor.getName()}.
+                No master data of '#{dataName}' at #{@constructor.getName()}.
                 Check the contents of #{@getFacade().master.masterJSONPath}.
             """)
 

@@ -10,6 +10,8 @@ run_test () {
 
     result=`run_packed`
 
+    remove_generated_js
+
     evaluate_result $result
 }
 
@@ -27,8 +29,11 @@ run_browserify () {
 
 run_packed () {
     result=`node packed.js`
-    rm -f "$dirname/packed.js"
     echo $result
+}
+
+remove_generated_js () {
+    rm -f "$dirname/packed.js"
 }
 
 evaluate_result () {

@@ -1,4 +1,6 @@
 
+Logger = require '../logger'
+
 { Entity } = require 'base-domain'
 
 class Device extends Entity

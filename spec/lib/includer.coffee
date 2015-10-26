@@ -107,7 +107,7 @@ describe 'Includer', ->
 
     describe 'include', ->
 
-        before ->
+        it 'includes subEntities', (done) ->
 
             class Main extends ValueObject
                 @properties:
@@ -125,23 +125,43 @@ describe 'Includer', ->
                     return Promise.resolve item
 
 
-            @f = require('../create-facade').create()
-            @f.addClass('main', Main)
-            @f.addClass('sub-item', SubItem)
-            @f.addClass('sub-item-repository', SubItemRepository)
+            f = require('../create-facade').create()
+            f.addClass('main', Main)
+            f.addClass('sub-item', SubItem)
+            f.addClass('sub-item-repository', SubItemRepository)
 
-        it 'includes subEntities', (done) ->
-
-            main = @f.createModel 'main',
+            main = f.createModel 'main',
                 name: 'xxx'
                 subId: 'abc'
 
             main.include().then =>
-                expect(main.sub).to.be.instanceof @f.getModel 'sub-item'
+                expect(main.sub).to.be.instanceof f.getModel 'sub-item'
                 done()
 
             .catch done
 
 
+    describe 'createRepository', ->
 
+        it 'checks parent class\'s repository', ->
 
+            class Parent extends Entity
+                @properties:
+                    name: @TYPES.STRING
+
+            class Child extends Parent
+                @properties:
+                    name: @TYPES.STRING
+
+            class ParentRepository extends BaseSyncRepository
+                @modelName: 'parent'
+
+            f = require('../create-facade').create()
+            f.addClass(Parent)
+            f.addClass(Child)
+            f.addClass(ParentRepository)
+
+            pnt = f.createModel 'parent'
+            repo = new Includer(pnt).createRepository('child')
+
+            expect(repo).to.be.instanceof ParentRepository

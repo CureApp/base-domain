@@ -4,6 +4,8 @@ DomainError = require './domain-error'
 
 { EventEmitter } = require 'events'
 
+getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
+
 ###*
 parent class of model, factory and repository.
 
@@ -68,7 +70,8 @@ class Base extends EventEmitter
     ###
     @getCustomParent: ->
         Facade = require './facade'
-        ParentClass = @__super__
+
+        ParentClass = getProto(@::).constructor
 
         if Facade.isBaseClass ParentClass
             return null

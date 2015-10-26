@@ -141,6 +141,7 @@ class Collection extends ValueObject
 
     @method setIds
     @param {Array(String|Number)} ids
+    @chainable
     ###
     setIds: (ids = []) ->
 
@@ -148,11 +149,19 @@ class Collection extends ValueObject
 
         @loaded = false
 
+        if ids.length is 0
+            return @setItems()
+
         Includer = require './includer'
 
         repo = new Includer(@).createRepository(@constructor.itemModelName)
 
-        return @ if not repo?
+        if not repo?
+            console.error("""base-domain:no repository found.
+            Model '#{@constructor.itemModelName}' cannot be loaded by id.
+            Given ids : #{ids.join(',')} were not set.
+            """)
+            return @
 
         if repo.constructor.isSync
 

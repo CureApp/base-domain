@@ -205,6 +205,20 @@ describe 'Collection', ->
 
             @facade.createRepository('diary').save(id: 'abc', name: 'xxx').then -> done()
 
+        it 'omit loading when no ids given', ->
+            class HobbyCollection extends Collection
+                @itemModelName: 'hobby'
+                @properties:
+                    annualCost: @TYPES.NUMBER
+
+            coll = new HobbyCollection(null, @facade)
+
+            coll.setIds([])
+
+            expect(coll.loaded).to.be.true
+
+
+
         it 'can load data by ids synchronously from BaseSyncRepository', ->
 
             class HobbyCollection extends Collection

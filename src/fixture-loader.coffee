@@ -24,6 +24,8 @@ class FixtureLoader
         for file in fs.readdirSync @fixtureDir + '/data'
             [ modelName, ext ] = file.split('.')
 
+            continue if ext not in ['coffee', 'js']
+
             tables[modelName] = @loadFile(file)
 
         return tables

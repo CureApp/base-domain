@@ -1,6 +1,7 @@
 
 BaseList = require './base-list'
 BaseDict = require './base-dict'
+Util = require '../util'
 
 ###*
 general factory class
@@ -132,14 +133,28 @@ class GeneralFactory
                 value = @constructor.createModel(subModelName, value, options, @root)
             model.set(prop, value)
 
+
         # adding empty values to the model
         for prop in @modelProps.names()
             continue if model[prop]? or obj.hasOwnProperty prop
 
-            if subModelName = @modelProps.getTypeInfo(prop).model
+            typeInfo = @modelProps.getTypeInfo(prop)
+
+            defaultValue = typeInfo.default
+
+            if subModelName = typeInfo.model
                 continue if @modelProps.isEntity(prop) # entity will be loaded at include() section
 
-                model.set(prop, @constructor.createModel(subModelName, undefined, options, @root))
+                model.set(prop, @constructor.createModel(subModelName, defaultValue, options, @root))
+
+            else if defaultValue?
+                switch typeof defaultValue
+                    when 'object'
+                        defaultValue = Util.clone(defaultValue)
+                    when 'function'
+                        defaultValue = defaultValue()
+
+                model.set(prop, defaultValue)
 
             else
                 model.set(prop, undefined)

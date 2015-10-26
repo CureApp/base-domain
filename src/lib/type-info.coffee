@@ -44,15 +44,18 @@ class TypeInfo
     @private
     @static
     @param {String} modelName
-    @param {String} [idPropName] by default: xxxYyyId when modelName is xxx-yyy
+    @param {Options|String} [idPropName] by default: xxxYyyId when modelName is xxx-yyy
     @return {TypeInfo} type
     ###
-    @createModelType: (modelName, idPropName) ->
+    @createModelType: (modelName, options = {}) ->
 
-        new TypeInfo 'MODEL',
-            model      : modelName
-            idPropName : idPropName ?  camelize(modelName, true) + 'Id'
+        if typeof options is 'string'
+            options = idPropName: options
 
+        options.model = modelName
+        options.idPropName ?= camelize(modelName, true) + 'Id'
+
+        new TypeInfo 'MODEL', options
 
 
     ###*

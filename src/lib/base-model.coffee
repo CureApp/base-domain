@@ -37,7 +37,7 @@ class BaseModel extends Base
         age          : @TYPES.NUMBER
         registeredAt : @TYPES.DATE
         team         : @TYPES.MODEL 'team'
-        hobbies      : @TYPES.MODEL_LIST 'hobby'
+        hobbies      : @TYPES.MODEL 'hobby-list'
         info         : @TYPES.ANY
 
     see type-info.coffee for full options.

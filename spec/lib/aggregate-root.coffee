@@ -10,8 +10,8 @@ describe 'AggregateRoot', ->
 
     class Game extends AggregateRoot
         @properties:
-            cards   : @TYPES.MODEL_DICT 'card'
-            players : @TYPES.MODEL_DICT 'player'
+            cards   : @TYPES.MODEL 'card-dict'
+            players : @TYPES.MODEL 'player-dict'
 
 
     class Card extends Entity

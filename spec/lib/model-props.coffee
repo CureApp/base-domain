@@ -22,8 +22,8 @@ describe 'ModelProps', ->
                 updatedAt2 : @TYPES.UPDATED_AT
                 b          : @TYPES.MODEL 'b'
                 c          : @TYPES.MODEL 'c'
-                bs         : @TYPES.MODEL_LIST 'b'
-                cs         : @TYPES.MODEL_LIST 'c'
+                bs         : @TYPES.MODEL 'b-list'
+                cs         : @TYPES.MODEL 'c-list'
 
         @facade.addClass('a', A)
         @facade.addClass('b', class B extends Entity)

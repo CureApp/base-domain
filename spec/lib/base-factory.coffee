@@ -133,7 +133,7 @@ describe 'BaseFactory', ->
 
             class Foo extends Facade.BaseModel
                 @properties:
-                    bars: @TYPES.MODEL_DICT 'bar'
+                    bars: @TYPES.MODEL 'bar-dict'
             f.addClass 'foo', Foo
 
             class Bar extends Facade.ValueObject

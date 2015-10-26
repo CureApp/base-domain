@@ -122,58 +122,41 @@ class Hospital extends require('base-domain').Entity
         beds         : @TYPES.NUMBER
         registeredAt : @TYPES.DATE
         isValidated  : @TYPES.BOOLEAN
-        doctors      : @TYPES.MODEL_LIST 'doctor'
-        flags        : @TYPES.MODEL_DICT 'flag'
+        doctors      : @TYPES.MODEL 'doctor-list'
+        flags        : @TYPES.MODEL 'flag-dict'
         doctorIdx    : @TYPES.TMP 'NUMBER'
 
 module.exports = Hospital
 ```
 #### properties definition
 
-there are two kinds of @TYPES.XXX
-
-1. @TYPES.XXX is object
-2. @TYPES.XXX is function
-
-when @TYPES.XXX is object, you can just set props as follows
+@TYPES.XXX is an object and also a function.
 
 ```coffee
     @properties:
-        somePropName: @TYPES.XXX
+        aaa: @TYPES.STRING
+        bbb: @TYPES.NUMBER 3
+        ccc: @TYPES.MODEL 'foo-bar'
 ```
 
-mark | property type     | meaning
------|-------------------|-----------------------------------------------------------------
- x   | @TYPES.ANY        | prop accepts any type
- x   | @TYPES.STRING     | prop is string
- x   | @TYPES.NUMBER     | prop is number
- x   | @TYPES.DATE       | prop is date
- x   | @TYPES.BOOLEAN    | prop is boolean
- x   | @TYPES.ARRAY      | prop is array
- x   | @TYPES.OBJECT     | prop is object
- x   | @TYPES.BUFFER     | prop is buffer
- x   | @TYPES.GEOPOINT   | prop is geopoint
- o   | @TYPES.CREATED_AT | prop is date, automatically inserted when first saved
- o   | @TYPES.UPDATED_AT | prop is date, automatically inserted each time saved
- o   | @TYPES.TMP        | prop is not saved
+mark | property type     | meaning                      |  arg1           | arg2
+-----|-------------------|------------------------------|-----------------|-----------------------------------
+ x   | @TYPES.ANY        | prop accepts any type        | default value   |
+ x   | @TYPES.STRING     | prop is string               | default value   |
+ x   | @TYPES.NUMBER     | prop is number               | default value   |
+ x   | @TYPES.DATE       | prop is date                 | default value   |
+ x   | @TYPES.BOOLEAN    | prop is boolean              | default value   |
+ x   | @TYPES.ARRAY      | prop is array                | default value   |
+ x   | @TYPES.OBJECT     | prop is object               | default value   |
+ x   | @TYPES.BUFFER     | prop is buffer               | default value   |
+ x   | @TYPES.GEOPOINT   | prop is geopoint             | default value   |
+ o   | @TYPES.CREATED_AT | date set when first saved    | default value   |
+ o   | @TYPES.UPDATED_AT | date set each time saved     | default value   |
+ o   | @TYPES.MODEL      | prop is BaseModel            | model name      | id prop name (if model is Entity)
+ o   | @TYPES.TMP        | prop is not saved            | type            |
 
-these are object-typed types. Currently, types with marked "x" are just provides the name of the type.
-base-domain `does not validate` the prop's type.
-
-
-when @TYPES.XXX is function, you must set type with arguments like
-```coffee
-    @properties:
-        somePropName: @TYPES.XXX 'arg1', 'arg2'
-```
-
- property type     | meaning           |  arg1           | arg2
--------------------|-------------------|-----------------|-----------------------------------
- @TYPES.MODEL      | prop is BaseModel | model name      | id prop name (if model is Entity)
- @TYPES.MODEL_LIST | prop is BaseList  | item model name | model name (model name of BaseList)
- @TYPES.MODEL_DICT | prop is BaseDict  | item model name | model name (model name of BaseDict)
- @TYPES.TMP        | prop is not saved | type            |
-
+Types with marked "x" just provide the name of the type.
+base-domain **does not validate** the prop's type.
 
 
 
@@ -217,7 +200,7 @@ hospitalRepository.query(where: name: 'CureApp Hp.').then (hospitals)->
 
 ```
 
-### baselist definition
+### list definition
 
 ```coffee
 # {domain-dir}/hospital-list.coffee
@@ -228,7 +211,7 @@ class HospitalList extends require('base-domain').BaseList
 module.exports = HospitalList
 ```
 
-### basedict definition
+### dict definition
 
 ```coffee
 # {domain-dir}/hospital-dict.coffee

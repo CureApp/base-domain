@@ -2,36 +2,39 @@
 { camelize } = require '../util'
 
 ###*
-type of model's property 
+type of model's property
 
 @class TypeInfo
 @module base-domain
 ###
 class TypeInfo
 
-    constructor: (@name, options = {}) ->
+    constructor: (@typeName, options = {}) ->
         @[k] = v for k, v of options
 
 
-    ###*
-    check if the type is the given typeName
-
-    @method equals
-    @public
-    @param {String} typeName
-    @return {Boolean}
-    ###
-    equals: (typeName) -> @name is typeName
 
     ###*
-    check if the type is not the given typeName
+    Creates a function which returns TypeInfo
 
-    @method notEquals
-    @public
+    @method createType
+    @private
+    @static
     @param {String} typeName
-    @return {Boolean}
+    @return {Function(TypeInfo)}
     ###
-    notEquals: (typeName) -> @name isnt typeName
+    @createType: (typeName) ->
+
+        fn = (defaultValue) ->
+
+            if defaultValue?.default?
+                defaultValue = defaultValue.default
+
+            return new TypeInfo typeName, default: defaultValue
+
+        fn.typeName = typeName
+
+        return fn
 
 
     ###*
@@ -44,49 +47,12 @@ class TypeInfo
     @param {String} [idPropName] by default: xxxYyyId when modelName is xxx-yyy
     @return {TypeInfo} type
     ###
-    @createModelType: (modelName, idPropName) -> 
+    @createModelType: (modelName, idPropName) ->
 
         new TypeInfo 'MODEL',
             model      : modelName
             idPropName : idPropName ?  camelize(modelName, true) + 'Id'
 
-
-    ###*
-    get TypeInfo as MODEL_LIST
-
-    @method createModelListType
-    @private
-    @static
-    @param {String} itemModelName
-    @param {String} [options.name] name of list model, by default: xxx-yyy-list when itemModelName is xxx-yyy
-    @return {TypeInfo} type
-    ###
-    @createModelListType: (itemModelName, options = {}) -> 
-        if typeof options is 'string'
-            options = name: options
-
-        new TypeInfo 'MODEL_LIST',
-            itemModel  : itemModelName
-            model      : options.name ? "#{itemModelName}-list"
-
-
-    ###*
-    get TypeInfo as MODEL_DICT
-
-    @method createModelDictType
-    @private
-    @static
-    @param {String} itemModelName
-    @param {String} [options.name] name of dict model, by default: xxx-yyy-dict when itemModelName is xxx-yyy
-    @return {TypeInfo} type
-    ###
-    @createModelDictType: (itemModelName, options = {}) -> 
-        if typeof options is 'string'
-            options = name: options
-
-        new TypeInfo 'MODEL_DICT',
-            itemModel : itemModelName
-            model     : options.name ? "#{itemModelName}-dict"
 
 
     ###*
@@ -104,11 +70,7 @@ class TypeInfo
 
         new TypeInfo typeName, options
 
-    ###
-    these hacky codes makes
-        @TYPES.TMP
-    an object and also a function
-    ###
+    # the following hacky codes makes @TYPES.TMP an object and also a function
     TypeInfo.createTemporaryType[k] = v for k, v of TypeInfo.createTemporaryType()
 
 
@@ -122,24 +84,20 @@ class TypeInfo
     @property TYPES
     @static
     ###
-
     @TYPES:
-        ANY        : new TypeInfo 'ANY'
-        STRING     : new TypeInfo 'STRING'
-        NUMBER     : new TypeInfo 'NUMBER'
-        BOOLEAN    : new TypeInfo 'BOOLEAN'
-        OBJECT     : new TypeInfo 'OBJECT'
-        ARRAY      : new TypeInfo 'ARRAY'
-        DATE       : new TypeInfo 'DATE'
-        BUFFER     : new TypeInfo 'BUFFER'
-        GEOPOINT   : new TypeInfo 'GEOPOINT'
-        CREATED_AT : new TypeInfo 'CREATED_AT'
-        UPDATED_AT : new TypeInfo 'UPDATED_AT'
-        MODEL      : TypeInfo.createModelType
-        MODEL_LIST : TypeInfo.createModelListType
-        MODEL_DICT : TypeInfo.createModelDictType
-        TMP        : TypeInfo.createTemporaryType
-
+        ANY        : @createType 'ANY'
+        STRING     : @createType 'STRING'
+        NUMBER     : @createType 'NUMBER'
+        BOOLEAN    : @createType 'BOOLEAN'
+        OBJECT     : @createType 'OBJECT'
+        ARRAY      : @createType 'ARRAY'
+        DATE       : @createType 'DATE'
+        BUFFER     : @createType 'BUFFER'
+        GEOPOINT   : @createType 'GEOPOINT'
+        CREATED_AT : @createType 'CREATED_AT'
+        UPDATED_AT : @createType 'UPDATED_AT'
+        MODEL      : @createModelType
+        TMP        : @createTemporaryType
 
 
 module.exports = TypeInfo

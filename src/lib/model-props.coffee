@@ -22,7 +22,7 @@ class ModelProps
         @updatedAt = null
 
         ###*
-        properties whose type is MODEL, MODEL_LIST, MODEL_DICT
+        properties whose type is MODEL
         @property {Array(String)} models
         ###
         @models = []
@@ -76,7 +76,7 @@ class ModelProps
             if typeInfo.tmp
                 @tmpDic[prop] = true
 
-            switch typeInfo.name
+            switch typeInfo.typeName
                 when 'DATE'
                     @dates.push prop
 
@@ -88,7 +88,7 @@ class ModelProps
                     @updatedAt = prop
                     @dates.push prop
 
-                when 'MODEL', 'MODEL_LIST', 'MODEL_DICT'
+                when 'MODEL'
                     @models.push prop
                     @modelDic[prop] = true
 
@@ -96,7 +96,7 @@ class ModelProps
 
                         console.error("""
                             base-domain:ModelProps could not parse property info of '#{prop}'.
-                            (@TYPES.#{typeInfo.name}, model=#{typeInfo.model}.)
+                            (@TYPES.#{typeInfo.typeName}, model=#{typeInfo.model}.)
                             Construct original model '#{@modelName}' with RootInterface.
 
                                 new Model(obj, facade)

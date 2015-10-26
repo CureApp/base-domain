@@ -40,6 +40,9 @@ class BaseDomainify
         dir = path.dirname(file)
         @relativePath = path.relative(dir, dirname)
 
+        if @relativePath.charAt(0) isnt '.'
+            @relativePath = './' + @relativePath
+
         initialCode = @getInitialCode(options.dirname)
 
         @initialCodeGenerated = true
@@ -77,8 +80,8 @@ class BaseDomainify
 
         for filename in @getFiles()
 
-            path = @relativePath + '/' + filename
             name = filename.split('.')[0]
+            path = @relativePath + '/' + name
 
             coffeeCode += """
                 #{_}@addClass '#{name}', require('#{path}')\n

@@ -3,8 +3,7 @@ Facade = require '../base-domain'
 
 { ValueObject, Entity, BaseAsyncRepository, BaseSyncRepository } = Facade
 
-MemoryResource = require '../../src/memory-resource'
-Includer = require '../../src/lib/includer'
+{ MemoryResource, Includer } = require '../others'
 
 
 describe 'Includer', ->

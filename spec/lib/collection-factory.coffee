@@ -1,11 +1,9 @@
 
-CollectionFactory = require '../../src/lib/collection-factory'
-
 facade = require('../create-facade').create()
 
 Facade = facade.constructor
 
-MemoryResource = require '../../src/memory-resource'
+{ MemoryResource, CollectionFactory } = require '../others'
 
 describe 'CollectionFactory', ->
 

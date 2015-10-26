@@ -1,7 +1,5 @@
 
-MasterDataResource = require '../src/master-data-resource'
-MemoryResource = require '../src/memory-resource'
-Util = require '../src/util'
+{ MasterDataResource, MemoryResource, Util } = require './others'
 
 fs = require 'fs'
 getGlobal = -> @ # for setting global variable

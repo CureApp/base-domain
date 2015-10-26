@@ -1,5 +1,5 @@
 
-Util = require '../src/util'
+{ Util } = require './others'
 
 
 describe 'Util', ->

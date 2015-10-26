@@ -1,5 +1,5 @@
 
-MemoryResource = require '../../src/memory-resource'
+{ MemoryResource } = require '../others'
 
 { BaseAsyncRepository } = require('../base-domain')
 

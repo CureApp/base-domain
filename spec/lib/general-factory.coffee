@@ -1,6 +1,6 @@
 
 Facade = require('../base-domain')
-GeneralFactory = require '../../src/lib/general-factory'
+{ GeneralFactory } = require '../others'
 
 describe 'GeneralFactory', ->
 

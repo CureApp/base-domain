@@ -4,7 +4,7 @@ Facade = require '../base-domain'
 { GeneralFactory, Collection, Entity, ValueObject,
     BaseSyncRepository, BaseAsyncRepository } = Facade
 
-MemoryResource = require '../../src/memory-resource'
+{ MemoryResource } = require '../others'
 
 describe 'Collection', ->
 

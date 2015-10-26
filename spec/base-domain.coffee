@@ -1,6 +1,4 @@
 
-basedomain = if process.env.DIST is '1' then '..' else '../src/lib/facade'
+path = require('./source-dir') + '/lib/facade'
 
-console.log "base-domain path: #{basedomain}"
-
-module.exports = require(basedomain)
+module.exports = require(path)

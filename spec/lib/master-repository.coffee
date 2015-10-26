@@ -1,7 +1,7 @@
 
 Facade = require('../base-domain')
 { MasterRepository, Entity } = Facade
-MemoryResource = require '../../src/memory-resource'
+{ MemoryResource } = require '../others'
 
 describe 'MasterRepository', ->
 

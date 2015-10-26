@@ -3,7 +3,7 @@ Facade = require '../base-domain'
 
 { Entity, ValueObject, BaseList } = Facade
 
-ModelProps = require '../../src/lib/model-props'
+{ ModelProps } = require '../others'
 
 describe 'ModelProps', ->
 

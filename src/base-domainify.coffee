@@ -84,7 +84,7 @@ class BaseDomainify
             path = @relativePath + '/' + name
 
             coffeeCode += """
-                #{_}@addClass '#{name}', require('#{path}')\n
+                #{_}@addClass require('#{path}')\n
             """
 
         coffeeCode += "#{_}return\n"

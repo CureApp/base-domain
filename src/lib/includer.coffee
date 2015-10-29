@@ -90,8 +90,7 @@ class Includer
             continue if subModel not instanceof BaseModel
             continue if subModel.included()
 
-            includer = new Includer(subModel, @options)
-            promises.push includer.include()
+            promises.push subModel.include(@options)
 
         return Promise.all(promises).then =>
             if @entityPoolCreated

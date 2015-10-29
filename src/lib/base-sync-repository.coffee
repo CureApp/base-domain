@@ -29,12 +29,13 @@ class BaseSyncRepository extends BaseRepository
     @method getByIds
     @public
     @param {Array(String|Number)} ids
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Array(Entity)} entities
     ###
-    getByIds: (ids, client) ->
+    getByIds: (ids, options) ->
 
-        (@get(id, client) for id in ids).filter (model) -> model?
+        (@get(id, options) for id in ids).filter (model) -> model?
 
 
     # following are all comments, for yuidoc
@@ -45,7 +46,8 @@ class BaseSyncRepository extends BaseRepository
     @method save
     @public
     @param {Entity|Object} entity
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Entity} entity (the same instance from input, if entity given,)
     ###
 
@@ -55,7 +57,8 @@ class BaseSyncRepository extends BaseRepository
     @method get
     @public
     @param {String|Number} id
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Entity} entity
     ###
 
@@ -65,7 +68,8 @@ class BaseSyncRepository extends BaseRepository
     @method getById
     @public
     @param {String|Number} id
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Entity} entity
     ###
 
@@ -82,7 +86,8 @@ class BaseSyncRepository extends BaseRepository
     @method query
     @public
     @param {Object} [params] query parameters
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Array(Entity)} array of entities
     ###
 
@@ -92,7 +97,8 @@ class BaseSyncRepository extends BaseRepository
     @method singleQuery
     @public
     @param {Object} [params] query parameters
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Entity|} entity
     ###
 
@@ -113,7 +119,8 @@ class BaseSyncRepository extends BaseRepository
     @public
     @param {String|Number} id of the entity to update
     @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Entity} updated entity
     ###
 

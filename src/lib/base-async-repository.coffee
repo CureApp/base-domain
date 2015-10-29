@@ -29,12 +29,13 @@ class BaseAsyncRepository extends BaseRepository
     @method getByIds
     @public
     @param {Array(String|Number)} ids
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Promise(Array(Entity))} entities
     ###
-    getByIds: (ids, client) ->
+    getByIds: (ids, options) ->
 
-        Promise.all((@get(id, client) for id in ids)).then (models) ->
+        Promise.all((@get(id, options) for id in ids)).then (models) ->
             models.filter (model) -> model?
 
 
@@ -46,7 +47,8 @@ class BaseAsyncRepository extends BaseRepository
     @method save
     @public
     @param {Entity|Object} entity
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Promise(Entity)} entity (the same instance from input, if entity given,)
     ###
 
@@ -66,7 +68,8 @@ class BaseAsyncRepository extends BaseRepository
     @method getById
     @public
     @param {String|Number} id
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Promise(Entity)} entity
     ###
 
@@ -83,7 +86,8 @@ class BaseAsyncRepository extends BaseRepository
     @method query
     @public
     @param {Object} [params] query parameters
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Promise(Array(Entity))} array of entities
     ###
 
@@ -103,7 +107,8 @@ class BaseAsyncRepository extends BaseRepository
     @method delete
     @public
     @param {Entity} entity
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Promise(Boolean)} isDeleted
     ###
 
@@ -114,7 +119,8 @@ class BaseAsyncRepository extends BaseRepository
     @public
     @param {String|Number} id of the entity to update
     @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
-    @param {ResourceClientInterface} [client=@client]
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
     @return {Promise(Entity)} updated entity
     ###
 

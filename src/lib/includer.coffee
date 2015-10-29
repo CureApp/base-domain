@@ -1,5 +1,6 @@
 
 BaseModel = require './base-model'
+EntityPool = require '../entity-pool'
 
 ###*
 include submodels
@@ -11,8 +12,21 @@ class Includer
 
     ###*
     @constructor
+    @param {Object} options
+    @param {Boolean} [options.async=true] get async values
+    @param {Boolean} [options.recursive=false] recursively include or not
+    @param {Boolean} [options.entityPool] entityPool, to detect circular references
+    @param {Array(String)} [options.props] include only given props
     ###
-    constructor: (@model, @modelPool = {}) ->
+    constructor: (@model, @options = {}) ->
+
+        if not @options.entityPool?
+            @entityPoolCreated = true
+            @options.entityPool = new EntityPool
+
+        { @entityPool } = @options
+
+        @options.async ?= true
 
         @facade = @model.getFacade()
 
@@ -21,7 +35,7 @@ class Includer
 
         { @root } = @model
 
-        @cache(@ModelClass.getName(), @model) if @ModelClass.isEntity
+        @entityPool.set(@model) if @ModelClass.isEntity
 
 
     ###*
@@ -29,15 +43,9 @@ class Includer
 
     @method include
     @public
-    @param {Object} options
-    @param {Boolean} [async=true] get async values
-    @param {Boolean} [recursive=false] recursively include or not
-    @param {Array(String)} [props] include only given props
     @return {Promise}
     ###
-    include: (@options = {}) ->
-
-        @options.async ?= true
+    include: ->
 
         entityProps = @modelProps.entities
 
@@ -58,6 +66,9 @@ class Includer
             if @options.recursive
                 return @doRecursively()
 
+            if @entityPoolCreated
+                @entityPool.clear()
+
             return @model
 
 
@@ -77,11 +88,15 @@ class Includer
             subModel = @model[modelProp]
 
             continue if subModel not instanceof BaseModel
+            continue if subModel.included()
 
-            includer = new Includer(subModel, @modelPool)
-            promises.push includer.include(@options)
+            includer = new Includer(subModel, @options)
+            promises.push includer.include()
 
-        return Promise.all(promises).then => @model
+        return Promise.all(promises).then =>
+            if @entityPoolCreated
+                @entityPool.clear()
+            return @model
 
 
     ###*
@@ -100,7 +115,7 @@ class Includer
 
         return if not subId?
 
-        if subModel = @cached(typeInfo.model, subId)
+        if subModel = @entityPool.get(typeInfo.model, subId)
             @model.set(entityProp, subModel)
             return
 
@@ -109,14 +124,14 @@ class Includer
         return if not repo?
 
         if repo.constructor.isSync
-            subModel = repo.get(subId)
-            @model.set(entityProp, subModel)
+            subModel = repo.get(subId, include: @options)
+            @model.set(entityProp, subModel) if subModel?
             return Promise.resolve subModel
 
         else
             return unless @options.async
 
-            return repo.get(subId).then (subModel) =>
+            return repo.get(subId, include: @options).then (subModel) =>
                 @model.set(entityProp, subModel)
             .catch (e) ->
 
@@ -141,35 +156,6 @@ class Includer
                 return null if not ParentClass?
 
                 modelName = ParentClass.getName()
-
-
-
-    ###*
-    cache model
-
-    @method cache
-    @private
-    @param {String} modelName
-    @param {Entity} model
-    ###
-    cache: (modelName, model) ->
-        @modelPool[modelName] ?= {}
-        @modelPool[modelName][model.id] = model
-        return
-
-
-    ###*
-    get cached model
-
-    @method cached
-    @private
-    @param {String} modelName
-    @param {String|Number} id
-    @return {Entity} model
-    ###
-    cached: (modelName, id) ->
-        @modelPool[modelName]?[id]
-
 
 
 module.exports = Includer

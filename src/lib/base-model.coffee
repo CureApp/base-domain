@@ -220,9 +220,31 @@ class BaseModel extends Base
 
         Includer = require './includer'
 
-        new Includer(@).include(options).then =>
+        new Includer(@, options).include().then =>
             @emit('included')
             return @
 
+
+    ###*
+    Check if all subentities are included.
+    @method included
+    @return {Boolean}
+    ###
+    included: (recursive = false) ->
+
+        modelProps = @getModelProps()
+
+        for entityProp in modelProps.entities
+            { idPropName } = modelProps.getTypeInfo(entityProp)
+
+            return false if @[idPropName]? and not @[entityProp]?
+
+        return true if not recursive
+
+        for modelProp in modelProps.models
+
+            return false if @[modelProp]? and not @[modelProp].included()
+
+        return true
 
 module.exports = BaseModel

@@ -1,5 +1,5 @@
 
-{ BaseModel, Entity, BaseList } = require('../base-domain')
+{ BaseModel, Entity, BaseList, BaseSyncRepository } = Facade = require('../base-domain')
 
 describe 'BaseModel', ->
 
@@ -186,6 +186,39 @@ describe 'BaseModel', ->
                 done e
 
 
+    describe 'include', ->
+
+        before ->
+            { MemoryResource } = require '../others'
+
+            class A extends Entity
+                @properties:
+                    name: @TYPES.STRING
+                    a: @TYPES.MODEL 'a'
+
+            class ARepository extends BaseSyncRepository
+                @modelName: 'a'
+                client: new MemoryResource()
+
+            @f = require('../create-facade').create()
+
+            @f.addClass A
+            @f.addClass ARepository
+
+            @f.createRepository('a').save(id: '1', name: 'a1', aId: '2')
+            @f.createRepository('a').save(id: '2', name: 'a2', aId: '3')
+            @f.createRepository('a').save(id: '3', name: 'a3', aId: '1')
+
+
+        it 'can load models recursively with circular references', ->
+
+            a = @f.createModel('a', { name: 'main', aId: '1' }, { include: recursive: true })
+
+            expect(a.a).to.equal a.a.a.a.a
+            expect(a.a.a).to.equal a.a.a.a.a.a
+            expect(a.a.a.a).to.equal a.a.a.a.a.a.a
+
+
     describe 'inherit', ->
 
         it 'overrides values', ->
@@ -219,4 +252,6 @@ describe 'BaseModel', ->
 
             expect(diary.memberId).to.equal '123'
             expect(diary.author).to.not.exist
+
+
 

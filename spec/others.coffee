@@ -4,6 +4,7 @@ path = require('./source-dir')
 module.exports =
     MasterDataResource : require(path + '/master-data-resource')
     MemoryResource     : require(path + '/memory-resource')
+    EntityPool         : require(path + '/entity-pool')
     Util               : require(path + '/util')
     BaseDomainify      : require(path + '/base-domainify')
     FixtureLoader      : require(path + '/fixture-loader')

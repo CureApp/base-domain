@@ -54,56 +54,6 @@ describe 'Includer', ->
 
         @a = @facade.createModel('a', { bId: 'xxx', cId: 'xxx' }, include: null)
 
-    describe 'constructor', ->
-
-        it 'receives modelPool object at 2nd argument', ->
-
-            modelPool = {}
-
-            includer = new Includer(@a, modelPool)
-
-            expect(includer.modelPool).to.equal modelPool
-
-
-    describe 'cache', ->
-
-        it 'caches model by its model name', ->
-
-            includer = new Includer(@a)
-
-            includer.cache('hoge', id: 'abc', mock: true)
-
-            expect(includer.modelPool.hoge.abc).to.deep.equal({ id: 'abc', mock: true })
-
-
-
-    describe 'cached', ->
-
-        it 'returns cached model by model name and id', ->
-
-            includer = new Includer(@a)
-
-            includer.cache('hoge', id: 'abc', mock: true)
-
-            expect(includer.cached('hoge', 'abc')).to.deep.equal({ id: 'abc', mock: true })
-
-
-        it 'returns undefined when unknown model name is given', ->
-
-            includer = new Includer(@a)
-
-            includer.cache('hoge', id: 'abc', mock: true)
-
-            expect(includer.cached('fuga', 'abc')).to.be.undefined
-
-        it 'returns undefined when unknown id is given', ->
-
-            includer = new Includer(@a)
-
-            includer.cache('hoge', id: 'abc', mock: true)
-
-            expect(includer.cached('hoge', '123')).to.be.undefined
-
 
     describe 'include', ->
 

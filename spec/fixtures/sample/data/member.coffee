@@ -5,18 +5,18 @@ module.exports =
         'hobby'
     ]
 
-    data: (fixtureData) ->
+    data: (pool) ->
 
         shinout:
             firstName    : 'Shin'
             age          : 29
             registeredAt : '2013-03-10'
             hobbies      : [
-                fixtureData.hobby.keyboard
-                fixtureData.hobby.ingress
+                pool.hobby.keyboard
+                pool.hobby.ingress
             ]
             newHobbies   : [
-                fixtureData.hobby.jogging
+                pool.hobby.jogging
             ]
 
         satake:
@@ -24,5 +24,5 @@ module.exports =
             age          : 32
             registeredAt : '2012-02-20'
             hobbies      : [
-                fixtureData.hobby.sailing
+                pool.hobby.sailing
             ]

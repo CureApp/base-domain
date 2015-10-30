@@ -9,7 +9,7 @@ if ( ! path.isAbsolute ) {
     path.isAbsolute = function (p) { p.charAt(0) === '/' };
 }
 
-var MasterDataResource = require('../dist/master-data-resource');
+var Facade = require('../dist/lib/facade');
 
 function run (argv) {
 
@@ -32,16 +32,11 @@ function run (argv) {
         process.exit(1);
     }
 
-    var master = new MasterDataResource(dirname);
+    var facade = Facade.createInstance({ dirname: dirname, master: true });
 
-    if (! fs.existsSync(master.masterDirPath)) {
-        console.error(master.masterDirPath + ' does not exist.');
-        process.exit(1);
-    }
+    var master = facade.master;
 
-    master.build();
-
-    console.log(master.masterJSONPath + ' is successfully created.');
+    console.log(path.normalize(master.masterJSONPath) + ' is successfully created.');
 }
 
 function help (argv) {

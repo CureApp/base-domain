@@ -10,6 +10,10 @@ include submodels
 ###
 class EntityCollectionIncluder extends Includer
 
+    constructor: ->
+        super
+        { @itemModelName } = @ModelClass
+
     include: ->
 
         Promise.all([
@@ -20,11 +24,18 @@ class EntityCollectionIncluder extends Includer
 
     includeItems: ->
 
-        if @model.loaded()
+        return if @model.loaded()
+
+        items = []
+        for id in @model.ids
+            item = @entityPool.get(@itemModelName, id)
+            items.push item if item?
+
+        if items.length is @model.length
+            @model.setItems(items)
             return
 
-        repo = @createRepository(@ModelClass.itemModelName)
-
+        repo = @createRepository(@itemModelName)
         return if not repo?
 
         if repo.constructor.isSync

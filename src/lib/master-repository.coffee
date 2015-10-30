@@ -38,33 +38,25 @@ class MasterRepository extends BaseSyncRepository
                 To enable it, set the option to Facade.createInstance() like
 
                 Facade.createInstance(master: true)
-
-                or
-
-                Facade.createInstance(master: '/path/to/master-data-dir')
             """)
 
         dataName = @constructor.dataName ? @constructor.modelName
 
-        memoryResource = master.getMemoryResource(dataName)
-
-        if not memoryResource?
-            throw @error('masterDataNotFound', """
-                No master data of '#{dataName}' at #{@constructor.getName()}.
-                Check the contents of #{@getFacade().master.masterJSONPath}.
-            """)
-
-        @client = memoryResource
+        @client = master.getMemoryResource(dataName)
 
 
     ###*
     Update or insert a model instance
+    Save data with force option. Otherwise throw an error.
 
     @method save
     @public
     ###
-    save: ->
-        throw @error('cannotSaveWithMasterRepository', 'base-domain:cannot save with MasterRepository')
+    save: (data, options = {}) ->
+        if options.force
+            super(data, options)
+        else
+            throw @error('cannotSaveWithMasterRepository', 'base-domain:cannot save with MasterRepository')
 
 
     ###*

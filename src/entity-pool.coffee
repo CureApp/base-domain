@@ -6,8 +6,6 @@
 class EntityPool
 
     constructor: ->
-        @pool = {}
-
 
     ###*
     Register an entity to pool
@@ -21,8 +19,10 @@ class EntityPool
 
         modelName = Model.getName()
 
-        @pool[modelName] ?= {}
-        @pool[modelName][model.id] = model
+        throw new Error("invalid model name #{modelName}") if EntityPool::[modelName]
+
+        @[modelName] ?= {}
+        @[modelName][model.id] = model
 
 
     ###*
@@ -35,7 +35,7 @@ class EntityPool
     ###
     get: (modelName, id) ->
 
-        @pool[modelName]?[id]
+        @[modelName]?[id]
 
 
     ###*
@@ -44,11 +44,9 @@ class EntityPool
     @method clear
     ###
     clear: ->
-        for modelName, models of @pool
+        for modelName, models of @
             for id of models
                 delete models[id]
             delete models[modelName]
-
-        @pool = {}
 
 module.exports = EntityPool

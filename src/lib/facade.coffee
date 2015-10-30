@@ -1,7 +1,7 @@
 
 require('es6-promise').polyfill()
 
-{ camelize, requireFile } = require '../util'
+Util = require '../util'
 
 GeneralFactory = require './general-factory'
 MasterDataResource = require '../master-data-resource'
@@ -81,7 +81,7 @@ class Facade
             @optional
             @readOnly
             ###
-            @master = new MasterDataResource(@dirname)
+            @master = new MasterDataResource(@)
 
         @init()
         @master?.init()
@@ -179,7 +179,7 @@ class Facade
 
         file = "#{@dirname}/#{name}"
         try
-            klass = requireFile file
+            klass = Util.requireFile file
         catch e
             throw @error('modelNotFound', "model '#{name}' is not found")
 
@@ -279,14 +279,13 @@ class Facade
     @param {String} [options.dataDir='./data'] directory to have fixture data files
     @param {String} [options.tsvDir='./tsv'] directory to have TSV files
     @param {Array(String)} [options.models=null] model names to insert. default: all models
-    @return {Promise(Object)} dataPool inserted data
+    @return {Promise(EntityPool)} inserted data
     ###
     insertFixtures: (options = {}) ->
 
         Fixture = require '../fixture'
         fixture = new Fixture(@, options)
-        fixture.insert(options.models).then ->
-            return fixture.dataPool
+        fixture.insert(options.models)
 
     ###*
     check the given class is registered in facade

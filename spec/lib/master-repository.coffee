@@ -9,25 +9,14 @@ describe 'MasterRepository', ->
 
         @f = Facade.createInstance
             master:  true
-            dirname: __dirname + '/../empty'
-
-        class Device extends Entity
-            @properties:
-                name: @TYPES.STRING
-                os  : @TYPES.STRING
-
-        class DeviceRepository extends MasterRepository
-            @modelName: 'device'
+            dirname: __dirname + '/../master-test'
 
         class Dummy extends Entity
         class DummyRepository extends MasterRepository
             @modelName: 'dummy'
 
-        @f.addClass('device', Device)
-        @f.addClass('device-repository', DeviceRepository)
-
-        @f.addClass('dummy', Dummy)
-        @f.addClass('dummy-repository', DummyRepository)
+        @f.addClass(Dummy)
+        @f.addClass(DummyRepository)
 
     it 'throws error when master is disabled', ->
 
@@ -37,22 +26,24 @@ describe 'MasterRepository', ->
         class DeviceRepository extends MasterRepository
             @modelName: 'device'
 
-        f.addClass('device', Device)
-        f.addClass('device-repository', DeviceRepository)
+        f.addClass(Device)
+        f.addClass(DeviceRepository)
 
         expect(=> f.createRepository('device')).to.throw /MasterRepository is disabled/
 
 
-    it 'throws error when the model is not registered in master', ->
+    it 'succeeds with no data, when the model is not registered in master', ->
 
-        expect(=> @f.createRepository('dummy')).to.throw /No master data of 'dummy'/
+        repo = @f.createRepository('dummy')
+        expect(repo.client).to.be.instanceof MemoryResource
+        expect(repo.client.count()).to.equal 0
 
 
     it 'has client, instance of MemoryResource', ->
 
         repo = @f.createRepository('device')
-
         expect(repo.client).to.be.instanceof MemoryResource
+        expect(repo.client.count()).to.be.above 0
 
 
     describe 'get', ->

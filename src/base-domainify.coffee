@@ -7,6 +7,7 @@ require('coffee-script/register')
 
 path.isAbsolute ?= (str) -> str.charAt(0) is '/'
 
+Facade = require './lib/facade'
 MasterDataResource = require './master-data-resource'
 
 class BaseDomainify
@@ -99,16 +100,14 @@ class BaseDomainify
     ###
     getMasterJSONPath: ->
 
-        master = new MasterDataResource(@absolutePath)
-
         try
-            master.build()
+            facade = Facade.createInstance(dirname: @absolutePath, master: true)
 
-            { masterJSONPath } = master
+            { masterJSONPath } = facade.master
 
             return '' if not fs.existsSync(masterJSONPath)
 
-            relPath = new MasterDataResource(@relativePath).masterJSONPath
+            relPath = MasterDataResource.getJSONPath(@relativePath)
 
             return relPath
 

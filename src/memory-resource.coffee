@@ -157,6 +157,16 @@ class MemoryResource
 
 
     ###*
+    Count all registered data
+
+    @method count
+    @return {Number} total
+    ###
+    count: ->
+        Object.keys(@pool).length
+
+
+    ###*
     create plain object
 
     @method toPlainObject

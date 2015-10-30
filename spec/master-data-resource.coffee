@@ -1,4 +1,5 @@
 
+Facade = require './base-domain'
 { MasterDataResource, MemoryResource, Util } = require './others'
 
 fs = require 'fs'
@@ -7,8 +8,8 @@ getGlobal = -> @ # for setting global variable
 describe 'MasterDataResource', ->
 
     before ->
-        @dir = __dirname + '/empty'
-        @allJSON = @dir + '/master-data/all.json'
+        @dirname = __dirname + '/master-test'
+        @allJSON = @dirname + '/master-data/all.json'
 
         if fs.existsSync @allJSON
             fs.unlinkSync @allJSON
@@ -18,9 +19,9 @@ describe 'MasterDataResource', ->
 
         expect(fs.existsSync @allJSON).to.be.false
 
-        master = new MasterDataResource(@dir).init()
+        f = Facade.createInstance(dirname: @dirname, master: true)
 
-        expect(master.memories.device).to.be.instanceof MemoryResource
+        expect(f.master.memories.device).to.be.instanceof MemoryResource
 
         expect(fs.existsSync @allJSON).to.be.true
 
@@ -32,7 +33,9 @@ describe 'MasterDataResource', ->
             expect(Ti).to.exist
             fs.unlinkSync @allJSON
             @UtilRequireJSON = Util.requireJSON
+            @UtilRequireFile = Util.requireFile
             Util.requireJSON = (file) -> require file
+            Util.requireFile = (file) -> require file
 
             @consoleError = console.error
             console.error = ->
@@ -40,19 +43,23 @@ describe 'MasterDataResource', ->
 
         it 'loads from JSON file', ->
 
-            master = new MasterDataResource(@dir).init()
+            f = Facade.createInstance(dirname: @dirname, master: true)
 
-            expect(master.memories.device).to.not.exist
+            expect(f.master.memories.device).to.not.exist
 
-            master.build()
+            f.master.build()
 
-            master2 = new MasterDataResource(@dir).init()
-            expect(master2.memories.device).to.be.instanceof MemoryResource
+            expect(fs.existsSync @allJSON).to.be.true
+
+            f2 = Facade.createInstance(dirname: @dirname, master: true)
+
+            expect(f2.master.memories.device).to.be.instanceof MemoryResource
 
         after ->
             getGlobal().Ti = undefined
             expect(Ti).not.to.exist
             Util.requireJSON = @UtilRequireJSON
+            Util.requireFile = @UtilRequireFile
             console.error = @consoleError
 
 

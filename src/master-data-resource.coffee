@@ -14,12 +14,34 @@ class MasterDataResource
 
     @constructor
     ###
-    constructor: (domainPath) ->
+    constructor: (@facade) ->
 
-        @masterDirPath = domainPath + '/master-data'
-        @masterJSONPath = @masterDirPath + '/all.json'
+        { dirname } = @facade
+
+        @masterDirPath  = @constructor.getDirPath(dirname)
+        @masterJSONPath = @constructor.getJSONPath(dirname)
         @memories = {}
 
+
+    ###*
+    Get master data dir
+
+    @method getDirPath
+    @public
+    @static
+    @return {String}
+    ###
+    @getDirPath: (dirname) -> dirname + '/master-data'
+
+    ###*
+    Get master JSON path
+
+    @method getJSONPath
+    @public
+    @static
+    @return {String}
+    ###
+    @getJSONPath: (dirname) -> @getDirPath(dirname) + '/all.json'
 
 
     ###*
@@ -67,7 +89,8 @@ class MasterDataResource
     @method getMemoryResource
     @return {MemoryResource}
     ###
-    getMemoryResource: (modelName) -> @memories[modelName]
+    getMemoryResource: (modelName) ->
+        @memories[modelName] ?= new MemoryResource
 
 
     ###*
@@ -79,12 +102,7 @@ class MasterDataResource
 
         FixtureLoader = require './fixture-loader'
 
-        data = new FixtureLoader(@masterDirPath).load()
-
-        for modelName, modelData of data
-            memory = @memories[modelName] = new MemoryResource()
-            for id, value of modelData
-                memory.create(value)
+        new FixtureLoader(@facade, @masterDirPath).load()
 
         fs = require 'fs'
         fs.writeFileSync @masterJSONPath, JSON.stringify @toPlainObject(), null, 1

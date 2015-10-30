@@ -8,6 +8,7 @@ module.exports = (grunt) ->
                     'spec/lib/*.coffee'
                     'spec/util.coffee'
                     'spec/master-data-resource.coffee'
+                    'spec/fixture.coffee'
                 ]
                 options:
                     ui: 'bdd'

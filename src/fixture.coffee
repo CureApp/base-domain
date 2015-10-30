@@ -1,5 +1,6 @@
 
-DomainError = require './domain-error'
+DomainError = require './lib/domain-error'
+EntityPool = require './entity-pool'
 debug = null
 
 { normalize } = require('path')
@@ -19,7 +20,7 @@ class Fixture
     @constructor
     @param {Object} [options]
     @param {String|Array} [options.dirname='./fixtures'] director(y|ies) to have fixture files. /data, /tsvs should be included in the directory.
-    @param {Object} [options.data={}] default data, merged to dataPool
+    @param {EntityPool} [options.pool] default data, merged to dataPool
     @param {String} [options.debug] if true, shows debug log
     ###
     constructor: (@facade, options = {}) ->
@@ -56,10 +57,11 @@ class Fixture
 
         # initial data pool
         @dataPool =
-            if options.data? and typeof options.data is 'object'
-                JSON.parse JSON.stringify options.data
+            if options.pool instanceof EntityPool
+                EntityPool
+                JSON.parse JSON.stringify options.pool
             else
-                {}
+                new EntityPool
 
         @dataPool[modelName] ?= {} for modelName of @fxModelMap
 
@@ -126,7 +128,7 @@ class Fixture
     ###
     resolveDependencies: (names) ->
 
-        # adds dependent models 
+        # adds dependent models
         namesWithDependencies = []
 
         for el in names

@@ -1,5 +1,5 @@
 
-Facade = require('../base-domain')
+Facade = require('./base-domain')
 
 describe 'Fixture', ->
 
@@ -7,15 +7,15 @@ describe 'Fixture', ->
 
         it 'succeed when attempting to insert no data', (done) ->
 
-            facade = require('../create-facade').create()
-            facade.insertFixtures(dirname: __dirname + '/../fixtures/empty', debug: true).then (dataPool) ->
+            facade = require('./create-facade').create()
+            facade.insertFixtures(dirname: __dirname + '/fixtures/empty', debug: true).then (dataPool) ->
                 done()
 
 
         it 'inserts data', (done) ->
-            facade = require('../create-facade').create('domain')
+            facade = require('./create-facade').create('domain')
 
-            facade.insertFixtures(dirname: __dirname + '/../fixtures/sample', debug: true, data: abc: 1).then (dataPool) ->
+            facade.insertFixtures(dirname: __dirname + '/fixtures/sample', debug: true, data: abc: 1).then (dataPool) ->
                 expect(dataPool).to.have.property 'hobby'
                 expect(dataPool).to.have.property 'member'
                 expect(dataPool.member).to.have.property 'shinout'

@@ -8,7 +8,6 @@ module.exports =
     Util               : require(path + '/util')
     BaseDomainify      : require(path + '/base-domainify')
     FixtureLoader      : require(path + '/fixture-loader')
-    CollectionFactory  : require(path + '/lib/collection-factory')
     GeneralFactory     : require(path + '/lib/general-factory')
     Includer           : require(path + '/lib/includer')
     ModelProps         : require(path + '/lib/model-props')

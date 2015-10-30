@@ -234,9 +234,15 @@ class GeneralFactory
 
         return null if val is null
 
-        CollectionFactory = require './collection-factory'
+        val ?= []
 
-        new CollectionFactory(collModelName, @root).createFromObject val, options
+        if Array.isArray val
+            if typeof val[0] is 'object'
+                val = items: val
+            else
+                val = ids: val
+
+        new GeneralFactory(collModelName, @root).createFromObject val, options
 
 
     ###*

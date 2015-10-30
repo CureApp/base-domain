@@ -14,11 +14,11 @@ class BaseList extends Collection
     ###*
     the number of items
 
-    @property length
+    @property itemLength
     @type number
     @public
     ###
-    Object.defineProperty @::, 'length',
+    Object.defineProperty @::, 'itemLength',
         get: ->
             @items.length
 
@@ -53,7 +53,10 @@ class BaseList extends Collection
     addItems: (items) ->
 
         super
-        @items.sort(@sort) if @sort
+        if @sort
+            @items.sort(@sort)
+            if @isItemEntity
+                @ids = (item.id for item in @items)
 
 
     ###*
@@ -75,6 +78,7 @@ class BaseList extends Collection
     ###
     clear: ->
         @items.pop() for i in [0...@length]
+        super
         return
 
 
@@ -84,7 +88,9 @@ class BaseList extends Collection
     @method remove
     @param {Number} index
     ###
-    remove: (index) -> @items.splice(index, 1)
+    remove: (index) ->
+        @items.splice(index, 1)
+        @ids.splice(index, 1) if @isItemEntity
 
 
 

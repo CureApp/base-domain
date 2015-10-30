@@ -23,13 +23,12 @@ class BaseDict extends Collection
     ###*
     the number of items
 
-    @property {Number} length
+    @property {Number} itemLength
     @public
     ###
-    Object.defineProperty @::, 'length',
+    Object.defineProperty @::, 'itemLength',
         get: ->
             Object.keys(@items).length
-
 
 
     ###*
@@ -75,7 +74,7 @@ class BaseDict extends Collection
     contains: (item) ->
         key = @constructor.key item
         sameKeyItem = @get(key)
-        item is sameKeyItem
+        sameKeyItem?.equals item
 
 
     ###*
@@ -140,7 +139,7 @@ class BaseDict extends Collection
 
 
     ###*
-    removes all items
+    removes all items and ids
 
     @method clear
     ###
@@ -148,6 +147,7 @@ class BaseDict extends Collection
 
         for key of @items
             delete @items[key]
+        super
 
         return
 

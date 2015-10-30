@@ -1,6 +1,7 @@
 
-Facade = require('../base-domain')
-{ GeneralFactory } = require '../others'
+{ BaseDict, ValueObject, Entity,
+    BaseSyncRepository, BaseAsyncRepository } = Facade = require('../base-domain')
+{ GeneralFactory, MemoryResource } = require '../others'
 
 describe 'GeneralFactory', ->
 
@@ -51,3 +52,119 @@ describe 'GeneralFactory', ->
             expect(abc.f).to.be.instanceof Date
 
 
+
+
+    describe 'createDict', ->
+
+        beforeEach ->
+
+            class ADict extends BaseDict
+                @itemModelName: 'a'
+                @key: (item) -> item.name
+
+            class A extends ValueObject
+                @properties:
+                    name: @TYPES.STRING
+
+            @facade.addClass ADict
+            @facade.addClass A
+
+
+        it 'creates dict from array', ->
+
+            factory = new GeneralFactory('a', @facade)
+
+            dict = factory.createDict('a-dict', [ { name: 'shin' } ])
+
+            expect(dict).to.be.instanceof @facade.getModel 'a-dict'
+            expect(dict).to.have.length 1
+            expect(dict.items.shin).to.be.instanceof @facade.getModel 'a'
+
+
+        describe 'with dict of entities', ->
+
+            beforeEach ->
+
+                class BDict extends BaseDict
+                    @itemModelName: 'b'
+
+                class B extends Entity
+                    @properties:
+                        name: @TYPES.STRING
+
+                @facade.addClass B
+                @facade.addClass BDict
+
+
+            it 'creates dict from array(string), as ids. Automatically loaded with SyncRepository', ->
+
+                class BRepository extends BaseSyncRepository
+                    @modelName: 'b'
+                    client: new MemoryResource
+                @facade.addClass BRepository
+                @facade.createRepository('b').save(id: '123', name: 'satake')
+                @facade.createRepository('b').save(id: '456', name: 'shin')
+
+                factory = new GeneralFactory('b', @facade)
+
+                dict = factory.createDict('b-dict', [ '123', '456' ])
+
+                expect(dict.ids).to.have.length 2
+                expect(dict).to.have.length 2
+                expect(dict.items['123']).to.be.instanceof @facade.getModel 'b'
+
+
+            it 'creates dict from array(string), as ids. Not loaded with AsyncRepository', (done) ->
+
+                class BRepository extends BaseAsyncRepository
+                    @modelName: 'b'
+                    client: new MemoryResource
+                @facade.addClass BRepository
+
+                Promise.all([
+                    @facade.createRepository('b').save(id: '123', name: 'satake')
+                    @facade.createRepository('b').save(id: '456', name: 'shin')
+
+                ]).then =>
+
+                    factory = new GeneralFactory('b', @facade)
+
+                    dict = factory.createDict('b-dict', [ '123', '456' ])
+
+                    expect(dict).to.have.length 2
+                    expect(dict.ids).to.have.length 2
+                    expect(dict.itemLength).to.equal 0
+                    done()
+
+                .catch done
+
+
+            it 'creates dict from array(string), as ids. Loaded with AsyncRepository with async option', (done) ->
+
+                class BRepository extends BaseAsyncRepository
+                    @modelName: 'b'
+                    client: new MemoryResource
+                @facade.addClass BRepository
+
+                Promise.all([
+                    @facade.createRepository('b').save(id: '123', name: 'satake')
+                    @facade.createRepository('b').save(id: '456', name: 'shin')
+
+                ]).then =>
+
+                    factory = new GeneralFactory('b', @facade)
+
+                    dict = factory.createDict('b-dict', [ '123', '456' ], include: async: true)
+
+                    expect(dict.ids).to.have.length 2
+                    expect(dict).to.have.length 2
+                    expect(dict.itemLength).to.equal 0
+
+                    setTimeout =>
+                        expect(dict).to.have.length 2
+                        expect(dict.itemLength).to.equal 2
+                        expect(dict.items['123']).to.be.instanceof @facade.getModel 'b'
+                        done()
+                    , 0
+
+                .catch done

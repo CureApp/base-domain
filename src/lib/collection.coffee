@@ -1,14 +1,9 @@
 
 ValueObject = require './value-object'
+EntityPool = require '../entity-pool'
 
 ###*
 collection model of one model
-
-
-add      -> addItems -> addItem
-setItems -> addItems -> addItem -> emit loaded event
-
-add() is public and setItems is package-level access
 
 @class Collection
 @extends ValueObject
@@ -28,23 +23,19 @@ class Collection extends ValueObject
 
 
     ###*
-    ids: get ids of items
-
-    @property {Array(String|Number)} ids
-    ###
-    Object.defineProperty @::, 'ids',
-        get: ->
-            return null if not @isItemEntity
-            return (item.id for key, item of @items)
-
-
-    ###*
-    the number of items
+    the number of items (or ids when @isItemEntity is true)
 
     @property {Number} length
     @public
-    @abstract
     ###
+    Object.defineProperty @::, 'length',
+        get: ->
+            if @isItemEntity
+                return @ids.length
+            else
+                return @itemLength
+
+
 
     ###*
     items (submodel collection)
@@ -53,7 +44,6 @@ class Collection extends ValueObject
     @abstract
     ###
     items: null
-
 
 
     ###*
@@ -66,12 +56,20 @@ class Collection extends ValueObject
         if not @constructor.itemModelName?
             throw @error 'base-domain:itemModelNameRequired', "@itemModelName is not set, in class #{@constructor.name}"
 
-        super(props, root)
-
         _itemFactory = null
-        isItemEntity = @getFacade().getModel(@constructor.itemModelName).isEntity
+        isItemEntity = root.getFacade().getModel(@constructor.itemModelName).isEntity
 
         Object.defineProperties @,
+
+            ###*
+            ids: get ids of items
+
+            @property {Array(String|Number)} ids
+            ###
+            ids:
+                value: if isItemEntity then [] else null
+                writable: true
+
             ###*
             item factory
             Created only one time. Be careful that @root is not changed even the collection's root is changed.
@@ -81,24 +79,32 @@ class Collection extends ValueObject
             itemFactory:
                 get: -> _itemFactory ?= require('./general-factory').create(@constructor.itemModelName, @root)
 
-            ###*
-            loaded: is data loaded or not
-
-            @property loaded
-            @type Boolean
-            ###
-            loaded:
-                value: false, writable: true
-
             isItemEntity:
                 value: isItemEntity, writable: false
 
 
-        if props.items
-            @setItems props.items
+        if props.ids? and props.items
+            { ids } = props
+            delete props.ids
+            super(props, root)
+            props.ids = ids
+        else
+            super(props, root)
 
-        if props.ids
-            @setIds props.ids
+
+    ###*
+    set value to prop
+    @return {BaseModel} this
+    ###
+    set: (k, v) ->
+        switch k
+            when 'items'
+                @setItems v
+            when 'ids'
+                @setIds v
+            else
+                super
+        return @
 
 
     ###*
@@ -124,6 +130,9 @@ class Collection extends ValueObject
         for key, item of items
             @addItem(factory.createFromObject item)
 
+        if @isItemEntity
+            @ids = (item.id for item in @toArray())
+
 
     ###*
     add item to @items
@@ -146,48 +155,34 @@ class Collection extends ValueObject
     setIds: (ids = []) ->
 
         return if not @isItemEntity
+        return if not Array.isArray ids
 
-        @loaded = false
-
-        if ids.length is 0
-            return @setItems()
-
-        Includer = require './includer'
-
-        repo = new Includer(@).createRepository(@constructor.itemModelName)
-
-        if not repo?
-            console.error("""base-domain:no repository found.
-            Model '#{@constructor.itemModelName}' cannot be loaded by id.
-            Given ids : #{ids.join(',')} were not set.
-            """)
-            return @
-
-        if repo.constructor.isSync
-
-            subModels = repo.getByIds(ids)
-            @setItems(subModels)
-
-        else
-            repo.getByIds(ids).then (subModels) =>
-                @setItems(subModels)
-
-        return @
+        @ids = ids
 
 
     ###*
-    set items and emit "loaded" event
+    clear and add items
 
     @method setItems
     @param {Object|Array(BaseModel|Object)} items
     ###
     setItems: (items = []) ->
 
+        @clear()
+
         @addItems(items)
 
-        @loaded = true
-        @emitNext('loaded')
         return @
+
+
+    ###*
+    removes all items and ids
+
+    @method clear
+    ###
+    clear: ->
+        if @isItemEntity
+            @ids = []
 
 
     ###*
@@ -199,6 +194,51 @@ class Collection extends ValueObject
     @return {Array}
     ###
     toArray: ->
+
+
+    ###*
+    include all relational models if not set
+
+    @method include
+    @param {Object} [options]
+    @param {Boolean} [options.recursive] recursively include models or not
+    @param {Boolean} [options.async=true] get async values
+    @param {Array(String)} [options.props] include only given props
+    @return {Promise(BaseModel)} self
+    ###
+    include: (options = {}) ->
+
+        options.entityPool ?= new EntityPool
+
+        superResult = super(options)
+
+        if not @isItemEntity
+            @includeVOItems(options, superResult)
+
+        else
+            @includeEntityItems(options, superResult)
+
+
+    includeVOItems: (options, superResult) ->
+
+        return superResult if not options.recursive
+
+        Promise.all([
+            superResult
+            Promise.all @toArray().map (item) -> item.include(options)
+        ]).then => @
+
+
+
+    includeEntityItems: (options, superResult) ->
+
+        EntityCollectionIncluder = require './entity-collection-includer'
+
+        Promise.all([
+            superResult
+            new EntityCollectionIncluder(@, options).include()
+        ]).then => @
+
 
 
     ###*
@@ -227,6 +267,17 @@ class Collection extends ValueObject
             plain.items = plainItems
 
         return plain
+
+
+    ###*
+    @method loaded
+    @public
+    @return {Boolean}
+    ###
+    loaded: ->
+
+        return true if not @isItemEntity
+        return @itemLength is @ids.length
 
 
     ###*

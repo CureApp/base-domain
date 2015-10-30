@@ -123,14 +123,14 @@ describe 'BaseDict', ->
             dict = new HobbyDict(null, @facade)
 
             dict.setIds(['1', '3'])
+            dict.include()
 
-            expect(dict.loaded).to.be.true
             expect(dict.length).to.equal 2
             expect(dict.items).to.have.property '1'
             expect(dict.items).to.have.property '3'
 
 
-        it 'loads data by ids asynchronously from BaseAsyncRepository', (done) ->
+        it 'loads data by ids asynchronously from BaseAsyncRepository', ->
 
             class DiaryDict extends BaseDict
                 @itemModelName: 'diary'
@@ -139,15 +139,7 @@ describe 'BaseDict', ->
 
             dict.setIds(['abc'])
 
-            expect(dict.loaded).to.be.false
             expect(dict.items).to.eql {}
-
-            dict.on 'loaded', ->
-
-                expect(dict.loaded).to.be.true
-                expect(dict.items).to.have.property 'abc'
-
-                done()
 
 
     describe 'has', ->
@@ -308,3 +300,46 @@ describe 'BaseDict', ->
             expect(@hobbyDict.has 'skiing').to.be.false
 
 
+    describe 'toPlainObject', ->
+
+        it 'returns object with ids when item is entity', ->
+
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
+
+            hobbyDict = new HobbyDict(items: @hobbies, @facade)
+            plain = hobbyDict.toPlainObject()
+
+            expect(plain).to.have.property 'ids'
+            expect(plain).not.to.have.property 'items'
+
+
+        it 'returns object with items when item is non-entity', ->
+
+            class NonEntityDict extends BaseDict
+                @itemModelName: 'non-entity'
+
+            nonEntities = (for name, i in ['keyboard', 'jogging', 'cycling']
+                @facade.createModel 'non-entity', id: 3 - i, name: name
+            )
+
+            nonEntityDict = new NonEntityDict(items: nonEntities, @facade)
+            plain = nonEntityDict.toPlainObject()
+
+            expect(plain).not.to.have.property 'ids'
+            expect(plain).to.have.property 'items'
+            expect(plain.items).to.be.instanceof Array
+            expect(plain.items).to.have.length 3
+
+
+        it 'returns object with custom properties', ->
+
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
+                @properties:
+                    annualCost: @TYPES.NUMBER
+
+            hobbyDict = new HobbyDict(items: @hobbies, annualCost: 2000, @facade)
+
+            expect(hobbyDict.toPlainObject()).to.have.property 'ids'
+            expect(hobbyDict.toPlainObject()).to.have.property 'annualCost'

@@ -205,29 +205,9 @@ describe 'BaseList', ->
             list = new HobbyList(null, @facade)
 
             list.setIds(['1', '3'])
+            list.include()
 
-            expect(list.loaded).to.be.true
             expect(list.length).to.equal 2
-
-
-        it 'loads data by ids asynchronously from BaseAsyncRepository', (done) ->
-
-            class DiaryList extends BaseList
-                @itemModelName: 'diary'
-
-            list = new DiaryList(null, @facade)
-
-            list.setIds(['abc'])
-
-            expect(list.loaded).to.be.false
-            expect(list.items).to.eql []
-
-            list.on 'loaded', ->
-
-                expect(list.loaded).to.be.true
-                expect(list.items).to.have.length 1
-
-                done()
 
 
     describe 'remove', ->

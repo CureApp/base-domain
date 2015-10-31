@@ -118,3 +118,36 @@ describe 'Collection', ->
 
 
 
+    describe 'getIds', ->
+
+        beforeEach ->
+
+            class HobbyCollection extends Collection
+                @itemModelName: 'hobby'
+                toArray: -> []
+
+            class NonEntityCollection extends Collection
+                @itemModelName: 'non-entity'
+                toArray: -> []
+
+            @facade.addClass HobbyCollection
+            @facade.addClass NonEntityCollection
+
+
+
+        it 'returns copy of ids when the item is not Entity', ->
+
+            hobbyCollection = @facade.createModel('hobby-collection')
+            hobbyCollection.setIds(['abc', 'def'])
+
+            expect(hobbyCollection.ids).to.eql ['abc', 'def']
+            expect(hobbyCollection.getIds()).to.eql ['abc', 'def']
+            expect(hobbyCollection.getIds()).not.to.equal hobbyCollection.ids
+
+
+        it 'returns undefined when the item is not Entity', ->
+            nonEntityCollection = @facade.createModel('non-entity-collection')
+            expect(nonEntityCollection.ids).to.be.undefined
+            expect(nonEntityCollection.getIds()).to.be.undefined
+
+

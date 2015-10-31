@@ -85,6 +85,16 @@ class Collection extends ValueObject
 
 
     ###*
+    Get the copy of ids
+    @return {Array(String)} ids
+    ###
+    getIds: ->
+        return undefined if not @isItemEntity
+
+        return @ids?.slice()
+
+
+    ###*
     set value to prop
     @return {BaseModel} this
     ###
@@ -175,7 +185,7 @@ class Collection extends ValueObject
     @method clear
     ###
     clear: ->
-        @items = undefined
+        delete @items
         if @isItemEntity
             @ids = []
 

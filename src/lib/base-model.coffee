@@ -220,10 +220,7 @@ class BaseModel extends Base
 
         Includer = require './includer'
 
-        new Includer(@, options).include().then =>
-            @emit('included')
-            return @
-
+        new Includer(@, options).include().then => @
 
     ###*
     Check if all subentities are included.

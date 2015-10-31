@@ -2,8 +2,6 @@ DomainError = require './domain-error'
 
 { hyphenize } = require '../util'
 
-{ EventEmitter } = require 'events'
-
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
 
 ###*
@@ -14,7 +12,7 @@ gives them @getFacade() method.
 @class Base
 @module base-domain
 ###
-class Base extends EventEmitter
+class Base
 
 
     constructor: (root) ->
@@ -53,14 +51,6 @@ class Base extends EventEmitter
             """
 
         @root.getFacade()
-
-
-    ###*
-    emit event at next tick
-    @method emitNext
-    ###
-    emitNext: (args...) ->
-        process.nextTick => @emit args...
 
 
     ###*

@@ -81,9 +81,9 @@ describe 'BaseList', ->
             hobbyList = @facade.createModel('hobby-list')
             expect(hobbyList.ids).to.be.instanceof Array
 
-        it 'get null when the item is not Entity', ->
+        it 'get undefined when the item is not Entity', ->
             nonEntityList = @facade.createModel('non-entity-list')
-            expect(nonEntityList.ids).to.be.null
+            expect(nonEntityList.ids).to.be.undefined
 
         it 'get array of ids when the item is Entity', ->
 

@@ -111,9 +111,10 @@ describe 'Collection', ->
             hobbyCollection = @facade.createModel('hobby-collection')
             expect(hobbyCollection.ids).to.be.instanceof Array
 
-        it 'get null when the item is not Entity', ->
+        it 'get undefined when the item is not Entity', ->
             nonEntityCollection = @facade.createModel('non-entity-collection')
-            expect(nonEntityCollection.ids).to.be.null
+            expect(nonEntityCollection.ids).to.be.undefined
+            expect(nonEntityCollection).not.to.have.property 'ids'
 
 
 

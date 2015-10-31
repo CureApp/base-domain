@@ -43,7 +43,6 @@ class Collection extends ValueObject
     @property {Object} items
     @abstract
     ###
-    items: null
 
 
     ###*
@@ -59,16 +58,14 @@ class Collection extends ValueObject
         _itemFactory = null
         isItemEntity = root.getFacade().getModel(@constructor.itemModelName).isEntity
 
+        ###*
+        ids: get ids of items
+
+        @property {Array(String|Number)} ids
+        ###
+        @ids = [] if isItemEntity
+
         Object.defineProperties @,
-
-            ###*
-            ids: get ids of items
-
-            @property {Array(String|Number)} ids
-            ###
-            ids:
-                value: if isItemEntity then [] else null
-                writable: true
 
             ###*
             item factory

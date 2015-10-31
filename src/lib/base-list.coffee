@@ -20,14 +20,14 @@ class BaseList extends Collection
     ###
     Object.defineProperty @::, 'itemLength',
         get: ->
+            return 0 if not @loaded()
             @items.length
 
 
     ###*
     items: array of models
 
-    @property items
-    @type Array
+    @property {Array} items
     ###
 
     ###*
@@ -37,11 +37,15 @@ class BaseList extends Collection
     ###
     constructor: (props = {}, root) ->
 
-        Object.defineProperty @, 'items',
-            value: []
-            enumerable: true
-
         super(props, root)
+
+
+    ###*
+    @method initItems
+    @protected
+    ###
+    initItems: ->
+        @items = []
 
 
 
@@ -67,19 +71,7 @@ class BaseList extends Collection
     @param {BaseModel} item
     ###
     addItem: (item) ->
-
         @items.push item
-
-
-    ###*
-    clear all models
-
-    @method clear
-    ###
-    clear: ->
-        @items.pop() for i in [0...@length]
-        super
-        return
 
 
     ###*
@@ -89,6 +81,9 @@ class BaseList extends Collection
     @param {Number} index
     ###
     remove: (index) ->
+
+        return if not @loaded()
+
         @items.splice(index, 1)
         @ids.splice(index, 1) if @isItemEntity
 
@@ -113,7 +108,9 @@ class BaseList extends Collection
     @method first
     @public
     ###
-    first: -> @items[0]
+    first: ->
+        return undefined if not @loaded()
+        @items[0]
 
     ###*
     last item
@@ -121,7 +118,9 @@ class BaseList extends Collection
     @method last
     @public
     ###
-    last: -> @items[@length - 1]
+    last: ->
+        return undefined if not @loaded()
+        @items[@length - 1]
 
     ###*
     export models to Array
@@ -129,7 +128,9 @@ class BaseList extends Collection
     @method toArray
     @public
     ###
-    toArray: -> @items.slice()
+    toArray: ->
+        return [] if not @loaded()
+        @items.slice()
 
 
 

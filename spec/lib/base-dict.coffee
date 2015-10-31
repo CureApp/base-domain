@@ -130,7 +130,7 @@ describe 'BaseDict', ->
             expect(dict.items).to.have.property '3'
 
 
-        it 'loads data by ids asynchronously from BaseAsyncRepository', ->
+        it 'loads data by ids asynchronously from BaseAsyncRepository', (done) ->
 
             class DiaryDict extends BaseDict
                 @itemModelName: 'diary'
@@ -139,7 +139,12 @@ describe 'BaseDict', ->
 
             dict.setIds(['abc'])
 
-            expect(dict.items).to.eql {}
+            expect(dict.items).to.be.undefined
+
+            dict.include().then =>
+                expect(dict.items).to.exist
+                expect(dict.itemLength).to.equal 1
+                done()
 
 
     describe 'has', ->

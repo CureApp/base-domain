@@ -28,14 +28,14 @@ class BaseDict extends Collection
     ###
     Object.defineProperty @::, 'itemLength',
         get: ->
+            return 0 if not @loaded()
             Object.keys(@items).length
 
 
     ###*
     items: dictionary of keys - models
 
-    @property items
-    @type Objects
+    @property {Object} items
     ###
 
     ###*
@@ -45,11 +45,15 @@ class BaseDict extends Collection
     ###
     constructor: (props = {}, root) ->
 
-        Object.defineProperty @, 'items',
-            value: {}
-            enumerable: true
-
         super(props, root)
+
+
+    ###*
+    @method initItems
+    @protected
+    ###
+    initItems: ->
+        @items = {}
 
 
     ###*
@@ -61,6 +65,7 @@ class BaseDict extends Collection
     @return {Boolean}
     ###
     has: (key) ->
+        return false if not @loaded()
         @items[key]?
 
     ###*
@@ -72,6 +77,7 @@ class BaseDict extends Collection
     @return {Boolean}
     ###
     contains: (item) ->
+        return false if not @loaded()
         key = @constructor.key item
         sameKeyItem = @get(key)
         sameKeyItem?.equals item
@@ -84,6 +90,7 @@ class BaseDict extends Collection
     @param {BaseModel} item
     ###
     toggle: (item) ->
+        return if not @loaded()
         key = @constructor.key item
         if @has key
             @remove item
@@ -100,6 +107,7 @@ class BaseDict extends Collection
     @return {BaseModel}
     ###
     get: (key) ->
+        return undefined if not @loaded()
         @items[key]
 
     ###*
@@ -125,6 +133,8 @@ class BaseDict extends Collection
     ###
     remove: (args...) ->
 
+        return if not @loaded()
+
         ItemClass = @getItemModelClass()
 
         for arg in args
@@ -139,25 +149,13 @@ class BaseDict extends Collection
 
 
     ###*
-    removes all items and ids
-
-    @method clear
-    ###
-    clear: ->
-
-        for key of @items
-            delete @items[key]
-        super
-
-        return
-
-    ###*
     export models to Array
 
     @method toArray
     @public
     ###
     toArray: ->
+        return [] if not @loaded()
         (item for key, item of @items)
 
 

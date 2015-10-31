@@ -58,13 +58,6 @@ class Collection extends ValueObject
         _itemFactory = null
         isItemEntity = root.getFacade().getModel(@constructor.itemModelName).isEntity
 
-        ###*
-        ids: get ids of items
-
-        @property {Array(String|Number)} ids
-        ###
-        @ids = [] if isItemEntity
-
         Object.defineProperties @,
 
             ###*
@@ -79,6 +72,8 @@ class Collection extends ValueObject
             isItemEntity:
                 value: isItemEntity, writable: false
 
+
+        @clear()
 
         if props.ids? and props.items
             { ids } = props
@@ -122,6 +117,8 @@ class Collection extends ValueObject
     ###
     addItems: (items = []) ->
 
+        @initItems() if not @loaded()
+
         factory = @itemFactory
 
         for key, item of items
@@ -143,7 +140,7 @@ class Collection extends ValueObject
 
 
     ###*
-    set ids.
+    clear and set ids.
 
     @method setIds
     @param {Array(String|Number)} ids
@@ -154,6 +151,7 @@ class Collection extends ValueObject
         return if not @isItemEntity
         return if not Array.isArray ids
 
+        @clear()
         @ids = ids
 
 
@@ -166,7 +164,6 @@ class Collection extends ValueObject
     setItems: (items = []) ->
 
         @clear()
-
         @addItems(items)
 
         return @
@@ -178,6 +175,7 @@ class Collection extends ValueObject
     @method clear
     ###
     clear: ->
+        @items = undefined
         if @isItemEntity
             @ids = []
 
@@ -191,6 +189,9 @@ class Collection extends ValueObject
     @return {Array}
     ###
     toArray: ->
+
+
+    initItems: ->
 
 
     ###*
@@ -271,10 +272,7 @@ class Collection extends ValueObject
     @public
     @return {Boolean}
     ###
-    loaded: ->
-
-        return true if not @isItemEntity
-        return @itemLength is @ids.length
+    loaded: -> @items?
 
 
     ###*

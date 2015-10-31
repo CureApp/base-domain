@@ -37,7 +37,7 @@ base-domain helps easier practice of Domain-Driven Design.
 - BaseList
 - BaseDict
 
-![class relations](https://github.com/CureApp/base-domain/blob/master/base-domain-classes.png "base-domain-classes")
+![class relations](https://github.com/CureApp/base-domain/blob/master/classes.png "base-domain-classes")
 
 #### Base
 [API Doc](http://cureapp.github.io/base-domain/classes/Base.html)

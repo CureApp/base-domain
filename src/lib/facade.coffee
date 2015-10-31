@@ -98,8 +98,8 @@ class Facade
     @param {String} modelName
     @return {Function}
     ###
-    getModel: (getName) ->
-        return @require(getName)
+    getModel: (modelName) ->
+        return @require(modelName)
 
 
     ###*

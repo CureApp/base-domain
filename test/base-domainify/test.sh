@@ -10,7 +10,7 @@ run_test () {
 
     result=`run_packed`
 
-    remove_generated_js
+    #remove_generated_js
 
     evaluate_result $result
 }

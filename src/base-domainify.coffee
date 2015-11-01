@@ -85,7 +85,7 @@ class BaseDomainify
             path = @relativePath + '/' + name
 
             coffeeCode += """
-                #{_}@addClass require('#{path}')\n
+                #{_}@addClass '#{name}', require('#{path}')\n
             """
 
         coffeeCode += "#{_}return\n"
@@ -148,7 +148,7 @@ class BaseDomainify
 
             ParentClass = Object.getPrototypeOf(klass::).constructor
 
-            if typeof ParentClass.getName is 'function' and pntFileName = fileInfoDict[ParentClass.getName()]?.filename
+            if ParentClass.className and pntFileName = fileInfoDict[ParentClass.getName()]?.filename
 
                 files.push pntFileName unless pntFileName in files
 

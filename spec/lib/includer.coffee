@@ -32,11 +32,11 @@ describe 'Includer', ->
             @properties:
                 name: @TYPES.STRING
 
-        @facade.addClass(A)
-        @facade.addClass(B)
-        @facade.addClass(C)
-        @facade.addClass(BRepository)
-        @facade.addClass(CRepository)
+        @facade.addClass('a', A)
+        @facade.addClass('b', B)
+        @facade.addClass('c', C)
+        @facade.addClass('b-repository', BRepository)
+        @facade.addClass('c-repository', CRepository)
 
         bRepo = @facade.createRepository('b')
         cRepo = @facade.createRepository('c')
@@ -107,9 +107,9 @@ describe 'Includer', ->
                 @modelName: 'parent'
 
             f = require('../create-facade').create()
-            f.addClass(Parent)
-            f.addClass(Child)
-            f.addClass(ParentRepository)
+            f.addClass('parent', Parent)
+            f.addClass('child', Child)
+            f.addClass('parent-repository', ParentRepository)
 
             pnt = f.createModel 'parent'
             repo = new Includer(pnt).createRepository('child')

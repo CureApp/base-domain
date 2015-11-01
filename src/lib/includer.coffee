@@ -150,9 +150,9 @@ class Includer
                 return @root.createRepository(modelName)
 
             catch e
-                ParentClass = @facade.getModel(modelName).getCustomParent()
+                ParentClass = @facade.getModel(modelName).getParent()
 
-                return null if not ParentClass?
+                return null if not ParentClass.className
 
                 modelName = ParentClass.getName()
 

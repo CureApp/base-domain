@@ -32,11 +32,11 @@ describe 'BaseDict', ->
             @modelName: 'diary'
             client: new MemoryResource()
 
-        @facade.addClass Hobby
-        @facade.addClass NonEntity
-        @facade.addClass HobbyRepository
-        @facade.addClass Diary
-        @facade.addClass DiaryRepository
+        @facade.addClass 'hobby', Hobby
+        @facade.addClass 'non-entity', NonEntity
+        @facade.addClass 'hobby-repository', HobbyRepository
+        @facade.addClass 'diary', Diary
+        @facade.addClass 'diary-repository', DiaryRepository
 
         @hobbyRepo = @facade.createRepository('hobby')
 
@@ -68,8 +68,8 @@ describe 'BaseDict', ->
             class NonEntityDict extends BaseDict
                 @itemModelName: 'non-entity'
 
-            @facade.addClass HobbyDict
-            @facade.addClass NonEntityDict
+            @facade.addClass 'hobby-dict', HobbyDict
+            @facade.addClass 'non-entity-dict', NonEntityDict
 
         it 'get array of ids when the item is Entity', ->
 
@@ -101,6 +101,7 @@ describe 'BaseDict', ->
 
             class HobbyDict extends BaseDict
                 @itemModelName: 'hobby'
+                @className: 'hobby-dict'
 
             hobbyDict = new HobbyDict(items: @hobbies, @facade)
             expect(Object.keys(hobbyDict.items)).to.have.length 3
@@ -117,6 +118,7 @@ describe 'BaseDict', ->
 
             class HobbyDict extends BaseDict
                 @itemModelName: 'hobby'
+                @className: 'hobby-dict'
                 @properties:
                     annualCost: @TYPES.NUMBER
 
@@ -134,6 +136,7 @@ describe 'BaseDict', ->
 
             class DiaryDict extends BaseDict
                 @itemModelName: 'diary'
+                @className: 'hobby-dict'
 
             dict = new DiaryDict(null, @facade)
 
@@ -154,7 +157,7 @@ describe 'BaseDict', ->
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @facade.addClass HobbyDict
+            @facade.addClass 'hobby-dict', HobbyDict
             @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
 
 
@@ -172,7 +175,7 @@ describe 'BaseDict', ->
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @facade.addClass HobbyDict
+            @facade.addClass 'hobby-dict', HobbyDict
             @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
 
 
@@ -195,7 +198,7 @@ describe 'BaseDict', ->
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @facade.addClass HobbyDict
+            @facade.addClass 'hobby-dict', HobbyDict
             @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
 
         it 'returns submodel when key exists', ->
@@ -213,7 +216,7 @@ describe 'BaseDict', ->
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @facade.addClass HobbyDict
+            @facade.addClass 'hobby-dict', HobbyDict
             @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
 
 
@@ -236,7 +239,7 @@ describe 'BaseDict', ->
                 @itemModelName: 'hobby'
                 @key: (item) -> item.name
 
-            @facade.addClass HobbyDict
+            @facade.addClass 'hobby-dict', HobbyDict
             @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
 
 
@@ -260,6 +263,7 @@ describe 'BaseDict', ->
 
             class HobbyDict extends BaseDict
                 @itemModelName: 'hobby'
+                @className: 'hobby-dict'
 
             hobbyDict = new HobbyDict(items: @hobbies, @facade)
 
@@ -283,6 +287,7 @@ describe 'BaseDict', ->
         beforeEach ->
             class HobbyDict extends BaseDict
                 @itemModelName: 'hobby'
+                @className: 'hobby-dict'
                 @key: (item) -> item.name
 
             @hobbyDict = new HobbyDict(items: @hobbies, @facade)
@@ -310,6 +315,7 @@ describe 'BaseDict', ->
         it 'returns object with ids when item is entity', ->
 
             class HobbyDict extends BaseDict
+                @className: 'hobby-dict'
                 @itemModelName: 'hobby'
 
             hobbyDict = new HobbyDict(items: @hobbies, @facade)
@@ -322,6 +328,7 @@ describe 'BaseDict', ->
         it 'returns object with items when item is non-entity', ->
 
             class NonEntityDict extends BaseDict
+                @className: 'hobby-dict'
                 @itemModelName: 'non-entity'
 
             nonEntities = (for name, i in ['keyboard', 'jogging', 'cycling']
@@ -341,6 +348,7 @@ describe 'BaseDict', ->
 
             class HobbyDict extends BaseDict
                 @itemModelName: 'hobby'
+                @className: 'hobby-dict'
                 @properties:
                     annualCost: @TYPES.NUMBER
 

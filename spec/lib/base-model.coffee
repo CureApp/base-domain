@@ -29,7 +29,7 @@ describe 'BaseModel', ->
                 name: @TYPES.STRING
                 beds: @TYPES.NUMBER
 
-        facade.addClass(Hospital)
+        facade.addClass('hospital', Hospital)
 
         hospital = new Hospital(name: 'shinout clinic', facade)
 
@@ -46,7 +46,7 @@ describe 'BaseModel', ->
             @properties:
                 name: @TYPES.STRING
 
-        f.addClass Hospital
+        f.addClass 'hospital', Hospital
 
         class Patient extends BaseModel
             @properties:
@@ -118,6 +118,7 @@ describe 'BaseModel', ->
         it 'returns plain object without tmp values', ->
 
             class Medicine extends BaseModel
+                @className: 'medicine'
                 @properties:
                     name: @TYPES.STRING
                     abc : @TYPES.TMP
@@ -202,8 +203,8 @@ describe 'BaseModel', ->
 
             @f = require('../create-facade').create()
 
-            @f.addClass A
-            @f.addClass ARepository
+            @f.addClass 'a', A
+            @f.addClass 'a-repository', ARepository
 
             @f.createRepository('a').save(id: '1', name: 'a1', aId: '2')
             @f.createRepository('a').save(id: '2', name: 'a2', aId: '3')

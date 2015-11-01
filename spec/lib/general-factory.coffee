@@ -66,8 +66,8 @@ describe 'GeneralFactory', ->
                 @properties:
                     name: @TYPES.STRING
 
-            @facade.addClass ADict
-            @facade.addClass A
+            @facade.addClass 'a-dict', ADict
+            @facade.addClass 'a', A
 
 
         it 'creates dict from array', ->
@@ -92,8 +92,8 @@ describe 'GeneralFactory', ->
                     @properties:
                         name: @TYPES.STRING
 
-                @facade.addClass B
-                @facade.addClass BDict
+                @facade.addClass 'b', B
+                @facade.addClass 'b-dict', BDict
 
 
             it 'creates dict from array(string), as ids. Automatically loaded with SyncRepository', ->
@@ -101,7 +101,7 @@ describe 'GeneralFactory', ->
                 class BRepository extends BaseSyncRepository
                     @modelName: 'b'
                     client: new MemoryResource
-                @facade.addClass BRepository
+                @facade.addClass 'b-repository', BRepository
                 @facade.createRepository('b').save(id: '123', name: 'satake')
                 @facade.createRepository('b').save(id: '456', name: 'shin')
 
@@ -119,7 +119,7 @@ describe 'GeneralFactory', ->
                 class BRepository extends BaseAsyncRepository
                     @modelName: 'b'
                     client: new MemoryResource
-                @facade.addClass BRepository
+                @facade.addClass 'b-repository', BRepository
 
                 Promise.all([
                     @facade.createRepository('b').save(id: '123', name: 'satake')
@@ -144,7 +144,7 @@ describe 'GeneralFactory', ->
                 class BRepository extends BaseAsyncRepository
                     @modelName: 'b'
                     client: new MemoryResource
-                @facade.addClass BRepository
+                @facade.addClass 'b-repository', BRepository
 
                 Promise.all([
                     @facade.createRepository('b').save(id: '123', name: 'satake')

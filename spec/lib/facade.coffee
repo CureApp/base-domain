@@ -18,44 +18,10 @@ describe 'Facade', ->
             expect(f).to.be.instanceof Facade
             expect(f).to.be.instanceof ChildFacade
 
-    describe '@isBaseClass', ->
-
-        it 'returns true to class "Base"', ->
-            expect(Facade.isBaseClass Facade.Base).to.be.true
-
-        it 'returns true to class "BaseFactory"', ->
-            expect(Facade.isBaseClass Facade.BaseFactory).to.be.true
-
-        it 'returns true to class "BaseModel"', ->
-            expect(Facade.isBaseClass Facade.BaseModel).to.be.true
-
-        it 'returns true to class "Entity"', ->
-            expect(Facade.isBaseClass Facade.Entity).to.be.true
-
-        it 'returns true to class "BaseList"', ->
-            expect(Facade.isBaseClass Facade.BaseList).to.be.true
-
-        it 'returns true to class "BaseRepository"', ->
-            expect(Facade.isBaseClass Facade.BaseRepository).to.be.true
-
-        it 'returns true to class "BaseSyncRepository"', ->
-            expect(Facade.isBaseClass Facade.BaseSyncRepository).to.be.true
-
-        it 'returns true to class "BaseAsyncRepository"', ->
-            expect(Facade.isBaseClass Facade.BaseAsyncRepository).to.be.true
-
-        it 'returns true to class "DomainError"', ->
-            expect(Facade.isBaseClass Facade.DomainError).to.be.true
-
-        it 'returns false to unregistereed class', ->
-            class BaseModel extends Facade.BaseModel
-            expect(Facade.isBaseClass BaseModel).to.be.false
-
-
 
     describe 'addClass', ->
 
-        it 'registers the given class', ->
+        it 'registers the given class, adding "className" property to the class', ->
 
             f = Facade.createInstance()
             class Hobby extends Facade.Entity
@@ -63,45 +29,13 @@ describe 'Facade', ->
 
             f.addClass('hobby', Hobby)
 
-            FaHobby = f.getModel('hobby')
-
-            expect(FaHobby).to.equal Hobby
-            expect(f.classes.hobby).to.equal Hobby
-
-
-        it 'registers the given class, without name', ->
-
-            f = Facade.createInstance()
-            class Hobby extends Facade.Entity
-                @abc: true
-
-            f.addClass(Hobby)
+            expect(Hobby.className).to.equal 'hobby'
 
             FaHobby = f.getModel('hobby')
 
             expect(FaHobby).to.equal Hobby
             expect(f.classes.hobby).to.equal Hobby
 
-
-        it 'cannot register class with the invalid name', ->
-
-            class CamelCaseClass extends Facade.Entity
-
-            f = Facade.createInstance()
-
-            expect(-> f.addClass('xxx', CamelCaseClass)).to.throw Facade.DomainError
-
-
-        it 'can register class with the invalid name, when 3rd argument is true', ->
-
-            class CamelCaseClass extends Facade.Entity
-                @abc: true
-
-            f = Facade.createInstance()
-
-            expect(-> f.addClass('xxx', CamelCaseClass, true)).not.to.throw Facade.DomainError
-
-            expect(f.getModel('xxx')).to.have.property 'abc', true
 
 
 

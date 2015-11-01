@@ -33,11 +33,11 @@ describe 'BaseList', ->
             @modelName: 'diary'
             client: new MemoryResource()
 
-        @facade.addClass Hobby
-        @facade.addClass NonEntity
-        @facade.addClass HobbyRepository
-        @facade.addClass Diary
-        @facade.addClass DiaryRepository
+        @facade.addClass 'hobby', Hobby
+        @facade.addClass 'non-entity', NonEntity
+        @facade.addClass 'hobby-repository', HobbyRepository
+        @facade.addClass 'diary', Diary
+        @facade.addClass 'diary-repository', DiaryRepository
 
         @hobbyRepo = @facade.createRepository('hobby')
 
@@ -55,6 +55,7 @@ describe 'BaseList', ->
 
             class HobbyList extends BaseList
                 @itemModelName: 'hobby'
+                @className: 'hobby-list'
                 sort: (a, b) -> a.id - b.id
 
             hobbyList = new HobbyList(items: @hobbies, @facade)
@@ -74,8 +75,8 @@ describe 'BaseList', ->
             class NonEntityList extends BaseList
                 @itemModelName: 'non-entity'
 
-            @facade.addClass HobbyList
-            @facade.addClass NonEntityList
+            @facade.addClass 'hobby-list', HobbyList
+            @facade.addClass 'non-entity-list', NonEntityList
 
         it 'get array when the item is Entity', ->
             hobbyList = @facade.createModel('hobby-list')
@@ -111,6 +112,7 @@ describe 'BaseList', ->
 
             class HobbyList extends BaseList
                 @itemModelName: 'hobby'
+                @className: 'hobby-list'
 
             hobbyList = new HobbyList(items: @hobbies, @facade)
 
@@ -123,6 +125,7 @@ describe 'BaseList', ->
 
             class HobbyList extends BaseList
                 @itemModelName: 'hobby'
+                @className: 'hobby-list'
 
             hobbyList = new HobbyList(items: @hobbies, @facade)
 
@@ -136,6 +139,7 @@ describe 'BaseList', ->
 
             class HobbyList extends BaseList
                 @itemModelName: 'hobby'
+                @className: 'hobby-list'
                 @properties:
                     annualCost: @TYPES.NUMBER
 
@@ -153,6 +157,7 @@ describe 'BaseList', ->
 
             class HobbyList extends BaseList
                 @itemModelName: 'hobby'
+                @className: 'hobby-list'
                 @properties:
                     annualCost: @TYPES.NUMBER
 
@@ -171,6 +176,7 @@ describe 'BaseList', ->
         it 'clears all models', ->
 
             class HobbyList extends BaseList
+                @className: 'hobby-list'
                 @itemModelName: 'hobby'
 
             hobbyList = new HobbyList(items: @hobbies, @facade)
@@ -199,6 +205,7 @@ describe 'BaseList', ->
 
             class HobbyList extends BaseList
                 @itemModelName: 'hobby'
+                @className: 'hobby-list'
                 @properties:
                     annualCost: @TYPES.NUMBER
 
@@ -215,6 +222,7 @@ describe 'BaseList', ->
         it 'removes an item by index', ->
 
             class HobbyList extends BaseList
+                @className: 'hobby-list'
                 @itemModelName: 'hobby'
 
             hobbyList = new HobbyList(items: @hobbies, @facade)

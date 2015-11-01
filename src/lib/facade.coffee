@@ -214,13 +214,7 @@ class Facade
     ###
     addClass: (name, klass, skipNameValidation = false) ->
 
-        if typeof name is 'function' # first argument can be Class
-            klass = name
-            name = klass.getName()
-
-        else if not skipNameValidation and klass.getName() isnt name
-            throw @error 'base-domain:classNameInvalid', """given class should be named '#{klass.getName()}',
-                but '#{name}' given."""
+        klass.className ?= name
 
         @classes[name] = klass
 
@@ -286,19 +280,6 @@ class Facade
         Fixture = require '../fixture'
         fixture = new Fixture(@, options)
         fixture.insert(options.models)
-
-    ###*
-    check the given class is registered in facade
-
-    @method isBaseClass
-    @static
-    @param {Function} klass
-    @return {Boolean}
-    ###
-    @isBaseClass: (klass) ->
-        (klass is @[klass.name]) or
-        (klass is @DomainError) or
-        (@[klass.name]?.toString() is klass.toString())
 
 
     @Base                : require './base'

@@ -22,7 +22,7 @@ describe 'Entity', ->
                     date    : @TYPES.DATE
                     visited : @TYPES.BOOLEAN
 
-            facade.addClass(Schedule)
+            facade.addClass('schedule', Schedule)
 
             date = new Date()
 

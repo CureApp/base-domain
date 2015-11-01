@@ -14,6 +14,18 @@ gives them @getFacade() method.
 ###
 class Base
 
+    ###*
+    Hyphenized name.
+    The name should equal to the file name (without path and extension).
+    If not set, facade will set the file name automatically.
+    This property were not necessary if uglify-js would not mangle class name...
+
+    @property {String} className
+    @static
+    @private
+    ###
+    @className: null
+
 
     constructor: (root) ->
 
@@ -34,8 +46,8 @@ class Base
         # add class to facade, if not registered.
         if root
             facade = @getFacade()
-            if not facade.hasClass @constructor.getName()
-                facade.addClass @constructor
+            if @constructor.className and not facade.hasClass @constructor.className
+                facade.addClass @constructor.className, @constructor
 
 
     ###*
@@ -52,34 +64,33 @@ class Base
 
         @root.getFacade()
 
-
     ###*
-    get parent class if it is not BaseClass
-    @method getCustomParent
+    get parent class
+    @method getParent
     @return {Function}
     ###
-    @getCustomParent: ->
-        Facade = require './facade'
-
-        ParentClass = getProto(@::).constructor
-
-        if Facade.isBaseClass ParentClass
-            return null
-
-        return ParentClass
-
+    @getParent: ->
+        getProto(@::).constructor
 
 
     ###*
-    ClassName -> class-name
-    the name must compatible with file name
+    get className
 
     @method getName
     @public
     @static
     @return {String}
     ###
-    @getName: -> hyphenize @name
+    @getName: ->
+
+        if not @className
+            throw new DomainError('classNameNotDefined', """
+                @className property is not defined at class #{@name}.
+                It will automatically be set when required through Facade.
+                You might have loaded this class not via Facade.
+            """)
+
+        return @className
 
 
     ###*

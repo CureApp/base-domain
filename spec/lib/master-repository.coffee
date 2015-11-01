@@ -15,8 +15,8 @@ describe 'MasterRepository', ->
         class DummyRepository extends MasterRepository
             @modelName: 'dummy'
 
-        @f.addClass(Dummy)
-        @f.addClass(DummyRepository)
+        @f.addClass('dummy', Dummy)
+        @f.addClass('dummy-repository', DummyRepository)
 
     it 'throws error when master is disabled', ->
 
@@ -26,8 +26,8 @@ describe 'MasterRepository', ->
         class DeviceRepository extends MasterRepository
             @modelName: 'device'
 
-        f.addClass(Device)
-        f.addClass(DeviceRepository)
+        f.addClass('device', Device)
+        f.addClass('device-repository', DeviceRepository)
 
         expect(=> f.createRepository('device')).to.throw /MasterRepository is disabled/
 

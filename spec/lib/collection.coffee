@@ -32,11 +32,11 @@ describe 'Collection', ->
             @modelName: 'diary'
             client: new MemoryResource()
 
-        @facade.addClass Hobby
-        @facade.addClass NonEntity
-        @facade.addClass HobbyRepository
-        @facade.addClass Diary
-        @facade.addClass DiaryRepository
+        @facade.addClass 'hobby', Hobby
+        @facade.addClass 'non-entity', NonEntity
+        @facade.addClass 'hobby-repository', HobbyRepository
+        @facade.addClass 'diary', Diary
+        @facade.addClass 'diary-repository', DiaryRepository
 
         @hobbyRepo = @facade.createRepository('hobby')
 
@@ -50,6 +50,7 @@ describe 'Collection', ->
 
         class HobbyCollection extends Collection
             @itemModelName: 'hobby'
+            @className: 'hobby-collection'
             toArray: -> []
 
         hobbyCollection = new HobbyCollection(items: @hobbies, @facade)
@@ -61,6 +62,7 @@ describe 'Collection', ->
 
         class HobbyCollection extends Collection
             @itemModelName: 'hobby'
+            @className: 'hobby-collection'
             toArray: -> []
 
         hobbyCollection = new HobbyCollection(items: @hobbies, @facade)
@@ -75,6 +77,7 @@ describe 'Collection', ->
 
         class HobbyCollection extends Collection
             @itemModelName: 'hobby'
+            @className: 'hobby-collection'
             @properties:
                 annualCost: @TYPES.NUMBER
             toArray: -> []
@@ -104,8 +107,8 @@ describe 'Collection', ->
                 @itemModelName: 'non-entity'
                 toArray: -> []
 
-            @facade.addClass HobbyCollection
-            @facade.addClass NonEntityCollection
+            @facade.addClass 'hobby-collection', HobbyCollection
+            @facade.addClass 'non-entity-collection', NonEntityCollection
 
         it 'get array when the item is Entity', ->
             hobbyCollection = @facade.createModel('hobby-collection')
@@ -130,8 +133,8 @@ describe 'Collection', ->
                 @itemModelName: 'non-entity'
                 toArray: -> []
 
-            @facade.addClass HobbyCollection
-            @facade.addClass NonEntityCollection
+            @facade.addClass 'hobby-collection', HobbyCollection
+            @facade.addClass 'non-entity-collection', NonEntityCollection
 
 
 

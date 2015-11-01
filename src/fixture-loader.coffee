@@ -4,6 +4,7 @@ EntityPool = require './entity-pool'
 DomainError = require './lib/domain-error'
 { normalize } = require('path')
 
+debug = require('debug')('base-domain:fixture-loader')
 
 ###*
 Load fixture data (only works in Node.js)
@@ -97,10 +98,12 @@ class FixtureLoader
             console.error e.message
             return
 
+        debug('inserting %s models into %s', Object.keys(data).length, modelName)
 
         for id, obj of data
             obj.id = id
             repo.save obj,
+                method : 'create'
                 force  : true
                 include:
                     entityPool: @entityPool

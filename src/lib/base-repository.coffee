@@ -118,7 +118,14 @@ class BaseRepository extends Base
         data = entity.toPlainObject()
         @appendTimeStamp(data)
 
-        @resolve client.upsert(data), (obj) ->
+        method =
+            switch options.method
+                when 'upsert', 'create'
+                    options.method
+                else
+                    'upsert'
+
+        @resolve client[method](data), (obj) ->
 
             newEntity = @factory.createFromObject(obj, options)
             entity.inherit newEntity

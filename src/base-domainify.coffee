@@ -135,9 +135,6 @@ class BaseDomainify
 
             klass = require @absolutePath + '/' + filename
 
-            continue if typeof klass.getName isnt 'function'
-            continue if klass.getName() isnt name
-
             fileInfoDict[name] = filename: filename, klass: klass
 
         files = []

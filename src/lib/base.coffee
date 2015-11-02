@@ -84,11 +84,23 @@ class Base
     @getName: ->
 
         if not @className or @getParent().className is @className
-            throw new DomainError('classNameNotDefined', """
+
+            hyphenized = hyphenize @name
+
+            console.error("""
                 @className property is not defined at class #{@name}.
                 It will automatically be set when required through Facade.
                 You might have loaded this class not via Facade.
+                We guess the name "#{hyphenized}" by the function name instead of @className.
+                It would not work at mangled JS (uglify-js).
             """)
+
+            try
+                throw new Error()
+            catch e
+                console.error e.stack
+
+            return hyphenize @name
 
 
         return @className

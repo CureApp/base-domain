@@ -27,3 +27,5 @@ all.json
 # test
 !test/base-domainify/node_modules
 test/base-domainify/packed.js
+!test/uglify-js/node_modules
+test/uglify-js/build

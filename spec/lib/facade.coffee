@@ -37,6 +37,28 @@ describe 'Facade', ->
             expect(f.classes.hobby).to.equal Hobby
 
 
+        it 'add new "className" property to the class whose parent class already has "className"', ->
+
+            f = Facade.createInstance()
+            class Hobby extends Facade.Entity
+                @abc: true
+            f.addClass('hobby', Hobby)
+
+            class ChildHobby extends Hobby
+                @abc: true
+            f.addClass('child-hobby', ChildHobby)
+
+            expect(Hobby.className).to.equal 'hobby'
+            expect(ChildHobby.className).to.equal 'child-hobby'
+
+            FaHobby = f.getModel('hobby')
+            expect(FaHobby).to.equal Hobby
+            expect(f.classes.hobby).to.equal Hobby
+
+            FaChildHobby = f.getModel('child-hobby')
+            expect(FaChildHobby).to.equal ChildHobby
+            expect(f.classes['child-hobby']).to.equal ChildHobby
+
 
 
     describe 'hasClass', ->

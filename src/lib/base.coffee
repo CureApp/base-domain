@@ -83,12 +83,13 @@ class Base
     ###
     @getName: ->
 
-        if not @className
+        if not @className or @getParent().className is @className
             throw new DomainError('classNameNotDefined', """
                 @className property is not defined at class #{@name}.
                 It will automatically be set when required through Facade.
                 You might have loaded this class not via Facade.
             """)
+
 
         return @className
 

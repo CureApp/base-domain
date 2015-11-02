@@ -214,7 +214,7 @@ class Facade
     ###
     addClass: (name, klass, skipNameValidation = false) ->
 
-        klass.className ?= name
+        klass.className = name
 
         @classes[name] = klass
 

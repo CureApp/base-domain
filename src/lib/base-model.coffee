@@ -184,7 +184,7 @@ class BaseModel extends Base
 
         for own prop, value of @
 
-            continue if modelProps.isEntity(prop) or modelProps.isTmp(prop)
+            continue if modelProps.isEntity(prop) or modelProps.checkOmit(prop)
 
             if typeof value?.toPlainObject is 'function'
                 plainObject[prop] = value.toPlainObject()

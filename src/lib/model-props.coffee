@@ -54,7 +54,7 @@ class ModelProps
         # private
         @entityDic = {}
         @modelDic  = {}
-        @tmpDic    = {}
+        @omitDic   = {}
         @idDic     = {}
 
 
@@ -73,8 +73,8 @@ class ModelProps
 
             @dic[prop] = typeInfo
 
-            if typeInfo.tmp
-                @tmpDic[prop] = true
+            if typeInfo.omit
+                @omitDic[prop] = true
 
             switch typeInfo.typeName
                 when 'DATE'
@@ -109,6 +109,9 @@ class ModelProps
                         @entities.push prop
                         @entityDic[prop] = true
                         @idDic[typeInfo.idPropName] = prop
+
+                        if typeInfo.omit
+                            @omitDic[typeInfo.idPropName] = true
                     else
                         @nonEntities.push prop
 
@@ -179,12 +182,12 @@ class ModelProps
     ###*
     check if the given prop is tmp prop
 
-    @method isTmp
+    @method checkOmit
     @param {String} prop
     @return {Boolean}
     ###
-    isTmp: (prop) ->
-        return @tmpDic[prop]?
+    checkOmit: (prop) ->
+        return @omitDic[prop]?
 
 
 module.exports = ModelProps

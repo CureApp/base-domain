@@ -13,6 +13,15 @@ class TypeInfo
         @[k] = v for k, v of options
 
 
+    ###*
+    default value
+    @property {any} default
+    ###
+
+    ###*
+    flag not to include this prop after 'toPlainObject()'
+    @property {Boolean} omit
+    ###
 
     ###*
     Creates a function which returns TypeInfo
@@ -25,12 +34,12 @@ class TypeInfo
     ###
     @createType: (typeName) ->
 
-        fn = (defaultValue) ->
+        fn = (options) ->
 
-            if defaultValue?.default?
-                defaultValue = defaultValue.default
+            if not options?.hasOwnProperty('default') and not options?.hasOwnProperty('omit')
+                options = default: options
 
-            return new TypeInfo typeName, default: defaultValue
+            return new TypeInfo typeName, options
 
         fn.typeName = typeName
 
@@ -59,26 +68,6 @@ class TypeInfo
 
 
     ###*
-    get TypeInfo as temporary value
-
-    @method createTemporaryType
-    @private
-    @static
-    @param {String} typeName
-    @return {TypeInfo} type
-    ###
-    @createTemporaryType: (typeName = 'ANY', options = {}) ->
-
-        options.tmp = true
-
-        new TypeInfo typeName, options
-
-    # the following hacky codes makes @TYPES.TMP an object and also a function
-    TypeInfo.createTemporaryType[k] = v for k, v of TypeInfo.createTemporaryType()
-
-
-
-    ###*
     TYPES defines various data type, including model and array of models
 
     key: typeName (String)
@@ -100,7 +89,6 @@ class TypeInfo
         CREATED_AT : @createType 'CREATED_AT'
         UPDATED_AT : @createType 'UPDATED_AT'
         MODEL      : @createModelType
-        TMP        : @createTemporaryType
 
 
 module.exports = TypeInfo

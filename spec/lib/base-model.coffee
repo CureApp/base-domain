@@ -115,14 +115,14 @@ describe 'BaseModel', ->
             expect(plainDiary.memberId).to.equal 12
 
 
-        it 'returns plain object without tmp values', ->
+        it 'returns plain object without "omit" options', ->
 
             class Medicine extends BaseModel
                 @className: 'medicine'
                 @properties:
                     name: @TYPES.STRING
-                    abc : @TYPES.TMP
-                    obj : @TYPES.TMP 'OBJECT'
+                    abc : @TYPES.STRING default: 'abd', omit: true
+                    obj : @TYPES.OBJECT omit: true
 
             medicine = new Medicine({ name: 'hoge', abc: 'yeah', obj: key: 'value' }, @facade)
 

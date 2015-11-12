@@ -140,6 +140,8 @@ class GeneralFactory
 
             typeInfo = @modelProps.getTypeInfo(prop)
 
+            continue if typeInfo.optional
+
             defaultValue = typeInfo.default
 
             if subModelName = typeInfo.model

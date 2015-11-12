@@ -31,6 +31,8 @@ describe 'GeneralFactory', ->
                     d: @TYPES.MODEL('sub', default: name: 'shinout')
                     e: @TYPES.STRING
                     f: @TYPES.DATE -> new Date()
+                    g: @TYPES.MODEL 'sub'
+                    h: @TYPES.MODEL 'sub', optional: true
 
             class Sub extends Facade.ValueObject
                 @properties:
@@ -50,6 +52,8 @@ describe 'GeneralFactory', ->
             expect(abc.d).to.eql @facade.createModel 'sub', name: 'shinout', type: 'xyz'
             expect(abc.e).to.be.undefined
             expect(abc.f).to.be.instanceof Date
+            expect(abc.g).to.be.instanceof Sub
+            expect(abc.h).to.be.undefined
 
 
 

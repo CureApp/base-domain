@@ -33,9 +33,10 @@ describe 'BaseModel', ->
 
         hospital = new Hospital(name: 'shinout clinic', facade)
 
-        expect(hospital).to.have.property 'name', 'shinout clinic'
+        assert hospital.name is 'shinout clinic'
+        assert hospital.root is facade
+
         expect(hospital).not.to.have.property 'beds'
-        expect(hospital.root).to.equal facade
 
 
     it 'can define sub entity with idPropName', ->
@@ -58,7 +59,7 @@ describe 'BaseModel', ->
         hospital = new Hospital(id: 123, f)
         patient.set 'hospital', hospital
 
-        expect(patient['hospital-id']).to.equal 123
+        assert patient['hospital-id'] is 123
 
 
 
@@ -75,10 +76,10 @@ describe 'BaseModel', ->
                 @properties: @withParentProps
                     prop2: @TYPES.NUMBER
 
-            expect(ChildClass.properties).to.have.property 'prop1', BaseModel.TYPES.STRING
-            expect(ChildClass.properties).to.have.property 'prop2', BaseModel.TYPES.NUMBER
+            assert ChildClass.properties.prop1 is BaseModel.TYPES.STRING
+            assert ChildClass.properties.prop2 is BaseModel.TYPES.NUMBER
 
-            expect(ParentClass.properties).to.have.property 'prop1', BaseModel.TYPES.STRING
+            assert ParentClass.properties.prop1 is BaseModel.TYPES.STRING
             expect(ParentClass.properties).not.to.have.property 'prop2'
 
 
@@ -89,10 +90,10 @@ describe 'BaseModel', ->
 
             plainMember = @member.toPlainObject()
 
-            expect(plainMember.registeredAt).to.be.instanceof Date
-            expect(plainMember.id).to.equal 12
-            expect(plainMember.firstName).to.equal 'Shin'
-            expect(plainMember.age).to.equal 29
+            assert plainMember.registeredAt instanceof Date
+            assert plainMember.id is 12
+            assert plainMember.firstName is 'Shin'
+            assert plainMember.age is 29
             expect(plainMember.hobbies.ids).to.eql [1,2,3]
 
 
@@ -107,12 +108,12 @@ describe 'BaseModel', ->
 
             plainDiary = diary.toPlainObject()
 
-            expect(plainDiary.title).to.equal diary.title
-            expect(plainDiary.comment).to.equal diary.comment
+            assert plainDiary.title is diary.title
+            assert plainDiary.comment is diary.comment
             expect(plainDiary.date).to.eql diary.date
-            expect(plainDiary.author).not.to.exist
-            expect(plainDiary.authorId).not.to.exist
-            expect(plainDiary.memberId).to.equal 12
+            assert not plainDiary.author?
+            assert not plainDiary.authorId?
+            assert plainDiary.memberId is 12
 
 
         it 'returns plain object without "omit" options', ->

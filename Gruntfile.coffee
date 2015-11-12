@@ -2,7 +2,15 @@ module.exports = (grunt) ->
 
     grunt.config.init
 
-        'mocha-chai-sinon':
+        mochaTest:
+            options:
+                reporter: 'spec'
+                require: [
+                    'espower-coffee/guess'
+                    'coffee-script/register'
+                    'spec/export-globals.js'
+                ]
+
             spec:
                 src: [
                     'spec/lib/*.coffee'
@@ -10,19 +18,11 @@ module.exports = (grunt) ->
                     'spec/master-data-resource.coffee'
                     'spec/fixture.coffee'
                 ]
-                options:
-                    ui: 'bdd'
-                    reporter: 'spec'
-                    require: 'coffee-script/register'
 
             single:
                 src: [
                     grunt.option('file') ? 'spec/base-repository.coffee'
                 ]
-                options:
-                    ui: 'bdd'
-                    reporter: 'spec'
-                    require: 'coffee-script/register'
 
 
         yuidoc:
@@ -72,13 +72,13 @@ module.exports = (grunt) ->
 
 
 
-    grunt.loadNpmTasks 'grunt-mocha-chai-sinon'
+    grunt.loadNpmTasks 'grunt-mocha-test'
     grunt.loadNpmTasks 'grunt-contrib-yuidoc'
     grunt.loadNpmTasks 'grunt-contrib-coffee'
     grunt.loadNpmTasks 'grunt-contrib-uglify'
     grunt.loadNpmTasks 'grunt-contrib-copy'
 
-    grunt.registerTask 'default', 'mocha-chai-sinon:spec'
-    grunt.registerTask 'single', 'mocha-chai-sinon:single'
+    grunt.registerTask 'default', 'mochaTest:spec'
+    grunt.registerTask 'single', 'mochaTest:single'
     grunt.registerTask 'build', ['coffee:dist']
     grunt.registerTask 'uglify-test', ['coffee:uglify_test', 'copy:uglify_test', 'uglify:test']

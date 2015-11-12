@@ -127,7 +127,7 @@ class BaseRepository extends Base
 
         @resolve client[method](data), (obj) ->
 
-            newEntity = @factory.createFromObject(obj, options)
+            newEntity = @createFromResult(obj, options)
             entity.inherit newEntity
 
 
@@ -148,7 +148,7 @@ class BaseRepository extends Base
 
         client ?= @client
         @resolve client.findById(id), (obj) ->
-            return @factory.createFromObject(obj, options)
+            @createFromResult(obj, options)
 
 
     ###*
@@ -214,7 +214,7 @@ class BaseRepository extends Base
 
         client ?= @client
         @resolve client.find(params), (objs) ->
-            return (@factory.createFromObject(obj, options) for obj in objs)
+            @createFromQueryResults(params, objs, options)
 
 
     ###*
@@ -234,7 +234,7 @@ class BaseRepository extends Base
 
         client ?= @client
         @resolve client.findOne(params), (obj) ->
-            return @factory.createFromObject(obj, options)
+            return @createFromResult(obj, options)
 
 
 
@@ -284,7 +284,7 @@ class BaseRepository extends Base
         @appendTimeStamp(data, isUpdate = true)
 
         @resolve client.updateAttributes(id, data), (obj) ->
-            return @factory.createFromObject(obj, options)
+            return @createFromResult(obj, options)
 
 
     ###*
@@ -314,5 +314,32 @@ class BaseRepository extends Base
 
         return data
 
+
+    ###*
+    Create model instance from result from client
+
+    @method createFromResult
+    @protected
+    @param {Object} obj
+    @param {Object} [options]
+    @return {BaseModel} model
+    ###
+    createFromResult: (obj, options) ->
+        @factory.createFromObject(obj, options)
+
+
+    ###*
+    Create model instances from query results
+
+    @method createFromQueryResults
+    @protected
+    @param {Object} params
+    @param {Array(Object)} objs
+    @param {Object} [options]
+    @return {Array(BaseModel)} models
+    ###
+    createFromQueryResults: (params, objs, options) ->
+
+         (@createFromResult(obj, options) for obj in objs)
 
 module.exports = BaseRepository

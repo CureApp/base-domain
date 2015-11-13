@@ -129,13 +129,18 @@ class GeneralFactory
         # setting values to the model
         for own prop, value of obj
 
-            if subModelName = @modelProps.getTypeInfo(prop)?.model
+            typeInfo = @modelProps.getTypeInfo(prop)
+
+            continue if not value? and typeInfo?.optional
+
+            if subModelName = typeInfo?.model
                 value = @constructor.createModel(subModelName, value, options, @root)
             model.set(prop, value)
 
 
         # adding empty values to the model
         for prop in @modelProps.names()
+
             continue if model[prop]? or obj.hasOwnProperty prop
 
             typeInfo = @modelProps.getTypeInfo(prop)

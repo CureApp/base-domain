@@ -132,9 +132,25 @@ describe 'BaseList', ->
             expect(hobbyList.toArray()).to.deep.equal hobbyList.items
 
 
-    describe 'map', ->
+    describe 'forEach', ->
 
         it 'executes function for each item', ->
+
+            class HobbyList extends BaseList
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(items: @hobbies, @facade)
+
+            str = ''
+
+            hobbyList.forEach (item) ->
+                str += item.name + '|'
+
+            assert str is 'keyboard|jogging|cycling|'
+
+    describe 'map', ->
+
+        it 'executes function for each item and returns the results', ->
 
             class HobbyList extends BaseList
                 @itemModelName: 'hobby'

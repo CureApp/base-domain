@@ -204,6 +204,19 @@ class Collection extends ValueObject
     ###*
     Execute given function for each item
 
+    @method forEach
+    @public
+    @param {Function} fn
+    @param {Object} _this
+    ###
+    forEach: (fn, _this) ->
+        @map(fn, _this)
+        return
+
+    ###*
+    Execute given function for each item
+    returns an array of the result
+
     @method map
     @public
     @param {Function} fn

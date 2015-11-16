@@ -122,6 +122,19 @@ class BaseList extends Collection
         return undefined if not @loaded()
         @items[@length - 1]
 
+
+    ###*
+    get item by index
+
+    @method getByIndex
+    @public
+    ###
+    getByIndex: (idx) ->
+        return undefined if not @loaded()
+        @items[idx]
+
+
+
     ###*
     export models to Array
 

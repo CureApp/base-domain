@@ -119,6 +119,21 @@ describe 'BaseList', ->
             expect(hobbyList.last()).to.equal @hobbies[2]
 
 
+    describe 'getByIndex', ->
+
+        it 'returns items at the given index', ->
+
+            class HobbyList extends BaseList
+                @itemModelName: 'hobby'
+                @className: 'hobby-list'
+
+            hobbyList = new HobbyList(items: @hobbies, @facade)
+
+            assert hobbyList.getByIndex(0) is @hobbies[0]
+            assert hobbyList.getByIndex(1) is @hobbies[1]
+            assert hobbyList.getByIndex(2) is @hobbies[2]
+
+
     describe 'toArray', ->
 
         it 'returns deeply-equal array to items', ->

@@ -68,7 +68,7 @@ class FixtureLoader
 
         modelName = modelNames.shift()
 
-        Promise.all(@loadAndSaveModels(modelName)).then =>
+        Promise.resolve(@loadAndSaveModels(modelName)).then =>
             @saveAsync(modelNames)
 
         .catch (e) =>
@@ -88,7 +88,7 @@ class FixtureLoader
                 when 'string'
                     @readTSV(fx.fixtureDir, fx.data)
                 when 'function'
-                    fx.data(@entityPool)
+                    fx.data.call(new Scope(@, fx), @entityPool)
                 when 'object'
                     fx.data
 
@@ -98,15 +98,44 @@ class FixtureLoader
             console.error e.message
             return
 
-        debug('inserting %s models into %s', Object.keys(data).length, modelName)
+        ids = Object.keys(data)
+        debug('inserting %s models into %s', ids.length, modelName)
 
-        for id, obj of data
-            obj.id = id
-            repo.save obj,
-                method : 'create'
-                force  : true
-                include:
-                    entityPool: @entityPool
+        # save models portion by portion, considering parallel connection size
+        PORTION_SIZE = 5
+        do saveModelsByPortion = =>
+            return if ids.length is 0
+
+            idsPortion = ids.slice(0, PORTION_SIZE)
+            ids = ids.slice(idsPortion.length)
+
+            results = for id in idsPortion
+                obj = data[id]
+                obj.id = id
+                @saveModel(repo, obj)
+
+            if results[0] instanceof Promise
+                Promise.all(results).then => saveModelsByPortion()
+            else
+                saveModelsByPortion()
+
+
+
+    saveModel: (repo, obj) ->
+
+        result = repo.save obj,
+            method : 'create'
+            force  : true
+            include:
+                entityPool: @entityPool
+
+        if result instanceof Promise
+            result.then (entity) =>
+                @entityPool.set entity
+
+        else
+            @entityPool.set result
+
 
 
     ###*
@@ -198,6 +227,33 @@ class FixtureLoader
             objs[obj.id] = obj
 
         return objs
+
+
+###*
+'this' property in fixture's data function
+
+this.readTSV('xxx.tsv') is available
+
+    module.exports = {
+        data: function(entityPool) {
+            this.readTSV('model-name.tsv');
+        }
+    };
+
+@class Scope
+@private
+###
+class Scope
+
+    constructor: (@loader, @fx) ->
+
+    ###*
+    @method readTSV
+    @param {String} filename filename (directory is automatically set)
+    @return {Object} tsv contents
+    ###
+    readTSV: (filename) ->
+        @loader.readTSV(@fx.fixtureDir, filename)
 
 
 module.exports = FixtureLoader

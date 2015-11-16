@@ -132,6 +132,20 @@ describe 'BaseList', ->
             expect(hobbyList.toArray()).to.deep.equal hobbyList.items
 
 
+    describe 'map', ->
+
+        it 'executes function for each item', ->
+
+            class HobbyList extends BaseList
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(items: @hobbies, @facade)
+
+            ids = hobbyList.map (item) -> item.id
+
+            expect(ids).to.eql [ 3, 2, 1 ]
+
+
 
     describe 'add', ->
 

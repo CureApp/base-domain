@@ -201,6 +201,21 @@ class Collection extends ValueObject
     toArray: ->
 
 
+    ###*
+    add new submodel to item(s)
+
+    @method map
+    @public
+    @param {Function} fn
+    @param {Object} _this
+    @return {Array}
+    ###
+    map: (fn, _this) ->
+        _this ?= @
+        return [] if typeof fn isnt 'function'
+        (fn.call(_this, item) for item in @toArray())
+
+
     initItems: ->
 
 

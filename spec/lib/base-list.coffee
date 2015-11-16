@@ -146,6 +146,20 @@ describe 'BaseList', ->
             expect(ids).to.eql [ 3, 2, 1 ]
 
 
+    describe 'filter', ->
+
+        it 'filter items with given function', ->
+
+            class HobbyList extends BaseList
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(items: @hobbies, @facade)
+
+            filtered = hobbyList.filter (item) -> item.id is 3
+
+            expect(filtered).to.eql [ @hobbies[0] ]
+
+
 
     describe 'add', ->
 

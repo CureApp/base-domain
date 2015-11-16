@@ -202,7 +202,7 @@ class Collection extends ValueObject
 
 
     ###*
-    add new submodel to item(s)
+    Execute given function for each item
 
     @method map
     @public
@@ -214,6 +214,22 @@ class Collection extends ValueObject
         _this ?= @
         return [] if typeof fn isnt 'function'
         (fn.call(_this, item) for item in @toArray())
+
+
+    ###*
+    Filter items with given function
+
+    @method filter
+    @public
+    @param {Function} fn
+    @param {Object} _this
+    @return {Array}
+    ###
+    filter: (fn, _this) ->
+        _this ?= @
+        return @toArray() if typeof fn isnt 'function'
+        @toArray().filter(fn, _this) # do not use func
+
 
 
     initItems: ->
@@ -248,7 +264,7 @@ class Collection extends ValueObject
 
         Promise.all([
             superResult
-            Promise.all @toArray().map (item) -> item.include(options)
+            Promise.all @map (item) -> item.include(options)
         ]).then => @
 
 

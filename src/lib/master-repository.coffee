@@ -47,13 +47,13 @@ class MasterRepository extends BaseSyncRepository
 
     ###*
     Update or insert a model instance
-    Save data with force option. Otherwise throw an error.
+    Save data with "fixtureInsertion" option. Otherwise throw an error.
 
     @method save
     @public
     ###
     save: (data, options = {}) ->
-        if options.force
+        if options.fixtureInsertion
             super(data, options)
         else
             throw @error('cannotSaveWithMasterRepository', 'base-domain:cannot save with MasterRepository')

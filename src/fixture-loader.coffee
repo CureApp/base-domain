@@ -125,7 +125,7 @@ class FixtureLoader
 
         result = repo.save obj,
             method : 'create'
-            force  : true
+            fixtureInsertion : true # save even if the repository is master
             include:
                 entityPool: @entityPool
 

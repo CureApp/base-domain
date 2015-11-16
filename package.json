@@ -1,6 +1,6 @@
 {
   "name": "base-domain",
-  "version": "3.4.3",
+  "version": "3.5.0",
   "description": "simple module to help build Domain-Driven Design",
   "main": "dist/lib/facade.js",
   "directories": {

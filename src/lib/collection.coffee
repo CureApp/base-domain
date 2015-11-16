@@ -241,7 +241,37 @@ class Collection extends ValueObject
     filter: (fn, _this) ->
         _this ?= @
         return @toArray() if typeof fn isnt 'function'
-        @toArray().filter(fn, _this) # do not use func
+        @toArray().filter(fn, _this)
+
+
+    ###*
+    Returns if some items match the condition in given function
+
+    @method some
+    @public
+    @param {Function} fn
+    @param {Object} _this
+    @return {Boolean}
+    ###
+    some: (fn, _this) ->
+        _this ?= @
+        return false if typeof fn isnt 'function'
+        @toArray().some(fn, _this)
+
+
+    ###*
+    Returns if every items match the condition in given function
+
+    @method every
+    @public
+    @param {Function} fn
+    @param {Object} _this
+    @return {Boolean}
+    ###
+    every: (fn, _this) ->
+        _this ?= @
+        return false if typeof fn isnt 'function'
+        @toArray().every(fn, _this)
 
 
 

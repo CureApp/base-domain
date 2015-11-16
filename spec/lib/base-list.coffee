@@ -176,6 +176,31 @@ describe 'BaseList', ->
             expect(filtered).to.eql [ @hobbies[0] ]
 
 
+    describe 'some', ->
+
+        it 'checks if some items match the condition in function', ->
+
+            class HobbyList extends BaseList
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(items: @hobbies, @facade)
+
+            assert hobbyList.some (item) -> item.id is 1
+            assert not hobbyList.some (item) -> item.id is 4
+
+
+    describe 'every', ->
+
+        it 'checks if every items match the condition in function', ->
+
+            class HobbyList extends BaseList
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(items: @hobbies, @facade)
+
+            assert hobbyList.every (item) -> item.id?
+            assert not hobbyList.every (item) -> item.id is 1
+
 
     describe 'add', ->
 

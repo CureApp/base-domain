@@ -52,11 +52,13 @@ class Collection extends ValueObject
     ###
     constructor: (props = {}, root) ->
 
+        @setRoot(root)
+
         if not @constructor.itemModelName?
             throw @error 'base-domain:itemModelNameRequired', "@itemModelName is not set, in class #{@constructor.name}"
 
         _itemFactory = null
-        isItemEntity = root.getFacade().getModel(@constructor.itemModelName).isEntity
+        isItemEntity = @getFacade().getModel(@constructor.itemModelName).isEntity
 
         Object.defineProperties @,
 

@@ -29,12 +29,41 @@ class Base
 
     constructor: (root) ->
 
+        @setRoot(root)
+
+        # add class to facade, if not registered.
+        if @root
+            facade = @getFacade()
+            if @constructor.className and not facade.hasClass @constructor.className
+                facade.addClass @constructor.className, @constructor
+
+
+
+    ###*
+    @method setRoot
+    @protected
+    ###
+    setRoot: (root) ->
+
         if not root?.constructor.isRoot
             console.error("""
                 base-domain: [warning] constructor of '#{@constructor.name}' was not given RootInterface (e.g. facade).
-                    @root, @getFacade() is unavailable.
             """)
-            root = null
+
+            { latestInstance } = require('./facade')
+
+            if latestInstance?
+                console.error("""
+                    @root is automatically set, value is the most recently created facade via Facade.createInstance().
+                    ( class name: #{latestInstance.constructor.name} )
+                """)
+                root = latestInstance
+
+            else
+                console.error("""@root, @getFacade() is unavailable.""")
+                root = null
+
+            console.error new Error().stack
 
         ###*
         @property {RootInterface} root
@@ -42,13 +71,6 @@ class Base
         Object.defineProperty @, 'root',
             value: root
             writable: true
-
-        # add class to facade, if not registered.
-        if root
-            facade = @getFacade()
-            if @constructor.className and not facade.hasClass @constructor.className
-                facade.addClass @constructor.className, @constructor
-
 
     ###*
     Get facade
@@ -95,10 +117,7 @@ class Base
                 It would not work at mangled JS (uglify-js).
             """)
 
-            try
-                throw new Error()
-            catch e
-                console.error e.stack
+            console.error new Error().stack
 
             return hyphenize @name
 

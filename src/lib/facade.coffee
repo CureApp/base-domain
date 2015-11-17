@@ -40,6 +40,16 @@ class Facade
 
 
     ###*
+    Latest instance created via @createInstance()
+    This instance will be attached base instances with no @root property.
+
+    @property {Facade} latestInstance
+    @static
+    ###
+    @latestInstance: null
+
+
+    ###*
     create instance of Facade
 
     @method createInstance
@@ -49,7 +59,10 @@ class Facade
     ###
     @createInstance: (options = {}) ->
         Constructor = @
-        return new Constructor(options)
+        instance = new Constructor(options)
+        Facade.latestInstance = instance
+
+        return instance
 
 
     ###*

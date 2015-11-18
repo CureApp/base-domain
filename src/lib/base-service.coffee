@@ -11,4 +11,7 @@ the parent "Base" class just simply gives a @getFacade() method.
 ###
 class BaseService extends Base
 
+    constructor: (params..., root) ->
+        super(root)
+
 module.exports = BaseService

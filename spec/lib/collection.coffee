@@ -92,7 +92,7 @@ describe 'Collection', ->
     it 'throws error if itemModelName is not set', ->
         class HobbyCollection extends Collection
 
-        expect(-> new HobbyCollection(null, @facade)).to.throw Facade.DomainError
+        expect(=> new HobbyCollection(null, @facade)).to.throw Facade.DomainError
 
 
     describe 'ids', ->

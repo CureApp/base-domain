@@ -3,6 +3,7 @@ fs = require 'fs'
 EntityPool = require './entity-pool'
 DomainError = require './lib/domain-error'
 { normalize } = require('path')
+{ isPromise } = require('./util')
 
 debug = require('debug')('base-domain:fixture-loader')
 
@@ -114,8 +115,9 @@ class FixtureLoader
                 obj.id = id
                 @saveModel(repo, obj)
 
-            if results[0] instanceof Promise
-                Promise.all(results).then => saveModelsByPortion()
+            if isPromise results[0]
+                Promise.all(results).then =>
+                    saveModelsByPortion()
             else
                 saveModelsByPortion()
 
@@ -129,7 +131,7 @@ class FixtureLoader
             include:
                 entityPool: @entityPool
 
-        if result instanceof Promise
+        if isPromise result
             result.then (entity) =>
                 @entityPool.set entity
 

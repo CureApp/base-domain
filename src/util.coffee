@@ -136,4 +136,14 @@ class Util
         clone v
 
 
+    ###*
+    Check if the given value is instanceof Promise.
+
+    "val instanceof Promise" fails when native Promise and its polyfill are mixed
+    ###
+    @isPromise: (val) ->
+
+        typeof val?.then is 'function'
+
+
 module.exports = Util

@@ -1,8 +1,7 @@
-
-
 Base  = require './base'
 Entity = require './entity'
 GeneralFactory = require './general-factory'
+{ isPromise } = require('../util')
 
 ###*
 Base repository class of DDD pattern.
@@ -88,7 +87,7 @@ class BaseRepository extends Base
     ###
     resolve: (result, fn) ->
 
-        if result instanceof Promise
+        if isPromise result
             return result.then (obj) => fn.call(@, obj)
 
         else
@@ -182,7 +181,7 @@ class BaseRepository extends Base
 
         existence = (val) -> val?
 
-        if results[0] instanceof Promise
+        if isPromise results[0]
             return Promise.all(results).then (models) -> models.filter existence
         else
             return results.filter existence

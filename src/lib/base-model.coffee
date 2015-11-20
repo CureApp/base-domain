@@ -1,4 +1,4 @@
-
+'use strict'
 
 TypeInfo = require './type-info'
 Base = require './base'

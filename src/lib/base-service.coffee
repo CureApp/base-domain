@@ -1,3 +1,5 @@
+'use strict'
+
 Base = require './base'
 
 ###*

@@ -1,3 +1,4 @@
+'use strict'
 
 ###*
 parses model properties and classifies them

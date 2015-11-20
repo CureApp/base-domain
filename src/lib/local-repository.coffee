@@ -1,3 +1,4 @@
+'use strict'
 
 AggregateRoot = require './aggregate-root'
 BaseSyncRepository = require './base-sync-repository'

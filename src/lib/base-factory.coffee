@@ -1,4 +1,4 @@
-
+'use strict'
 
 Base = require './base'
 GeneralFactory = require './general-factory'

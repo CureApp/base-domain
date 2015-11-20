@@ -1,3 +1,5 @@
+'use strict'
+
 ###*
 interface of factory
 

@@ -1,3 +1,4 @@
+'use strict'
 
 DomainError = require './lib/domain-error'
 FixtureLoader = require './fixture-loader'

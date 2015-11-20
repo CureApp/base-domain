@@ -1,3 +1,4 @@
+'use strict'
 
 ###*
 interface of Aggregate Root

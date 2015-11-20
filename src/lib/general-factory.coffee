@@ -1,3 +1,4 @@
+'use strict'
 
 BaseList = require './base-list'
 BaseDict = require './base-dict'

@@ -1,3 +1,4 @@
+'use strict'
 
 Includer = require './includer'
 

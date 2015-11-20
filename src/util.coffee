@@ -1,3 +1,4 @@
+'use strict'
 
 deepEqual = require 'deep-eql'
 clone     = require 'clone'

@@ -1,3 +1,4 @@
+'use strict'
 
 ValueObject = require './value-object'
 EntityPool = require '../entity-pool'

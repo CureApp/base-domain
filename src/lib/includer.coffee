@@ -1,3 +1,4 @@
+'use strict'
 
 BaseModel = require './base-model'
 EntityPool = require '../entity-pool'

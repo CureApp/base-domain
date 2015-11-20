@@ -1,4 +1,4 @@
-
+'use strict'
 
 BaseSyncRepository = require './base-sync-repository'
 

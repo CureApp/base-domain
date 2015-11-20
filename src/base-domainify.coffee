@@ -1,4 +1,4 @@
-
+'use strict'
 through = require 'through'
 fs      = require 'fs'
 path    = require 'path'

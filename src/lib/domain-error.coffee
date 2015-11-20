@@ -1,5 +1,4 @@
-
-
+'use strict'
 
 ###*
 error thrown by base-domain module

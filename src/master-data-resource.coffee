@@ -1,3 +1,4 @@
+'use strict'
 
 Util = require './util'
 MemoryResource = require './memory-resource'

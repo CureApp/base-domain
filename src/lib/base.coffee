@@ -1,3 +1,5 @@
+'use strict'
+
 DomainError = require './domain-error'
 
 { hyphenize } = require '../util'

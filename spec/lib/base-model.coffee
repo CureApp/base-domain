@@ -36,7 +36,7 @@ describe 'BaseModel', ->
         assert hospital.name is 'shinout clinic'
         assert hospital.root is facade
 
-        expect(hospital).not.to.have.property 'beds'
+        assert not hospital.beds?
 
 
     it 'can define sub entity with idPropName', ->
@@ -80,7 +80,7 @@ describe 'BaseModel', ->
             assert ChildClass.properties.prop2 is BaseModel.TYPES.NUMBER
 
             assert ParentClass.properties.prop1 is BaseModel.TYPES.STRING
-            expect(ParentClass.properties).not.to.have.property 'prop2'
+            assert not ParentClass.properties.prop2?
 
 
 
@@ -127,15 +127,15 @@ describe 'BaseModel', ->
 
             medicine = new Medicine({ name: 'hoge', abc: 'yeah', obj: key: 'value' }, @facade)
 
-            expect(medicine).to.have.property 'name', 'hoge'
-            expect(medicine).to.have.property 'abc', 'yeah'
-            expect(medicine).to.have.property 'obj'
+            assert medicine.name is 'hoge'
+            assert medicine.abc is 'yeah'
+            assert medicine.obj?
 
             plain = medicine.toPlainObject()
 
-            expect(plain).to.have.property 'name', 'hoge'
-            expect(plain).not.to.have.property 'abc'
-            expect(plain).not.to.have.property 'obj'
+            assert plain.name is 'hoge'
+            assert not plain.abc?
+            assert not plain.obj?
 
 
 
@@ -150,8 +150,8 @@ describe 'BaseModel', ->
 
             diary.set('coauthor', @member)
 
-            expect(diary.coauthor).to.equal @member
-            expect(diary.coauthorId).to.equal 12
+            assert diary.coauthor is @member
+            assert diary.coauthorId is 12
 
 
 
@@ -167,8 +167,8 @@ describe 'BaseModel', ->
 
             diary.unset('author')
 
-            expect(diary.author).not.to.exist
-            expect(diary.memberId).not.to.exist
+            assert not diary.author?
+            assert not diary.memberId?
 
 
     describe 'include', ->
@@ -180,9 +180,9 @@ describe 'BaseModel', ->
                 hobbies: [1,2,3]
 
             mem.include(recursive: true).then (model) ->
-                expect(mem).to.equal model
-                expect(mem).to.have.property('hobbies')
-                expect(mem.hobbies).to.be.instanceof BaseList
+                assert mem is model
+                assert mem.hobbies
+                assert mem.hobbies instanceof BaseList
                 done()
             .catch (e) ->
                 done e
@@ -216,9 +216,9 @@ describe 'BaseModel', ->
 
             a = @f.createModel('a', { name: 'main', aId: '1' }, { include: recursive: true })
 
-            expect(a.a).to.equal a.a.a.a.a
-            expect(a.a.a).to.equal a.a.a.a.a.a
-            expect(a.a.a.a).to.equal a.a.a.a.a.a.a
+            assert a.a is a.a.a.a.a
+            assert a.a.a is a.a.a.a.a.a
+            assert a.a.a.a is a.a.a.a.a.a.a
 
 
     describe 'inherit', ->
@@ -232,10 +232,10 @@ describe 'BaseModel', ->
 
             mem.inherit(foo: 0, bar: 'bar', age: 29, hobbies: null)
 
-            expect(mem).to.have.property 'foo', 0
-            expect(mem).to.have.property 'bar', 'bar'
-            expect(mem).to.have.property 'age', 29
-            expect(mem.hobbies).to.exist
+            assert mem.foo is 0
+            assert mem.bar is 'bar'
+            assert mem.age is 29
+            assert mem.hobbies?
 
 
         it 'overrides values', ->
@@ -252,8 +252,8 @@ describe 'BaseModel', ->
 
             diary.inherit(memberId: '123')
 
-            expect(diary.memberId).to.equal '123'
-            expect(diary.author).to.not.exist
+            assert diary.memberId is '123'
+            assert not diary.author?
 
 
 

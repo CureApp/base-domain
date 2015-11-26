@@ -15,7 +15,7 @@ describe 'GeneralFactory', ->
             class Abc extends Facade.ValueObject
 
             @facade.addClass('abc', Abc)
-            expect(GeneralFactory.create('abc', @facade)).to.be.instanceof GeneralFactory
+            assert GeneralFactory.create('abc', @facade) instanceof GeneralFactory
 
 
 
@@ -44,16 +44,16 @@ describe 'GeneralFactory', ->
 
             abc = GeneralFactory.createModel('abc', undefined, null, @facade)
 
-            expect(abc.a).to.equal 'a'
-            expect(abc.b).to.be.true
+            assert abc.a is 'a'
+            assert abc.b is true
             expect(abc.c).to.eql [1, 2, 3]
             expect(abc.c).to.eql Abc.properties.c.default
-            expect(abc.c).to.not.equal Abc.properties.c.default
+            assert abc.c isnt Abc.properties.c.default
             expect(abc.d).to.eql @facade.createModel 'sub', name: 'shinout', type: 'xyz'
-            expect(abc.e).to.be.undefined
-            expect(abc.f).to.be.instanceof Date
-            expect(abc.g).to.be.instanceof Sub
-            expect(abc.h).to.be.undefined
+            assert abc.e is undefined
+            assert abc.f instanceof Date
+            assert abc.g instanceof Sub
+            assert abc.h is undefined
 
 
 
@@ -80,9 +80,9 @@ describe 'GeneralFactory', ->
 
             dict = factory.createDict('a-dict', [ { name: 'shin' } ])
 
-            expect(dict).to.be.instanceof @facade.getModel 'a-dict'
-            expect(dict).to.have.length 1
-            expect(dict.items.shin).to.be.instanceof @facade.getModel 'a'
+            assert dict instanceof @facade.getModel 'a-dict'
+            assert dict.length is 1
+            assert dict.items.shin instanceof @facade.getModel 'a'
 
 
         describe 'with dict of entities', ->
@@ -113,12 +113,12 @@ describe 'GeneralFactory', ->
 
                 dict = factory.createDict('b-dict', [ '123', '456' ])
 
-                expect(dict.ids).to.have.length 2
-                expect(dict).to.have.length 2
-                expect(dict.items['123']).to.be.instanceof @facade.getModel 'b'
+                assert dict.ids.length is 2
+                assert dict.length is 2
+                assert dict.items['123'] instanceof @facade.getModel 'b'
 
 
-            it 'creates dict from array(string), as ids. Not loaded with AsyncRepository', (done) ->
+            it 'creates dict from array(string), as ids. Not loaded with AsyncRepository', ->
 
                 class BRepository extends BaseAsyncRepository
                     @modelName: 'b'
@@ -135,12 +135,9 @@ describe 'GeneralFactory', ->
 
                     dict = factory.createDict('b-dict', [ '123', '456' ])
 
-                    expect(dict).to.have.length 2
-                    expect(dict.ids).to.have.length 2
-                    expect(dict.itemLength).to.equal 0
-                    done()
-
-                .catch done
+                    assert dict.length is 2
+                    assert dict.ids.length is 2
+                    assert dict.itemLength is 0
 
 
             it 'creates dict from array(string), as ids. Loaded with AsyncRepository with async option', (done) ->
@@ -160,14 +157,14 @@ describe 'GeneralFactory', ->
 
                     dict = factory.createDict('b-dict', [ '123', '456' ], include: async: true)
 
-                    expect(dict.ids).to.have.length 2
-                    expect(dict).to.have.length 2
-                    expect(dict.itemLength).to.equal 0
+                    assert dict.ids.length is 2
+                    assert dict.length is 2
+                    assert dict.itemLength is 0
 
                     setTimeout =>
-                        expect(dict).to.have.length 2
-                        expect(dict.itemLength).to.equal 2
-                        expect(dict.items['123']).to.be.instanceof @facade.getModel 'b'
+                        assert dict.length is 2
+                        assert dict.itemLength is 2
+                        assert dict.items['123'] instanceof @facade.getModel 'b'
                         done()
                     , 0
 

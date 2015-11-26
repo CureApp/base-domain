@@ -85,7 +85,7 @@ describe 'Includer', ->
                 subId: 'abc'
 
             main.include().then =>
-                expect(main.sub).to.be.instanceof f.getModel 'sub-item'
+                assert main.sub instanceof f.getModel 'sub-item'
                 done()
 
             .catch done
@@ -114,4 +114,4 @@ describe 'Includer', ->
             pnt = f.createModel 'parent'
             repo = new Includer(pnt).createRepository('child')
 
-            expect(repo).to.be.instanceof ParentRepository
+            assert repo instanceof ParentRepository

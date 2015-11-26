@@ -9,7 +9,7 @@ describe 'Entity', ->
 
     it 'has isEntity, true', ->
 
-        expect(Hobby).to.have.property 'isEntity', true
+        assert Hobby.isEntity is true
 
 
     describe 'equals', ->
@@ -30,5 +30,5 @@ describe 'Entity', ->
             scheduleB = new Schedule(id: 'abcd', title: 'abc', date: date, visited: false, facade)
             scheduleC = new Schedule(id: 'abc', title: 'abcd', date: date, visited: false, facade)
 
-            expect(scheduleA.equals scheduleB).to.be.false
-            expect(scheduleA.equals scheduleC).to.be.true
+            assert scheduleA.equals(scheduleB) is false
+            assert scheduleA.equals(scheduleC) is true

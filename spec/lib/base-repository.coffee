@@ -10,66 +10,60 @@ xdescribe 'BaseRepository', ->
         it 'is created by the model name', ->
             repo = facade.createRepository('hobby')
             HobbyFactory = facade.require('hobby-factory')
-            expect(repo.factory).to.be.instanceof HobbyFactory
+            assert repo.factory instanceof HobbyFactory
 
 
     describe 'save', ->
         repo = facade.createRepository('hobby')
 
-        it 'returns instance of Model', (done) ->
+        it 'returns instance of Model', ->
 
             repo.save(name: 'music').then (model) =>
-                expect(model).to.be.instanceof Hobby
-                done()
+                assert model instanceof Hobby
 
 
-        it 'returns instance of Model with createdAt, updatedAt when configured as such', (done) ->
+        it 'returns instance of Model with createdAt, updatedAt when configured as such', ->
 
             memberRepo = facade.createRepository('member')
 
             memberRepo.save(firstName: 'Shin').then (model) =>
-                expect(model).to.have.property('mCreatedAt')
-                expect(model).to.have.property('mUpdatedAt')
-                expect(new Date(model.mCreatedAt)).to.be.instanceof Date
-                expect(new Date(model.mUpdatedAt)).to.be.instanceof Date
-                done()
-            .catch done
+                assert model.mCreatedAt?
+                assert model.mUpdatedAt?
+                assert new Date(model.mCreatedAt) instanceof Date
+                assert new Date(model.mUpdatedAt) instanceof Date
 
-        it 'createdAt stays original', (done) ->
+        it 'createdAt stays original', ->
 
             memberRepo = facade.createRepository('member')
             now = new Date()
 
             memberRepo.save(firstName: 'Shin', mCreatedAt: now).then (model) =>
-                expect(model).to.have.property('mCreatedAt')
-                expect(model.mCreatedAt).to.equal now
-                done()
+                assert model.mCreatedAt?
+                assert model.mCreatedAt is now
 
-        it 'createdAt is newly set even when model has id', (done) ->
+        it 'createdAt is newly set even when model has id', ->
 
             memberRepo = facade.createRepository('member')
             now = new Date()
 
             memberRepo.save(firstName: 'Shin', id: 'shin').then (model) =>
-                expect(model).to.have.property('mCreatedAt')
-                expect(new Date(model.mCreatedAt)).to.be.instanceof Date
-                expect(new Date(model.mUpdatedAt)).to.be.instanceof Date
-                done()
+                assert model.mCreatedAt?
+                assert new Date(model.mCreatedAt) instanceof Date
+                assert new Date(model.mUpdatedAt) instanceof Date
 
 
-        it 'updatedAt changes for each saving', (done) ->
+        it 'updatedAt changes for each saving', ->
 
             memberRepo = facade.createRepository('member')
             now = new Date()
 
             memberRepo.save(firstName: 'Shin', mUpdatedAt: now).then (model) =>
-                expect(model).to.have.property('mCreatedAt')
-                expect(model.mUpdatedAt).not.to.equal now
-                done()
+                assert model.mCreatedAt?
+                assert model.mUpdatedAt isnt now
 
 
 
-        it 'returns instance of Model with relation ids', (done) ->
+        it 'returns instance of Model with relation ids', ->
 
             memberFactory = facade.createFactory('member')
 
@@ -95,71 +89,62 @@ xdescribe 'BaseRepository', ->
 
             dRepo = facade.createRepository('diary')
             dRepo.save(diary).then (model) =>
-                expect(model.memberId).to.equal '12'
-                done()
-            .catch done
+                assert model.memberId is '12'
 
 
      describe 'get', ->
         repo = facade.createRepository('hobby')
 
-        it 'returns instance of Model', (done) ->
+        it 'returns instance of Model', ->
 
             repo.get(1).then (model) =>
-                expect(model).to.be.instanceof Hobby
-                done()
+                assert model instanceof Hobby
 
 
      describe 'query', ->
         repo = facade.createRepository('hobby')
 
-        it 'returns array of models', (done) ->
+        it 'returns array of models', ->
 
             repo.query().then (models) =>
-                expect(models).to.be.instanceof Array
-                expect(models[0]).to.be.instanceof Hobby
-                done()
+                assert models instanceof Array
+                assert models[0] instanceof Hobby
 
 
      describe 'singleQuery', ->
         repo = facade.createRepository('hobby')
 
-        it 'returns instance of Model', (done) ->
+        it 'returns instance of Model', ->
 
             repo.singleQuery().then (model) =>
-                expect(model).to.be.instanceof Hobby
-                done()
+                assert model instanceof Hobby
 
 
      describe 'delete', ->
         repo = facade.createRepository('hobby')
 
-        it 'returns boolean', (done) ->
+        it 'returns boolean', ->
 
             repo.delete(id: '123').then (isDeleted) =>
-                expect(isDeleted).to.be.true
-                done()
+                assert isDeleted
 
 
 
      describe 'update', ->
         repo = facade.createRepository('hobby')
 
-        it 'returns instance of Model', (done) ->
+        it 'returns instance of Model', ->
 
             repo.update('123', name: 'tennis').then (model) =>
-                expect(model).to.be.instanceof Hobby
+                assert model instanceof Hobby
 
-                done()
 
-        it 'returns instance of Model with updatedAt when configured as such', (done) ->
+        it 'returns instance of Model with updatedAt when configured as such', ->
 
             memberRepo = facade.createRepository('member')
 
             memberRepo.update('123', firstName: 'Shin').then (model) =>
                 arg2 = model.arg2 # mock prop
-                expect(arg2).not.to.have.property('mCreatedAt')
-                expect(arg2).to.have.property('mUpdatedAt')
-                expect(new Date(arg2.mUpdatedAt)).to.be.instanceof Date
-                done()
-            .catch done
+                assert not arg2.mCreatedAt?
+                assert arg2.mUpdatedAt?
+                assert new Date(arg2.mUpdatedAt) instanceof Date

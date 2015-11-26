@@ -7,7 +7,7 @@ describe 'Entity', ->
 
         class Schedule extends ValueObject
 
-        expect(Schedule).to.have.property 'isEntity', false
+        assert Schedule.isEntity is false
 
 
     describe 'equals', ->
@@ -30,5 +30,5 @@ describe 'Entity', ->
             scheduleB = facade.createModel('schedule', title: 'abc', date: date, visited: false)
             scheduleC = facade.createModel('schedule', title: 'abcd', date: date, visited: false)
 
-            expect(scheduleA.equals scheduleB).to.be.true
-            expect(scheduleA.equals scheduleC).to.be.false
+            assert scheduleA.equals scheduleB
+            assert (scheduleA.equals scheduleC) is false

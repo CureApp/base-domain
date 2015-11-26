@@ -8,15 +8,15 @@ describe 'Facade', ->
 
         it 'returns instance of Facade', ->
             f = Facade.createInstance()
-            expect(f).to.be.instanceof Facade
+            assert f instanceof Facade
 
 
         it 'returns instance of extended class', ->
             class ChildFacade extends Facade
 
             f = ChildFacade.createInstance()
-            expect(f).to.be.instanceof Facade
-            expect(f).to.be.instanceof ChildFacade
+            assert f instanceof Facade
+            assert f instanceof ChildFacade
 
 
     describe 'addClass', ->
@@ -29,12 +29,12 @@ describe 'Facade', ->
 
             f.addClass('hobby', Hobby)
 
-            expect(Hobby.className).to.equal 'hobby'
+            assert Hobby.className is 'hobby'
 
             FaHobby = f.getModel('hobby')
 
-            expect(FaHobby).to.equal Hobby
-            expect(f.classes.hobby).to.equal Hobby
+            assert FaHobby is Hobby
+            assert f.classes.hobby is Hobby
 
 
         it 'add new "className" property to the class whose parent class already has "className"', ->
@@ -48,16 +48,16 @@ describe 'Facade', ->
                 @abc: true
             f.addClass('child-hobby', ChildHobby)
 
-            expect(Hobby.className).to.equal 'hobby'
-            expect(ChildHobby.className).to.equal 'child-hobby'
+            assert Hobby.className is 'hobby'
+            assert ChildHobby.className is 'child-hobby'
 
             FaHobby = f.getModel('hobby')
-            expect(FaHobby).to.equal Hobby
-            expect(f.classes.hobby).to.equal Hobby
+            assert FaHobby is Hobby
+            assert f.classes.hobby is Hobby
 
             FaChildHobby = f.getModel('child-hobby')
-            expect(FaChildHobby).to.equal ChildHobby
-            expect(f.classes['child-hobby']).to.equal ChildHobby
+            assert FaChildHobby is ChildHobby
+            assert f.classes['child-hobby'] is ChildHobby
 
 
 
@@ -66,13 +66,13 @@ describe 'Facade', ->
         it 'returns false if a class with the given name is not found', ->
 
             f = Facade.createInstance()
-            expect(f.hasClass('hobby')).to.be.false
+            assert f.hasClass('hobby') is false
 
         it 'returns true if a class with the given name is found', ->
             f = Facade.createInstance()
             class Hobby extends Facade.BaseModel
             f.addClass('hobby', Hobby)
-            expect(f.hasClass('hobby')).to.be.true
+            assert f.hasClass('hobby')
 
 
     describe 'createFactory', ->
@@ -89,7 +89,7 @@ describe 'Facade', ->
             f.addClass('abc', Abc)
             f.addClass('abc-factory', AbcFactory)
             factory = f.createFactory('abc')
-            expect(factory.constructor.xxx).to.equal 'yyy'
+            assert factory.constructor.xxx is 'yyy'
 
         it 'throws error when no specific factory is found', ->
 
@@ -108,5 +108,5 @@ describe 'Facade', ->
             f = Facade.createInstance()
             err = f.error('notANumber')
 
-            expect(err).to.have.property 'reason', 'notANumber'
-            expect(f.isDomainError(err)).to.be.true
+            assert err.reason is 'notANumber'
+            assert f.isDomainError(err)

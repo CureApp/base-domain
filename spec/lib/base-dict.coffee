@@ -86,13 +86,13 @@ describe 'BaseDict', ->
 
             hobbyDict = new HobbyDict(items: @hobbies, @facade)
 
-            expect(hobbyDict).to.have.length 3
+            assert hobbyDict.length is 3
 
             arr = hobbyDict.toArray()
-            expect(arr).to.have.length 3
+            assert arr.length is 3
 
             for hobby in arr
-                expect(@hobbies).to.include hobby
+                assert hobby in @hobbies
 
 
     describe 'keys', ->
@@ -131,8 +131,8 @@ describe 'BaseDict', ->
                 @className: 'hobby-dict'
 
             hobbyDict = new HobbyDict(items: @hobbies, @facade)
-            expect(Object.keys(hobbyDict.items)).to.have.length 3
-            expect(hobbyDict).to.have.length 3
+            assert Object.keys(hobbyDict.items).length is 3
+            assert hobbyDict.length is 3
 
 
     describe 'setIds', ->
@@ -154,9 +154,9 @@ describe 'BaseDict', ->
             dict.setIds(['1', '3'])
             dict.include()
 
-            expect(dict.length).to.equal 2
-            expect(dict.items).to.have.property '1'
-            expect(dict.items).to.have.property '3'
+            assert dict.length is 2
+            assert dict.items[1]?
+            assert dict.items[3]?
 
 
         it 'loads data by ids asynchronously from BaseAsyncRepository', (done) ->
@@ -169,11 +169,11 @@ describe 'BaseDict', ->
 
             dict.setIds(['abc'])
 
-            expect(dict.items).to.be.undefined
+            assert dict.items is undefined
 
             dict.include().then =>
-                expect(dict.items).to.exist
-                expect(dict.itemLength).to.equal 1
+                assert dict.items?
+                assert dict.itemLength is 1
                 done()
 
 
@@ -189,10 +189,10 @@ describe 'BaseDict', ->
 
 
         it 'returns true when item exists', ->
-            expect(@hobbyDict.has('keyboard')).to.be.true
+            assert @hobbyDict.has('keyboard')
 
         it 'returns false when item does not exist', ->
-            expect(@hobbyDict.has('sailing')).to.be.false
+            assert @hobbyDict.has('sailing') is false
 
 
     describe 'contains', ->
@@ -207,15 +207,15 @@ describe 'BaseDict', ->
 
 
         it 'returns true when item exists', ->
-            expect(@hobbyDict.contains(@hobbies[0])).to.be.true
+            assert @hobbyDict.contains(@hobbies[0])
 
         it 'returns false when item does not exist', ->
             newHobby = @facade.createModel('hobby', id: 4, name: 'xxx')
-            expect(@hobbyDict.has(newHobby)).to.be.false
+            assert @hobbyDict.has(newHobby) is false
 
         it 'returns false when item with same key exists but these two are different', ->
             newHobby = @facade.createModel('hobby', id: 4, name: 'keyboard')
-            expect(@hobbyDict.has(newHobby)).to.be.false
+            assert @hobbyDict.has(newHobby) is false
 
 
     describe 'get', ->
@@ -229,10 +229,10 @@ describe 'BaseDict', ->
             @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
 
         it 'returns submodel when key exists', ->
-            expect(@hobbyDict.get('keyboard')).to.be.instanceof @facade.getModel('hobby')
+            assert @hobbyDict.get('keyboard') instanceof @facade.getModel('hobby')
 
         it 'returns undefined when key does not exist', ->
-            expect(@hobbyDict.get('xxx')).to.be.undefined
+            assert @hobbyDict.get('xxx') is undefined
 
 
 
@@ -250,13 +250,13 @@ describe 'BaseDict', ->
         it 'add item model', ->
             newHobby = @facade.createModel('hobby', id: 4, name: 'xxx')
             @hobbyDict.add(newHobby)
-            expect(@hobbyDict.items.xxx).to.be.instanceof @facade.getModel 'hobby'
+            assert @hobbyDict.items.xxx instanceof @facade.getModel 'hobby'
 
 
         it 'adds non-item model', ->
             newHobby = id: 4, name: 'yyyy'
             @hobbyDict.add(newHobby)
-            expect(@hobbyDict.items.yyyy).to.be.instanceof @facade.getModel 'hobby'
+            assert @hobbyDict.items.yyyy instanceof @facade.getModel 'hobby'
 
 
     describe 'remove', ->
@@ -272,11 +272,11 @@ describe 'BaseDict', ->
 
         it 'removes by key', ->
             @hobbyDict.remove('keyboard')
-            expect(@hobbyDict.items.keyboard).not.to.exist
+            assert not @hobbyDict.items.keyboard?
 
         it 'removes by item', ->
             @hobbyDict.remove(@hobbies[0])
-            expect(@hobbyDict.items.keyboard).not.to.exist
+            assert not @hobbyDict.items.keyboard?
 
 
         it 'do nothing if no key exists', ->
@@ -294,18 +294,18 @@ describe 'BaseDict', ->
 
             hobbyDict = new HobbyDict(items: @hobbies, @facade)
 
-            expect(hobbyDict).to.have.length 3
-            expect(hobbyDict.ids).to.have.length 3
+            assert hobbyDict.length is 3
+            assert hobbyDict.ids.length is 3
 
             hobbyDict.clear()
 
-            expect(hobbyDict).to.have.length 0
-            expect(hobbyDict.ids).to.have.length 0
+            assert hobbyDict.length is 0
+            assert hobbyDict.ids.length is 0
 
             hobbyDict.clear()
 
-            expect(hobbyDict).to.have.length 0
-            expect(hobbyDict.ids).to.have.length 0
+            assert hobbyDict.length is 0
+            assert hobbyDict.ids.length is 0
 
 
 
@@ -325,7 +325,7 @@ describe 'BaseDict', ->
 
             @hobbyDict.toggle h
 
-            expect(@hobbyDict.has 'skiing').to.be.true
+            assert @hobbyDict.has 'skiing'
 
 
         it 'removes if exists', ->
@@ -334,7 +334,7 @@ describe 'BaseDict', ->
 
             @hobbyDict.add h
             @hobbyDict.toggle h
-            expect(@hobbyDict.has 'skiing').to.be.false
+            assert @hobbyDict.has('skiing') is false
 
 
     describe 'toPlainObject', ->
@@ -348,8 +348,8 @@ describe 'BaseDict', ->
             hobbyDict = new HobbyDict(items: @hobbies, @facade)
             plain = hobbyDict.toPlainObject()
 
-            expect(plain).to.have.property 'ids'
-            expect(plain).not.to.have.property 'items'
+            assert plain.ids?
+            assert not plain.items?
 
 
         it 'returns object with items when item is non-entity', ->
@@ -365,10 +365,10 @@ describe 'BaseDict', ->
             nonEntityDict = new NonEntityDict(items: nonEntities, @facade)
             plain = nonEntityDict.toPlainObject()
 
-            expect(plain).not.to.have.property 'ids'
-            expect(plain).to.have.property 'items'
-            expect(plain.items).to.be.instanceof Array
-            expect(plain.items).to.have.length 3
+            assert not plain.ids?
+            assert plain.items?
+            assert plain.items instanceof Array
+            assert plain.items.length is 3
 
 
         it 'returns object with custom properties', ->
@@ -381,5 +381,5 @@ describe 'BaseDict', ->
 
             hobbyDict = new HobbyDict(items: @hobbies, annualCost: 2000, @facade)
 
-            expect(hobbyDict.toPlainObject()).to.have.property 'ids'
-            expect(hobbyDict.toPlainObject()).to.have.property 'annualCost'
+            assert hobbyDict.toPlainObject().ids?
+            assert hobbyDict.toPlainObject().annualCost?

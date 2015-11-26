@@ -16,7 +16,7 @@ describe 'BaseFactory', ->
 
         it 'returns model class', ->
 
-            expect(factory.getModelClass()).to.equal Hobby
+            assert factory.getModelClass() is Hobby
 
         it 'returns guessed model class when no @modelName given', ->
 
@@ -26,7 +26,7 @@ describe 'BaseFactory', ->
             f.addClass 'foo', Foo
             f.addClass 'foo-factory', FooFactory
 
-            expect(f.createFactory('foo').getModelClass()).to.equal f.getModel 'foo'
+            assert f.createFactory('foo').getModelClass() is f.getModel 'foo'
 
 
 
@@ -36,8 +36,8 @@ describe 'BaseFactory', ->
             factory = facade.createFactory('hobby')
 
             model = factory.createEmpty()
-            expect(model).to.be.instanceof Hobby
-            expect(model).to.have.property 'id', null
+            assert model instanceof Hobby
+            assert model.id is null
 
 
     describe 'createFromObject', ->
@@ -57,18 +57,18 @@ describe 'BaseFactory', ->
                     { id: 3, name: 'Shogi' }
                 ]
 
-            expect(model).to.be.instanceof Member
-            expect(model).to.have.property 'id', null
-            expect(model).to.have.property 'firstName', 'Shin'
-            expect(model).to.have.property 'registeredAt', now
+            assert model instanceof Member
+            assert model.id is null
+            assert model.firstName is 'Shin'
+            assert model.registeredAt is now
 
-            expect(model.hobbies).to.be.instanceof BaseList
-            expect(model.hobbies.items).to.be.instanceof Array
-            expect(model.hobbies.items).to.have.length 3
+            assert model.hobbies instanceof BaseList
+            assert model.hobbies.items instanceof Array
+            assert model.hobbies.items.length is 3
 
             for hobby in model.hobbies.items
-                expect(hobby).to.be.instanceof Hobby
-                expect(hobby).to.have.property 'name'
+                assert hobby instanceof Hobby
+                assert hobby.name?
 
 
         it 'returns instance of model with relational model', ->
@@ -94,7 +94,7 @@ describe 'BaseFactory', ->
                 author: member
                 date  : new Date()
 
-            expect(diary.memberId.toString()).to.equal '12' # not authorId
+            assert diary.memberId.toString() is '12' # not authorId
 
 
         it 'creates empty list', ->
@@ -104,7 +104,7 @@ describe 'BaseFactory', ->
             member = mFactory.createFromObject
                 firstName: 'Shin'
 
-            expect(member.hobbies).to.be.instanceof Facade.BaseList
+            assert member.hobbies instanceof Facade.BaseList
 
 
         it 'does not create sub-model when key is given null', ->
@@ -124,7 +124,7 @@ describe 'BaseFactory', ->
             foo = f.createFactory('foo').createFromObject
                 bar: null
 
-            expect(foo.bar).to.equal null
+            assert foo.bar is null
 
 
         it 'does not create sub-dict when key is given null', ->
@@ -148,7 +148,7 @@ describe 'BaseFactory', ->
             foo = f.createFactory('foo').createFromObject
                 bars: null
 
-            expect(foo.bars).to.equal null
+            assert foo.bars is null
 
 
 
@@ -159,7 +159,7 @@ describe 'BaseFactory', ->
                 firstName: 'Shin'
                 hobbies: null
 
-            expect(member.hobbies).not.to.exist
+            assert not member.hobbies?
 
 
     describe 'createList', ->
@@ -176,7 +176,7 @@ describe 'BaseFactory', ->
             factory = facade.createFactory('diary')
 
             list = factory.createList('super-diary-list', {})
-            expect(list).to.be.instanceof facade.getModel('super-diary-list')
+            assert list instanceof facade.getModel('super-diary-list')
 
 
     describe 'createDict', ->
@@ -193,5 +193,5 @@ describe 'BaseFactory', ->
             factory = facade.createFactory('diary')
 
             dict = factory.createDict('super-diary-dict', {})
-            expect(dict).to.be.instanceof facade.getModel('super-diary-dict')
+            assert dict instanceof facade.getModel('super-diary-dict')
 

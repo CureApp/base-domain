@@ -17,20 +17,20 @@ describe 'MasterDataResource', ->
 
     it 'always loads data from data directory in Node.js environment', ->
 
-        expect(fs.existsSync @allJSON).to.be.false
+        assert fs.existsSync(@allJSON) is false
 
         f = Facade.createInstance(dirname: @dirname, master: true)
 
-        expect(f.master.memories.device).to.be.instanceof MemoryResource
+        assert f.master.memories.device instanceof MemoryResource
 
-        expect(fs.existsSync @allJSON).to.be.true
+        assert fs.existsSync @allJSON
 
 
     describe 'in Titanium environment', ->
 
         before ->
             getGlobal().Ti = {}
-            expect(Ti).to.exist
+            assert Ti?
             fs.unlinkSync @allJSON
             @UtilRequireJSON = Util.requireJSON
             @UtilRequireFile = Util.requireFile
@@ -45,19 +45,19 @@ describe 'MasterDataResource', ->
 
             f = Facade.createInstance(dirname: @dirname, master: true)
 
-            expect(f.master.memories.device).to.not.exist
+            assert not f.master.memories.device?
 
             f.master.build()
 
-            expect(fs.existsSync @allJSON).to.be.true
+            assert fs.existsSync @allJSON
 
             f2 = Facade.createInstance(dirname: @dirname, master: true)
 
-            expect(f2.master.memories.device).to.be.instanceof MemoryResource
+            assert f2.master.memories.device instanceof MemoryResource
 
         after ->
             getGlobal().Ti = undefined
-            expect(Ti).not.to.exist
+            assert not Ti?
             Util.requireJSON = @UtilRequireJSON
             Util.requireFile = @UtilRequireFile
             console.error = @consoleError

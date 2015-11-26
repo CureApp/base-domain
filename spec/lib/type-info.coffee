@@ -9,14 +9,14 @@ describe 'TypeInfo', ->
 
             typeInfo = TypeInfo.createModelType('paris-match')
 
-            expect(typeInfo).to.have.property('typeName', 'MODEL')
-            expect(typeInfo).to.have.property('model', 'paris-match')
-            expect(typeInfo).to.have.property('idPropName', 'parisMatchId')
+            assert typeInfo.typeName is 'MODEL'
+            assert typeInfo.model is 'paris-match'
+            assert typeInfo.idPropName is 'parisMatchId'
 
         it 'returns TypeInfo with custom idPropName', ->
 
             typeInfo = TypeInfo.createModelType('paris-match', 'type')
 
-            expect(typeInfo).to.have.property('typeName', 'MODEL')
-            expect(typeInfo).to.have.property('model', 'paris-match')
-            expect(typeInfo).to.have.property('idPropName', 'type')
+            assert typeInfo.typeName is 'MODEL'
+            assert typeInfo.model is 'paris-match'
+            assert typeInfo.idPropName is 'type'

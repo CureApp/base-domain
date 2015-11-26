@@ -52,8 +52,8 @@ describe 'AggregateRoot', ->
             game = facade.createModel('game')
             card = game.createModel('card', name: 'road1')
 
-            expect(card.root).to.equal game
-            expect(game.root).to.equal facade
+            assert card.root is game
+            assert game.root is facade
 
 
 
@@ -66,7 +66,7 @@ describe 'AggregateRoot', ->
 
             game.createRepository('card').save card
 
-            expect(Object.keys game.memories).to.have.length 1
+            assert Object.keys(game.memories).length is 1
 
 
     describe 'toPlainObject', ->
@@ -78,7 +78,7 @@ describe 'AggregateRoot', ->
 
             game.createRepository('card').save card
 
-            expect(Object.keys game.memories).to.have.length 1
+            assert Object.keys(game.memories).length is 1
 
             plain = game.toPlainObject()
 

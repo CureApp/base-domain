@@ -55,7 +55,7 @@ describe 'Collection', ->
 
         hobbyCollection = new HobbyCollection(items: @hobbies, @facade)
 
-        expect(hobbyCollection.itemFactory).to.be.instanceof GeneralFactory
+        assert hobbyCollection.itemFactory instanceof GeneralFactory
 
 
     it '"isItemEntity" and "itemFactory" are hidden properties', ->
@@ -69,8 +69,8 @@ describe 'Collection', ->
 
         explicitKeys = Object.keys(hobbyCollection)
 
-        expect(explicitKeys).not.to.contain 'isItemEntity'
-        expect(explicitKeys).not.to.contain 'itemFactory'
+        assert 'isItemEntity' not in explicitKeys
+        assert 'itemFactory' not in explicitKeys
 
 
     it 'can contain custom properties', ->
@@ -84,10 +84,10 @@ describe 'Collection', ->
 
         hobbyCollection = new HobbyCollection(items: @hobbies, annualCost: 2000, @facade)
 
-        expect(hobbyCollection).to.have.property 'annualCost', 2000
+        assert hobbyCollection.annualCost is 2000
 
         explicitKeys = Object.keys(hobbyCollection)
-        expect(explicitKeys).to.contain 'annualCost'
+        assert 'annualCost' in explicitKeys
 
     it 'throws error if itemModelName is not set', ->
         class HobbyCollection extends Collection
@@ -112,12 +112,12 @@ describe 'Collection', ->
 
         it 'get array when the item is Entity', ->
             hobbyCollection = @facade.createModel('hobby-collection')
-            expect(hobbyCollection.ids).to.be.instanceof Array
+            assert hobbyCollection.ids instanceof Array
 
         it 'get undefined when the item is not Entity', ->
             nonEntityCollection = @facade.createModel('non-entity-collection')
-            expect(nonEntityCollection.ids).to.be.undefined
-            expect(nonEntityCollection).not.to.have.property 'ids'
+            assert nonEntityCollection.ids is undefined
+            assert not nonEntityCollection.ids?
 
 
 
@@ -145,12 +145,12 @@ describe 'Collection', ->
 
             expect(hobbyCollection.ids).to.eql ['abc', 'def']
             expect(hobbyCollection.getIds()).to.eql ['abc', 'def']
-            expect(hobbyCollection.getIds()).not.to.equal hobbyCollection.ids
+            assert hobbyCollection.getIds() isnt hobbyCollection.ids
 
 
         it 'returns undefined when the item is not Entity', ->
             nonEntityCollection = @facade.createModel('non-entity-collection')
-            expect(nonEntityCollection.ids).to.be.undefined
-            expect(nonEntityCollection.getIds()).to.be.undefined
+            assert nonEntityCollection.ids is undefined
+            assert nonEntityCollection.getIds() is undefined
 
 

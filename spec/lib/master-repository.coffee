@@ -35,15 +35,15 @@ describe 'MasterRepository', ->
     it 'succeeds with no data, when the model is not registered in master', ->
 
         repo = @f.createRepository('dummy')
-        expect(repo.client).to.be.instanceof MemoryResource
-        expect(repo.client.count()).to.equal 0
+        assert repo.client instanceof MemoryResource
+        assert repo.client.count() is 0
 
 
     it 'has client, instance of MemoryResource', ->
 
         repo = @f.createRepository('device')
-        expect(repo.client).to.be.instanceof MemoryResource
-        expect(repo.client.count()).to.be.above 0
+        assert repo.client instanceof MemoryResource
+        assert repo.client.count() > 0
 
 
     describe 'get', ->
@@ -54,16 +54,16 @@ describe 'MasterRepository', ->
 
             iPhone6s = repo.get('iphone6s')
 
-            expect(iPhone6s).to.be.instanceof @f.getModel('device')
-            expect(iPhone6s).to.have.property 'id', 'iphone6s'
-            expect(iPhone6s).to.have.property 'name', 'iPhone6S'
-            expect(iPhone6s).to.have.property 'os', 'iOS'
+            assert iPhone6s instanceof @f.getModel('device')
+            assert iPhone6s.id is 'iphone6s'
+            assert iPhone6s.name is 'iPhone6S'
+            assert iPhone6s.os is 'iOS'
 
 
         it 'returns null if not exists', ->
 
             repo = @f.createRepository('device')
-            expect(repo.get('abc')).to.not.exist
+            assert not repo.get('abc')?
 
 
     describe 'getAll', ->
@@ -73,8 +73,8 @@ describe 'MasterRepository', ->
             repo = @f.createRepository('device')
             devices = repo.getAll()
 
-            expect(devices).to.be.instanceof Array
-            expect(devices).to.have.length 3
+            assert devices instanceof Array
+            assert devices.length is 3
 
 
     describe 'save', ->

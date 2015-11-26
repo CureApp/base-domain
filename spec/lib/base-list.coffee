@@ -80,11 +80,11 @@ describe 'BaseList', ->
 
         it 'get array when the item is Entity', ->
             hobbyList = @facade.createModel('hobby-list')
-            expect(hobbyList.ids).to.be.instanceof Array
+            assert hobbyList.ids instanceof Array
 
         it 'get undefined when the item is not Entity', ->
             nonEntityList = @facade.createModel('non-entity-list')
-            expect(nonEntityList.ids).to.be.undefined
+            assert nonEntityList.ids is undefined
 
         it 'get array of ids when the item is Entity', ->
 
@@ -102,7 +102,7 @@ describe 'BaseList', ->
 
             hobbyList = new HobbyList(items: @hobbies, @facade)
 
-            expect(hobbyList.first()).to.equal @hobbies[0]
+            assert hobbyList.first() is @hobbies[0]
 
 
 
@@ -116,7 +116,7 @@ describe 'BaseList', ->
 
             hobbyList = new HobbyList(items: @hobbies, @facade)
 
-            expect(hobbyList.last()).to.equal @hobbies[2]
+            assert hobbyList.last() is @hobbies[2]
 
 
     describe 'getByIndex', ->
@@ -233,8 +233,8 @@ describe 'BaseList', ->
 
             hobbyList.add new Hobby(id: 0, name: 'abc', @facade), new Hobby(id: 100, name: 'xyz', @facade)
 
-            expect(hobbyList.first()).to.have.property 'name', 'keyboard'
-            expect(hobbyList.last()).to.have.property 'name', 'xyz'
+            assert hobbyList.first().name is 'keyboard'
+            assert hobbyList.last().name is 'xyz'
 
 
         it 'appends plain objects', ->
@@ -249,9 +249,9 @@ describe 'BaseList', ->
 
             hobbyList.add {id: 0, name: 'abc'}, {id: 100, name: 'xyz'}
 
-            expect(hobbyList).to.have.length 5
-            expect(hobbyList.first()).to.have.property 'name', 'keyboard'
-            expect(hobbyList.last()).to.have.property 'name', 'xyz'
+            assert hobbyList.length is 5
+            assert hobbyList.first().name is 'keyboard'
+            assert hobbyList.last().name is 'xyz'
 
 
 
@@ -265,17 +265,17 @@ describe 'BaseList', ->
 
             hobbyList = new HobbyList(items: @hobbies, @facade)
 
-            expect(hobbyList).to.have.length 3
+            assert hobbyList.length is 3
 
             hobbyList.clear()
 
-            expect(hobbyList).to.have.length 0
-            expect(hobbyList.ids).to.have.length 0
+            assert hobbyList.length is 0
+            assert hobbyList.ids.length is 0
 
             hobbyList.clear()
 
-            expect(hobbyList).to.have.length 0
-            expect(hobbyList.ids).to.have.length 0
+            assert hobbyList.length is 0
+            assert hobbyList.ids.length is 0
 
 
     describe 'setIds', ->
@@ -298,7 +298,7 @@ describe 'BaseList', ->
             list.setIds(['1', '3'])
             list.include()
 
-            expect(list.length).to.equal 2
+            assert list.length is 2
 
 
     describe 'remove', ->
@@ -311,12 +311,12 @@ describe 'BaseList', ->
 
             hobbyList = new HobbyList(items: @hobbies, @facade)
 
-            expect(hobbyList).to.have.length 3
+            assert hobbyList.length is 3
 
             hobbyList.remove(1)
 
-            expect(hobbyList).to.have.length 2
-            expect(hobbyList.ids).to.have.length 2
+            assert hobbyList.length is 2
+            assert hobbyList.ids.length is 2
 
             expect(hobbyList.ids).to.eql [3, 1]
 

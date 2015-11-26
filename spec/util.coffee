@@ -10,14 +10,14 @@ describe 'Util', ->
 
             cameled = Util.camelize('larry-carlton')
 
-            expect(cameled).to.equal 'LarryCarlton'
+            assert cameled is 'LarryCarlton'
 
 
         it 'converts get-element-by-id to getElementById when lowerFirst is true', ->
 
             cameled = Util.camelize('get-element-by-id', true)
 
-            expect(cameled).to.equal 'getElementById'
+            assert cameled is 'getElementById'
 
 
     describe 'hyphenize', ->
@@ -26,28 +26,28 @@ describe 'Util', ->
 
             hyphenized = Util.hyphenize('CureApp')
 
-            expect(hyphenized).to.equal 'cure-app'
+            assert hyphenized is 'cure-app'
 
 
         it 'converts getElementById to get-element-by-id', ->
 
             hyphenized = Util.hyphenize('getElementById')
 
-            expect(hyphenized).to.equal 'get-element-by-id'
+            assert hyphenized is 'get-element-by-id'
 
 
         it 'converts Room335 to room335', ->
 
             hyphenized = Util.hyphenize('Room335')
 
-            expect(hyphenized).to.equal 'room335'
+            assert hyphenized is 'room335'
 
 
         it 'converts WBC to w-b-c', ->
 
             hyphenized = Util.hyphenize('WBC')
 
-            expect(hyphenized).to.equal 'w-b-c'
+            assert hyphenized is 'w-b-c'
 
 
     describe 'isInstance', ->
@@ -56,8 +56,8 @@ describe 'Util', ->
 
             F = ->
             f = new F
-            expect(Util.isInstance(f, F)).to.be.true
-            expect(Util.isInstance({}, F)).to.be.false
+            assert Util.isInstance(f, F)
+            assert Util.isInstance({}, F) is false
 
 
         it 'also returns the same result as "instanceof" operator, when class is given', ->
@@ -71,24 +71,24 @@ describe 'Util', ->
             n = null
             u = undefined
 
-            expect(Util.isInstance(p, Human)).to.be.true
-            expect(Util.isInstance(h, Human)).to.be.true
-            expect(Util.isInstance(h, Human)).to.be.true
-            expect(Util.isInstance(o, Human)).to.be.false
-            expect(Util.isInstance(n, Human)).to.be.false
-            expect(Util.isInstance(u, Human)).to.be.false
+            assert Util.isInstance(p, Human)
+            assert Util.isInstance(h, Human)
+            assert Util.isInstance(h, Human)
+            assert Util.isInstance(o, Human) is false
+            assert Util.isInstance(n, Human) is false
+            assert Util.isInstance(u, Human) is false
 
-            expect(Util.isInstance(p, Patient)).to.be.true
-            expect(Util.isInstance(h, Patient)).to.be.false
-            expect(Util.isInstance(o, Patient)).to.be.false
-            expect(Util.isInstance(n, Patient)).to.be.false
-            expect(Util.isInstance(u, Patient)).to.be.false
+            assert Util.isInstance(p, Patient)
+            assert Util.isInstance(h, Patient) is false
+            assert Util.isInstance(o, Patient) is false
+            assert Util.isInstance(n, Patient) is false
+            assert Util.isInstance(u, Patient) is false
 
-            expect(Util.isInstance(p, Object)).to.be.true
-            expect(Util.isInstance(h, Object)).to.be.true
-            expect(Util.isInstance(o, Object)).to.be.true
-            expect(Util.isInstance(n, Object)).to.be.false
-            expect(Util.isInstance(u, Object)).to.be.false
+            assert Util.isInstance(p, Object)
+            assert Util.isInstance(h, Object)
+            assert Util.isInstance(o, Object)
+            assert Util.isInstance(n, Object) is false
+            assert Util.isInstance(u, Object) is false
 
 
         describe 'in Titanium environment', ->
@@ -97,19 +97,19 @@ describe 'Util', ->
                 # creates Ti in global scope
                 getGlobal = -> @
                 getGlobal().Ti = {}
-                expect(Ti).to.exist
+                assert Ti?
 
             after ->
                 getGlobal = -> @
                 getGlobal().Ti = undefined
-                expect(Ti).not.to.exist
+                assert not Ti?
 
 
             it 'also returns the same result as "instanceof" operator', ->
                 F = ->
                 f = new F
-                expect(Util.isInstance(f, F)).to.be.true
-                expect(Util.isInstance({}, F)).to.be.false
+                assert Util.isInstance(f, F)
+                assert Util.isInstance({}, F) is false
 
             it 'also returns the same result as "instanceof" operator, when class is given', ->
 
@@ -122,24 +122,24 @@ describe 'Util', ->
                 n = null
                 u = undefined
 
-                expect(Util.isInstance(p, Human)).to.be.true
-                expect(Util.isInstance(h, Human)).to.be.true
-                expect(Util.isInstance(h, Human)).to.be.true
-                expect(Util.isInstance(o, Human)).to.be.false
-                expect(Util.isInstance(n, Human)).to.be.false
-                expect(Util.isInstance(u, Human)).to.be.false
+                assert Util.isInstance(p, Human)
+                assert Util.isInstance(h, Human)
+                assert Util.isInstance(h, Human)
+                assert Util.isInstance(o, Human) is false
+                assert Util.isInstance(n, Human) is false
+                assert Util.isInstance(u, Human) is false
 
-                expect(Util.isInstance(p, Patient)).to.be.true
-                expect(Util.isInstance(h, Patient)).to.be.false
-                expect(Util.isInstance(o, Patient)).to.be.false
-                expect(Util.isInstance(n, Patient)).to.be.false
-                expect(Util.isInstance(u, Patient)).to.be.false
+                assert Util.isInstance(p, Patient)
+                assert Util.isInstance(h, Patient) is false
+                assert Util.isInstance(o, Patient) is false
+                assert Util.isInstance(n, Patient) is false
+                assert Util.isInstance(u, Patient) is false
 
-                expect(Util.isInstance(p, Object)).to.be.true
-                expect(Util.isInstance(h, Object)).to.be.true
-                expect(Util.isInstance(o, Object)).to.be.true
-                expect(Util.isInstance(n, Object)).to.be.false
-                expect(Util.isInstance(u, Object)).to.be.false
+                assert Util.isInstance(p, Object)
+                assert Util.isInstance(h, Object)
+                assert Util.isInstance(o, Object)
+                assert Util.isInstance(n, Object) is false
+                assert Util.isInstance(u, Object) is false
 
 
     describe 'requireFile', ->
@@ -147,7 +147,7 @@ describe 'Util', ->
         it 'just requires a file', ->
 
             abc = Util.requireFile(__dirname + '/sample-files/abc')
-            expect(abc).to.equal 'abc'
+            assert abc is 'abc'
 
 
         describe 'in Titanium environment', ->
@@ -164,7 +164,7 @@ describe 'Util', ->
             afterEach ->
                 getGlobal = -> @
                 getGlobal().Ti = undefined
-                expect(Ti).not.to.exist
+                assert not Ti?
 
 
             it 'just adds suffix ".js" and requires the path when platform is android', ->
@@ -172,7 +172,7 @@ describe 'Util', ->
                 Ti.Filesystem.getFile = -> throw new Error 'this must not be called'
 
                 abc = Util.requireFile(__dirname + '/sample-files/abc')
-                expect(abc).to.equal 'abc'
+                assert abc is 'abc'
 
 
             it 'adds suffix ".js", checkes existence and requires when platform is not android', ->
@@ -183,7 +183,7 @@ describe 'Util', ->
                     exists: -> true
 
                 abc = Util.requireFile(__dirname + '/sample-files/abc')
-                expect(abc).to.equal 'abc'
+                assert abc is 'abc'
 
 
             it 'adds suffix ".js", checkes existence and throws an error when platform is not android and file does not exist', ->

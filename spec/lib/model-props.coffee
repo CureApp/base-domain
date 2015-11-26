@@ -41,10 +41,10 @@ describe 'ModelProps', ->
 
 
     it 'has createdAt whose value is CREATED_AT at last column', ->
-        expect(@modelProps.createdAt).to.equal 'createdAt2'
+        assert @modelProps.createdAt is 'createdAt2'
 
     it 'has updatedAt whose value is UPDATED_AT at last column', ->
-        expect(@modelProps.updatedAt).to.equal 'updatedAt2'
+        assert @modelProps.updatedAt is 'updatedAt2'
 
     it 'has models collecting MODELs (ValueObject and Entities, Collections)', ->
         expect(@modelProps.models).to.eql ['b', 'c', 'bs', 'cs']
@@ -71,23 +71,23 @@ describe 'ModelProps', ->
     describe 'isEntity', ->
 
         it 'returns whether the prop is entity', ->
-            expect(@modelProps.isEntity('b')).to.be.true
-            expect(@modelProps.isEntity('c')).to.be.false
-            expect(@modelProps.isEntity('date')).to.be.false
-            expect(@modelProps.isEntity('xxx')).to.be.false
+            assert @modelProps.isEntity('b')
+            assert @modelProps.isEntity('c') is false
+            assert @modelProps.isEntity('date') is false
+            assert @modelProps.isEntity('xxx') is false
 
     describe 'isModelProp', ->
         it 'returns whether the prop is model', ->
-            expect(@modelProps.isModel('b')).to.be.true
-            expect(@modelProps.isModel('c')).to.be.true
-            expect(@modelProps.isModel('date')).to.be.false
-            expect(@modelProps.isModel('xxx')).to.be.false
+            assert @modelProps.isModel('b')
+            assert @modelProps.isModel('c')
+            assert @modelProps.isModel('date') is false
+            assert @modelProps.isModel('xxx') is false
 
 
     describe 'getTypeInfo', ->
         it 'returns typeInfo of the prop', ->
-            expect(@modelProps.getTypeInfo('b')).to.exist
-            expect(@modelProps.getTypeInfo('c')).to.exist
-            expect(@modelProps.getTypeInfo('cs')).to.exist
-            expect(@modelProps.getTypeInfo('num')).to.exist
-            expect(@modelProps.getTypeInfo('xxxx')).not.to.exist
+            assert @modelProps.getTypeInfo('b')?
+            assert @modelProps.getTypeInfo('c')?
+            assert @modelProps.getTypeInfo('cs')?
+            assert @modelProps.getTypeInfo('num')?
+            assert not @modelProps.getTypeInfo('xxxx')?

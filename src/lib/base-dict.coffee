@@ -160,4 +160,30 @@ class BaseDict extends Collection
         (item for key, item of @items)
 
 
+    ###*
+    get all keys
+
+    @method keys
+    @public
+    @return {Array}
+    ###
+    keys: ->
+        return [] if not @loaded()
+        (key for key, item of @items)
+
+
+    ###*
+    iterate key - item
+
+    @method keyValues
+    @public
+    @params {Function} fn 1st argument: key, 2nd argument: value
+    ###
+    keyValues: (fn, _this) ->
+        _this ?= @
+        return if typeof fn isnt 'function' or not @loaded()
+        fn.call(_this, key, item) for key, item of @items
+        return
+
+
 module.exports = BaseDict

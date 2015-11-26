@@ -46,7 +46,7 @@ describe 'BaseDict', ->
         )
 
 
-    describe '@keys', ->
+    describe '@key', ->
 
         it 'originally returns item.id', ->
 
@@ -93,6 +93,33 @@ describe 'BaseDict', ->
 
             for hobby in arr
                 expect(@hobbies).to.include hobby
+
+
+    describe 'keys', ->
+
+        it 'returns keys of the items', ->
+
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
+
+            hobbyDict = new HobbyDict(items: @hobbies, @facade)
+
+            keys = hobbyDict.keys()
+            expect(keys).to.eql ['1', '2', '3']
+
+
+    describe 'keyValues', ->
+
+        it 'iterates key-value of the items', ->
+
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
+
+            hobbyDict = new HobbyDict(items: @hobbies, @facade)
+
+            hobbyDict.keyValues (k, v) ->
+                assert k in ['1', '2', '3']
+                assert v.name in ['keyboard', 'jogging', 'cycling']
 
 
     describe 'length', ->

@@ -39,15 +39,6 @@ class BaseDict extends Collection
     @property {Object} items
     ###
 
-    ###*
-    @constructor
-    @params {any} props
-    @params {RootInterface} root
-    ###
-    constructor: (props = {}, root) ->
-
-        super(props, root)
-
 
     ###*
     @method initItems

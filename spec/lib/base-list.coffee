@@ -280,9 +280,9 @@ describe 'BaseList', ->
 
     describe 'setIds', ->
 
-        beforeEach (done) ->
+        beforeEach ->
 
-            @facade.createRepository('diary').save(id: 'abc', name: 'xxx').then -> done()
+            @facade.createRepository('diary').save(id: 'abc', name: 'xxx')
 
 
         it 'can load data by ids synchronously from BaseSyncRepository', ->

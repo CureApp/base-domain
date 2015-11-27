@@ -173,7 +173,7 @@ describe 'BaseModel', ->
 
     describe 'include', ->
 
-        it 'includes all submodels', (done) ->
+        it 'includes all submodels', ->
 
             mem = @facade.createModel 'member',
                 id: 11
@@ -183,9 +183,6 @@ describe 'BaseModel', ->
                 assert mem is model
                 assert mem.hobbies
                 assert mem.hobbies instanceof BaseList
-                done()
-            .catch (e) ->
-                done e
 
 
     describe 'include', ->

@@ -342,7 +342,8 @@ class Collection extends ValueObject
             plain.ids = @ids.slice()
             delete plain.items
 
-        else
+        else if @loaded()
+
             plainItems = for key, item of @items
                 if typeof item.toPlainObject is 'function'
                     item.toPlainObject()

@@ -8,7 +8,7 @@ Facade = require '../base-domain'
 
 describe 'Includer', ->
 
-    before (done) ->
+    before ->
 
         @facade = require('../create-facade').create()
 
@@ -47,7 +47,7 @@ describe 'Includer', ->
         Promise.all([
             bRepo.save(id: 'xxx', name: 'shin', cId: 'xxx')
             bRepo.save(id: 'yyy', name: 'satake', cId: 'yyy')
-        ]).then -> done()
+        ])
 
 
     beforeEach ->
@@ -57,7 +57,7 @@ describe 'Includer', ->
 
     describe 'include', ->
 
-        it 'includes subEntities', (done) ->
+        it 'includes subEntities', ->
 
             class Main extends ValueObject
                 @properties:
@@ -86,9 +86,6 @@ describe 'Includer', ->
 
             main.include().then =>
                 assert main.sub instanceof f.getModel 'sub-item'
-                done()
-
-            .catch done
 
 
     describe 'createRepository', ->

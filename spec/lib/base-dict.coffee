@@ -137,9 +137,9 @@ describe 'BaseDict', ->
 
     describe 'setIds', ->
 
-        beforeEach (done) ->
+        beforeEach ->
 
-            @facade.createRepository('diary').save(id: 'abc', name: 'xxx').then -> done()
+            @facade.createRepository('diary').save(id: 'abc', name: 'xxx')
 
         it 'can load data by ids synchronously from BaseSyncRepository', ->
 
@@ -159,7 +159,7 @@ describe 'BaseDict', ->
             assert dict.items[3]?
 
 
-        it 'loads data by ids asynchronously from BaseAsyncRepository', (done) ->
+        it 'loads data by ids asynchronously from BaseAsyncRepository', ->
 
             class DiaryDict extends BaseDict
                 @itemModelName: 'diary'
@@ -174,7 +174,6 @@ describe 'BaseDict', ->
             dict.include().then =>
                 assert dict.items?
                 assert dict.itemLength is 1
-                done()
 
 
     describe 'has', ->
@@ -338,6 +337,36 @@ describe 'BaseDict', ->
 
 
     describe 'toPlainObject', ->
+
+        it 'returns object without items when dict has no items', ->
+
+            class HobbyDict extends BaseDict
+                @className: 'hobby-dict'
+                @itemModelName: 'hobby'
+
+            hobbyDict = new HobbyDict({}, @facade)
+            plain = hobbyDict.toPlainObject()
+            newHobbyDict = new HobbyDict(plain, @facade)
+
+            assert plain.hasOwnProperty('items') is false
+            assert plain.hasOwnProperty('ids')
+
+            expect(hobbyDict).to.eql newHobbyDict
+
+
+        it 'returns object without ids or items when dict has no items (non-entity-dict)', ->
+
+            class NonEntityDict extends BaseDict
+                @className: 'hobby-dict'
+                @itemModelName: 'non-entity'
+
+            nonEntityDict = new NonEntityDict({}, @facade)
+            plain = nonEntityDict.toPlainObject()
+            newNonEntityDict = new NonEntityDict({}, @facade)
+            assert plain.hasOwnProperty('items') is false
+            assert plain.hasOwnProperty('ids') is false
+
+            expect(nonEntityDict).to.eql newNonEntityDict
 
         it 'returns object with ids when item is entity', ->
 

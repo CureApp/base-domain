@@ -167,5 +167,3 @@ describe 'GeneralFactory', ->
                         assert dict.items['123'] instanceof @facade.getModel 'b'
                         done()
                     , 0
-
-                .catch done

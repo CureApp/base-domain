@@ -135,7 +135,12 @@ class BaseDict extends Collection
             else
                 key = arg
 
+            item = @items[key]
             delete @items[key]
+
+            if item and @ids
+                idx = @ids.indexOf(item.id)
+                @ids.splice(idx, 1) if idx >= 0
 
         return
 

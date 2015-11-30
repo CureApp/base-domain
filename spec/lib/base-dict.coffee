@@ -270,15 +270,30 @@ describe 'BaseDict', ->
 
 
         it 'removes by key', ->
+
+            assert @hobbyDict.length is 3
+
             @hobbyDict.remove('keyboard')
+
             assert not @hobbyDict.items.keyboard?
+            assert @hobbyDict.length is 2
+            assert 3 not in @hobbyDict.ids
+
 
         it 'removes by item', ->
+
+            assert @hobbyDict.length is 3
+
             @hobbyDict.remove(@hobbies[0])
+
             assert not @hobbyDict.items.keyboard?
+            assert @hobbyDict.length is 2
+            assert 3 not in @hobbyDict.ids
+
 
 
         it 'do nothing if no key exists', ->
+
             @hobbyDict.remove('xxx')
 
 

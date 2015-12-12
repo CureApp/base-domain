@@ -88,27 +88,4 @@ describe 'Includer', ->
                 assert main.sub instanceof f.getModel 'sub-item'
 
 
-    describe 'createRepository', ->
 
-        it 'checks parent class\'s repository', ->
-
-            class Parent extends Entity
-                @properties:
-                    name: @TYPES.STRING
-
-            class Child extends Parent
-                @properties:
-                    name: @TYPES.STRING
-
-            class ParentRepository extends BaseSyncRepository
-                @modelName: 'parent'
-
-            f = require('../create-facade').create()
-            f.addClass('parent', Parent)
-            f.addClass('child', Child)
-            f.addClass('parent-repository', ParentRepository)
-
-            pnt = f.createModel 'parent'
-            repo = new Includer(pnt).createRepository('child')
-
-            assert repo instanceof ParentRepository

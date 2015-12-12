@@ -119,7 +119,7 @@ class Includer
             @model.set(entityProp, subModel)
             return
 
-        repo = @createRepository(typeInfo.model)
+        repo = @facade.createPreferredRepository(typeInfo.model)
 
         return if not repo?
 
@@ -134,28 +134,6 @@ class Includer
             return repo.get(subId, include: @options).then (subModel) =>
                 @model.set(entityProp, subModel)
             .catch (e) ->
-
-
-
-    ###*
-    Get instance of repository.
-    If not found, checks parent class's repository
-
-    @method createRepository
-    @return {BaseRepository}
-    ###
-    createRepository: (modelName) ->
-
-        loop
-            try
-                return @root.createRepository(modelName)
-
-            catch e
-                ParentClass = @facade.getModel(modelName).getParent()
-
-                return null if not ParentClass.className
-
-                modelName = ParentClass.getName()
 
 
 module.exports = Includer

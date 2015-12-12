@@ -251,7 +251,7 @@ class Facade
             if @hasClass(name, cacheResult: true)
                 return @__create(name, null, params, @)
 
-            ParentClass = @require(name).getParent()
+            ParentClass = @require(modelName).getParent()
 
             return null if not ParentClass.className
 

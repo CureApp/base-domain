@@ -202,6 +202,29 @@ describe 'Facade', ->
             assert f.createPreferredRepository('medicine') instanceof MedicineRepository
 
 
+        it 'checks parent class\'s repository', ->
+
+            { Entity, BaseSyncRepository } = Facade
+
+            class Parent extends Entity
+                @properties:
+                    name: @TYPES.STRING
+
+            class Child extends Parent
+                @properties:
+                    name: @TYPES.STRING
+
+            class ParentRepository extends BaseSyncRepository
+                @modelName: 'parent'
+
+            f = require('../create-facade').create()
+            f.addClass('parent', Parent)
+            f.addClass('child', Child)
+            f.addClass('parent-repository', ParentRepository)
+
+            assert f.createPreferredRepository('child') instanceof ParentRepository
+
+
 
     describe 'createPreferredFactory', ->
 

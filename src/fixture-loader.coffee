@@ -95,7 +95,7 @@ class FixtureLoader
                     fx.data
 
         try
-            repo = @facade.createRepository(modelName) # TODO (find repo by includer's algorithm)
+            repo = @facade.createPreferredRepository(modelName)
         catch e
             console.error e.message
             return

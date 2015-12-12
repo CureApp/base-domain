@@ -100,7 +100,6 @@ describe 'Facade', ->
             expect(-> f.createFactory('abc')).to.throw Error
 
 
-
     describe 'error', ->
 
         it 'throw DomainError with reason', ->
@@ -110,3 +109,198 @@ describe 'Facade', ->
 
             assert err.reason is 'notANumber'
             assert f.isDomainError(err)
+
+
+    describe 'createPreferredRepository', ->
+
+        before ->
+            @f = require('../create-facade').create 'preferred-test'
+
+
+        it 'throw error if no candidates are found', ->
+
+            expect(=> @f.createPreferredRepository('hospital')).to.throw.Error
+
+
+
+        it 'returns standard repository if preferred repository is not specified', ->
+
+            MedicineRepository = @f.require 'medicine-repository'
+
+            assert @f.createPreferredRepository('medicine') instanceof MedicineRepository
+
+
+        it 'returns preferred repository', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    repository:
+                        medicine: 'web-medicine-repository'
+
+            WebMedicineRepository = f.require 'web-medicine-repository'
+
+            assert f.createPreferredRepository('medicine') instanceof WebMedicineRepository
+
+
+        it 'returns repository with prefix if exists', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    prefix: 'web'
+
+            WebMedicineRepository = f.require 'web-medicine-repository'
+
+            assert f.createPreferredRepository('medicine') instanceof WebMedicineRepository
+
+
+        it 'returns standard repository when prefix is given but not exists', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    prefix: 'node'
+
+            MedicineRepository = f.require 'medicine-repository'
+
+            assert f.createPreferredRepository('medicine') instanceof MedicineRepository
+
+
+        it 'returns standard repository when preferred repository name is specified but not exists', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    repository:
+                        medicine: 'abcdef-repository'
+
+            MedicineRepository = f.require 'medicine-repository'
+
+            assert f.createPreferredRepository('medicine') instanceof MedicineRepository
+
+
+
+    describe 'createPreferredFactory', ->
+
+        before ->
+            @f = require('../create-facade').create 'preferred-test'
+
+
+        it 'throw error if no candidates are found', ->
+
+            expect(=> @f.createPreferredFactory('hospital')).to.throw.Error
+
+
+        it 'returns standard factory if preferred factory is not specified', ->
+
+            MedicineFactory = @f.require 'medicine-factory'
+
+            assert @f.createPreferredFactory('medicine') instanceof MedicineFactory
+
+
+        it 'returns preferred factory', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    factory:
+                        medicine: 'xx-medicine-factory'
+
+            XxMedicineFactory = f.require 'xx-medicine-factory'
+
+            assert f.createPreferredFactory('medicine') instanceof XxMedicineFactory
+
+
+        it 'returns factory with prefix if exists', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    prefix: 'xx'
+
+            XxMedicineFactory = f.require 'xx-medicine-factory'
+
+            assert f.createPreferredFactory('medicine') instanceof XxMedicineFactory
+
+
+        it 'returns standard factory when prefix is given but not exists', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    prefix: 'node'
+
+            MedicineFactory = f.require 'medicine-factory'
+
+            assert f.createPreferredFactory('medicine') instanceof MedicineFactory
+
+
+        it 'returns standard factory when preferred factory name is specified but not exists', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    factory:
+                        medicine: 'abcdef-factory'
+
+            MedicineFactory = f.require 'medicine-factory'
+
+            assert f.createPreferredFactory('medicine') instanceof MedicineFactory
+
+
+
+    describe 'createPreferredService', ->
+
+        before ->
+            @f = require('../create-facade').create 'preferred-test'
+
+
+        it 'throw error if no candidates are found', ->
+
+            expect(=> @f.createPreferredService('hospital')).to.throw.Error
+
+
+        it 'returns standard service if preferred service is not specified', ->
+
+            MedicineService = @f.require 'medicine-service'
+
+            assert @f.createPreferredService('medicine') instanceof MedicineService
+
+
+        it 'returns preferred service', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    service:
+                        medicine: 'special-medicine-service'
+
+            SpecialMedicineService = f.require 'special-medicine-service'
+
+            assert f.createPreferredService('medicine') instanceof SpecialMedicineService
+
+
+        it 'returns service with prefix if exists', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    prefix: 'special'
+
+            SpecialMedicineService = f.require 'special-medicine-service'
+
+            assert f.createPreferredService('medicine') instanceof SpecialMedicineService
+
+
+        it 'returns standard service when prefix is given but not exists', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    prefix: 'node'
+
+            MedicineService = f.require 'medicine-service'
+
+            assert f.createPreferredService('medicine') instanceof MedicineService
+
+
+        it 'returns standard service when preferred service name is specified but not exists', ->
+
+            f = require('../create-facade').create 'preferred-test',
+                preferred:
+                    service:
+                        medicine: 'abcdef-service'
+
+            MedicineService = f.require 'medicine-service'
+
+            assert f.createPreferredService('medicine') instanceof MedicineService

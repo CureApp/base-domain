@@ -72,6 +72,11 @@ class Facade
     @constructor
     @param {String} [options]
     @param {String} [options.dirname="."] path where domain definition files are included
+    @param {Object} [options.preferred={}]
+    @param {Object} [options.preferred.repository] key: modelName, value: repository name used in facade.createPreferredRepository(modelName)
+    @param {Object} [options.preferred.factory] key: modelName, value: factory name used in facade.createPreferredFactory(modelName)
+    @param {Object} [options.preferred.service] key: modelName, value: service name used in facade.createPreferredService(modelName)
+    @param {String|Array(String)} [options.preferred.prefix] prefix attached to load preferred class
     @param {Boolean} [options.master] if true, MasterDataResource is enabled.
     ###
     constructor: (options = {}) ->
@@ -84,6 +89,12 @@ class Facade
                 value: {}
 
         @dirname = options.dirname ? '.'
+
+        @preferred =
+            repository : Util.clone(options.preferred?.repository) ? {}
+            factory    : Util.clone(options.preferred?.factory) ? {}
+            service    : Util.clone(options.preferred?.service) ? {}
+            prefix     : options.preferred?.prefix
 
         if options.master
 
@@ -168,7 +179,10 @@ class Facade
 
 
     __create: (modelName, type, params, root) ->
-        Class = ClassWithConstructor = @require("#{modelName}-#{type}")
+
+        name = if type then modelName + '-' + type else modelName
+
+        Class = ClassWithConstructor = @require(name)
 
         while ClassWithConstructor.length is 0 and ClassWithConstructor isnt Object
             ClassWithConstructor = getProto(ClassWithConstructor::).constructor
@@ -177,6 +191,89 @@ class Facade
             params.push undefined
 
         return new Class(params..., root ? @)
+
+
+    ###*
+    create a preferred repository instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
+
+    @method createPreferredRepository
+    @param {String} modelName
+    @return {BaseRepository}
+    ###
+    createPreferredRepository: (modelName, params...) ->
+
+        @createPreferred(modelName, 'repository', params)
+
+
+    ###*
+    create a preferred factory instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
+
+    @method createPreferredFactory
+    @param {String} modelName
+    @return {BaseFactory}
+    ###
+    createPreferredFactory: (modelName, params...) ->
+
+        @createPreferred(modelName, 'factory', params)
+
+
+    ###*
+    create a preferred service instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
+
+    @method createPreferredService
+    @param {String} modelName
+    @return {BaseFactory}
+    ###
+    createPreferredService: (modelName, params...) ->
+
+        @createPreferred(modelName, 'service', params)
+
+
+    ###*
+    create a preferred factory|repository|service instance
+
+    @method createPreferred
+    @private
+    @param {String} modelName
+    @param {String} type factory|repository|service
+    @return {BaseFactory}
+    ###
+    createPreferred: (modelName, type, params) ->
+
+        loop
+            name = @getPreferredName(modelName, type)
+
+            if @hasClass(name)
+                return @__create(name, null, params, @)
+
+            ParentClass = @require(name).getParent()
+
+            return null if not ParentClass.className
+
+            modelName = ParentClass.getName()
+
+
+    ###*
+    @method getPreferredName
+    @private
+    @param {String} modelName
+    @param {String} type repository|factory|service
+    @return {String}
+    ###
+    getPreferredName: (modelName, type) ->
+
+        name = @preferred[type][modelName]
+
+        return name if name and @hasClass(name)
+
+        if @preferred.prefix
+            name = @preferred.prefix + '-' + modelName + '-' + type
+            return name if name and @hasClass(name)
+
+        return modelName + '-' + type
 
 
 

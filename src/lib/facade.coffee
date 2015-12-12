@@ -96,6 +96,8 @@ class Facade
             service    : Util.clone(options.preferred?.service) ? {}
             prefix     : options.preferred?.prefix
 
+        @nonExistingClassNames = {}
+
         if options.master
 
             ###*
@@ -246,7 +248,7 @@ class Facade
         loop
             name = @getPreferredName(modelName, type)
 
-            if @hasClass(name)
+            if @hasClass(name, cacheResult: true)
                 return @__create(name, null, params, @)
 
             ParentClass = @require(name).getParent()
@@ -267,11 +269,11 @@ class Facade
 
         name = @preferred[type][modelName]
 
-        return name if name and @hasClass(name)
+        return name if name and @hasClass(name, cacheResult: true)
 
         if @preferred.prefix
             name = @preferred.prefix + '-' + modelName + '-' + type
-            return name if name and @hasClass(name)
+            return name if name and @hasClass(name, cacheResult: true)
 
         return modelName + '-' + type
 
@@ -302,13 +304,20 @@ class Facade
 
     @method hasClass
     @param {String} name
+    @param {Object} [options]
+    @param {Boolean} [options.cacheResult] cache information of non-existing name
     @return {Function}
     ###
-    hasClass: (name) ->
+    hasClass: (name, options = {}) ->
+
+        return false if @nonExistingClassNames[name]
+
         try
             @require(name)
             return true
         catch e
+            if options.cacheResult
+                @nonExistingClassNames[name] = true
             return false
 
 
@@ -326,6 +335,8 @@ class Facade
     addClass: (name, klass, skipNameValidation = false) ->
 
         klass.className = name
+
+        delete @nonExistingClassNames[name]
 
         @classes[name] = klass
 

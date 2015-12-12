@@ -75,6 +75,32 @@ describe 'Facade', ->
             assert f.hasClass('hobby')
 
 
+        it 'remembers non-existing class name if cacheResult option is given', ->
+
+            f = Facade.createInstance()
+
+            hasClass = f.hasClass('hobby', cacheResult: true)
+            assert hasClass is false
+
+            f.require = -> throw new Error('this must not be called')
+
+            assert f.hasClass('hobby') is false
+
+
+        it 'remembers, but updates information of non-existing class name if addClass() is called after memorizing', ->
+
+            f = Facade.createInstance()
+
+            hasClass = f.hasClass('hobby', cacheResult: true)
+            assert hasClass is false
+
+            class Hobby extends Facade.BaseModel
+            f.addClass('hobby', Hobby)
+
+            assert f.hasClass('hobby') is true
+
+
+
     describe 'createFactory', ->
 
         it 'returns an instance of registered Factory', ->

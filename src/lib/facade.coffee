@@ -149,11 +149,11 @@ class Facade
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createFactory
-    @param {String} modelName
+    @param {String} name
     @return {BaseFactory}
     ###
-    createFactory: (modelName, params...) ->
-        @__create(modelName, 'factory', params, @)
+    createFactory: (name, params...) ->
+        @__create(name, 'factory', params, @)
 
 
     ###*
@@ -161,11 +161,11 @@ class Facade
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createRepository
-    @param {String} modelName
+    @param {String} name
     @return {BaseRepository}
     ###
-    createRepository: (modelName, params...) ->
-        @__create(modelName, 'repository', params, @)
+    createRepository: (name, params...) ->
+        @__create(name, 'repository', params, @)
 
 
     ###*
@@ -180,9 +180,9 @@ class Facade
         @__create(name, 'service', params, @)
 
 
-    __create: (modelName, type, params, root) ->
+    __create: (name, type, params, root) ->
 
-        name = if type then modelName + '-' + type else modelName
+        name = if type then name + '-' + type else name
 
         Class = ClassWithConstructor = @require(name)
 
@@ -205,7 +205,7 @@ class Facade
     ###
     createPreferredRepository: (modelName, params...) ->
 
-        @createPreferred(modelName, 'repository', params)
+        @createPreferred(modelName, 'repository', params, @)
 
 
     ###*
@@ -218,7 +218,7 @@ class Facade
     ###
     createPreferredFactory: (modelName, params...) ->
 
-        @createPreferred(modelName, 'factory', params)
+        @createPreferred(modelName, 'factory', params, @)
 
 
     ###*
@@ -231,7 +231,7 @@ class Facade
     ###
     createPreferredService: (modelName, params...) ->
 
-        @createPreferred(modelName, 'service', params)
+        @createPreferred(modelName, 'service', params, @)
 
 
     ###*
@@ -243,13 +243,13 @@ class Facade
     @param {String} type factory|repository|service
     @return {BaseFactory}
     ###
-    createPreferred: (modelName, type, params) ->
+    createPreferred: (modelName, type, params, root) ->
 
         loop
             name = @getPreferredName(modelName, type)
 
             if @hasClass(name, cacheResult: true)
-                return @__create(name, null, params, @)
+                return @__create(name, null, params, root)
 
             ParentClass = @require(modelName).getParent()
 

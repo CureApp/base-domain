@@ -37,12 +37,12 @@ class AggregateRoot extends Entity
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createFactory
-    @param {String} modelName
+    @param {String} name
     @return {BaseFactory}
     ###
-    createFactory: (modelName, params...) ->
+    createFactory: (name, params...) ->
 
-        @getFacade().__create(modelName, 'factory', params, @)
+        @getFacade().__create(name, 'factory', params, @)
 
 
     ###*
@@ -50,12 +50,12 @@ class AggregateRoot extends Entity
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createRepository
-    @param {String} modelName
+    @param {String} name
     @return {BaseRepository}
     ###
-    createRepository: (modelName, params...) ->
+    createRepository: (name, params...) ->
 
-        @getFacade().__create(modelName, 'repository', params, @)
+        @getFacade().__create(name, 'repository', params, @)
 
 
     ###*
@@ -83,7 +83,46 @@ class AggregateRoot extends Entity
     ###
     createService: (name, params...) ->
 
-        @getFacade().__create(modelName, 'service', params, @)
+        @getFacade().__create(name, 'service', params, @)
+
+
+    ###*
+    create a preferred repository instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
+
+    @method createPreferredRepository
+    @param {String} modelName
+    @return {BaseRepository}
+    ###
+    createPreferredRepository: (modelName, params...) ->
+
+        @getFacade().createPreferred(modelName, 'repository', params, @)
+
+
+    ###*
+    create a preferred factory instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
+
+    @method createPreferredFactory
+    @param {String} modelName
+    @return {BaseFactory}
+    ###
+    createPreferredFactory: (modelName, params...) ->
+
+        @getFacade().createPreferred(modelName, 'factory', params, @)
+
+
+    ###*
+    create a preferred service instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
+
+    @method createPreferredService
+    @param {String} modelName
+    @return {BaseFactory}
+    ###
+    createPreferredService: (modelName, params...) ->
+
+        @getFacade().createPreferred(modelName, 'service', params, @)
 
 
     ###*

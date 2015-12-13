@@ -1,9 +1,12 @@
 
-facade = require('../create-facade').create()
+facade = require('../create-facade').create null,
+    preferred:
+        repository:
+            joker: 'ex-joker-repository'
 
 Facade = facade.constructor
 
-{ AggregateRoot, Entity, BaseDict, LocalRepository } = facade.constructor
+{ AggregateRoot, Entity, BaseDict, BaseRepository, LocalRepository } = facade.constructor
 
 
 describe 'AggregateRoot', ->
@@ -25,6 +28,11 @@ describe 'AggregateRoot', ->
         @modelName: 'card'
         @aggregateRoot: 'game'
 
+    class Joker extends Card
+
+    class ExJokerRepository extends BaseRepository
+        @modelName: 'joker'
+
     class Player extends Entity
         @properties:
             name: @TYPES.STRING
@@ -41,6 +49,8 @@ describe 'AggregateRoot', ->
     facade.addClass('card', Card)
     facade.addClass('card-dict', CardDict)
     facade.addClass('card-repository', CardRepository)
+    facade.addClass('joker', Joker)
+    facade.addClass('ex-joker-repository', ExJokerRepository)
     facade.addClass('player', Player)
     facade.addClass('player-dict', PlayerDict)
     facade.addClass('player-repository', PlayerRepository)
@@ -67,6 +77,17 @@ describe 'AggregateRoot', ->
             game.createRepository('card').save card
 
             assert Object.keys(game.memories).length is 1
+
+
+    describe 'createPreferredRepository', ->
+
+        it 'returns preferred repository', ->
+
+            game = facade.createModel('game')
+            jokerRepo = game.createPreferredRepository('joker')
+
+            assert jokerRepo instanceof ExJokerRepository
+
 
 
     describe 'toPlainObject', ->

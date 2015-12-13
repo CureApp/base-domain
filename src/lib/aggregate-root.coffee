@@ -118,7 +118,7 @@ class AggregateRoot extends Entity
 
     @method createPreferredService
     @param {String} modelName
-    @return {BaseFactory}
+    @return {BaseService}
     ###
     createPreferredService: (modelName, params...) ->
 

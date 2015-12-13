@@ -61,5 +61,35 @@ class RootInterface
     @return {BaseModel}
     ###
 
+    ###*
+    create a preferred repository instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
+
+    @method createPreferredRepository
+    @param {String} modelName
+    @return {BaseRepository}
+    ###
+
+    ###*
+    create a preferred factory instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
+
+    @method createPreferredFactory
+    @param {String} modelName
+    @return {BaseFactory}
+    ###
+
+    ###*
+    create a preferred service instance
+    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
+
+    @method createPreferredService
+    @param {String} modelName
+    @return {BaseService}
+    ###
+    createPreferredService: (modelName, params...) ->
+
+        @createPreferred(modelName, 'service', params, @)
+
 
 module.exports = RootInterface

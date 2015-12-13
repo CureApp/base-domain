@@ -227,7 +227,7 @@ class Facade
 
     @method createPreferredService
     @param {String} modelName
-    @return {BaseFactory}
+    @return {BaseService}
     ###
     createPreferredService: (modelName, params...) ->
 

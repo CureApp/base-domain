@@ -119,7 +119,7 @@ class Includer
             @model.set(entityProp, subModel)
             return
 
-        repo = @facade.createPreferredRepository(typeInfo.model)
+        repo = @root.createPreferredRepository(typeInfo.model)
 
         return if not repo?
 

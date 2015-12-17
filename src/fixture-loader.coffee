@@ -95,7 +95,7 @@ class FixtureLoader
                     fx.data
 
         try
-            repo = @facade.createPreferredRepository(modelName)
+            repo = @facade.createPreferredRepository(modelName) # TODO: enable to add 2nd argument (noParent: boolean)
         catch e
             console.error e.message
             return

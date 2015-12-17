@@ -217,10 +217,12 @@ class Facade
     @method createPreferredFactory
     @param {String} modelName
     @param {Object} [options]
-    @param {Object} [options.noParent] if true, stop requiring parent class
+    @param {Object} [options.noParent=true] if true, stop requiring parent class
     @return {BaseFactory}
     ###
-    createPreferredFactory: (modelName, options, params...) ->
+    createPreferredFactory: (modelName, options = {}, params...) ->
+
+        options.noParent ?= true
 
         @createPreferred(modelName, 'factory', options, params, @)
 

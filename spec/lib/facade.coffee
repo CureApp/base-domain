@@ -313,7 +313,7 @@ describe 'Facade', ->
             assert f.createPreferredFactory('medicine') instanceof MedicineFactory
 
 
-        it 'checks parent class\'s factory when options.noParent is not true', ->
+        it 'checks parent class\'s factory when options.noParent is false', ->
 
             { Entity, BaseFactory } = Facade
 
@@ -333,10 +333,10 @@ describe 'Facade', ->
             f.addClass('child', Child)
             f.addClass('parent-factory', ParentFactory)
 
-            assert f.createPreferredFactory('child') instanceof ParentFactory
+            assert f.createPreferredFactory('child', noParent: false) instanceof ParentFactory
 
 
-        it 'skips checking parent class\'s factory when options.noParent is true', ->
+        it 'skips checking parent class\'s factory by default', ->
 
             { Entity, BaseFactory } = Facade
 
@@ -356,7 +356,7 @@ describe 'Facade', ->
             f.addClass('child', Child)
             f.addClass('parent-factory', ParentFactory)
 
-            expect(=> f.createPreferredFactory('child', noParent: true)).to.throw.Error
+            expect(=> f.createPreferredFactory('child')).to.throw.Error
 
 
 

@@ -36,7 +36,7 @@ class EntityCollectionIncluder extends Includer
             @model.setItems(items)
             return
 
-        repo = @root.createPreferredRepository(@itemModelName)
+        repo = @createPreferredRepository(@itemModelName)
         return if not repo?
 
         if repo.constructor.isSync

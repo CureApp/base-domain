@@ -17,6 +17,7 @@ class Includer
     @param {Boolean} [options.async=true] get async values
     @param {Boolean} [options.recursive=false] recursively include or not
     @param {Boolean} [options.entityPool] entityPool, to detect circular references
+    @param {Array(String)} [options.noParentRepos] array of modelNames which needs "noParent" option when calling root.createPreferredRepository()
     @param {Array(String)} [options.props] include only given props
     ###
     constructor: (@model, @options = {}) ->
@@ -119,7 +120,7 @@ class Includer
             @model.set(entityProp, subModel)
             return
 
-        repo = @root.createPreferredRepository(typeInfo.model)
+        repo = @createPreferredRepository(typeInfo.model)
 
         return if not repo?
 
@@ -134,6 +135,19 @@ class Includer
             return repo.get(subId, include: @options).then (subModel) =>
                 @model.set(entityProp, subModel)
             .catch (e) ->
+
+
+    createPreferredRepository: (modelName) ->
+
+        options = {}
+
+        if Array.isArray(@options.noParentRepos) and modelName in @options.noParentRepos
+            options.noParent ?= true
+
+        try
+            return @root.createPreferredRepository(modelName, options)
+        catch e
+            return null
 
 
 module.exports = Includer

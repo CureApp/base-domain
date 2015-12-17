@@ -88,41 +88,49 @@ class AggregateRoot extends Entity
 
     ###*
     create a preferred repository instance
-    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
+    3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createPreferredRepository
     @param {String} modelName
+    @param {Object} [options]
+    @param {Object} [options.noParent] if true, stop requiring parent class
     @return {BaseRepository}
     ###
-    createPreferredRepository: (modelName, params...) ->
+    createPreferredRepository: (modelName, options, params...) ->
 
-        @getFacade().createPreferred(modelName, 'repository', params, @)
+        @getFacade().createPreferred(modelName, 'repository', options, params, @)
 
 
     ###*
     create a preferred factory instance
-    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
+    3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createPreferredFactory
     @param {String} modelName
+    @param {Object} [options]
+    @param {Object} [options.noParent] if true, stop requiring parent class
     @return {BaseFactory}
     ###
-    createPreferredFactory: (modelName, params...) ->
+    createPreferredFactory: (modelName, options, params...) ->
 
-        @getFacade().createPreferred(modelName, 'factory', params, @)
+        @getFacade().createPreferred(modelName, 'factory', options, params, @)
 
 
     ###*
     create a preferred service instance
-    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
+    3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createPreferredService
     @param {String} modelName
+    @param {Object} [options]
+    @param {Object} [options.noParent=true] if true, stop requiring parent class
     @return {BaseService}
     ###
-    createPreferredService: (modelName, params...) ->
+    createPreferredService: (modelName, options = {}, params...) ->
 
-        @getFacade().createPreferred(modelName, 'service', params, @)
+        options.noParent ?= true
+
+        @getFacade().createPreferred(modelName, 'service', options, params, @)
 
 
     ###*

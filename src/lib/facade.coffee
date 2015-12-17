@@ -245,6 +245,8 @@ class Facade
     ###
     createPreferred: (modelName, type, params, root) ->
 
+        originalModelName = modelName
+
         loop
             name = @getPreferredName(modelName, type)
 
@@ -253,7 +255,8 @@ class Facade
 
             ParentClass = @require(modelName).getParent()
 
-            return null if not ParentClass.className
+            if not ParentClass.className
+                throw @error("preferred#{type}NotFound", "preferred #{type} of '#{originalModelName}' is not found")
 
             modelName = ParentClass.getName()
 

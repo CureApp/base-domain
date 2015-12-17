@@ -202,7 +202,7 @@ describe 'Facade', ->
             assert f.createPreferredRepository('medicine') instanceof MedicineRepository
 
 
-        it 'checks parent class\'s repository', ->
+        it 'checks parent class\'s repository when options.noParent is not true', ->
 
             { Entity, BaseSyncRepository } = Facade
 
@@ -223,6 +223,29 @@ describe 'Facade', ->
             f.addClass('parent-repository', ParentRepository)
 
             assert f.createPreferredRepository('child') instanceof ParentRepository
+
+
+        it 'skips checking parent class\'s repository when options.noParent is true', ->
+
+            { Entity, BaseSyncRepository } = Facade
+
+            class Parent extends Entity
+                @properties:
+                    name: @TYPES.STRING
+
+            class Child extends Parent
+                @properties:
+                    name: @TYPES.STRING
+
+            class ParentRepository extends BaseSyncRepository
+                @modelName: 'parent'
+
+            f = require('../create-facade').create()
+            f.addClass('parent', Parent)
+            f.addClass('child', Child)
+            f.addClass('parent-repository', ParentRepository)
+
+            expect(=> f.createPreferredRepository('child', noParent: true)).to.throw.Error
 
 
 
@@ -290,6 +313,52 @@ describe 'Facade', ->
             assert f.createPreferredFactory('medicine') instanceof MedicineFactory
 
 
+        it 'checks parent class\'s factory when options.noParent is not true', ->
+
+            { Entity, BaseFactory } = Facade
+
+            class Parent extends Entity
+                @properties:
+                    name: @TYPES.STRING
+
+            class Child extends Parent
+                @properties:
+                    name: @TYPES.STRING
+
+            class ParentFactory extends BaseFactory
+                @modelName: 'parent'
+
+            f = require('../create-facade').create()
+            f.addClass('parent', Parent)
+            f.addClass('child', Child)
+            f.addClass('parent-factory', ParentFactory)
+
+            assert f.createPreferredFactory('child') instanceof ParentFactory
+
+
+        it 'skips checking parent class\'s factory when options.noParent is true', ->
+
+            { Entity, BaseFactory } = Facade
+
+            class Parent extends Entity
+                @properties:
+                    name: @TYPES.STRING
+
+            class Child extends Parent
+                @properties:
+                    name: @TYPES.STRING
+
+            class ParentFactory extends BaseFactory
+                @modelName: 'parent'
+
+            f = require('../create-facade').create()
+            f.addClass('parent', Parent)
+            f.addClass('child', Child)
+            f.addClass('parent-factory', ParentFactory)
+
+            expect(=> f.createPreferredFactory('child', noParent: true)).to.throw.Error
+
+
 
     describe 'createPreferredService', ->
 
@@ -353,3 +422,50 @@ describe 'Facade', ->
             MedicineService = f.require 'medicine-service'
 
             assert f.createPreferredService('medicine') instanceof MedicineService
+
+
+
+        it 'skips checking parent class\'s service by default', ->
+
+            { Entity, BaseService } = Facade
+
+            class Parent extends Entity
+                @properties:
+                    name: @TYPES.STRING
+
+            class Child extends Parent
+                @properties:
+                    name: @TYPES.STRING
+
+            class ParentService extends BaseService
+                @modelName: 'parent'
+
+            f = require('../create-facade').create()
+            f.addClass('parent', Parent)
+            f.addClass('child', Child)
+            f.addClass('parent-service', ParentService)
+
+            expect(=> f.createPreferredService('child')).to.throw.Error
+
+
+        it 'checks parent class\'s service when options.noParent is false', ->
+
+            { Entity, BaseService } = Facade
+
+            class Parent extends Entity
+                @properties:
+                    name: @TYPES.STRING
+
+            class Child extends Parent
+                @properties:
+                    name: @TYPES.STRING
+
+            class ParentService extends BaseService
+                @modelName: 'parent'
+
+            f = require('../create-facade').create()
+            f.addClass('parent', Parent)
+            f.addClass('child', Child)
+            f.addClass('parent-service', ParentService)
+
+            assert f.createPreferredService('child', noParent: false) instanceof ParentService

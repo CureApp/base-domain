@@ -197,28 +197,32 @@ class Facade
 
     ###*
     create a preferred repository instance
-    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
+    3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createPreferredRepository
     @param {String} modelName
+    @param {Object} [options]
+    @param {Object} [options.noParent] if true, stop requiring parent class
     @return {BaseRepository}
     ###
-    createPreferredRepository: (modelName, params...) ->
+    createPreferredRepository: (modelName, options, params...) ->
 
-        @createPreferred(modelName, 'repository', params, @)
+        @createPreferred(modelName, 'repository', options, params, @)
 
 
     ###*
     create a preferred factory instance
-    2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
+    3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createPreferredFactory
     @param {String} modelName
+    @param {Object} [options]
+    @param {Object} [options.noParent] if true, stop requiring parent class
     @return {BaseFactory}
     ###
-    createPreferredFactory: (modelName, params...) ->
+    createPreferredFactory: (modelName, options, params...) ->
 
-        @createPreferred(modelName, 'factory', params, @)
+        @createPreferred(modelName, 'factory', options, params, @)
 
 
     ###*
@@ -227,11 +231,15 @@ class Facade
 
     @method createPreferredService
     @param {String} modelName
+    @param {Object} [options]
+    @param {Object} [options.noParent=true] if true, stop requiring parent class
     @return {BaseService}
     ###
-    createPreferredService: (modelName, params...) ->
+    createPreferredService: (modelName, options = {}, params...) ->
 
-        @createPreferred(modelName, 'service', params, @)
+        options.noParent ?= true
+
+        @createPreferred(modelName, 'service', options, params, @)
 
 
     ###*
@@ -241,9 +249,12 @@ class Facade
     @private
     @param {String} modelName
     @param {String} type factory|repository|service
+    @param {Object} [options]
+    @param {Object} [params] params pass to constructor of Repository, Factory or Service
+    @param {RootInterface} root
     @return {BaseFactory}
     ###
-    createPreferred: (modelName, type, params, root) ->
+    createPreferred: (modelName, type, options = {}, params, root) ->
 
         originalModelName = modelName
 
@@ -252,6 +263,9 @@ class Facade
 
             if @hasClass(name, cacheResult: true)
                 return @__create(name, null, params, root)
+
+            if options.noParent
+                throw @error("preferred#{type}NotFound", "preferred #{type} of '#{originalModelName}' is not found")
 
             ParentClass = @require(modelName).getParent()
 

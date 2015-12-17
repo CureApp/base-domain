@@ -30,7 +30,7 @@ class GeneralFactory
     @create: (modelName, root) ->
 
         try
-            return root.createFactory(modelName)
+            return root.createPreferredFactory(modelName) # TODO: enable to pass 2nd arguement (noParent: boolean)
 
         catch e
             return new GeneralFactory(modelName, root)

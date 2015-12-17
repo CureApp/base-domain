@@ -9,6 +9,20 @@ clone     = require 'clone'
 class Util
 
     ###*
+    get __proto__ of the given object
+
+    @method getProto
+    @static
+    @param {Object} obj
+    @return {Object} __proto__
+    ###
+    @getProto: (obj) ->
+        if Object.getPrototypeOf?
+            return Object.getPrototypeOf(obj)
+        else
+            obj.__proto__
+
+    ###*
     converts hyphenation to camel case
 
         'shinout-no-macbook-pro' => 'ShinoutNoMacbookPro'

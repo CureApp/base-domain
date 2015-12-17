@@ -6,8 +6,6 @@ GeneralFactory = require './general-factory'
 MasterDataResource = require '../master-data-resource'
 ModelProps = require './model-props'
 
-getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
-
 ###*
 Facade class of DDD pattern.
 
@@ -185,7 +183,7 @@ class Facade
         Class = ClassWithConstructor = @require(name)
 
         while ClassWithConstructor.length is 0 and ClassWithConstructor isnt Object
-            ClassWithConstructor = getProto(ClassWithConstructor::).constructor
+            ClassWithConstructor = Util.getProto(ClassWithConstructor::).constructor
 
         while params.length < ClassWithConstructor.length - 1
             params.push undefined

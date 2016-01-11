@@ -1,7 +1,5 @@
 'use strict'
 
-require('es6-promise').polyfill()
-
 Util = require '../util'
 
 GeneralFactory = require './general-factory'

@@ -12,6 +12,8 @@ machine:
     pre:
         - "git config --global user.name 'CircleCI'"
         - "git config --global user.email 'circleci@cureapp.jp'"
+    node:
+        version: 4.2.3
 dependencies:
     post:
         - npm run post-dependencies

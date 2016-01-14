@@ -168,28 +168,6 @@ describe 'Facade', ->
             assert f.createPreferredRepository('medicine') instanceof WebMedicineRepository
 
 
-        it 'returns repository with prefix if exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'web'
-
-            WebMedicineRepository = f.require 'web-medicine-repository'
-
-            assert f.createPreferredRepository('medicine') instanceof WebMedicineRepository
-
-
-        it 'returns standard repository when prefix is given but not exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'node'
-
-            MedicineRepository = f.require 'medicine-repository'
-
-            assert f.createPreferredRepository('medicine') instanceof MedicineRepository
-
-
         it 'returns standard repository when preferred repository name is specified but not exists', ->
 
             f = require('../create-facade').create 'preferred-test',
@@ -279,28 +257,6 @@ describe 'Facade', ->
             assert f.createPreferredFactory('medicine') instanceof XxMedicineFactory
 
 
-        it 'returns factory with prefix if exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'xx'
-
-            XxMedicineFactory = f.require 'xx-medicine-factory'
-
-            assert f.createPreferredFactory('medicine') instanceof XxMedicineFactory
-
-
-        it 'returns standard factory when prefix is given but not exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'node'
-
-            MedicineFactory = f.require 'medicine-factory'
-
-            assert f.createPreferredFactory('medicine') instanceof MedicineFactory
-
-
         it 'returns standard factory when preferred factory name is specified but not exists', ->
 
             f = require('../create-facade').create 'preferred-test',
@@ -388,28 +344,6 @@ describe 'Facade', ->
             SpecialMedicineService = f.require 'special-medicine-service'
 
             assert f.createPreferredService('medicine') instanceof SpecialMedicineService
-
-
-        it 'returns service with prefix if exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'special'
-
-            SpecialMedicineService = f.require 'special-medicine-service'
-
-            assert f.createPreferredService('medicine') instanceof SpecialMedicineService
-
-
-        it 'returns standard service when prefix is given but not exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'node'
-
-            MedicineService = f.require 'medicine-service'
-
-            assert f.createPreferredService('medicine') instanceof MedicineService
 
 
         it 'returns standard service when preferred service name is specified but not exists', ->
@@ -553,3 +487,20 @@ describe 'Facade', ->
             ServerDiaryFactory = require __dirname + '/../module-test/server/diary-factory'
             service = f.createService('client/photo-upload')
             factory = service.getPreferredFactoryInstance() instanceof ServerDiaryFactory
+
+
+        it 'preferred: module: "client" make preferred call load the file of the module', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+                    client: __dirname + '/../module-test/client'
+                preferred:
+                    module: 'client'
+
+            ClientDiaryFactory = require __dirname + '/../module-test/server/diary-factory'
+            service = f.createService('client/photo-upload')
+            factory = service.getPreferredFactoryInstance() instanceof ClientDiaryFactory
+
+
+

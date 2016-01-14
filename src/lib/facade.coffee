@@ -71,7 +71,7 @@ class Facade
     @param {Object} [options.preferred.repository] key: modelName, value: repository name used in facade.createPreferredRepository(modelName)
     @param {Object} [options.preferred.factory] key: modelName, value: factory name used in facade.createPreferredFactory(modelName)
     @param {Object} [options.preferred.service] key: modelName, value: service name used in facade.createPreferredService(modelName)
-    @param {String|Array(String)} [options.preferred.prefix] prefix attached to load preferred class
+    @param {String|Array(String)} [options.preferred.module] module prefix attached to load preferred class
     @param {Boolean} [options.master] if true, MasterDataResource is enabled.
     ###
     constructor: (options = {}) ->
@@ -90,7 +90,7 @@ class Facade
             repository : Util.clone(options.preferred?.repository) ? {}
             factory    : Util.clone(options.preferred?.factory) ? {}
             service    : Util.clone(options.preferred?.service) ? {}
-            prefix     : options.preferred?.prefix
+            module     : options.preferred?.module
 
         @nonExistingClassNames = {}
 
@@ -286,8 +286,8 @@ class Facade
 
         return name if name and @hasClass(name, cacheResult: true)
 
-        if @preferred.prefix
-            name = @preferred.prefix + '-' + modelName + '-' + type
+        if @preferred.module
+            name = @preferred.module + '/' + modelName + '-' + type
             return name if name and @hasClass(name, cacheResult: true)
 
         return modelName + '-' + type

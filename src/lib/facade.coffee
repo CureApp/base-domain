@@ -68,9 +68,9 @@ class Facade
     @param {String} [options]
     @param {String} [options.dirname="."] path where domain definition files are included
     @param {Object} [options.preferred={}]
-    @param {Object} [options.preferred.repository] key: modelName, value: repository name used in facade.createPreferredRepository(modelName)
-    @param {Object} [options.preferred.factory] key: modelName, value: factory name used in facade.createPreferredFactory(modelName)
-    @param {Object} [options.preferred.service] key: modelName, value: service name used in facade.createPreferredService(modelName)
+    @param {Object} [options.preferred.repository] key: firstName, value: repository name used in facade.createPreferredRepository(firstName)
+    @param {Object} [options.preferred.factory] key: firstName, value: factory name used in facade.createPreferredFactory(firstName)
+    @param {Object} [options.preferred.service] key: firstName, value: service name used in facade.createPreferredService(firstName)
     @param {String|Array(String)} [options.preferred.module] module prefix attached to load preferred class
     @param {Boolean} [options.master] if true, MasterDataResource is enabled.
     ###
@@ -118,26 +118,26 @@ class Facade
     get a model class
 
     @method getModel
-    @param {String} modelName
+    @param {String} modFullName
     @return {Function}
     ###
-    getModel: (modelName) ->
-        return @require(modelName)
+    getModel: (modFullName) ->
+        return @require(modFullName)
 
 
     ###*
-    create an instance of the given modelName using obj
+    create an instance of the given modFirstName using obj
     if obj is null or undefined, empty object will be created.
 
     @method createModel
-    @param {String} modelName
+    @param {String} modFirstName
     @param {Object} obj
     @param {Object} [options]
     @param {RootInterface} [root]
     @return {BaseModel}
     ###
-    createModel: (modelName, obj, options, root) ->
-        GeneralFactory.createModel(modelName, obj, options, root ? @)
+    createModel: (modFirstName, obj, options, root) ->
+        GeneralFactory.createModel(modFirstName, obj, options, root ? @)
 
 
     ###*
@@ -145,11 +145,11 @@ class Facade
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createFactory
-    @param {String} name
+    @param {String} modFirstName
     @return {BaseFactory}
     ###
-    createFactory: (name, params...) ->
-        @__create(name, 'factory', params, @)
+    createFactory: (modFirstName, params...) ->
+        @__create(modFirstName, 'factory', params, @)
 
 
     ###*
@@ -157,11 +157,11 @@ class Facade
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createRepository
-    @param {String} name
+    @param {String} modFirstName
     @return {BaseRepository}
     ###
-    createRepository: (name, params...) ->
-        @__create(name, 'repository', params, @)
+    createRepository: (modFirstName, params...) ->
+        @__create(modFirstName, 'repository', params, @)
 
 
     ###*
@@ -169,18 +169,18 @@ class Facade
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the service
 
     @method createService
-    @param {String} name
+    @param {String} modFirstName
     @return {BaseService}
     ###
-    createService: (name, params...) ->
-        @__create(name, 'service', params, @)
+    createService: (modFirstName, params...) ->
+        @__create(modFirstName, 'service', params, @)
 
 
-    __create: (name, type, params, root) ->
+    __create: (modFirstName, type, params, root) ->
 
-        name = if type then name + '-' + type else name
+        modFullName = if type then modFirstName + '-' + type else modFirstName
 
-        Class = ClassWithConstructor = @require(name)
+        Class = ClassWithConstructor = @require(modFullName)
 
         while ClassWithConstructor.length is 0 and ClassWithConstructor isnt Object
             ClassWithConstructor = Util.getProto(ClassWithConstructor::).constructor
@@ -196,14 +196,14 @@ class Facade
     3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createPreferredRepository
-    @param {String} modelName
+    @param {String} firstName
     @param {Object} [options]
     @param {Object} [options.noParent] if true, stop requiring parent class
     @return {BaseRepository}
     ###
-    createPreferredRepository: (modelName, options, params...) ->
+    createPreferredRepository: (firstName, options, params...) ->
 
-        @createPreferred(modelName, 'repository', options, params, @)
+        @createPreferred(firstName, 'repository', options, params, @)
 
 
     ###*
@@ -211,16 +211,16 @@ class Facade
     3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createPreferredFactory
-    @param {String} modelName
+    @param {String} firstName
     @param {Object} [options]
     @param {Object} [options.noParent=true] if true, stop requiring parent class
     @return {BaseFactory}
     ###
-    createPreferredFactory: (modelName, options = {}, params...) ->
+    createPreferredFactory: (firstName, options = {}, params...) ->
 
         options.noParent ?= true
 
-        @createPreferred(modelName, 'factory', options, params, @)
+        @createPreferred(firstName, 'factory', options, params, @)
 
 
     ###*
@@ -228,16 +228,16 @@ class Facade
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createPreferredService
-    @param {String} modelName
+    @param {String} firstName
     @param {Object} [options]
     @param {Object} [options.noParent=true] if true, stop requiring parent class
     @return {BaseService}
     ###
-    createPreferredService: (modelName, options = {}, params...) ->
+    createPreferredService: (firstName, options = {}, params...) ->
 
         options.noParent ?= true
 
-        @createPreferred(modelName, 'service', options, params, @)
+        @createPreferred(firstName, 'service', options, params, @)
 
 
     ###*
@@ -245,52 +245,52 @@ class Facade
 
     @method createPreferred
     @private
-    @param {String} modelName
+    @param {String} firstName
     @param {String} type factory|repository|service
     @param {Object} [options]
     @param {Object} [params] params pass to constructor of Repository, Factory or Service
     @param {RootInterface} root
     @return {BaseFactory}
     ###
-    createPreferred: (modelName, type, options = {}, params, root) ->
+    createPreferred: (firstName, type, options = {}, params, root) ->
 
-        originalModelName = modelName
+        originalFirstName = firstName
 
         loop
-            name = @getPreferredName(modelName, type)
+            modFullName = @getPreferredName(firstName, type)
 
-            if @hasClass(name, cacheResult: true)
-                return @__create(name, null, params, root)
+            if @hasClass(modFullName, cacheResult: true)
+                return @__create(modFullName, null, params, root)
 
             if options.noParent
-                throw @error("preferred#{type}NotFound", "preferred #{type} of '#{originalModelName}' is not found")
+                throw @error("preferred#{type}NotFound", "preferred #{type} of '#{originalFirstName}' is not found")
 
-            ParentClass = @require(modelName).getParent()
+            ParentClass = @require(firstName).getParent()
 
             if not ParentClass.className
-                throw @error("preferred#{type}NotFound", "preferred #{type} of '#{originalModelName}' is not found")
+                throw @error("preferred#{type}NotFound", "preferred #{type} of '#{originalFirstName}' is not found")
 
-            modelName = ParentClass.getName()
+            firstName = ParentClass.getName()
 
 
     ###*
     @method getPreferredName
     @private
-    @param {String} modelName
+    @param {String} firstName
     @param {String} type repository|factory|service
-    @return {String}
+    @return {String} modFullName
     ###
-    getPreferredName: (modelName, type) ->
+    getPreferredName: (firstName, type) ->
 
-        name = @preferred[type][modelName]
+        modFullName = @preferred[type][firstName]
 
-        return name if name and @hasClass(name, cacheResult: true)
+        return modFullName if modFullName and @hasClass(modFullName, cacheResult: true)
 
         if @preferred.module
-            name = @preferred.module + '/' + modelName + '-' + type
-            return name if name and @hasClass(name, cacheResult: true)
+            modFullName = @preferred.module + '/' + firstName + '-' + type
+            return modFullName if modFullName and @hasClass(modFullName, cacheResult: true)
 
-        return modelName + '-' + type
+        return firstName + '-' + type
 
 
 
@@ -299,23 +299,23 @@ class Facade
 
     @method require
     @private
-    @param {String} name
+    @param {String} modFullName
     @return {Function}
     ###
-    require: (name) ->
-        return @classes[name] if @classes[name]?
+    require: (modFullName) ->
+        return @classes[modFullName] if @classes[modFullName]?
 
-        if name.match('/')
-            file = @resolveModuleFile(name.split('/')...)
+        if modFullName.match('/')
+            file = @resolveModuleFile(modFullName.split('/')...)
         else
-            file = "#{@dirname}/#{name}"
+            file = "#{@dirname}/#{modFullName}"
 
         try
             klass = Util.requireFile file
         catch e
-            throw @error('modelNotFound', "model '#{name}' is not found")
+            throw @error('modelNotFound', "model '#{modFullName}' is not found")
 
-        @addClass name, klass
+        @addClass modFullName, klass
 
 
     ###*
@@ -345,62 +345,64 @@ class Facade
     check existence of the class of the given name
 
     @method hasClass
-    @param {String} name
+    @param {String} modFullName
     @param {Object} [options]
     @param {Boolean} [options.cacheResult] cache information of non-existing name
     @return {Function}
     ###
-    hasClass: (name, options = {}) ->
+    hasClass: (modFullName, options = {}) ->
 
-        return false if @nonExistingClassNames[name]
+        return false if @nonExistingClassNames[modFullName]
 
         try
-            @require(name)
+            @require(modFullName)
             return true
         catch e
             if options.cacheResult
-                @nonExistingClassNames[name] = true
+                @nonExistingClassNames[modFullName] = true
             return false
 
 
     ###*
     add class to facade.
-    the class is acquired by @require(name)
+    the class is acquired by @require(modFullName)
 
     @method addClass
     @private
-    @param {String} name
+    @param {String} modFullName
     @param {Function} klass
-    @param {Boolean} skipNameValidation validate class name is compatible with the name to register
     @return {Function}
     ###
-    addClass: (name, klass, skipNameValidation = false) ->
+    addClass: (modFullName, klass) ->
 
-        klass.className = name
-        klass.moduleName = if name.match '/' then name.split('/')[0] else 'core'
+        klass.className = modFullName
+        klass.moduleName = if modFullName.match '/' then modFullName.split('/')[0] else 'core'
 
-        delete @nonExistingClassNames[name]
+        delete @nonExistingClassNames[modFullName]
 
-        @classes[name] = klass
+        @classes[modFullName] = klass
 
 
     ###*
-    Get ModelProps by modelName.
+    Get ModelProps by firstName.
     ModelProps summarizes properties of this class
 
     @method getModelProps
-    @param {String} modelName
+    @param {String} firstName
     @return {ModelProps}
     ###
-    getModelProps: (modelName) ->
+    getModelProps: (firstName) ->
 
-        if not @modelProps[modelName]?
+        #modFullName = @getPreferredName(firstName) # TODO
+        modFullName = firstName # TODO attach default module name
 
-            Model = @getModel(modelName)
+        if not @modelProps[modFullName]?
 
-            @modelProps[modelName] = new ModelProps(modelName, Model.properties, @)
+            Model = @getModel(modFullName)
 
-        return @modelProps[modelName]
+            @modelProps[modFullName] = new ModelProps(modFullName, Model.properties, @)
+
+        return @modelProps[modFullName]
 
     ###*
     create instance of DomainError
@@ -437,7 +439,7 @@ class Facade
     @param {Object} [options]
     @param {String} [options.dataDir='./data'] directory to have fixture data files
     @param {String} [options.tsvDir='./tsv'] directory to have TSV files
-    @param {Array(String)} [options.models=null] model names to insert. default: all models
+    @param {Array(String)} [options.models=null] model firstNames to insert. default: all models
     @return {Promise(EntityPool)} inserted data
     ###
     insertFixtures: (options = {}) ->

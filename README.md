@@ -230,4 +230,8 @@ To enable base-domain's requiring system in browsers, use 'base-domain/ify' tran
 ```bash
 browserify -t [ base-domain/ify --dirname /path/to/domain/dir ] <entry-file>
 ```
+## include modules
 
+```bash
+browserify -t [ base-domain/ify --dirname /path/to/domain/dir --modules foo:/path/to/foo,bar:/path/to/bar ] <entry-file>
+```

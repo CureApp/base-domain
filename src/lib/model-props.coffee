@@ -8,7 +8,12 @@ parses model properties and classifies them
 ###
 class ModelProps
 
-    constructor: (@modelName, properties, facade) ->
+    ###*
+    @param {String} modelName
+    @param {Object} properties
+    @param {BaseModule} modl
+    ###
+    constructor: (@modelName, properties, modl) ->
 
         ###*
         property whose type is CREATED_AT
@@ -59,7 +64,7 @@ class ModelProps
         @idDic     = {}
 
 
-        @build properties, facade
+        @build properties, modl
 
 
     ###*
@@ -68,7 +73,7 @@ class ModelProps
     @method build
     @private
     ###
-    build: (properties, facade) ->
+    build: (properties, modl) ->
 
         for prop, typeInfo of properties
 
@@ -93,7 +98,7 @@ class ModelProps
                     @models.push prop
                     @modelDic[prop] = true
 
-                    if not facade?
+                    if not modl?
 
                         console.error("""
                             base-domain:ModelProps could not parse property info of '#{prop}'.
@@ -106,7 +111,7 @@ class ModelProps
                         """)
                         continue
 
-                    if facade.getModel(typeInfo.model).isEntity
+                    if modl.getModel(typeInfo.model).isEntity
                         @entities.push prop
                         @entityDic[prop] = true
                         @idDic[typeInfo.idPropName] = prop

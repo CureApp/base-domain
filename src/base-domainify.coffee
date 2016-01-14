@@ -1,11 +1,11 @@
 'use strict'
 through = require 'through'
 fs      = require 'fs'
-path    = require 'path'
+Path    = require 'path'
 coffee  = require 'coffee-script'
 require('coffee-script/register')
 
-path.isAbsolute ?= (str) -> str.charAt(0) is '/'
+Path.isAbsolute ?= (str) -> str.charAt(0) is '/'
 
 Facade = require './lib/facade'
 MasterDataResource = require './master-data-resource'
@@ -25,26 +25,20 @@ class BaseDomainify
     @public
     @return {String} code CoffeeScript code
     ###
-    run: (file, options = {}) ->
+    run: (@file, options = {}) ->
 
         return through() if @initialCodeGenerated
 
-        { dirname } = options
-
+        { dirname, modules } = options
         @throwError() if not dirname
 
-        if path.isAbsolute dirname
-            @absolutePath = dirname
-        else
-            @absolutePath = process.cwd() + '/' + dirname
+        modulePaths = {}
 
-        dir = path.dirname(file)
-        @relativePath = path.relative(dir, dirname)
+        for modNamePath in modules?.split(',') ? []
+            [modName, path] = modNamePath.split(':')
+            modulePaths[modName] = path
 
-        if @relativePath.charAt(0) isnt '.'
-            @relativePath = './' + @relativePath
-
-        initialCode = @getInitialCode(options.dirname)
+        initialCode = @getInitialCode(dirname, modulePaths)
 
         @initialCodeGenerated = true
 
@@ -55,6 +49,26 @@ class BaseDomainify
         return through write, end
 
 
+
+    relativePath: (path) ->
+        dir = Path.dirname(@file)
+        relPath = Path.relative(dir, path)
+
+        if relPath.charAt(0) isnt '.'
+            relPath = './' + relPath
+
+        return relPath
+
+
+    absolutePath: (path) ->
+        return path if Path.isAbsolute path
+        return process.cwd() + '/' + path
+
+
+    baseName: (path) ->
+        return Path.basename path
+
+
     ###*
     get CoffeeScript code of adding addClass methods to all domain files
 
@@ -62,9 +76,8 @@ class BaseDomainify
     @private
     @return {String} code CoffeeScript code
     ###
-    getInitialCode: ->
-
-        basename = require('path').basename @relativePath
+    getInitialCode: (dirname, modulePaths) ->
+        basename = @baseName dirname
         _ = ' ' # spacer for indent
 
         coffeeCode = """
@@ -74,23 +87,54 @@ class BaseDomainify
             #{_}return unless @dirname.match '#{basename}'\n
         """
 
-        if masterJSONPath = @getMasterJSONPath()
-            coffeeCode += """
-                #{_}@master?.loadFromJSON = -> require('#{masterJSONPath}')\n
-            """
+        coffeeCode += @getScriptToLoadCoreModule(dirname)
 
-        for filename in @getFiles()
-
-            name = filename.split('.')[0]
-            path = @relativePath + '/' + name
-
-            coffeeCode += """
-                #{_}@addClass '#{name}', require('#{path}')\n
-            """
+        coffeeCode += @getScriptToLoadModule(moduleName, path) for moduleName, path of modulePaths
 
         coffeeCode += "#{_}return\n"
 
         return coffee.compile(coffeeCode, bare: true)
+
+
+
+    getScriptToLoadCoreModule: (dirname) ->
+
+        _ = ' ' # spacer for indent
+        coffeeCode = ''
+
+        if masterJSONPath = @getMasterJSONPath(dirname)
+            coffeeCode += """
+                #{_}@master?.loadFromJSON = -> require('#{masterJSONPath}')\n
+            """
+
+        for filename in @getFiles(dirname)
+
+            name = filename.split('.')[0]
+            path = @relativePath(dirname) + '/' + name
+
+            coffeeCode += """
+                #{_}@addClass '#{name}', require('#{path}')\n
+            """
+        return coffeeCode
+
+
+    getScriptToLoadModule: (moduleName, moduleDirname) ->
+
+        basename = @baseName moduleDirname
+        _ = ' ' # spacer for indent
+        coffeeCode = """
+            #{_}if @modules['#{moduleName}'] and @modules['#{moduleName}'].path.match '#{basename}'\n
+        """
+
+        for filename in @getFiles(moduleDirname)
+
+            name = filename.split('.')[0]
+            path = @relativePath(moduleDirname) + '/' + name
+
+            coffeeCode += """
+                #{_}#{_}@addClass '#{moduleName}/#{name}', require('#{path}')\n
+            """
+        return coffeeCode
 
 
     ###*
@@ -98,16 +142,16 @@ class BaseDomainify
     @private
     @return {String} path
     ###
-    getMasterJSONPath: ->
+    getMasterJSONPath: (dirname) ->
 
         try
-            facade = Facade.createInstance(dirname: @absolutePath, master: true)
+            facade = Facade.createInstance(dirname: @absolutePath(dirname), master: true)
 
             { masterJSONPath } = facade.master
 
             return '' if not fs.existsSync(masterJSONPath)
 
-            relPath = MasterDataResource.getJSONPath(@relativePath)
+            relPath = MasterDataResource.getJSONPath(@relativePath(dirname))
 
             return relPath
 
@@ -124,16 +168,18 @@ class BaseDomainify
     @private
     @return {Array} filenames
     ###
-    getFiles: ->
+    getFiles: (dirname) ->
 
         fileInfoDict = {}
 
-        for filename in fs.readdirSync(@absolutePath)
+        path = @absolutePath(dirname)
+
+        for filename in fs.readdirSync(path)
 
             [ name, ext ] = filename.split('.')
             continue if ext not in ['js', 'coffee']
 
-            klass = require @absolutePath + '/' + filename
+            klass = require path + '/' + filename
 
             fileInfoDict[name] = filename: filename, klass: klass
 
@@ -164,7 +210,7 @@ class BaseDomainify
         throw new Error """
             dirname must be passed.
 
-            browserify -t [ base-domain/ify --dirname dirname ]
+            browserify -t [ base-domain/ify --dirname dirname --modules module1:/path/to/module1,module2:/path/to/module2 ]
 
         """
 

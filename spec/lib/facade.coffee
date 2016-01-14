@@ -168,28 +168,6 @@ describe 'Facade', ->
             assert f.createPreferredRepository('medicine') instanceof WebMedicineRepository
 
 
-        it 'returns repository with prefix if exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'web'
-
-            WebMedicineRepository = f.require 'web-medicine-repository'
-
-            assert f.createPreferredRepository('medicine') instanceof WebMedicineRepository
-
-
-        it 'returns standard repository when prefix is given but not exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'node'
-
-            MedicineRepository = f.require 'medicine-repository'
-
-            assert f.createPreferredRepository('medicine') instanceof MedicineRepository
-
-
         it 'returns standard repository when preferred repository name is specified but not exists', ->
 
             f = require('../create-facade').create 'preferred-test',
@@ -277,28 +255,6 @@ describe 'Facade', ->
             XxMedicineFactory = f.require 'xx-medicine-factory'
 
             assert f.createPreferredFactory('medicine') instanceof XxMedicineFactory
-
-
-        it 'returns factory with prefix if exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'xx'
-
-            XxMedicineFactory = f.require 'xx-medicine-factory'
-
-            assert f.createPreferredFactory('medicine') instanceof XxMedicineFactory
-
-
-        it 'returns standard factory when prefix is given but not exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'node'
-
-            MedicineFactory = f.require 'medicine-factory'
-
-            assert f.createPreferredFactory('medicine') instanceof MedicineFactory
 
 
         it 'returns standard factory when preferred factory name is specified but not exists', ->
@@ -390,28 +346,6 @@ describe 'Facade', ->
             assert f.createPreferredService('medicine') instanceof SpecialMedicineService
 
 
-        it 'returns service with prefix if exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'special'
-
-            SpecialMedicineService = f.require 'special-medicine-service'
-
-            assert f.createPreferredService('medicine') instanceof SpecialMedicineService
-
-
-        it 'returns standard service when prefix is given but not exists', ->
-
-            f = require('../create-facade').create 'preferred-test',
-                preferred:
-                    prefix: 'node'
-
-            MedicineService = f.require 'medicine-service'
-
-            assert f.createPreferredService('medicine') instanceof MedicineService
-
-
         it 'returns standard service when preferred service name is specified but not exists', ->
 
             f = require('../create-facade').create 'preferred-test',
@@ -469,3 +403,134 @@ describe 'Facade', ->
             f.addClass('parent-service', ParentService)
 
             assert f.createPreferredService('child', noParent: false) instanceof ParentService
+
+
+
+    describe '[using modules]', ->
+
+        it 'throws error when "core" module is given at constructor', ->
+
+            fn = ->
+                require('../create-facade').create 'domain',
+                    modules:
+                        core: __dirname + '/../module-test/server'
+
+            expect(fn).to.throw 'Cannot use "core" as a module name'
+
+
+        it '"moduleName" property of classes in modules is the name of the module', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+
+            service = f.createService('server/photo-upload')
+
+            assert service.constructor.moduleName is 'server'
+
+
+        it '"moduleName" property of classes in core module is "core"', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+
+            service = f.createRepository('diary')
+
+            assert service.constructor.moduleName is 'core'
+
+
+        it 'loads from module dir with suffix', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+
+            ServerPhotoUploadService = require(__dirname + '/../module-test/server/photo-upload-service')
+
+            service = f.createService('server/photo-upload')
+
+            assert service instanceof ServerPhotoUploadService
+
+
+        it 'loads from multiple modules dir', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+                    client: __dirname + '/../module-test/client'
+
+            ServerPhotoUploadService = require(__dirname + '/../module-test/server/photo-upload-service')
+            ClientPhotoUploadService = require(__dirname + '/../module-test/client/photo-upload-service')
+
+            assert ServerPhotoUploadService isnt ClientPhotoUploadService
+
+            ssv = f.createService('server/photo-upload')
+            assert ssv instanceof ServerPhotoUploadService
+
+            csv = f.createService('client/photo-upload')
+            assert csv instanceof ClientPhotoUploadService
+
+
+        it 'loads from multiple modules dir', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+                    client: __dirname + '/../module-test/client'
+
+            ServerPhotoUploadService = require(__dirname + '/../module-test/server/photo-upload-service')
+            ClientPhotoUploadService = require(__dirname + '/../module-test/client/photo-upload-service')
+
+            assert ServerPhotoUploadService isnt ClientPhotoUploadService
+
+            ssv = f.createService('server/photo-upload')
+            assert ssv instanceof ServerPhotoUploadService
+
+            csv = f.createService('client/photo-upload')
+            assert csv instanceof ClientPhotoUploadService
+
+
+        it 'preferred call loads core module\'s file by default', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+                    client: __dirname + '/../module-test/client'
+                preferred:
+                    factory:
+                        diary: 'server/diary-factory'
+
+            DiaryFactory = require __dirname + '/../domain/diary-factory'
+            service = f.createService('client/photo-upload')
+            factory = service.getPreferredFactoryInstance() instanceof DiaryFactory
+
+
+        it 'preferred call inside module can load other module\'s file', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+                    client: __dirname + '/../module-test/client'
+                preferred:
+                    factory:
+                        diary: 'server/diary-factory'
+
+            ServerDiaryFactory = require __dirname + '/../module-test/server/diary-factory'
+            service = f.createService('client/photo-upload')
+            factory = service.getPreferredFactoryInstance() instanceof ServerDiaryFactory
+
+
+        it 'preferred: module: "client" make preferred call load the file of the module', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+                    client: __dirname + '/../module-test/client'
+                preferred:
+                    module: 'client'
+
+            ClientDiaryFactory = require __dirname + '/../module-test/server/diary-factory'
+            service = f.createService('client/photo-upload')
+            factory = service.getPreferredFactoryInstance() instanceof ClientDiaryFactory
+

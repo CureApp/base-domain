@@ -3,6 +3,19 @@
 ###*
 interface of Aggregate Root
 
+Followings are the meanings of argument name of files in detail.
+Let's see difference with two file examples.
+- A: core/post-submission-service
+- B: server/diary-factory
+
+- firstName:    A => post-submission,         B => diary
+- fullName:     A => post-submission-service, B => diary-factory
+- modFirstName: A => core/post-submission          | post-submission,         B => server/diary
+- modFullName:  A => core/post-submission-service, | post-submission-service, B => server/diary-factory
+
+"mod" requires module name except "core" module, which can be omitted
+
+
 @class RootInterface
 @module base-domain
 ###
@@ -21,7 +34,7 @@ class RootInterface
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createFactory
-    @param {String} modelName
+    @param {String} modFirstName
     @return {BaseFactory}
     ###
 
@@ -30,7 +43,7 @@ class RootInterface
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createRepository
-    @param {String} modelName
+    @param {String} modFirstName
     @return {BaseRepository}
     ###
 
@@ -51,11 +64,18 @@ class RootInterface
     ###
 
     ###*
-    create an instance of the given modelName using obj
+    get module the class belongs to
+
+    @method getModule
+    @return {BaseModule}
+    ###
+
+    ###*
+    create an instance of the given modFirstName using obj
     if obj is null or undefined, empty object will be created.
 
     @method createModel
-    @param {String} modelName
+    @param {String} modFirstName
     @param {Object} obj
     @param {Object} [options]
     @return {BaseModel}
@@ -66,7 +86,7 @@ class RootInterface
     3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createPreferredRepository
-    @param {String} modelName
+    @param {String} firstName
     @param {Object} [options]
     @param {Object} [options.noParent] if true, stop requiring parent class
     @return {BaseRepository}
@@ -77,7 +97,7 @@ class RootInterface
     3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createPreferredFactory
-    @param {String} modelName
+    @param {String} firstName
     @param {Object} [options]
     @param {Object} [options.noParent=true] if true, stop requiring parent class
     @return {BaseFactory}
@@ -88,7 +108,7 @@ class RootInterface
     3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createPreferredService
-    @param {String} modelName
+    @param {String} firstName
     @param {Object} [options]
     @param {Object} [options.noParent=true] if true, stop requiring parent class
     @return {BaseService}

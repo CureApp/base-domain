@@ -12,3 +12,4 @@ module.exports =
     Includer           : require(path + '/lib/includer')
     ModelProps         : require(path + '/lib/model-props')
     TypeInfo           : require(path + '/lib/type-info')
+    BaseModule         : require(path + '/lib/base-module')

@@ -93,6 +93,8 @@ class Facade
 
         for moduleName, path of Util.clone(options.modules ? {})
             @modules[moduleName] = new BaseModule(moduleName, path, @)
+        throw @error('invalidModuleName', 'Cannot use "core" as a module name') if @modules.core
+
         @modules.core = new CoreModule(@dirname, @)
 
         if options.master

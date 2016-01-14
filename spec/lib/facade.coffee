@@ -408,6 +408,16 @@ describe 'Facade', ->
 
     describe '[using modules]', ->
 
+        it 'throws error when "core" module is given at constructor', ->
+
+            fn = ->
+                require('../create-facade').create 'domain',
+                    modules:
+                        core: __dirname + '/../module-test/server'
+
+            expect(fn).to.throw 'Cannot use "core" as a module name'
+
+
         it '"moduleName" property of classes in modules is the name of the module', ->
 
             f = require('../create-facade').create 'domain',

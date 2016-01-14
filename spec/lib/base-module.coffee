@@ -25,7 +25,22 @@ describe 'BaseModule', ->
 
 
 
-    xdescribe 'createModel', ->
+    describe 'createModel', ->
+
+        it 'creates model defined in module', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+
+            bookInfo = f.getModule('server').createModel 'book-info',
+                title: 'Tiny script Once I loved'
+                author: firstName: 'Shin'
+
+            BookInfo = require __dirname + '/../module-test/server/book-info'
+            assert bookInfo instanceof BookInfo
+            assert f.getModel('server/book-info') is BookInfo
+            assert bookInfo.author instanceof f.getModel('member')
 
 
     describe 'createFactory', ->

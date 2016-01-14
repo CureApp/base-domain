@@ -31,10 +31,10 @@ class BaseModule
     getFacade: -> @facade
 
 
-    normalizeName: (modFullName) ->
-        if not modFullName.match '/'
-            return @name + '/' + modFullName
-        return modFullName
+    normalizeName: (name) ->
+        if not name.match '/'
+            return @name + '/' + name
+        return name
 
     ###*
     create an instance of the given modFirstName using obj
@@ -48,7 +48,8 @@ class BaseModule
     @return {BaseModel}
     ###
     createModel: (modFirstName, obj, options, root) ->
-        # TODO
+        modFirstName = @normalizeName(modFirstName)
+        @facade.createModel(modFirstName, obj, options, @)
 
 
     ###*

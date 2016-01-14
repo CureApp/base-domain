@@ -469,3 +469,87 @@ describe 'Facade', ->
             f.addClass('parent-service', ParentService)
 
             assert f.createPreferredService('child', noParent: false) instanceof ParentService
+
+
+
+    describe '[using modules]', ->
+
+        it 'loads from module dir with suffix', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+
+            ServerPhotoUploadService = require(__dirname + '/../module-test/server/photo-upload-service')
+
+            service = f.createService('server/photo-upload')
+
+            assert service instanceof ServerPhotoUploadService
+
+
+        it 'loads from multiple modules dir', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+                    client: __dirname + '/../module-test/client'
+
+            ServerPhotoUploadService = require(__dirname + '/../module-test/server/photo-upload-service')
+            ClientPhotoUploadService = require(__dirname + '/../module-test/client/photo-upload-service')
+
+            assert ServerPhotoUploadService isnt ClientPhotoUploadService
+
+            ssv = f.createService('server/photo-upload')
+            assert ssv instanceof ServerPhotoUploadService
+
+            csv = f.createService('client/photo-upload')
+            assert csv instanceof ClientPhotoUploadService
+
+
+        it 'loads from multiple modules dir', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+                    client: __dirname + '/../module-test/client'
+
+            ServerPhotoUploadService = require(__dirname + '/../module-test/server/photo-upload-service')
+            ClientPhotoUploadService = require(__dirname + '/../module-test/client/photo-upload-service')
+
+            assert ServerPhotoUploadService isnt ClientPhotoUploadService
+
+            ssv = f.createService('server/photo-upload')
+            assert ssv instanceof ServerPhotoUploadService
+
+            csv = f.createService('client/photo-upload')
+            assert csv instanceof ClientPhotoUploadService
+
+
+        it 'preferred call loads core module\'s file by default', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+                    client: __dirname + '/../module-test/client'
+                preferred:
+                    factory:
+                        diary: 'server/diary-factory'
+
+            DiaryFactory = require __dirname + '/../domain/diary-factory'
+            service = f.createService('client/photo-upload')
+            factory = service.getPreferredFactoryInstance() instanceof DiaryFactory
+
+
+        it 'preferred call inside module can load other module\'s file', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+                    client: __dirname + '/../module-test/client'
+                preferred:
+                    factory:
+                        diary: 'server/diary-factory'
+
+            ServerDiaryFactory = require __dirname + '/../module-test/server/diary-factory'
+            service = f.createService('client/photo-upload')
+            factory = service.getPreferredFactoryInstance() instanceof ServerDiaryFactory

@@ -58,7 +58,6 @@ class Facade
         Constructor = @
         instance = new Constructor(options)
         Facade.latestInstance = instance
-
         return instance
 
 
@@ -85,6 +84,7 @@ class Facade
                 value: {}
 
         @dirname = options.dirname ? '.'
+        @modules = Util.clone(options.modules ? {})
 
         @preferred =
             repository : Util.clone(options.preferred?.repository) ? {}
@@ -305,13 +305,40 @@ class Facade
     require: (name) ->
         return @classes[name] if @classes[name]?
 
-        file = "#{@dirname}/#{name}"
+        if name.match('/')
+            file = @resolveModuleFile(name.split('/')...)
+        else
+            file = "#{@dirname}/#{name}"
+
         try
             klass = Util.requireFile file
         catch e
             throw @error('modelNotFound', "model '#{name}' is not found")
 
         @addClass name, klass
+
+
+    ###*
+    resolve the path of given moduleName and fileName
+
+    @example
+        domain = Facade.createInstance
+            dirname: '/a/b'
+            modules:
+                foo: '/x/y/z'
+
+        domain.resolveModuleFile('foo', 'abc-factory') # /x/y/z/abc-factory
+
+    @method resolveModuleFile
+    @param {String} moduleName
+    @param {String} fileName
+    @return {Function}
+    ###
+    resolveModuleFile: (moduleName, fileName) ->
+        dirname = @modules[moduleName]
+        if not dirname
+            throw @error('ModuleNotFound', "module '#{moduleName}' is not found (in requiring #{moduleName}/#{fileName})")
+        return dirname + '/' + fileName
 
 
     ###*

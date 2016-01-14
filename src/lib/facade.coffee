@@ -5,6 +5,8 @@ Util = require '../util'
 GeneralFactory = require './general-factory'
 MasterDataResource = require '../master-data-resource'
 ModelProps = require './model-props'
+BaseModule = require './base-module'
+CoreModule = require './core-module'
 
 ###*
 Facade class of DDD pattern.
@@ -77,25 +79,23 @@ class Facade
     constructor: (options = {}) ->
 
         Object.defineProperties @,
-            classes:
-                value: {}
-
-            modelProps:
-                value: {}
+            nonExistingClassNames: value: {}
+            classes   : value: {}
+            modelProps: value: {}
+            modules   : value: {}
+            preferred : value:
+                repository : Util.clone(options.preferred?.repository) ? {}
+                factory    : Util.clone(options.preferred?.factory) ? {}
+                service    : Util.clone(options.preferred?.service) ? {}
+                module     : options.preferred?.module
 
         @dirname = options.dirname ? '.'
-        @modules = Util.clone(options.modules ? {})
 
-        @preferred =
-            repository : Util.clone(options.preferred?.repository) ? {}
-            factory    : Util.clone(options.preferred?.factory) ? {}
-            service    : Util.clone(options.preferred?.service) ? {}
-            module     : options.preferred?.module
-
-        @nonExistingClassNames = {}
+        for moduleName, path of Util.clone(options.modules ? {})
+            @modules[moduleName] = new BaseModule(moduleName, path, @)
+        @modules.core = new CoreModule(@dirname, @)
 
         if options.master
-
             ###*
             instance of MasterDataResource
             Exist only when "master" property is given to Facade's option
@@ -283,15 +283,14 @@ class Facade
     getPreferredName: (firstName, type) ->
 
         modFullName = @preferred[type][firstName]
-
         return modFullName if modFullName and @hasClass(modFullName, cacheResult: true)
 
-        if @preferred.module
-            modFullName = @preferred.module + '/' + firstName + '-' + type
-            return modFullName if modFullName and @hasClass(modFullName, cacheResult: true)
+        if @preferred.module and @modules[@preferred.module]?
+            moduleName = @preferred.module
+        else
+            moduleName = 'core'
 
-        return firstName + '-' + type
-
+        return @getModule(moduleName).normalizeName(firstName + '-' + type)
 
 
     ###*
@@ -302,43 +301,56 @@ class Facade
     @param {String} modFullName
     @return {Function}
     ###
-    require: (modFullName) ->
+    require: (modFullName_o) ->
+
+        modFullName = @getModule('core').normalizeName(modFullName_o)
+
         return @classes[modFullName] if @classes[modFullName]?
 
-        if modFullName.match('/')
-            file = @resolveModuleFile(modFullName.split('/')...)
-        else
-            file = "#{@dirname}/#{modFullName}"
+        moduleName = @moduleName(modFullName)
+        fullName   = @fullName(modFullName)
 
-        try
-            klass = Util.requireFile file
-        catch e
-            throw @error('modelNotFound', "model '#{modFullName}' is not found")
+        klass = @getModule(moduleName).requireOwn(fullName)
+
+        if not klass? and moduleName isnt 'core'
+            klass = @getModule('core').requireOwn(fullName)
+
+        if not klass?
+            throw @error('modelNotFound', "model '#{modFullName_o}' is not found")
 
         @addClass modFullName, klass
 
 
     ###*
-    resolve the path of given moduleName and fileName
-
-    @example
-        domain = Facade.createInstance
-            dirname: '/a/b'
-            modules:
-                foo: '/x/y/z'
-
-        domain.resolveModuleFile('foo', 'abc-factory') # /x/y/z/abc-factory
-
-    @method resolveModuleFile
+    @method getModule
     @param {String} moduleName
-    @param {String} fileName
-    @return {Function}
+    @return {BaseModule}
     ###
-    resolveModuleFile: (moduleName, fileName) ->
-        dirname = @modules[moduleName]
-        if not dirname
-            throw @error('ModuleNotFound', "module '#{moduleName}' is not found (in requiring #{moduleName}/#{fileName})")
-        return dirname + '/' + fileName
+    getModule: (moduleName) ->
+        @modules[moduleName]
+
+
+    ###*
+    get moduleName from modFullName
+    @method moduleName
+    @private
+    @param {String} modFullName
+    @return {String}
+    ###
+    moduleName: (modFullName) ->
+        if modFullName.match '/' then modFullName.split('/')[0] else 'core'
+
+
+    ###*
+    get fullName from modFullName
+    @method fullName
+    @private
+    @param {String} modFullName
+    @return {String}
+    ###
+    fullName: (modFullName) ->
+        if modFullName.match '/' then modFullName.split('/')[1] else modFullName
+
 
 
     ###*
@@ -351,6 +363,8 @@ class Facade
     @return {Function}
     ###
     hasClass: (modFullName, options = {}) ->
+
+        modFullName = @getModule('core').normalizeName(modFullName)
 
         return false if @nonExistingClassNames[modFullName]
 
@@ -375,8 +389,10 @@ class Facade
     ###
     addClass: (modFullName, klass) ->
 
+        modFullName = @getModule('core').normalizeName(modFullName)
+
         klass.className = modFullName
-        klass.moduleName = if modFullName.match '/' then modFullName.split('/')[0] else 'core'
+        klass.moduleName = @moduleName(modFullName)
 
         delete @nonExistingClassNames[modFullName]
 

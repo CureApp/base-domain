@@ -1,5 +1,7 @@
 'use strict'
 
+Util = require '../util'
+
 ###*
 Module of DDD pattern.
 
@@ -9,7 +11,7 @@ Module of DDD pattern.
 ###
 class BaseModule
 
-    constructor: (@name, @facade) ->
+    constructor: (@name, @path, @facade) ->
 
     ###*
     is root (to identify RootInterface)
@@ -29,17 +31,10 @@ class BaseModule
     getFacade: -> @facade
 
 
-    ###*
-    @method attachModuleNameIfPossible
-    @param {String} modFirstName
-    @return {String}
-    ###
-    attachModuleNameIfPossible: (modFirstName) ->
-
-        return modFirstName if modFirstName.match '/'
-
-        return @constructor.moduleName + '/' + modFirstName
-
+    normalizeName: (modFullName) ->
+        if not modFullName.match '/'
+            return @name + '/' + modFullName
+        return modFullName
 
     ###*
     create an instance of the given modFirstName using obj
@@ -65,7 +60,9 @@ class BaseModule
     @return {BaseFactory}
     ###
     createFactory: (modFirstName, params...) ->
-        # TODO
+        modFirstName = @normalizeName(modFirstName)
+        @facade.createFactory(modFirstName, params...)
+
 
     ###*
     create a repository instance
@@ -76,7 +73,9 @@ class BaseModule
     @return {BaseRepository}
     ###
     createRepository: (modFirstName, params...) ->
-        # TODO
+        modFirstName = @normalizeName(modFirstName)
+        @facade.createRepository(modFirstName, params...)
+
 
     ###*
     create a service instance
@@ -87,7 +86,10 @@ class BaseModule
     @return {BaseService}
     ###
     createService: (modFirstName, params...) ->
-        # TODO
+        modFirstName = @normalizeName(modFirstName)
+        @facade.createRepository(modFirstName, params...)
+
+
 
 
     ###*
@@ -134,33 +136,6 @@ class BaseModule
 
 
     ###*
-    create a preferred factory|repository|service instance
-
-    @method createPreferred
-    @private
-    @param {String} firstName
-    @param {String} type factory|repository|service
-    @param {Object} [options]
-    @param {Object} [params] params pass to constructor of Repository, Factory or Service
-    @param {RootInterface} root
-    @return {BaseFactory}
-    ###
-    createPreferred: (firstName, type, options = {}, params, root) ->
-        # TODO
-
-    ###*
-    @method getPreferredName
-    @private
-    @param {String} firstName
-    @param {String} type repository|factory|service
-    @return {String} modFullName
-    ###
-    getPreferredName: (firstName, type) ->
-        # TODO
-
-
-
-    ###*
     read a file and returns class
 
     @method require
@@ -168,8 +143,12 @@ class BaseModule
     @param {String} modFullName
     @return {Function}
     ###
-    require: (modFullName) ->
-        # TODO
+    requireOwn: (fullName) ->
+
+        try
+            return Util.requireFile(@path + '/' + fullName)
+        catch e
+            return null # FIXME: no information of e is returned.
 
 
-module.exports = Facade
+module.exports = BaseModule

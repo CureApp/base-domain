@@ -64,6 +64,13 @@ class RootInterface
     ###
 
     ###*
+    get module the class belongs to
+
+    @method getModule
+    @return {BaseModule}
+    ###
+
+    ###*
     create an instance of the given modFirstName using obj
     if obj is null or undefined, empty object will be created.
 

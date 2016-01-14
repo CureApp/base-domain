@@ -74,6 +74,7 @@ class Base
             value: root
             writable: true
 
+
     ###*
     Get facade
 
@@ -87,6 +88,16 @@ class Base
             """
 
         @root.getFacade()
+
+    ###*
+    Get module which this class belongs to
+
+    @method getModule
+    @return {BaseModule}
+    ###
+    getModule: ->
+        @getFacade().getModule(@constructor.moduleName)
+
 
     ###*
     get parent class

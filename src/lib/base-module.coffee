@@ -31,10 +31,38 @@ class BaseModule
     getFacade: -> @facade
 
 
+    ###*
+    Get module
+
+    @method getModule
+    @return {BaseModule}
+    ###
+    getModule: -> @
+
+
     normalizeName: (name) ->
         if not name.match '/'
             return @name + '/' + name
         return name
+
+    stripName: (name) ->
+        len = @name.length + 1
+        if name.slice(0, len) is @name + '/'
+            return name.slice(len)
+
+        return name
+
+
+
+    ###*
+    get a model class in the module
+
+    @method getModel
+    @param {String} firstName
+    @return {Function}
+    ###
+    getModel: (firstName) ->
+        @facade.require @normalizeName firstName
 
     ###*
     create an instance of the given modFirstName using obj
@@ -96,13 +124,14 @@ class BaseModule
     3rd, 4th ... arguments are the params to pass to the constructor of the repository
 
     @method createPreferredRepository
-    @param {String} firstName
+    @param {String} modFirstName
     @param {Object} [options]
     @param {Object} [options.noParent] if true, stop requiring parent class
     @return {BaseRepository}
     ###
-    createPreferredRepository: (firstName, options, params...) ->
-        @facade.createPreferredRepository(firstName, options, params...)
+    createPreferredRepository: (modFirstName, options, params...) ->
+        modFirstName = @normalizeName(modFirstName)
+        @facade.createPreferredRepository(modFirstName, options, params...)
 
 
     ###*
@@ -110,13 +139,14 @@ class BaseModule
     3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createPreferredFactory
-    @param {String} firstName
+    @param {String} modFirstName
     @param {Object} [options]
     @param {Object} [options.noParent=true] if true, stop requiring parent class
     @return {BaseFactory}
     ###
-    createPreferredFactory: (firstName, options = {}, params...) ->
-        @facade.createPreferredFactory(firstName, options, params...)
+    createPreferredFactory: (modFirstName, options = {}, params...) ->
+        modFirstName = @normalizeName(modFirstName)
+        @facade.createPreferredFactory(modFirstName, options, params...)
 
 
     ###*
@@ -124,13 +154,14 @@ class BaseModule
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
     @method createPreferredService
-    @param {String} firstName
+    @param {String} modFirstName
     @param {Object} [options]
     @param {Object} [options.noParent=true] if true, stop requiring parent class
     @return {BaseService}
     ###
-    createPreferredService: (firstName, options = {}, params...) ->
-        @facade.createPreferredService(firstName, options, params...)
+    createPreferredService: (modFirstName, options = {}, params...) ->
+        modFirstName = @normalizeName(modFirstName)
+        @facade.createPreferredService(modFirstName, options, params...)
 
 
     ###*
@@ -146,7 +177,6 @@ class BaseModule
         try
             return Util.requireFile(@path + '/' + fullName)
         catch e
-            #console.log e
             return null # FIXME: no information of e is returned.
 
 

@@ -120,11 +120,11 @@ class Facade
     get a model class
 
     @method getModel
-    @param {String} modFullName
+    @param {String} firstName
     @return {Function}
     ###
-    getModel: (modFullName) ->
-        return @require(modFullName)
+    getModel: (firstName) ->
+        return @require(firstName)
 
 
     ###*
@@ -247,52 +247,47 @@ class Facade
 
     @method createPreferred
     @private
-    @param {String} firstName
+    @param {String} modFirstName
     @param {String} type factory|repository|service
     @param {Object} [options]
     @param {Object} [params] params pass to constructor of Repository, Factory or Service
     @param {RootInterface} root
     @return {BaseFactory}
     ###
-    createPreferred: (firstName, type, options = {}, params, root) ->
+    createPreferred: (modFirstName, type, options = {}, params, root) ->
 
-        originalFirstName = firstName
+        originalFirstName = modFirstName
 
-        loop
-            modFullName = @getPreferredName(firstName, type)
+        for modFullName in @getPreferredNames(modFirstName, type)
+            return @__create(modFullName, null, params, root) if @hasClass(modFullName)
 
-            if @hasClass(modFullName)
-                return @__create(modFullName, null, params, root)
+        if not options.noParent
+            ParentClass = @require(modFirstName).getParent()
+            if ParentClass.className
+                return @createPreferred(ParentClass.getName(), type, options, params, root)
 
-            if options.noParent
-                throw @error("preferred#{type}NotFound", "preferred #{type} of '#{originalFirstName}' is not found")
-
-            ParentClass = @require(firstName).getParent()
-
-            if not ParentClass.className
-                throw @error("preferred#{type}NotFound", "preferred #{type} of '#{originalFirstName}' is not found")
-
-            firstName = ParentClass.getName()
+        throw @error("preferred#{type}NotFound", "preferred #{type} of '#{originalFirstName}' is not found")
 
 
     ###*
-    @method getPreferredName
+    @method getPreferredNames
     @private
-    @param {String} firstName
+    @param {String} modFirstName
     @param {String} type repository|factory|service
     @return {String} modFullName
     ###
-    getPreferredName: (firstName, type) ->
+    getPreferredNames: (modFirstName, type) ->
 
-        modFullName = @preferred[type][firstName]
-        return modFullName if modFullName and @hasClass(modFullName)
+        specific = @preferred[type][modFirstName]
 
-        if @preferred.module and @modules[@preferred.module]?
-            moduleName = @preferred.module
-        else
-            moduleName = 'core'
+        names = [@preferred.module, @moduleName(modFirstName), 'core'] # FIXME: make it unique
+            .filter (v) -> v
+            .map (moduleName) =>
+                @getModule(moduleName).normalizeName(modFirstName + '-' + type)
 
-        return @getModule(moduleName).normalizeName(firstName + '-' + type)
+        names.unshift specific if specific
+
+        return names
 
 
     ###*
@@ -305,7 +300,7 @@ class Facade
     ###
     require: (modFullName_o) ->
 
-        modFullName = @getModule('core').normalizeName(modFullName_o)
+        modFullName = @getModule().normalizeName(modFullName_o)
 
         return @classes[modFullName] if @classes[modFullName]?
 
@@ -319,7 +314,7 @@ class Facade
             @nonExistingClassNames[modFullName] = true
 
             modFullName = fullName # strip module name
-            klass = @getModule('core').requireOwn(fullName)
+            klass = @getModule().requireOwn(fullName)
 
         if not klass?
             @nonExistingClassNames[fullName] = true
@@ -334,7 +329,7 @@ class Facade
     @param {String} moduleName
     @return {BaseModule}
     ###
-    getModule: (moduleName) ->
+    getModule: (moduleName = 'core') ->
         @modules[moduleName]
 
 
@@ -370,7 +365,7 @@ class Facade
     ###
     hasClass: (modFullName) ->
 
-        modFullName = @getModule('core').normalizeName(modFullName)
+        modFullName = @getModule().normalizeName(modFullName)
 
         return false if @nonExistingClassNames[modFullName]
 
@@ -393,7 +388,7 @@ class Facade
     ###
     addClass: (modFullName, klass) ->
 
-        modFullName = @getModule('core').normalizeName(modFullName)
+        modFullName = @getModule().normalizeName(modFullName)
 
         klass.className = modFullName
         klass.moduleName = @moduleName(modFullName)
@@ -408,19 +403,16 @@ class Facade
     ModelProps summarizes properties of this class
 
     @method getModelProps
-    @param {String} firstName
+    @param {String} modFullName
     @return {ModelProps}
     ###
-    getModelProps: (firstName) ->
-
-        #modFullName = @getPreferredName(firstName) # TODO
-        modFullName = firstName # TODO attach default module name
+    getModelProps: (modFullName) ->
 
         if not @modelProps[modFullName]?
 
             Model = @getModel(modFullName)
 
-            @modelProps[modFullName] = new ModelProps(modFullName, Model.properties, @)
+            @modelProps[modFullName] = new ModelProps(modFullName, Model.properties, @getModule(@moduleName modFullName))
 
         return @modelProps[modFullName]
 

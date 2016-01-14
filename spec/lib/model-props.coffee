@@ -33,7 +33,7 @@ describe 'ModelProps', ->
 
         @prop = @facade.getModel('a').properties
 
-        @modelProps = new ModelProps('a', A.properties, @facade)
+        @modelProps = new ModelProps('a', A.properties, @facade.getModule())
 
 
     it 'has dates collecting prop of DATE, CREATED_AT and UPDATED_AT', ->

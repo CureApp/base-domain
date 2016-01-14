@@ -259,7 +259,7 @@ class Facade
         loop
             modFullName = @getPreferredName(firstName, type)
 
-            if @hasClass(modFullName, cacheResult: true)
+            if @hasClass(modFullName)
                 return @__create(modFullName, null, params, root)
 
             if options.noParent
@@ -283,7 +283,7 @@ class Facade
     getPreferredName: (firstName, type) ->
 
         modFullName = @preferred[type][firstName]
-        return modFullName if modFullName and @hasClass(modFullName, cacheResult: true)
+        return modFullName if modFullName and @hasClass(modFullName)
 
         if @preferred.module and @modules[@preferred.module]?
             moduleName = @preferred.module
@@ -310,14 +310,20 @@ class Facade
         moduleName = @moduleName(modFullName)
         fullName   = @fullName(modFullName)
 
-        klass = @getModule(moduleName).requireOwn(fullName)
+        if not @nonExistingClassNames[modFullName] # avoid searching non-existing files many times
+            klass = @getModule(moduleName).requireOwn(fullName)
 
-        if not klass? and moduleName isnt 'core'
+        if not klass?
+            @nonExistingClassNames[modFullName] = true
+
+            modFullName = fullName # strip module name
             klass = @getModule('core').requireOwn(fullName)
 
         if not klass?
+            @nonExistingClassNames[fullName] = true
             throw @error('modelNotFound', "model '#{modFullName_o}' is not found")
 
+        @nonExistingClassNames[modFullName] = false
         @addClass modFullName, klass
 
 
@@ -358,11 +364,9 @@ class Facade
 
     @method hasClass
     @param {String} modFullName
-    @param {Object} [options]
-    @param {Boolean} [options.cacheResult] cache information of non-existing name
     @return {Function}
     ###
-    hasClass: (modFullName, options = {}) ->
+    hasClass: (modFullName) ->
 
         modFullName = @getModule('core').normalizeName(modFullName)
 
@@ -372,8 +376,6 @@ class Facade
             @require(modFullName)
             return true
         catch e
-            if options.cacheResult
-                @nonExistingClassNames[modFullName] = true
             return false
 
 

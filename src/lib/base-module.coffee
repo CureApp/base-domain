@@ -87,9 +87,7 @@ class BaseModule
     ###
     createService: (modFirstName, params...) ->
         modFirstName = @normalizeName(modFirstName)
-        @facade.createRepository(modFirstName, params...)
-
-
+        @facade.createService(modFirstName, params...)
 
 
     ###*
@@ -103,7 +101,7 @@ class BaseModule
     @return {BaseRepository}
     ###
     createPreferredRepository: (firstName, options, params...) ->
-        # TODO
+        @facade.createPreferredRepository(firstName, options, params...)
 
 
     ###*
@@ -117,7 +115,7 @@ class BaseModule
     @return {BaseFactory}
     ###
     createPreferredFactory: (firstName, options = {}, params...) ->
-        # TODO
+        @facade.createPreferredFactory(firstName, options, params...)
 
 
     ###*
@@ -131,8 +129,7 @@ class BaseModule
     @return {BaseService}
     ###
     createPreferredService: (firstName, options = {}, params...) ->
-        # TODO
-
+        @facade.createPreferredService(firstName, options, params...)
 
 
     ###*
@@ -148,6 +145,7 @@ class BaseModule
         try
             return Util.requireFile(@path + '/' + fullName)
         catch e
+            #console.log e
             return null # FIXME: no information of e is returned.
 
 

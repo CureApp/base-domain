@@ -408,6 +408,28 @@ describe 'Facade', ->
 
     describe '[using modules]', ->
 
+        it '"moduleName" property of classes in modules is the name of the module', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+
+            service = f.createService('server/photo-upload')
+
+            assert service.constructor.moduleName is 'server'
+
+
+        it '"moduleName" property of classes in core module is "core"', ->
+
+            f = require('../create-facade').create 'domain',
+                modules:
+                    server: __dirname + '/../module-test/server'
+
+            service = f.createRepository('diary')
+
+            assert service.constructor.moduleName is 'core'
+
+
         it 'loads from module dir with suffix', ->
 
             f = require('../create-facade').create 'domain',
@@ -501,6 +523,4 @@ describe 'Facade', ->
             ClientDiaryFactory = require __dirname + '/../module-test/server/diary-factory'
             service = f.createService('client/photo-upload')
             factory = service.getPreferredFactoryInstance() instanceof ClientDiaryFactory
-
-
 

@@ -377,6 +377,7 @@ class Facade
     addClass: (name, klass, skipNameValidation = false) ->
 
         klass.className = name
+        klass.moduleName = if name.match '/' then name.split('/')[0] else 'core'
 
         delete @nonExistingClassNames[name]
 

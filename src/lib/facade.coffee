@@ -355,6 +355,27 @@ class Facade
         if modFullName.match '/' then modFullName.split('/')[1] else modFullName
 
 
+    ###*
+    Serialize the given object containing model information
+
+    @method serialize
+    @param {any} val
+    @return {String}
+    ###
+    serialize: (val) ->
+        Util.serialize val
+
+
+    ###*
+    Deserializes serialized string
+
+    @method deserialize
+    @param {String} str
+    @return {any}
+    ###
+    deserialize: (str) ->
+        Util.deserialize str, @
+
 
     ###*
     check existence of the class of the given name

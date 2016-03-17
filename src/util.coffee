@@ -60,6 +60,58 @@ class Util
         cameled.replace(/([A-Z])/g, (st)-> '-' + st.charAt(0).toLowerCase()).slice(1)
 
 
+    @serialize: (v) ->
+
+        JSON.stringify do attachClassName = (val = v, inModel = false) ->
+
+            return val if not val? or typeof val isnt 'object'
+
+            if Array.isArray val
+                return (attachClassName(item) for item in val)
+
+            ret = {}
+            isModel = val.constructor.className?
+            Object.keys(val).forEach (key) ->
+                ret[key] = attachClassName(val[key], isModel)
+
+            if val instanceof Error
+                ret.stack = val.stack
+                ret.__errorMessage__ = val.message
+
+            else if isModel and not inModel
+                ret.__className__ = val.constructor.className
+
+            return ret
+
+
+    @deserialize: (str, facade) ->
+
+        return str if not str?
+
+        do restore = (val = JSON.parse str) ->
+
+            return val if not val? or typeof val isnt 'object'
+
+            if Array.isArray val
+                return (restore(item) for item in val)
+
+            if val.__errorMessage__
+                ret = new Error(val.__errorMessage__)
+                ret[key] = value for key, value of val
+                delete ret.__errorMessage__
+                return ret
+
+            else if val.__className__
+                className = val.__className__
+                delete val.__className__
+                return facade.createModel(className, val)
+            else
+                ret = {}
+                ret[key] = restore(value) for key, value of val
+                return ret
+
+
+
     ###*
     requires js file
     in Titanium, file-not-found-like-exception occurred in require function cannot be caught.

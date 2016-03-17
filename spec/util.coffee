@@ -219,6 +219,11 @@ describe 'Util', ->
         it 'converts plain array to equivalent to strinfified json', ->
             assert Util.serialize([a: 123, b: 'str']) is JSON.stringify([a: 123, b: 'str'])
 
+        it 'converts error object to plain object with message and stack', ->
+            e = new Error('err msg')
+            e.prop1 = 'prop1 val'
+            assert Util.serialize(e) is JSON.stringify({prop1: 'prop1 val', stack: e.stack, __errorMessage__: e.message})
+
         it 'attaches __className__ property to model ', ->
             class Diary extends Entity
             facade.addClass('diary', Diary)
@@ -270,6 +275,12 @@ describe 'Util', ->
         it 'restores array', ->
             serialized = Util.serialize([a: 123, b: 'str'])
             expect(Util.deserialize(serialized, facade)).to.eql [{a: 123, b: 'str'}]
+
+        it 'restores error', ->
+            e = new Error('err msg')
+            e.prop1 = 'prop1 val'
+            serialized = Util.serialize(e)
+            expect(Util.deserialize(serialized, facade)).to.eql e
 
         it 'restores model', ->
             class Diary extends Entity

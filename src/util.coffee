@@ -74,8 +74,13 @@ class Util
             Object.keys(val).forEach (key) ->
                 ret[key] = attachClassName(val[key], isModel)
 
-            if isModel and not inModel
+            if val instanceof Error
+                ret.stack = val.stack
+                ret.__errorMessage__ = val.message
+
+            else if isModel and not inModel
                 ret.__className__ = val.constructor.className
+
             return ret
 
 
@@ -90,7 +95,13 @@ class Util
             if Array.isArray val
                 return (restore(item) for item in val)
 
-            if val.__className__
+            if val.__errorMessage__
+                ret = new Error(val.__errorMessage__)
+                ret[key] = value for key, value of val
+                delete ret.__errorMessage__
+                return ret
+
+            else if val.__className__
                 className = val.__className__
                 delete val.__className__
                 return facade.createModel(className, val)

@@ -333,6 +333,25 @@ describe 'BaseDict', ->
 
             @hobbyDict = new HobbyDict(items: @hobbies, @facade)
 
+
+        it 'adds item if not loaded', ->
+
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
+                @className: 'hobby-dict'
+                @key: (item) -> item.name
+
+            hobbyDict = new HobbyDict(null, @facade)
+            assert hobbyDict.loaded() is false
+            h = @facade.createModel 'hobby', name: 'skiing'
+
+            hobbyDict.toggle h
+            assert hobbyDict.has 'skiing'
+
+
+
+
+
         it 'adds if not exist', ->
 
             h = @facade.createModel 'hobby', name: 'skiing'

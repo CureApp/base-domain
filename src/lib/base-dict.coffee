@@ -82,7 +82,9 @@ class BaseDict extends Collection
     @param {BaseModel} item
     ###
     toggle: (item) ->
-        return if not @loaded()
+        if not @loaded()
+            return @add item
+
         key = @constructor.key item
         if @has key
             @remove item

@@ -11,6 +11,16 @@ describe 'Fixture', ->
             facade.insertFixtures(dirname: __dirname + '/fixtures/empty', debug: true)
 
 
+        it 'fails when attempting to insert invalid data', ->
+
+            facade = require('./create-facade').create('domain')
+
+            facade.insertFixtures(dirname: __dirname + '/fixtures/invalid').then =>
+                throw new Error('this should not be occurred.')
+
+            , (e) =>
+                assert e.message.match /Invalid fixture in model 'member'\./
+
         it 'inserts data', ->
             facade = require('./create-facade').create('domain')
 

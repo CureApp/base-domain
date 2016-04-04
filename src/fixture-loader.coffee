@@ -28,36 +28,42 @@ class FixtureLoader
     @method load
     @public
     @param {Object} [options]
-    @param {Boolean} [options.async]
+    @param {Boolean} [options.async] if true, returns Promise.
     @return {EntityPool|Promise(EntityPool)}
     ###
     load: (options = {}) ->
+        try
 
-        modelNames = []
-        for fixtureDir in @fixtureDirs
+            modelNames = []
+            for fixtureDir in @fixtureDirs
 
-            for file in fs.readdirSync fixtureDir + '/data'
-                [ modelName, ext ] = file.split('.')
-                continue if ext not in ['coffee', 'js', 'json']
-                fx = require(fixtureDir + '/data/' + file)
-                fx.fixtureDir = fixtureDir
-                @fixturesByModel[modelName] = fx
-                modelNames.push modelName
+                for file in fs.readdirSync fixtureDir + '/data'
+                    [ modelName, ext ] = file.split('.')
+                    continue if ext not in ['coffee', 'js', 'json']
+                    path = fixtureDir + '/data/' + file
+                    fx = require(path)
+                    fx.path = path
+                    fx.fixtureDir = fixtureDir
+                    @fixturesByModel[modelName] = fx
+                    modelNames.push modelName
 
-        modelNames = @topoSort(modelNames)
+            modelNames = @topoSort(modelNames)
 
-        names = options.names ? modelNames
+            names = options.names ? modelNames
 
-        modelNames = modelNames.filter (name) -> name in names
+            modelNames = modelNames.filter (name) -> name in names
 
-        if options.async
-            return @saveAsync(modelNames).then => @entityPool
+            if options.async
+                return @saveAsync(modelNames).then => @entityPool
 
-        else
-            for modelName in modelNames
-                @loadAndSaveModels(modelName)
+            else
+                for modelName in modelNames
+                    @loadAndSaveModels(modelName)
 
-            return @entityPool
+                return @entityPool
+
+        catch e
+            if options.async then Promise.reject(e) else throw e
 
 
     ###*
@@ -72,10 +78,6 @@ class FixtureLoader
 
         Promise.resolve(@loadAndSaveModels(modelName)).then =>
             @saveAsync(modelNames)
-
-        .catch (e) =>
-            console.error e.stack
-            return false
 
 
     ###*
@@ -99,6 +101,9 @@ class FixtureLoader
         catch e
             console.error e.message
             return
+
+        if not data?
+            throw new Error("Invalid fixture in model '#{modelName}'. Check the fixture file: #{fx.path}")
 
         ids = Object.keys(data)
         debug('inserting %s models into %s', ids.length, modelName)

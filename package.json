@@ -11,7 +11,7 @@
   },
   "scripts": {
     "mocha": "mocha -r spec/global.js spec/util.coffee spec/master-data-resource.coffee spec/fixture.coffee spec/lib/*.coffee",
-    "single": "mocha -r spec/global.js spec/util.coffee",
+    "single": "mocha -r spec/global.js",
     "test": "gulp build && DIST=1 npm run mocha && npm run base-domainify-test && npm run uglify-js-test",
     "base-domainify-test": "cd test/base-domainify; ./test.sh; cd ../..",
     "uglify-js-test": "rm -rf test/uglify-js/build && gulp uglify-test && node test/uglify-js/build/index.js",

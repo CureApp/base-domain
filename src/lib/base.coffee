@@ -151,4 +151,19 @@ class Base
         new DomainError(reason, message)
 
 
+    ###*
+    Show indication message of deprecated method
+
+    @method deprecated
+    @protected
+    @param {String} methodName
+    @param {String} message
+    @return {Error}
+    ###
+    deprecated: (methodName, message) ->
+        try
+            line = new Error().stack.split('\n')[3]
+            console.error("Deprecated method: '#{methodName}'. #{message if message}\n", line)
+        catch e
+
 module.exports = Base

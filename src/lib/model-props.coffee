@@ -34,12 +34,6 @@ class ModelProps
         ###
         @dates = []
 
-        ###*
-        properties whose type is MODEL and the model does not extend Entity
-        @property {Array(String)} valueObjects
-        ###
-        @valueObjects = []
-
         # private
         @subModelProps = []
         @typeInfoDic = {}
@@ -121,9 +115,6 @@ class ModelProps
 
             idTypeInfo = TYPES.ID modelProp: prop, entity: typeInfo.model, omit: typeInfo.omit
             @parseProp(typeInfo.idPropName, idTypeInfo, modl)
-
-        else
-            @valueObjects.push prop
 
         return
 

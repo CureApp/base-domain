@@ -49,7 +49,7 @@ class Includer
     ###
     include: ->
 
-        entityProps = @modelProps.entities
+        entityProps = @modelProps.getEntities()
 
         if @options.props
             entityProps = (p for p in entityProps when p in @options.props)

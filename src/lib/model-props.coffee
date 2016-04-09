@@ -35,12 +35,6 @@ class ModelProps
         @models = []
 
         ###*
-        properties whose type is MODEL and the model extends Entity
-        @property {Array(String)} entities
-        ###
-        @entities = []
-
-        ###*
         properties whose type is DATE, CREATED_AT and UPDATED_AT
         @property {Array(String)} dates
         ###
@@ -128,7 +122,6 @@ class ModelProps
 
         if modl.getModel(typeInfo.model).isEntity
 
-            @entities.push prop
             @entityDic[prop] = true
 
             idTypeInfo = TYPES.ID modelProp: prop, entity: typeInfo.model, omit: typeInfo.omit
@@ -142,6 +135,11 @@ class ModelProps
 
     getNames: ->
         Object.keys @typeInfoDic
+
+
+    getEntities: ->
+        Object.keys @entityDic
+
 
 
     ###*

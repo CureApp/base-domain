@@ -49,9 +49,6 @@ describe 'ModelProps', ->
     it 'has models collecting MODELs (ValueObject and Entities, Collections)', ->
         expect(@modelProps.models).to.eql ['b', 'c', 'bs', 'cs']
 
-    it 'has entities collecting MODELs who extend Entity', ->
-        expect(@modelProps.entities).to.eql ['b']
-
     it 'has entityDic collecting all entities', ->
 
         expect(Object.keys @modelProps.entityDic).to.eql ['b']

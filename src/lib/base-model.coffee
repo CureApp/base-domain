@@ -231,7 +231,7 @@ class BaseModel extends Base
 
         modelProps = @getModelProps()
 
-        for entityProp in modelProps.entities
+        for entityProp in modelProps.getEntities()
 
             subIdProp = modelProps.getSubIdProp(entityProp)
 

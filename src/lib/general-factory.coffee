@@ -128,27 +128,23 @@ class GeneralFactory
         # setting values to the model
         for own prop, value of obj
 
-            typeInfo = @modelProps.getTypeInfo(prop)
+            continue if not value? and @modelProps.isOptional(prop)
 
-            continue if not value? and typeInfo?.optional
-
-            if subModelName = typeInfo?.model
+            if subModelName = @modelProps.getSubModelName(prop)
                 value = @constructor.createModel(subModelName, value, options, @root)
             model.set(prop, value)
 
 
         # adding empty values to the model
-        for prop in @modelProps.names()
+        for prop in @modelProps.getAllProps()
 
             continue if model[prop]? or obj.hasOwnProperty prop
 
-            typeInfo = @modelProps.getTypeInfo(prop)
+            continue if @modelProps.isOptional(prop)
 
-            continue if typeInfo.optional
+            defaultValue = @modelProps.getDefaultValue(prop)
 
-            defaultValue = typeInfo.default
-
-            if subModelName = typeInfo.model
+            if subModelName = @modelProps.getSubModelName(prop)
                 continue if @modelProps.isEntity(prop) # entity will be loaded at include() section
 
                 model.set(prop, @constructor.createModel(subModelName, defaultValue, options, @root))

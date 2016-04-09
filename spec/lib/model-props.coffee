@@ -46,27 +46,6 @@ describe 'ModelProps', ->
     it 'has updatedAt whose value is UPDATED_AT at last column', ->
         assert @modelProps.updatedAt is 'updatedAt2'
 
-    it 'has models collecting MODELs (ValueObject and Entities, Collections)', ->
-        expect(@modelProps.models).to.eql ['b', 'c', 'bs', 'cs']
-
-    it 'has entities collecting MODELs who extend Entity', ->
-        expect(@modelProps.entities).to.eql ['b']
-
-    it 'has nonEntities collecting MODELs who don\'t extend Entity', ->
-        expect(@modelProps.nonEntities).to.eql ['c', 'bs', 'cs']
-
-
-    it 'has dic collecting all properties', ->
-
-        expect(Object.keys @modelProps.dic).to.eql Object.keys @prop
-
-    it 'has entityDic collecting all entities', ->
-
-        expect(Object.keys @modelProps.entityDic).to.eql ['b']
-
-    it 'has modelDic collecting all models', ->
-
-        expect(Object.keys @modelProps.modelDic).to.eql ['b', 'c', 'bs', 'cs']
 
     describe 'isEntity', ->
 
@@ -75,19 +54,3 @@ describe 'ModelProps', ->
             assert @modelProps.isEntity('c') is false
             assert @modelProps.isEntity('date') is false
             assert @modelProps.isEntity('xxx') is false
-
-    describe 'isModelProp', ->
-        it 'returns whether the prop is model', ->
-            assert @modelProps.isModel('b')
-            assert @modelProps.isModel('c')
-            assert @modelProps.isModel('date') is false
-            assert @modelProps.isModel('xxx') is false
-
-
-    describe 'getTypeInfo', ->
-        it 'returns typeInfo of the prop', ->
-            assert @modelProps.getTypeInfo('b')?
-            assert @modelProps.getTypeInfo('c')?
-            assert @modelProps.getTypeInfo('cs')?
-            assert @modelProps.getTypeInfo('num')?
-            assert not @modelProps.getTypeInfo('xxxx')?

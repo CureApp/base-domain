@@ -49,7 +49,7 @@ class Includer
     ###
     include: ->
 
-        entityProps = @modelProps.entities
+        entityProps = @modelProps.getEntityProps()
 
         if @options.props
             entityProps = (p for p in entityProps when p in @options.props)
@@ -85,7 +85,7 @@ class Includer
 
         promises = []
 
-        for modelProp in @modelProps.models
+        for modelProp in @modelProps.getSubModelProps()
 
             subModel = @model[modelProp]
 
@@ -110,17 +110,19 @@ class Includer
     ###
     setSubEntity: (entityProp) ->
 
-        typeInfo = @modelProps.getTypeInfo entityProp
+        subIdProp = @modelProps.getIdPropByEntityProp(entityProp)
 
-        subId = @model[typeInfo.idPropName]
+        subId = @model[subIdProp]
 
         return if not subId?
 
-        if subModel = @entityPool.get(typeInfo.model, subId)
+        subModelName = @modelProps.getSubModelName(entityProp)
+
+        if subModel = @entityPool.get(subModelName, subId)
             @model.set(entityProp, subModel)
             return
 
-        repo = @createPreferredRepository(typeInfo.model)
+        repo = @createPreferredRepository(subModelName)
 
         return if not repo?
 

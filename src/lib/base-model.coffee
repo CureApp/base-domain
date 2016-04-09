@@ -119,13 +119,13 @@ class BaseModel extends Base
 
         # set entity prop
         if modelProps.isEntity(prop)
-            typeInfo = modelProps.getTypeInfo(prop)
-            @[typeInfo.idPropName] = value?.id
+            subIdProp = modelProps.getIdPropByEntityProp(prop)
+            @[subIdProp] = value?.id
 
         # set submodel id prop
         else if modelProps.isId(prop) and value?
             @[prop] = value
-            submodelProp = modelProps.submodelOf(prop)
+            submodelProp = modelProps.getEntityPropByIdProp(prop)
 
             # if new submodel id is set and old one exists, delete old one
             if @[submodelProp]? and @[prop] isnt @[submodelProp].id
@@ -148,8 +148,8 @@ class BaseModel extends Base
         modelProps = @getModelProps()
 
         if modelProps.isEntity(prop)
-            typeInfo = modelProps.getTypeInfo(prop)
-            @[typeInfo.idPropName] = undefined
+            subIdProp = modelProps.getIdPropByEntityProp(prop)
+            @[subIdProp] = undefined
 
         return @
 
@@ -184,7 +184,7 @@ class BaseModel extends Base
 
         for own prop, value of @
 
-            continue if modelProps.isEntity(prop) or modelProps.checkOmit(prop)
+            continue if modelProps.isEntity(prop) or modelProps.isOmitted(prop)
 
             if typeof value?.toPlainObject is 'function'
                 plainObject[prop] = value.toPlainObject()
@@ -231,10 +231,11 @@ class BaseModel extends Base
 
         modelProps = @getModelProps()
 
-        for entityProp in modelProps.entities
-            { idPropName } = modelProps.getTypeInfo(entityProp)
+        for entityProp in modelProps.getEntityProps()
 
-            return false if @[idPropName]? and not @[entityProp]?
+            subIdProp = modelProps.getIdPropByEntityProp(entityProp)
+
+            return false if @[subIdProp]? and not @[entityProp]?
 
         return true if not recursive
 

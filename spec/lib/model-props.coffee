@@ -56,9 +56,6 @@ describe 'ModelProps', ->
 
         expect(Object.keys @modelProps.entityDic).to.eql ['b']
 
-    it 'has modelDic collecting all models', ->
-
-        expect(Object.keys @modelProps.modelDic).to.eql ['b', 'c', 'bs', 'cs']
 
     describe 'isEntity', ->
 
@@ -67,11 +64,3 @@ describe 'ModelProps', ->
             assert @modelProps.isEntity('c') is false
             assert @modelProps.isEntity('date') is false
             assert @modelProps.isEntity('xxx') is false
-
-    describe 'isModelProp', ->
-        it 'returns whether the prop is model', ->
-            assert @modelProps.isModel('b')
-            assert @modelProps.isModel('c')
-            assert @modelProps.isModel('date') is false
-            assert @modelProps.isModel('xxx') is false
-

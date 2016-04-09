@@ -55,7 +55,6 @@ class ModelProps
         # private
         @typeInfoDic = {}
         @entityDic = {}
-        @modelDic  = {}
 
 
         @parse properties, modl
@@ -113,7 +112,6 @@ class ModelProps
     parseSubModelProp: (prop, typeInfo, modl) ->
 
         @models.push prop
-        @modelDic[prop] = true
 
         if not modl?
 
@@ -182,16 +180,6 @@ class ModelProps
     modelPropOf: (idPropName) ->
         @typeInfoDic[idPropName]?.modelProp
 
-
-    ###*
-    check if the given prop is model prop
-
-    @method isModel
-    @param {String} prop
-    @return {Boolean}
-    ###
-    isModel: (prop) ->
-        @modelDic[prop]?
 
     ###*
     check if the given prop is tmp prop

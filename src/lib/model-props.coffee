@@ -186,13 +186,13 @@ class ModelProps
     ###*
     get submodel prop of the given idPropName
 
-    @method modelPropOf
+    @method getModelPropByIdProp
     @public
     @param {String} idPropName
     @return {String} submodelProp
     ###
-    modelPropOf: (idPropName) ->
-        @typeInfoDic[idPropName]?.modelProp
+    getModelPropByIdProp: (idProp) ->
+        @typeInfoDic[idProp]?.modelProp
 
 
     ###*

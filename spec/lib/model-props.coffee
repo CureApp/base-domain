@@ -24,12 +24,21 @@ describe 'ModelProps', ->
                 c          : @TYPES.MODEL 'c'
                 bs         : @TYPES.MODEL 'b-list'
                 cs         : @TYPES.MODEL 'c-list'
+                en1        : @TYPES.ENUM ['NOT_DISTRIBUTED', 'DISTRIBUTED', 'COMPLETED']
+                en2        : @TYPES.ENUM ['a123', 'a234', 'a345'], 'a234'
+                en3        : @TYPES.ENUM ['Japan', 'Thai', 'Canada'], 2
+
+        class BList extends BaseList
+            @itemModelName: 'b'
+
+        class CList extends BaseList
+            @itemModelName: 'c'
 
         @facade.addClass('a', A)
         @facade.addClass('b', class B extends Entity)
         @facade.addClass('c', class C extends ValueObject)
-        @facade.addClass('b-list', class BList extends BaseList)
-        @facade.addClass('c-list', class CList extends BaseList)
+        @facade.addClass('b-list', BList)
+        @facade.addClass('c-list', CList)
 
         @prop = @facade.getModel('a').properties
 
@@ -45,6 +54,13 @@ describe 'ModelProps', ->
 
     it 'has updatedAt whose value is UPDATED_AT at last column', ->
         assert @modelProps.updatedAt is 'updatedAt2'
+
+
+    it 'set enum default values', ->
+        a = @facade.createModel('a')
+        assert a.en1 is 0
+        assert a.en2 is 1
+        assert a.en3 is 2
 
 
     describe 'isEntity', ->

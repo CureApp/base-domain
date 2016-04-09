@@ -69,6 +69,28 @@ class TypeInfo
 
 
     ###*
+    get TypeInfo as MODEL
+
+    @method createEnumType
+    @private
+    @static
+    @param {Array(String)} values
+    @param {Object|String} [idPropName] by default: xxxYyyId when modelName is xxx-yyy
+    @return {TypeInfo} type
+    ###
+    @createEnumType: (values, options = {}) ->
+
+        if typeof options isnt 'object'
+            options = default: options
+
+        options.values = values
+        options.default ?= 0
+
+        new TypeInfo 'ENUM', options
+
+
+
+    ###*
     TYPES defines various data type, including model and array of models
 
     key: typeName (String)
@@ -91,6 +113,7 @@ class TypeInfo
         UPDATED_AT : @createType 'UPDATED_AT'
         SUB_ID     : @createType 'SUB_ID'
         MODEL      : @createModelType
+        ENUM       : @createEnumType
 
 
 module.exports = TypeInfo

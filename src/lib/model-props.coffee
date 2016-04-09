@@ -128,11 +128,11 @@ class ModelProps
     ###*
     get all prop names
 
-    @method getNames
+    @method getAllProps
     @public
     @return {Array(String)}
     ###
-    getNames: ->
+    getAllProps: ->
         Object.keys @typeInfoDic
 
 

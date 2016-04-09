@@ -119,7 +119,7 @@ class ModelProps
 
             @entityDic[prop] = true
 
-            idTypeInfo = TYPES.ID modelProp: prop, entity: typeInfo.model, omit: typeInfo.omit
+            idTypeInfo = TYPES.SUB_ID modelProp: prop, entity: typeInfo.model, omit: typeInfo.omit
             @parseProp(typeInfo.idPropName, idTypeInfo, modl)
 
         return
@@ -180,7 +180,7 @@ class ModelProps
     @return {Boolean}
     ###
     isId: (prop) ->
-        @typeInfoDic[prop]?.typeName is 'ID'
+        @typeInfoDic[prop]?.typeName is 'SUB_ID'
 
 
     ###*

@@ -139,11 +139,11 @@ class ModelProps
     ###*
     get all entity prop names
 
-    @method getEntities
+    @method getEntityProps
     @public
     @return {Array(String)}
     ###
-    getEntities: ->
+    getEntityProps: ->
         Object.keys @entityDic
 
 
@@ -163,6 +163,7 @@ class ModelProps
     check if the given prop is entity prop
 
     @method isEntity
+    @public
     @param {String} prop
     @return {Boolean}
     ###
@@ -174,6 +175,7 @@ class ModelProps
     check if the given prop is submodel's id
 
     @method isId
+    @public
     @param {String} prop
     @return {Boolean}
     ###
@@ -185,6 +187,7 @@ class ModelProps
     get submodel prop of the given idPropName
 
     @method modelPropOf
+    @public
     @param {String} idPropName
     @return {String} submodelProp
     ###
@@ -196,6 +199,7 @@ class ModelProps
     check if the given prop is tmp prop
 
     @method checkOmit
+    @public
     @param {String} prop
     @return {Boolean}
     ###
@@ -207,6 +211,7 @@ class ModelProps
     get prop name of id of entity prop
 
     @method getSubIdProp
+    @public
     @param {String} prop
     @return {String} idPropName
     ###
@@ -219,6 +224,7 @@ class ModelProps
     get model name of model prop
 
     @method getSubModelProps
+    @public
     @param {String} prop
     @return {String} model name
     ###
@@ -231,6 +237,7 @@ class ModelProps
     check if the prop is optional
 
     @method isOptional
+    @public
     @param {String} prop
     @return {Boolean}
     ###
@@ -243,6 +250,7 @@ class ModelProps
     get the default value of the prop
 
     @method getDefaultValue
+    @public
     @param {String} prop
     @return {any} defaultValue
     ###

@@ -198,12 +198,12 @@ class ModelProps
     ###*
     check if the given prop is tmp prop
 
-    @method checkOmit
+    @method isOmitted
     @public
     @param {String} prop
     @return {Boolean}
     ###
-    checkOmit: (prop) ->
+    isOmitted: (prop) ->
         !!@typeInfoDic[prop]?.omit
 
 

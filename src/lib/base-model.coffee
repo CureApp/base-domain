@@ -125,7 +125,7 @@ class BaseModel extends Base
         # set submodel id prop
         else if modelProps.isId(prop) and value?
             @[prop] = value
-            submodelProp = modelProps.submodelOf(prop)
+            submodelProp = modelProps.modelPropOf(prop)
 
             # if new submodel id is set and old one exists, delete old one
             if @[submodelProp]? and @[prop] isnt @[submodelProp].id

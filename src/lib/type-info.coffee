@@ -89,6 +89,7 @@ class TypeInfo
         GEOPOINT   : @createType 'GEOPOINT'
         CREATED_AT : @createType 'CREATED_AT'
         UPDATED_AT : @createType 'UPDATED_AT'
+        ID         : @createType 'ID'
         MODEL      : @createModelType
 
 

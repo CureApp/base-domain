@@ -1,4 +1,5 @@
 'use strict'
+{ TYPES } = require './type-info'
 
 ###*
 parses model properties and classifies them
@@ -55,66 +56,88 @@ class ModelProps
         @typeInfoDic = {}
         @entityDic = {}
         @modelDic  = {}
-        @omitDic   = {}
-        @idDic     = {}
 
 
-        @build properties, modl
+        @parse properties, modl
 
 
     ###*
-    classify each prop by type
+    parse props by type
 
-    @method build
+    @method parse
     @private
     ###
-    build: (properties, modl) ->
+    parse: (properties, modl) ->
 
         for prop, typeInfo of properties
+            @parseProp(prop, typeInfo, modl)
+        return
 
-            @typeInfoDic[prop] = typeInfo
 
-            if typeInfo.omit
-                @omitDic[prop] = true
 
-            switch typeInfo.typeName
-                when 'DATE'
-                    @dates.push prop
+    ###*
+    parse one prop by type
 
-                when 'CREATED_AT'
-                    @createdAt = prop
-                    @dates.push prop
+    @method parseProp
+    @private
+    ###
+    parseProp: (prop, typeInfo, modl) ->
 
-                when 'UPDATED_AT'
-                    @updatedAt = prop
-                    @dates.push prop
+        @typeInfoDic[prop] = typeInfo
 
-                when 'MODEL'
-                    @models.push prop
-                    @modelDic[prop] = true
+        switch typeInfo.typeName
 
-                    if not modl?
+            when 'DATE'
+                @dates.push prop
 
-                        console.error("""
-                            base-domain:ModelProps could not parse property info of '#{prop}'.
-                            (@TYPES.#{typeInfo.typeName}, model=#{typeInfo.model}.)
-                            Construct original model '#{@modelName}' with RootInterface.
+            when 'CREATED_AT'
+                @createdAt = prop
+                @dates.push prop
 
-                                new Model(obj, facade)
-                                facade.createModel('#{@modelName}', obj)
+            when 'UPDATED_AT'
+                @updatedAt = prop
+                @dates.push prop
 
-                        """)
-                        continue
+            when 'MODEL'
+                @parseSubModelProp(prop, typeInfo, modl)
 
-                    if modl.getModel(typeInfo.model).isEntity
-                        @entities.push prop
-                        @entityDic[prop] = true
-                        @idDic[typeInfo.idPropName] = prop
+        return
 
-                        if typeInfo.omit
-                            @omitDic[typeInfo.idPropName] = true
-                    else
-                        @valueObjects.push prop
+
+    ###*
+    parse submodel prop
+
+    @method parseSubModelProp
+    @private
+    ###
+    parseSubModelProp: (prop, typeInfo, modl) ->
+
+        @models.push prop
+        @modelDic[prop] = true
+
+        if not modl?
+
+            console.error("""
+                base-domain:ModelProps could not parse property info of '#{prop}'.
+                (@TYPES.#{typeInfo.typeName}, model=#{typeInfo.model}.)
+                Construct original model '#{@modelName}' with RootInterface.
+
+                    new Model(obj, facade)
+                    facade.createModel('#{@modelName}', obj)
+
+            """)
+            return
+
+        if modl.getModel(typeInfo.model).isEntity
+
+            @entities.push prop
+            @entityDic[prop] = true
+
+            idTypeInfo = TYPES.ID modelProp: prop, entity: typeInfo.model, omit: typeInfo.omit
+            @parseProp(typeInfo.idPropName, idTypeInfo, modl)
+
+        else
+            @valueObjects.push prop
 
         return
 
@@ -135,7 +158,7 @@ class ModelProps
     @return {Boolean}
     ###
     isEntity: (prop) ->
-        return @entityDic[prop]?
+        @entityDic[prop]?
 
 
     ###*
@@ -146,18 +169,18 @@ class ModelProps
     @return {Boolean}
     ###
     isId: (prop) ->
-        return @idDic[prop]?
+        @typeInfoDic[prop]?.typeName is 'ID'
 
 
     ###*
     get submodel prop of the given idPropName
 
-    @method submodelOf
+    @method modelPropOf
     @param {String} idPropName
     @return {String} submodelProp
     ###
-    submodelOf: (idPropName) ->
-        return @idDic[idPropName]
+    modelPropOf: (idPropName) ->
+        @typeInfoDic[idPropName]?.modelProp
 
 
     ###*
@@ -168,7 +191,7 @@ class ModelProps
     @return {Boolean}
     ###
     isModel: (prop) ->
-        return @modelDic[prop]?
+        @modelDic[prop]?
 
     ###*
     check if the given prop is tmp prop
@@ -178,7 +201,7 @@ class ModelProps
     @return {Boolean}
     ###
     checkOmit: (prop) ->
-        return @omitDic[prop]?
+        !!@typeInfoDic[prop]?.omit
 
 
     getSubIdProp: (prop) ->

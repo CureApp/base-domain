@@ -144,10 +144,6 @@ class ModelProps
         Object.keys @typeInfoDic
 
 
-    types: ->
-        (typeInfo for prop, typeInfo of @typeInfoDic)
-
-
     ###*
     check if the given prop is entity prop
 

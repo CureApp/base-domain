@@ -119,8 +119,8 @@ class BaseModel extends Base
 
         # set entity prop
         if modelProps.isEntity(prop)
-            typeInfo = modelProps.getTypeInfo(prop)
-            @[typeInfo.idPropName] = value?.id
+            subIdProp = modelProps.getSubIdProp(prop)
+            @[subIdProp] = value?.id
 
         # set submodel id prop
         else if modelProps.isId(prop) and value?
@@ -148,8 +148,8 @@ class BaseModel extends Base
         modelProps = @getModelProps()
 
         if modelProps.isEntity(prop)
-            typeInfo = modelProps.getTypeInfo(prop)
-            @[typeInfo.idPropName] = undefined
+            subIdProp = modelProps.getSubIdProp(prop)
+            @[subIdProp] = undefined
 
         return @
 
@@ -232,9 +232,10 @@ class BaseModel extends Base
         modelProps = @getModelProps()
 
         for entityProp in modelProps.entities
-            { idPropName } = modelProps.getTypeInfo(entityProp)
 
-            return false if @[idPropName]? and not @[entityProp]?
+            subIdProp = modelProps.getSubIdProp(entityProp)
+
+            return false if @[subIdProp]? and not @[entityProp]?
 
         return true if not recursive
 

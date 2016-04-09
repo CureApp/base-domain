@@ -168,6 +168,7 @@ class ModelProps
     get typeInfo by prop
 
     @method getTypeInfo
+    @private
     @param {String} prop
     @return {TypeInfo}
     ###
@@ -195,5 +196,24 @@ class ModelProps
     checkOmit: (prop) ->
         return @omitDic[prop]?
 
+
+    getSubIdProp: (prop) ->
+
+        @getTypeInfo(prop)?.idPropName
+
+
+    getSubModelName: (prop) ->
+
+        @getTypeInfo(prop)?.model
+
+
+    isOptional: (prop) ->
+
+        !!@getTypeInfo(prop)?.optional
+
+
+    getDefaultValue: (prop) ->
+
+        @getTypeInfo(prop)?.default
 
 module.exports = ModelProps

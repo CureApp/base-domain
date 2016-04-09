@@ -136,7 +136,7 @@ class GeneralFactory
 
 
         # adding empty values to the model
-        for prop in @modelProps.names()
+        for prop in @modelProps.getNames()
 
             continue if model[prop]? or obj.hasOwnProperty prop
 

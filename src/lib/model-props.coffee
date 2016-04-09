@@ -140,7 +140,7 @@ class ModelProps
         return
 
 
-    names: ->
+    getNames: ->
         Object.keys @typeInfoDic
 
 

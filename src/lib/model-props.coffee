@@ -29,12 +29,6 @@ class ModelProps
         @updatedAt = null
 
         ###*
-        properties whose type is MODEL
-        @property {Array(String)} models
-        ###
-        @models = []
-
-        ###*
         properties whose type is DATE, CREATED_AT and UPDATED_AT
         @property {Array(String)} dates
         ###
@@ -47,6 +41,7 @@ class ModelProps
         @valueObjects = []
 
         # private
+        @subModelProps = []
         @typeInfoDic = {}
         @entityDic = {}
 
@@ -105,7 +100,7 @@ class ModelProps
     ###
     parseSubModelProp: (prop, typeInfo, modl) ->
 
-        @models.push prop
+        @subModelProps.push prop
 
         if not modl?
 
@@ -139,6 +134,10 @@ class ModelProps
 
     getEntities: ->
         Object.keys @entityDic
+
+
+    getSubModelProps: ->
+        @subModelProps.slice()
 
 
 

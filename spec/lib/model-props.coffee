@@ -46,9 +46,6 @@ describe 'ModelProps', ->
     it 'has updatedAt whose value is UPDATED_AT at last column', ->
         assert @modelProps.updatedAt is 'updatedAt2'
 
-    it 'has models collecting MODELs (ValueObject and Entities, Collections)', ->
-        expect(@modelProps.models).to.eql ['b', 'c', 'bs', 'cs']
-
 
     describe 'isEntity', ->
 

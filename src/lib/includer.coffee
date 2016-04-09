@@ -85,7 +85,7 @@ class Includer
 
         promises = []
 
-        for modelProp in @modelProps.models
+        for modelProp in @modelProps.getSubModelProps()
 
             subModel = @model[modelProp]
 

@@ -52,9 +52,6 @@ describe 'ModelProps', ->
     it 'has entities collecting MODELs who extend Entity', ->
         expect(@modelProps.entities).to.eql ['b']
 
-    it 'has nonEntities collecting MODELs who don\'t extend Entity', ->
-        expect(@modelProps.nonEntities).to.eql ['c', 'bs', 'cs']
-
     it 'has entityDic collecting all entities', ->
 
         expect(Object.keys @modelProps.entityDic).to.eql ['b']

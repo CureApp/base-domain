@@ -47,9 +47,9 @@ class ModelProps
 
         ###*
         properties whose type is MODEL and the model does not extend Entity
-        @property {Array(String)} nonEntities
+        @property {Array(String)} valueObjects
         ###
-        @nonEntities = []
+        @valueObjects = []
 
         ###*
         key value pairs of (property => TypeInfo)
@@ -119,7 +119,7 @@ class ModelProps
                         if typeInfo.omit
                             @omitDic[typeInfo.idPropName] = true
                     else
-                        @nonEntities.push prop
+                        @valueObjects.push prop
 
         return
 

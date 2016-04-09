@@ -51,13 +51,8 @@ class ModelProps
         ###
         @valueObjects = []
 
-        ###*
-        key value pairs of (property => TypeInfo)
-        @property {Object(TypeInfo)} typeInfoDic
-        ###
-        @typeInfoDic = {}
-
         # private
+        @typeInfoDic = {}
         @entityDic = {}
         @modelDic  = {}
         @omitDic   = {}

@@ -184,14 +184,14 @@ class ModelProps
 
 
     ###*
-    get submodel prop of the given idPropName
+    get entity prop of the given idPropName
 
-    @method getModelPropByIdProp
+    @method getEntityPropByIdProp
     @public
     @param {String} idPropName
     @return {String} submodelProp
     ###
-    getModelPropByIdProp: (idProp) ->
+    getEntityPropByIdProp: (idProp) ->
         @typeInfoDic[idProp]?.modelProp
 
 
@@ -210,12 +210,12 @@ class ModelProps
     ###*
     get prop name of id of entity prop
 
-    @method getSubIdProp
+    @method getIdPropByEntityProp
     @public
     @param {String} prop
     @return {String} idPropName
     ###
-    getSubIdProp: (entityProp) ->
+    getIdPropByEntityProp: (entityProp) ->
 
         @typeInfoDic[entityProp]?.idPropName
 

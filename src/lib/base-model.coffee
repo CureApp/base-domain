@@ -119,13 +119,13 @@ class BaseModel extends Base
 
         # set entity prop
         if modelProps.isEntity(prop)
-            subIdProp = modelProps.getSubIdProp(prop)
+            subIdProp = modelProps.getIdPropByEntityProp(prop)
             @[subIdProp] = value?.id
 
         # set submodel id prop
         else if modelProps.isId(prop) and value?
             @[prop] = value
-            submodelProp = modelProps.getModelPropByIdProp(prop)
+            submodelProp = modelProps.getEntityPropByIdProp(prop)
 
             # if new submodel id is set and old one exists, delete old one
             if @[submodelProp]? and @[prop] isnt @[submodelProp].id
@@ -148,7 +148,7 @@ class BaseModel extends Base
         modelProps = @getModelProps()
 
         if modelProps.isEntity(prop)
-            subIdProp = modelProps.getSubIdProp(prop)
+            subIdProp = modelProps.getIdPropByEntityProp(prop)
             @[subIdProp] = undefined
 
         return @
@@ -233,7 +233,7 @@ class BaseModel extends Base
 
         for entityProp in modelProps.getEntityProps()
 
-            subIdProp = modelProps.getSubIdProp(entityProp)
+            subIdProp = modelProps.getIdPropByEntityProp(entityProp)
 
             return false if @[subIdProp]? and not @[entityProp]?
 

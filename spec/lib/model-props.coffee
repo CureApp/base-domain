@@ -55,11 +55,6 @@ describe 'ModelProps', ->
     it 'has nonEntities collecting MODELs who don\'t extend Entity', ->
         expect(@modelProps.nonEntities).to.eql ['c', 'bs', 'cs']
 
-
-    it 'has dic collecting all properties', ->
-
-        expect(Object.keys @modelProps.dic).to.eql Object.keys @prop
-
     it 'has entityDic collecting all entities', ->
 
         expect(Object.keys @modelProps.entityDic).to.eql ['b']
@@ -83,11 +78,3 @@ describe 'ModelProps', ->
             assert @modelProps.isModel('date') is false
             assert @modelProps.isModel('xxx') is false
 
-
-    describe 'getTypeInfo', ->
-        it 'returns typeInfo of the prop', ->
-            assert @modelProps.getTypeInfo('b')?
-            assert @modelProps.getTypeInfo('c')?
-            assert @modelProps.getTypeInfo('cs')?
-            assert @modelProps.getTypeInfo('num')?
-            assert not @modelProps.getTypeInfo('xxxx')?

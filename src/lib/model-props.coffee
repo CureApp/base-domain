@@ -53,9 +53,9 @@ class ModelProps
 
         ###*
         key value pairs of (property => TypeInfo)
-        @property {Object(TypeInfo)} dic
+        @property {Object(TypeInfo)} typeInfoDic
         ###
-        @dic = {}
+        @typeInfoDic = {}
 
         # private
         @entityDic = {}
@@ -77,7 +77,7 @@ class ModelProps
 
         for prop, typeInfo of properties
 
-            @dic[prop] = typeInfo
+            @typeInfoDic[prop] = typeInfo
 
             if typeInfo.omit
                 @omitDic[prop] = true
@@ -125,11 +125,11 @@ class ModelProps
 
 
     names: ->
-        Object.keys @dic
+        Object.keys @typeInfoDic
 
 
     types: ->
-        (typeInfo for prop, typeInfo of @dic)
+        (typeInfo for prop, typeInfo of @typeInfoDic)
 
 
     ###*
@@ -164,17 +164,6 @@ class ModelProps
     submodelOf: (idPropName) ->
         return @idDic[idPropName]
 
-    ###*
-    get typeInfo by prop
-
-    @method getTypeInfo
-    @private
-    @param {String} prop
-    @return {TypeInfo}
-    ###
-    getTypeInfo: (prop) ->
-        return @dic[prop]
-
 
     ###*
     check if the given prop is model prop
@@ -199,21 +188,22 @@ class ModelProps
 
     getSubIdProp: (prop) ->
 
-        @getTypeInfo(prop)?.idPropName
+        @typeInfoDic[prop]?.idPropName
 
 
     getSubModelName: (prop) ->
 
-        @getTypeInfo(prop)?.model
+        @typeInfoDic[prop]?.model
 
 
     isOptional: (prop) ->
 
-        !!@getTypeInfo(prop)?.optional
+        !!@typeInfoDic[prop]?.optional
 
 
     getDefaultValue: (prop) ->
 
-        @getTypeInfo(prop)?.default
+        @typeInfoDic[prop]?.default
+
 
 module.exports = ModelProps

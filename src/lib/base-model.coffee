@@ -80,6 +80,15 @@ class BaseModel extends Base
 
 
     ###*
+    @method enum
+    @public
+    @return {Object}
+    ###
+    enum: (prop) ->
+        @getModelProps().getEnumDic(prop)
+
+
+    ###*
     @method getModelProps
     @private
     @return {ModelProps}

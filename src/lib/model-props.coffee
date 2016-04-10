@@ -235,6 +235,18 @@ class ModelProps
 
 
     ###*
+    get value - enum pair
+
+    @method isEnumDic
+    @public
+    @param {String} prop
+    @return {Boolean}
+    ###
+    getEnumDic: (prop) ->
+        @typeInfoDic[prop]?.numsByValue
+
+
+    ###*
     get entity prop of the given idPropName
 
     @method getEntityPropByIdProp

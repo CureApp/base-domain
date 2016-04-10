@@ -124,6 +124,7 @@ class Hospital extends require('base-domain').Entity
         isValidated  : @TYPES.BOOLEAN
         doctors      : @TYPES.MODEL 'doctor-list'
         flags        : @TYPES.MODEL 'flag-dict'
+        state        : @TYPES.ENUM ['PREPARED', 'RUNNING', 'CLOSED']
 
 module.exports = Hospital
 ```
@@ -152,6 +153,7 @@ mark | property type     | meaning                      |  arg1           | arg2
  o   | @TYPES.CREATED_AT | date set when first saved    | default value   |
  o   | @TYPES.UPDATED_AT | date set each time saved     | default value   |
  o   | @TYPES.MODEL      | prop is BaseModel            | model name      | id prop name (if model is Entity)
+ o   | @TYPES.ENUM       | prop is index of the alternatives | alternatives    | default value
 
 Types with marked "x" just provide the name of the type.
 base-domain **does not validate** the prop's type.

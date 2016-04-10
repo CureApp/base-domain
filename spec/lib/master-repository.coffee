@@ -29,7 +29,7 @@ describe 'MasterRepository', ->
         f.addClass('device', Device)
         f.addClass('device-repository', DeviceRepository)
 
-        expect(=> f.createRepository('device')).to.throw /MasterRepository is disabled/
+        assert.throws (=> f.createRepository('device')), /MasterRepository is disabled/
 
 
     it 'succeeds with no data, when the model is not registered in master', ->
@@ -82,7 +82,7 @@ describe 'MasterRepository', ->
         it 'throws an error', ->
 
             repo = @f.createRepository('device')
-            expect(=> repo.save(id: '3gs', name: 'iPhone3GS', os: 'iOS')).to.throw /cannot save/
+            assert.throws (=> repo.save(id: '3gs', name: 'iPhone3GS', os: 'iOS')), /cannot save/
 
 
     describe 'update', ->
@@ -90,7 +90,7 @@ describe 'MasterRepository', ->
         it 'throws an error', ->
 
             repo = @f.createRepository('device')
-            expect(=> repo.update('iphone6s', os: 'iOS9')).to.throw /cannot update/
+            assert.throws (=> repo.update('iphone6s', os: 'iOS9')), /cannot update/
 
 
     describe 'delete', ->
@@ -100,5 +100,4 @@ describe 'MasterRepository', ->
             repo = @f.createRepository('device')
             iPhone6s = repo.get('iphone6s')
 
-            expect(=> repo.delete(iPhone6s)).to.throw /cannot delete/
-
+            assert.throws (=> repo.delete(iPhone6s)), /cannot delete/

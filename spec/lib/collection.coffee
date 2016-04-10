@@ -92,7 +92,7 @@ describe 'Collection', ->
     it 'throws error if itemModelName is not set', ->
         class HobbyCollection extends Collection
 
-        expect(=> new HobbyCollection(null, @facade)).to.throw Facade.DomainError
+        assert.throws (=> new HobbyCollection(null, @facade)), Facade.DomainError
 
 
     describe 'ids', ->
@@ -143,8 +143,8 @@ describe 'Collection', ->
             hobbyCollection = @facade.createModel('hobby-collection')
             hobbyCollection.setIds(['abc', 'def'])
 
-            expect(hobbyCollection.ids).to.eql ['abc', 'def']
-            expect(hobbyCollection.getIds()).to.eql ['abc', 'def']
+            assert.deepEqual hobbyCollection.ids, ['abc', 'def']
+            assert.deepEqual hobbyCollection.getIds(), ['abc', 'def']
             assert hobbyCollection.getIds() isnt hobbyCollection.ids
 
 

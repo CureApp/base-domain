@@ -47,10 +47,10 @@ describe 'GeneralFactory', ->
 
             assert abc.a is 'a'
             assert abc.b is true
-            expect(abc.c).to.eql [1, 2, 3]
-            expect(abc.c).to.eql Abc.properties.c.default
+            assert.deepEqual abc.c, [1, 2, 3]
+            assert.deepEqual abc.c, Abc.properties.c.default
             assert abc.c isnt Abc.properties.c.default
-            expect(abc.d).to.eql @facade.createModel 'sub', name: 'shinout', type: 'xyz'
+            assert.deepEqual abc.d, @facade.createModel 'sub', name: 'shinout', type: 'xyz'
             assert abc.e is undefined
             assert abc.f instanceof Date
             assert abc.g instanceof Sub

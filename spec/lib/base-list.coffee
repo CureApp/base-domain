@@ -62,8 +62,7 @@ describe 'BaseList', ->
 
             hobbyIdsSorted = (hobby.id for hobby in hobbyList.items)
 
-            expect(hobbyIdsSorted).to.deep.equal [1, 2, 3]
-
+            assert.deepEqual hobbyIdsSorted, [1, 2, 3]
 
     describe 'ids', ->
 
@@ -89,7 +88,7 @@ describe 'BaseList', ->
         it 'get array of ids when the item is Entity', ->
 
             hobbyList = @facade.createModel('hobby-list', @hobbies)
-            expect(hobbyList.ids).to.deep.equal [3, 2, 1]
+            assert.deepEqual hobbyList.ids, [3, 2, 1]
 
 
 
@@ -144,7 +143,7 @@ describe 'BaseList', ->
 
             hobbyList = new HobbyList(items: @hobbies, @facade)
 
-            expect(hobbyList.toArray()).to.deep.equal hobbyList.items
+            assert.deepEqual hobbyList.toArray(), hobbyList.items
 
 
     describe 'forEach', ->
@@ -174,7 +173,7 @@ describe 'BaseList', ->
 
             ids = hobbyList.map (item) -> item.id
 
-            expect(ids).to.eql [ 3, 2, 1 ]
+            assert.deepEqual ids, [3, 2, 1]
 
 
     describe 'filter', ->
@@ -188,8 +187,7 @@ describe 'BaseList', ->
 
             filtered = hobbyList.filter (item) -> item.id is 3
 
-            expect(filtered).to.eql [ @hobbies[0] ]
-
+            assert.deepEqual filtered, [ @hobbies[0] ]
 
     describe 'some', ->
 
@@ -318,5 +316,5 @@ describe 'BaseList', ->
             assert hobbyList.length is 2
             assert hobbyList.ids.length is 2
 
-            expect(hobbyList.ids).to.eql [3, 1]
+            assert.deepEqual hobbyList.ids, [3, 1]
 

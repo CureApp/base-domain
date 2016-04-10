@@ -103,7 +103,7 @@ describe 'AggregateRoot', ->
 
             plain = game.toPlainObject()
 
-            expect(plain).to.eql
+            assert.deepEqual plain,
                 cards:   ids: []
                 players: ids: []
                 memories:

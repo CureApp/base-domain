@@ -195,8 +195,7 @@ describe 'Util', ->
 
                     exists: -> false
 
-                expect(-> Util.requireFile(__dirname + '/sample-files/abc')).to.throw Error
-
+                assert.throws(-> Util.requireFile(__dirname + '/sample-files/abc'))
 
 
     describe 'serialize', ->
@@ -270,24 +269,24 @@ describe 'Util', ->
 
         it 'restores object', ->
             serialized = Util.serialize(a: 123, b: 'str')
-            expect(Util.deserialize(serialized, facade)).to.eql {a: 123, b: 'str'}
+            assert.deepEqual(Util.deserialize(serialized, facade), {a: 123, b: 'str'})
 
         it 'restores array', ->
             serialized = Util.serialize([a: 123, b: 'str'])
-            expect(Util.deserialize(serialized, facade)).to.eql [{a: 123, b: 'str'}]
+            assert.deepEqual(Util.deserialize(serialized, facade), [{a: 123, b: 'str'}])
 
         it 'restores error', ->
             e = new Error('err msg')
             e.prop1 = 'prop1 val'
             serialized = Util.serialize(e)
-            expect(Util.deserialize(serialized, facade)).to.eql e
+            assert.deepEqual(Util.deserialize(serialized, facade), e)
 
         it 'restores model', ->
             class Diary extends Entity
             facade.addClass('diary', Diary)
             diary = facade.createModel('diary', { p1: 123, p2: 'str' })
             serialized = Util.serialize(diary)
-            expect(Util.deserialize(serialized, facade)).to.eql diary
+            assert.deepEqual(Util.deserialize(serialized, facade), diary)
             assert Util.deserialize(serialized, facade) instanceof Diary
             assert Util.deserialize(serialized, facade).__className__ is undefined
 
@@ -296,7 +295,7 @@ describe 'Util', ->
             facade.addClass('diary', Diary)
             diary = facade.createModel('diary', { p1: 123, p2: 'str' })
             serialized = Util.serialize([diary])
-            expect(Util.deserialize(serialized, facade)).to.eql [diary]
+            assert.deepEqual(Util.deserialize(serialized, facade), [diary])
 
         it 'restores model in object', ->
             class Diary extends Entity
@@ -304,4 +303,4 @@ describe 'Util', ->
             diary1 = facade.createModel('diary', { p1: 123, p2: 'str' })
             diary2 = facade.createModel('diary', { p1: 123, p2: 'str' })
             serialized = Util.serialize(d1: diary1, d2: diary2)
-            expect(Util.deserialize(serialized, facade)).to.eql d1: diary1, d2: diary2
+            assert.deepEqual(Util.deserialize(serialized, facade), d1: diary1, d2: diary2)

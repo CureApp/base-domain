@@ -140,6 +140,10 @@ class BaseModel extends Base
             if @[submodelProp]? and @[prop] isnt @[submodelProp].id
                 @[submodelProp] = undefined
 
+        # set enum
+        else if modelProps.isEnum(prop)
+            @[prop] = modelProps.getValidEnum(prop, value)
+
         return @
 
 

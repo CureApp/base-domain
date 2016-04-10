@@ -336,11 +336,13 @@ class ModelProps
         typeInfo = @typeInfoDic[prop]
         return false if not typeInfo?.values?
 
-        if typeof value is 'string'
-            return typeInfo.numsByValue[value] ? typeInfo.default
+        if typeof value is 'string' and typeInfo.numsByValue[value]?
+            return typeInfo.numsByValue[value]
 
-        else
-            return typeInfo.values[value] ? typeInfo.default
+        if typeof value is 'number' and typeInfo.values[value]?
+            return value
+
+        return typeInfo.default
 
 
 module.exports = ModelProps

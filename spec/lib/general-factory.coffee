@@ -58,21 +58,6 @@ describe 'GeneralFactory', ->
             assert abc.i is 4
 
 
-        it 'converts ENUM string into number', ->
-
-            class Abc extends Facade.ValueObject
-                @properties:
-                    i: @TYPES.ENUM ['Jazz', 'Funk', 'Fusion', 'Soul', 'Bossa Nova'], 'Bossa Nova'
-
-            @facade.addClass('abc', Abc)
-
-            obj = i: 'Fusion'
-
-            abc = GeneralFactory.createModel('abc', obj, null, @facade)
-
-            assert abc.i is 2
-
-
 
     describe 'createDict', ->
 

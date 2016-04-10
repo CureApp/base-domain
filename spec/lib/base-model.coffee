@@ -73,9 +73,10 @@ describe 'BaseModel', ->
 
         f.addClass 'hospital', Hospital
 
-        hospital = new Hospital(id: 123, state: 1, f)
+        hospital = new Hospital(id: 123, state: 'UNAVAILABLE', f)
 
         assert hospital.state is hospital.enum('state').UNAVAILABLE
+
 
 
     describe '@withParentProp', ->

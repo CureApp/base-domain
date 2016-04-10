@@ -33,6 +33,7 @@ describe 'GeneralFactory', ->
                     f: @TYPES.DATE -> new Date()
                     g: @TYPES.MODEL 'sub'
                     h: @TYPES.MODEL 'sub', optional: true
+                    i: @TYPES.ENUM ['Jazz', 'Funk', 'Fusion', 'Soul', 'Bossa Nova'], 'Bossa Nova'
 
             class Sub extends Facade.ValueObject
                 @properties:
@@ -54,7 +55,7 @@ describe 'GeneralFactory', ->
             assert abc.f instanceof Date
             assert abc.g instanceof Sub
             assert abc.h is undefined
-
+            assert abc.i is 4
 
 
 

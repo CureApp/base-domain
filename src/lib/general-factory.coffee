@@ -132,6 +132,7 @@ class GeneralFactory
 
             if subModelName = @modelProps.getSubModelName(prop)
                 value = @constructor.createModel(subModelName, value, options, @root)
+
             model.set(prop, value)
 
 

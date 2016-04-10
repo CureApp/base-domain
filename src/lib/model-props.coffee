@@ -44,6 +44,7 @@ class ModelProps
         @subModelProps = []
         @typeInfoDic = {}
         @entityDic = {}
+        @enumDic = {}
 
 
         @parse properties, modl
@@ -89,6 +90,9 @@ class ModelProps
             when 'MODEL'
                 @parseSubModelProp(prop, typeInfo, modl)
 
+            when 'ENUM'
+                @parseEnumProp(prop, typeInfo, modl)
+
         return
 
 
@@ -121,6 +125,41 @@ class ModelProps
 
             idTypeInfo = TYPES.SUB_ID modelProp: prop, entity: typeInfo.model, omit: typeInfo.omit
             @parseProp(typeInfo.idPropName, idTypeInfo, modl)
+
+        return
+
+
+    ###*
+    parse enum prop
+
+    @method parseEnumProp
+    @private
+    ###
+    parseEnumProp: (prop, typeInfo, modl) ->
+
+        { values } = typeInfo
+
+        if not Array.isArray values
+            throw new Error("Invalid definition of ENUM '#{prop}' in model '#{@modelName}'. Values must be an array.")
+
+        numsByValue = {}
+
+        for value, i in values
+            if typeof value isnt 'string'
+                throw new Error("Invalid definition of ENUM '#{prop}' in model '#{@modelName}'. Values must be an array of string.")
+
+            if numsByValue[value]?
+                throw new Error("Invalid definition of ENUM '#{prop}' in model '#{@modelName}'. Value '#{value}' is duplicated.")
+
+            numsByValue[value] = i
+
+        if typeof typeInfo.default is 'string'
+            typeInfo.default = numsByValue[typeInfo.default]
+
+        if not typeInfo.default? or not values[typeInfo.default]?
+            throw new Error("Invalid default value '#{typeInfo.default}' of ENUM '#{prop}' in model '#{@modelName}'.")
+
+        typeInfo.numsByValue = numsByValue
 
         return
 
@@ -181,6 +220,30 @@ class ModelProps
     ###
     isId: (prop) ->
         @typeInfoDic[prop]?.typeName is 'SUB_ID'
+
+
+    ###*
+    check if the given prop is enum
+
+    @method isEnum
+    @public
+    @param {String} prop
+    @return {Boolean}
+    ###
+    isEnum: (prop) ->
+        @typeInfoDic[prop]?.typeName is 'ENUM'
+
+
+    ###*
+    get value - enum pair
+
+    @method isEnumDic
+    @public
+    @param {String} prop
+    @return {Boolean}
+    ###
+    getEnumDic: (prop) ->
+        @typeInfoDic[prop]?.numsByValue
 
 
     ###*
@@ -257,6 +320,29 @@ class ModelProps
     getDefaultValue: (prop) ->
 
         @typeInfoDic[prop]?.default
+
+
+    ###*
+    get the valid enum value from input
+
+    @method getValidEnum
+    @public
+    @param {String} prop
+    @param {String|Number} value
+    @return {Number} value
+    ###
+    getValidEnum: (prop, value) ->
+
+        typeInfo = @typeInfoDic[prop]
+        return false if not typeInfo?.values?
+
+        if typeof value is 'string' and typeInfo.numsByValue[value]?
+            return typeInfo.numsByValue[value]
+
+        if typeof value is 'number' and typeInfo.values[value]?
+            return value
+
+        return typeInfo.default
 
 
 module.exports = ModelProps

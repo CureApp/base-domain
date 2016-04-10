@@ -80,6 +80,15 @@ class BaseModel extends Base
 
 
     ###*
+    @method enum
+    @public
+    @return {Object}
+    ###
+    enum: (prop) ->
+        @getModelProps().getEnumDic(prop)
+
+
+    ###*
     @method getModelProps
     @private
     @return {ModelProps}
@@ -130,6 +139,10 @@ class BaseModel extends Base
             # if new submodel id is set and old one exists, delete old one
             if @[submodelProp]? and @[prop] isnt @[submodelProp].id
                 @[submodelProp] = undefined
+
+        # set enum
+        else if modelProps.isEnum(prop)
+            @[prop] = modelProps.getValidEnum(prop, value)
 
         return @
 

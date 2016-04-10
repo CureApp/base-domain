@@ -62,6 +62,22 @@ describe 'BaseModel', ->
         assert patient['hospital-id'] is 123
 
 
+    it 'can define enum and can get the map', ->
+
+        f = require('../create-facade').create()
+
+        class Hospital extends Entity
+            @properties:
+                name: @TYPES.STRING
+                state: @TYPES.ENUM ['AVAILABLE', 'UNAVAILABLE']
+
+        f.addClass 'hospital', Hospital
+
+        hospital = new Hospital(id: 123, state: 'UNAVAILABLE', f)
+
+        assert hospital.state is hospital.enum('state').UNAVAILABLE
+
+
 
     describe '@withParentProp', ->
 

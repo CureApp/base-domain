@@ -132,6 +132,10 @@ class GeneralFactory
 
             if subModelName = @modelProps.getSubModelName(prop)
                 value = @constructor.createModel(subModelName, value, options, @root)
+
+            else if @modelProps.isEnum(prop)
+                value = @modelProps.getValidEnum(prop, value)
+
             model.set(prop, value)
 
 

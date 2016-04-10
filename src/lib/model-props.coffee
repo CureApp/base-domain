@@ -223,6 +223,18 @@ class ModelProps
 
 
     ###*
+    check if the given prop is enum
+
+    @method isEnum
+    @public
+    @param {String} prop
+    @return {Boolean}
+    ###
+    isEnum: (prop) ->
+        @typeInfoDic[prop]?.typeName is 'ENUM'
+
+
+    ###*
     get entity prop of the given idPropName
 
     @method getEntityPropByIdProp

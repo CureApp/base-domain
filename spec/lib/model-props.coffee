@@ -46,7 +46,7 @@ describe 'ModelProps', ->
 
 
     it 'has dates collecting prop of DATE, CREATED_AT and UPDATED_AT', ->
-        expect(@modelProps.dates).to.eql ['date', 'createdAt', 'createdAt2', 'updatedAt', 'updatedAt2']
+        assert.deepEqual @modelProps.dates, ['date', 'createdAt', 'createdAt2', 'updatedAt', 'updatedAt2']
 
 
     it 'has createdAt whose value is CREATED_AT at last column', ->

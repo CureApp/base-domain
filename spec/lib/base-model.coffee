@@ -110,7 +110,7 @@ describe 'BaseModel', ->
             assert plainMember.id is 12
             assert plainMember.firstName is 'Shin'
             assert plainMember.age is 29
-            expect(plainMember.hobbies.ids).to.eql [1,2,3]
+            assert.deepEqual plainMember.hobbies.ids, [1,2,3]
 
 
 
@@ -126,7 +126,7 @@ describe 'BaseModel', ->
 
             assert plainDiary.title is diary.title
             assert plainDiary.comment is diary.comment
-            expect(plainDiary.date).to.eql diary.date
+            assert.deepEqual plainDiary.date, diary.date
             assert not plainDiary.author?
             assert not plainDiary.authorId?
             assert plainDiary.memberId is 12

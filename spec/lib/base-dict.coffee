@@ -55,7 +55,7 @@ describe 'BaseDict', ->
 
             dict = new HobbyDict(null, @facade).setItems(@hobbies)
 
-            expect(dict.ids).to.eql [1,2,3]
+            assert.deepEqual dict.ids, [1,2,3]
 
 
     describe 'ids', ->
@@ -74,7 +74,7 @@ describe 'BaseDict', ->
         it 'get array of ids when the item is Entity', ->
 
             hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
-            expect(hobbyDict.ids).to.deep.equal [1, 2, 3]
+            assert.deepEqual hobbyDict.ids, [1,2,3]
 
 
     describe 'toArray', ->
@@ -105,8 +105,7 @@ describe 'BaseDict', ->
             hobbyDict = new HobbyDict(items: @hobbies, @facade)
 
             keys = hobbyDict.keys()
-            expect(keys).to.eql ['1', '2', '3']
-
+            assert.deepEqual keys, ['1', '2', '3']
 
     describe 'keyValues', ->
 
@@ -385,7 +384,7 @@ describe 'BaseDict', ->
             assert plain.hasOwnProperty('items') is false
             assert plain.hasOwnProperty('ids')
 
-            expect(hobbyDict).to.eql newHobbyDict
+            assert.deepEqual hobbyDict, newHobbyDict
 
 
         it 'returns object without ids or items when dict has no items (non-entity-dict)', ->
@@ -400,7 +399,7 @@ describe 'BaseDict', ->
             assert plain.hasOwnProperty('items') is false
             assert plain.hasOwnProperty('ids') is false
 
-            expect(nonEntityDict).to.eql newNonEntityDict
+            assert.deepEqual nonEntityDict, newNonEntityDict
 
         it 'returns object with ids when item is entity', ->
 

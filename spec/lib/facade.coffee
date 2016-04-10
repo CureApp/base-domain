@@ -123,7 +123,7 @@ describe 'Facade', ->
 
             f = Facade.createInstance()
             f.addClass('abc', Abc)
-            expect(-> f.createFactory('abc')).to.throw Error
+            assert.throws(-> f.createFactory('abc'))
 
 
     describe 'error', ->
@@ -145,7 +145,7 @@ describe 'Facade', ->
 
         it 'throw error if no candidates are found', ->
 
-            expect(=> @f.createPreferredRepository('hospital')).to.throw.Error
+            assert.throws(=> @f.createPreferredRepository('hospital'))
 
 
 
@@ -223,7 +223,7 @@ describe 'Facade', ->
             f.addClass('child', Child)
             f.addClass('parent-repository', ParentRepository)
 
-            expect(=> f.createPreferredRepository('child', noParent: true)).to.throw.Error
+            assert.throws(=> f.createPreferredRepository('child', noParent: true))
 
 
 
@@ -235,7 +235,7 @@ describe 'Facade', ->
 
         it 'throw error if no candidates are found', ->
 
-            expect(=> @f.createPreferredFactory('hospital')).to.throw.Error
+            assert.throws(=> @f.createPreferredFactory('hospital'))
 
 
         it 'returns standard factory if preferred factory is not specified', ->
@@ -312,7 +312,7 @@ describe 'Facade', ->
             f.addClass('child', Child)
             f.addClass('parent-factory', ParentFactory)
 
-            expect(=> f.createPreferredFactory('child')).to.throw.Error
+            assert.throws (=> f.createPreferredFactory('child'))
 
 
 
@@ -324,7 +324,7 @@ describe 'Facade', ->
 
         it 'throw error if no candidates are found', ->
 
-            expect(=> @f.createPreferredService('hospital')).to.throw.Error
+            assert.throws (=> @f.createPreferredService('hospital'))
 
 
         it 'returns standard service if preferred service is not specified', ->
@@ -379,7 +379,7 @@ describe 'Facade', ->
             f.addClass('child', Child)
             f.addClass('parent-service', ParentService)
 
-            expect(=> f.createPreferredService('child')).to.throw.Error
+            assert.throws (=> f.createPreferredService('child'))
 
 
         it 'checks parent class\'s service when options.noParent is false', ->
@@ -415,7 +415,7 @@ describe 'Facade', ->
                     modules:
                         core: __dirname + '/../module-test/server'
 
-            expect(fn).to.throw 'Cannot use "core" as a module name'
+            assert.throws fn, 'Cannot use "core" as a module name'
 
 
         it '"moduleName" property of classes in modules is the name of the module', ->

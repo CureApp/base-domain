@@ -84,7 +84,6 @@ class TypeInfo
             options = default: options
 
         options.values = values
-        options.default ?= 0
 
         new TypeInfo 'ENUM', options
 

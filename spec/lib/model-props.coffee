@@ -58,7 +58,7 @@ describe 'ModelProps', ->
 
     it 'set enum default values', ->
         a = @facade.createModel('a')
-        assert a.en1 is 0
+        assert a.en1 is undefined
         assert a.en2 is 1
         assert a.en3 is 2
 

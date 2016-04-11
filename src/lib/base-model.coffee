@@ -142,9 +142,35 @@ class BaseModel extends Base
 
         # set enum
         else if modelProps.isEnum(prop)
-            @[prop] = modelProps.getValidEnum(prop, value)
+            @setEnum(prop, value)
 
         return @
+
+    ###*
+    set enum value
+
+    @method setEnum
+    @private
+    @param {String} prop
+    @param {String|Number} value
+    ###
+    setEnum: (prop, value) ->
+
+        return if not value?
+        modelProps = @getModelProps()
+        enums = modelProps.getEnumDic(prop)
+
+        if typeof value is 'string' and enums[value]?
+            return @[prop] = enums[value]
+
+        else if typeof value is 'number' and modelProps.getEnumValues(prop)[value]?
+            return @[prop] = value
+
+        console.error("""
+            base-domain: Invalid value is passed to ENUM prop "#{prop}" in model "#{modelProps.modelName}".
+            Value: "#{value}"
+            The property was not set.
+        """)
 
 
     ###*

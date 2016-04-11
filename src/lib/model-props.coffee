@@ -242,10 +242,21 @@ class ModelProps
     @method isEnumDic
     @public
     @param {String} prop
-    @return {Boolean}
+    @return {Object}
     ###
     getEnumDic: (prop) ->
         @typeInfoDic[prop]?.numsByValue
+
+    ###*
+    get values of enum
+
+    @method isEnumValues
+    @public
+    @param {String} prop
+    @return {Array(String)}
+    ###
+    getEnumValues: (prop) ->
+        @typeInfoDic[prop]?.values.slice()
 
 
     ###*
@@ -323,28 +334,6 @@ class ModelProps
 
         @typeInfoDic[prop]?.default
 
-
-    ###*
-    get the valid enum value from input
-
-    @method getValidEnum
-    @public
-    @param {String} prop
-    @param {String|Number} value
-    @return {Number} value
-    ###
-    getValidEnum: (prop, value) ->
-
-        typeInfo = @typeInfoDic[prop]
-        return false if not typeInfo?.values?
-
-        if typeof value is 'string' and typeInfo.numsByValue[value]?
-            return typeInfo.numsByValue[value]
-
-        if typeof value is 'number' and typeInfo.values[value]?
-            return value
-
-        return typeInfo.default
 
 
 module.exports = ModelProps

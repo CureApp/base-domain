@@ -78,6 +78,30 @@ describe 'BaseModel', ->
         assert hospital.state is hospital.enum('state').UNAVAILABLE
 
 
+    describe 'when invalid ENUM value is passed', ->
+
+        before ->
+            @console_error = console.error
+        after ->
+            console.error = @console_error
+
+        it 'shows warning message via console.error', (done) ->
+
+            console.error = (msg) ->
+                assert(msg.match /Invalid value is passed/)
+                done()
+
+            f = require('../create-facade').create()
+
+            class Hospital extends Entity
+                @properties:
+                    state: @TYPES.ENUM ['AVAILABLE', 'UNAVAILABLE']
+
+            f.addClass 'hospital', Hospital
+
+            hospital = new Hospital(id: 123, state: 'ABCDE', f)
+
+
 
     describe '@withParentProp', ->
 

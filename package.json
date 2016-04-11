@@ -23,7 +23,8 @@
     "post-dependencies": "echo post-dependencies",
     "pre-release": "gulp build",
     "post-release": "echo postrelease",
-    "gh-pages": "gulp yuidoc"
+    "gh-pages": "gulp yuidoc",
+    "bmp-r": "cc-bmp -r"
   },
   "engines": {
     "node": ">=0.12"

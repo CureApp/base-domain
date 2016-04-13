@@ -141,6 +141,7 @@ class GeneralFactory
 
             continue if model[prop]? or obj.hasOwnProperty prop
 
+            continue if @modelProps.isId(prop)
             continue if @modelProps.isOptional(prop)
 
             defaultValue = @modelProps.getDefaultValue(prop)

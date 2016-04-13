@@ -58,6 +58,43 @@ describe 'GeneralFactory', ->
             assert abc.i is 4
 
 
+        it 'set subId to undefined when submodel does not exist', ->
+
+            class Abc extends Facade.ValueObject
+                @properties:
+                    sub: @TYPES.MODEL 'sub'
+
+            class Sub extends Facade.Entity
+                @properties:
+                    name: @TYPES.STRING
+
+            @facade.addClass('abc', Abc)
+            @facade.addClass('sub', Sub)
+
+            abc = GeneralFactory.createModel('abc', undefined, null, @facade)
+
+            assert abc.sub is undefined
+            assert abc.subId is undefined
+
+
+        it 'set subId to null when submodel does not contain id', ->
+
+            class Abc extends Facade.ValueObject
+                @properties:
+                    sub: @TYPES.MODEL 'sub'
+
+            class Sub extends Facade.Entity
+                @properties:
+                    name: @TYPES.STRING
+
+            @facade.addClass('abc', Abc)
+            @facade.addClass('sub', Sub)
+
+            abc = GeneralFactory.createModel('abc', { sub: {name: 'foo'} }, null, @facade)
+
+            assert abc.sub.id is null
+            assert abc.subId is null
+
 
     describe 'createDict', ->
 

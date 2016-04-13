@@ -104,6 +104,7 @@ describe 'AggregateRoot', ->
             plain = game.toPlainObject()
 
             assert.deepEqual plain,
+                id: null
                 cards:   ids: []
                 players: ids: []
                 memories:

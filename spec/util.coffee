@@ -226,31 +226,31 @@ describe 'Util', ->
         it 'attaches __className__ property to model ', ->
             class Diary extends Entity
             facade.addClass('diary', Diary)
-            diary = facade.createModel('diary', { p1: 123, p2: 'str' })
-            assert Util.serialize(diary) is JSON.stringify { p1: 123, p2: 'str', __className__: 'diary' }
+            diary = facade.createModel('diary', { id: 'abc', p1: 123, p2: 'str' })
+            assert Util.serialize(diary) is JSON.stringify { id: 'abc', p1: 123, p2: 'str', __className__: 'diary' }
             assert diary.__className__ is undefined
 
         it 'attaches __className__ property to model when it is in array', ->
             class Diary extends Entity
             facade.addClass('diary', Diary)
-            diary = facade.createModel('diary', { p1: 123, p2: 'str' })
-            assert Util.serialize([diary]) is JSON.stringify [{ p1: 123, p2: 'str', __className__: 'diary' }]
+            diary = facade.createModel('diary', { id: 'abc', p1: 123, p2: 'str' })
+            assert Util.serialize([diary]) is JSON.stringify [{ id: 'abc', p1: 123, p2: 'str', __className__: 'diary' }]
 
         it 'attaches __className__ property to model when it is in plain object', ->
             class Diary extends Entity
             facade.addClass('diary', Diary)
-            diary1 = facade.createModel('diary', { p1: 123, p2: 'str' })
-            diary2 = facade.createModel('diary', { p1: 123, p2: 'str' })
-            assert Util.serialize(d1: diary1, d2: diary2) is JSON.stringify d1: { p1: 123, p2: 'str', __className__: 'diary' }, d2: { p1: 123, p2: 'str', __className__: 'diary' }
+            diary1 = facade.createModel('diary', { id: 'abc', p1: 123, p2: 'str' })
+            diary2 = facade.createModel('diary', { id: 'def', p1: 123, p2: 'str' })
+            assert Util.serialize(d1: diary1, d2: diary2) is JSON.stringify d1: { id: 'abc', p1: 123, p2: 'str', __className__: 'diary' }, d2: { id: 'def', p1: 123, p2: 'str', __className__: 'diary' }
 
         it 'does not attach __className__ property to model when it is in another model', ->
             class Diary extends Entity
             facade.addClass('diary', Diary)
-            diary1 = facade.createModel('diary', { p1: 123, p2: 'str' })
-            diary2 = facade.createModel('diary', { p1: 123, p2: 'str' })
+            diary1 = facade.createModel('diary', { id: 'abc', p1: 123, p2: 'str' })
+            diary2 = facade.createModel('diary', { id: 'def', p1: 123, p2: 'str' })
             diary1.d = diary2
 
-            assert Util.serialize(diary1) is JSON.stringify { p1: 123, p2: 'str', d: { p1: 123, p2: 'str' }, __className__: 'diary' }
+            assert Util.serialize(diary1) is JSON.stringify { id: 'abc', p1: 123, p2: 'str', d: { id: 'def', p1: 123, p2: 'str' }, __className__: 'diary' }
 
 
     describe 'deserialize', ->

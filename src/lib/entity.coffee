@@ -11,15 +11,17 @@ Base model class with "id" column
 ###
 class Entity extends BaseModel
 
-    @isEntity: true
-
     ###*
     primary key for the model
 
     @property id
     @type {String|Number}
     ###
-    id: null
+    constructor: ->
+        @id = null
+        super
+
+    @isEntity: true
 
 
     ###*

@@ -3,6 +3,7 @@
 TypeInfo = require './type-info'
 Base = require './base'
 ModelProps = require './model-props'
+Util = require '../util'
 
 ###*
 Base model class of DDD pattern.
@@ -243,6 +244,31 @@ class BaseModel extends Base
     ###
     equals: (model) ->
         model? and @constructor is model.constructor
+
+    ###*
+    create clone
+
+    @method equals
+    @param {BaseModel} model
+    @return {Boolean}
+    ###
+    clone: ->
+
+        plainObject = {}
+
+        modelProps = @getModelProps()
+
+        for own prop, value of @
+
+            if modelProps.isModel and value instanceof BaseModel
+                plainObject[prop] = value.clone()
+
+            else
+                plainObject[prop] = Util.clone value
+
+        return @getFacade().createModel modelProps.modelName, plainObject
+
+
 
 
     ###*

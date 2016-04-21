@@ -293,4 +293,24 @@ describe 'BaseModel', ->
             assert not diary.author?
 
 
+    describe 'clone', ->
+
+        it 'copies the model', ->
+
+            mem = @facade.createModel 'member',
+                id: 11
+                hobbies: [1,2,3]
+                age: 30
+
+            diary = @facade.createModel 'diary',
+                id: '2015/1/12'
+                comment: 'sample'
+                author: mem
+
+            diary2 = diary.clone()
+
+            assert.deepEqual diary, diary2
+            assert diary2 instanceof @facade.getModel 'diary'
+            assert diary2.author instanceof @facade.getModel 'member'
+            assert diary2.author isnt mem
 

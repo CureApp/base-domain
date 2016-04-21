@@ -248,12 +248,13 @@ class BaseModel extends Base
 
 
     ###*
-    create clone
+    clone the model as a plain object
 
-    @method clone
-    @return {BaseModel}
+    @method plainClone
+    @public
+    @return {Object}
     ###
-    clone: ->
+    plainClone: ->
 
         plainObject = {}
 
@@ -262,10 +263,25 @@ class BaseModel extends Base
         for own prop, value of @
 
             if modelProps.isModel and value instanceof BaseModel
-                plainObject[prop] = value.clone()
+                plainObject[prop] = value.plainClone()
 
             else
                 plainObject[prop] = Util.clone value
+
+        return plainObject
+
+
+    ###*
+    create clone
+
+    @method clone
+    @public
+    @return {BaseModel}
+    ###
+    clone: ->
+
+        plainObject = @plainClone()
+        modelProps = @getModelProps()
 
         return @getFacade().createModel modelProps.modelName, plainObject
 

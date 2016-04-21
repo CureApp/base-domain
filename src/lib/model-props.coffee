@@ -213,6 +213,18 @@ class ModelProps
 
 
     ###*
+    check if the given prop is model prop
+
+    @method isModel
+    @public
+    @param {String} prop
+    @return {Boolean}
+    ###
+    isModel: (prop) ->
+        @typeInfoDic[prop]?.typeName is 'MODEL'
+
+
+    ###*
     check if the given prop is submodel's id
 
     @method isId

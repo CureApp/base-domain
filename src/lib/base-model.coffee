@@ -245,12 +245,13 @@ class BaseModel extends Base
     equals: (model) ->
         model? and @constructor is model.constructor
 
+
+
     ###*
     create clone
 
-    @method equals
-    @param {BaseModel} model
-    @return {Boolean}
+    @method clone
+    @return {BaseModel}
     ###
     clone: ->
 

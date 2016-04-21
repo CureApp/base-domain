@@ -299,7 +299,11 @@ describe 'BaseModel', ->
 
             mem = @facade.createModel 'member',
                 id: 11
-                hobbies: [1,2,3]
+                hobbies: [
+                    { id: 1, name: 'keyboard' }
+                    { id: 2, name: 'ingress' }
+                    { id: 3, name: 'Shogi' }
+                ]
                 age: 30
 
             diary = @facade.createModel 'diary',
@@ -308,6 +312,7 @@ describe 'BaseModel', ->
                 author: mem
 
             diary2 = diary.clone()
+
 
             assert.deepEqual diary, diary2
             assert diary2 instanceof @facade.getModel 'diary'

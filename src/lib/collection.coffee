@@ -2,6 +2,7 @@
 
 ValueObject = require './value-object'
 EntityPool = require '../entity-pool'
+BaseModel = require './base-model'
 
 ###*
 collection model of one model
@@ -353,6 +354,25 @@ class Collection extends ValueObject
             plain.items = plainItems
 
         return plain
+
+
+    ###*
+    clone the model as a plain object
+
+    @method clone
+    @return {BaseModel}
+    ###
+    plainClone: ->
+
+        plain = super()
+        plain.items = for key, item of @items
+            if item instanceof BaseModel
+                item.plainClone()
+            else
+                item
+
+        return plain
+
 
 
     ###*

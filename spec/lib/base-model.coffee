@@ -313,9 +313,30 @@ describe 'BaseModel', ->
 
             diary2 = diary.clone()
 
-
             assert.deepEqual diary, diary2
             assert diary2 instanceof @facade.getModel 'diary'
             assert diary2.author instanceof @facade.getModel 'member'
             assert diary2.author isnt mem
 
+
+
+        it 'copies an empty list of value objects', ->
+
+            class ValObj extends @facade.constructor.ValueObject
+                @properties:
+                    name: @TYPES.STRING
+
+            class ValObjList extends @facade.constructor.BaseList
+                @itemModelName: 'val-obj'
+
+            @facade.addClass('val-obj', ValObj)
+            @facade.addClass('val-obj-list', ValObjList)
+
+            list = @facade.createModel 'val-obj-list'
+
+            list2 = list.clone()
+
+            console.log "list.items", list.items
+            console.log "list2.items", list2.items
+
+            assert.deepEqual list, list2

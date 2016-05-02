@@ -365,11 +365,13 @@ class Collection extends ValueObject
     plainClone: ->
 
         plain = super()
-        plain.items = for key, item of @items
-            if item instanceof BaseModel
-                item.plainClone()
-            else
-                item
+
+        if @loaded()
+            plain.items = for key, item of @items
+                if item instanceof BaseModel
+                    item.plainClone()
+                else
+                    item
 
         return plain
 

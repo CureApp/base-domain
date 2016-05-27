@@ -60,7 +60,7 @@
     "gulp-uglify": "^1.5.3",
     "gulp-yuidoc": "^0.1.2",
     "mocha": "^2.3.3",
-    "node-circleci-autorelease": "^1.6.1",
+    "node-circleci-autorelease": "^2.0.9",
     "power-assert": "^1.1.0"
   },
   "node-circleci-autorelease": {

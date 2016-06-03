@@ -67,12 +67,12 @@ class Util
             return val if not val? or typeof val isnt 'object'
 
             if Array.isArray val
-                return (attachClassName(item) for item in val)
+                return (attachClassName(item, inModel) for item in val)
 
             ret = {}
             isModel = val.constructor.className?
             Object.keys(val).forEach (key) ->
-                ret[key] = attachClassName(val[key], isModel)
+                ret[key] = attachClassName(val[key], isModel || inModel)
 
             if val instanceof Error
                 ret.stack = val.stack

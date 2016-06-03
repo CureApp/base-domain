@@ -1,6 +1,6 @@
 
 { Util } = require './others'
-{ Entity, ValueObject } = Facade = require('./base-domain')
+{ Entity, ValueObject, BaseDict, BaseList } = Facade = require('./base-domain')
 facade = require('./create-facade').create()
 
 describe 'Util', ->
@@ -304,3 +304,43 @@ describe 'Util', ->
             diary2 = facade.createModel('diary', { p1: 123, p2: 'str' })
             serialized = Util.serialize(d1: diary1, d2: diary2)
             assert.deepEqual(Util.deserialize(serialized, facade), d1: diary1, d2: diary2)
+
+
+        it 'restores model in list', ->
+
+            class Diary extends Entity
+            facade.addClass('diary', Diary)
+
+            class DiaryList extends BaseList
+                @itemModelName: 'diary'
+
+            facade.addClass('diary-list', DiaryList)
+
+            diary1 = facade.createModel('diary', { id: 'abc', p1: 123, p2: 'str' })
+            diary2 = facade.createModel('diary', { id: 'def', p1: 123, p2: 'str' })
+
+            diaries = facade.createModel('diary-list', [diary1, diary2])
+
+            serialized = Util.serialize(diaries)
+            assert.deepEqual(Util.deserialize(serialized, facade), diaries)
+
+
+        it 'restores model in dict', ->
+
+            class Diary extends Entity
+            facade.addClass('diary', Diary)
+
+            class DiaryDict extends BaseDict
+                @itemModelName: 'diary'
+
+            facade.addClass('diary-dict', DiaryDict)
+
+            diary1 = facade.createModel('diary', { id: 'abc', p1: 123, p2: 'str' })
+            diary2 = facade.createModel('diary', { id: 'def', p1: 123, p2: 'str' })
+
+            diaries = facade.createModel('diary-dict', [diary1, diary2])
+
+            serialized = Util.serialize(diaries)
+            assert.deepEqual(Util.deserialize(serialized, facade), diaries)
+
+

@@ -1,0 +1,20 @@
+hooks:
+  release:
+    pre:
+      - gulp build
+  gh_pages:
+    pre:
+      - gulp yuidoc
+config:
+  git_user_name: CircleCI
+  git_user_email: circleci@example.com
+  npm_update_depth: 0
+  version_prefix: v
+  create_branch: false
+  npm_shrinkwrap: false
+  create_gh_pages: true
+  gh_pages_dir: doc
+circle:
+  machine:
+    node:
+      version: 4.4.5

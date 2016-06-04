@@ -1,26 +1,25 @@
 general:
-    branches:
-        ignore:
-            - gh-pages
-            - '/release.*/'
+  branches:
+    ignore:
+      - gh-pages
+      - /release.*/
 machine:
-    environment:
-        PATH: '$PATH:$HOME/$CIRCLE_PROJECT_REPONAME/node_modules/node-circleci-autorelease/bin'
-        VERSION_PREFIX: v
-        CREATE_GH_PAGES: 1
-        GH_PAGES_DIR: doc
-    pre:
-        - "git config --global user.name 'CircleCI'"
-        - "git config --global user.email 'circleci@cureapp.jp'"
-    node:
-        version: 4.2.3
+  environment:
+    PATH: './node_modules/.bin:$PATH'
+  pre:
+    - git config --global user.name "CircleCI"
+    - git config --global user.email "circleci@example.com"
+  node:
+    version: 4.4.5
 dependencies:
-    post:
-        - npm run post-dependencies
+  post:
+    - nca run nca notice update-modules
 deployment:
-    create_release_branch:
-        branch:
-            - master
-        commands:
-            - 'cc-prepare-for-release && npm run pre-release && cc-release || cc-not-released'
-            - cc-gh-pages
+  create_release_branch:
+    branch:
+      - master
+    commands:
+      - nca run gulp build
+      - nca release --prefix v
+      - nca run gulp yuidoc
+      - nca run nca gh-pages --dir doc

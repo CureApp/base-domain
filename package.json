@@ -14,17 +14,7 @@
     "single": "mocha -r spec/global.js",
     "test": "gulp build && DIST=1 npm run mocha && npm run base-domainify-test && npm run uglify-js-test",
     "base-domainify-test": "cd test/base-domainify; ./test.sh; cd ../..",
-    "uglify-js-test": "rm -rf test/uglify-js/build && gulp uglify-test && node test/uglify-js/build/index.js",
-    "bmp": "cc-bmp",
-    "bmp-p": "cc-bmp -p",
-    "bmp-m": "cc-bmp -m",
-    "bmp-j": "cc-bmp -j",
-    "circle": "cc-generate-yml",
-    "post-dependencies": "echo post-dependencies",
-    "pre-release": "gulp build",
-    "post-release": "echo postrelease",
-    "gh-pages": "gulp yuidoc",
-    "bmp-r": "cc-bmp -r"
+    "uglify-js-test": "rm -rf test/uglify-js/build && gulp uglify-test && node test/uglify-js/build/index.js"
   },
   "engines": {
     "node": ">=0.12"
@@ -60,22 +50,7 @@
     "gulp-uglify": "^1.5.3",
     "gulp-yuidoc": "^0.1.2",
     "mocha": "^2.3.3",
-    "node-circleci-autorelease": "^1.6.1",
+    "node-circleci-autorelease": "^2.1.7",
     "power-assert": "^1.1.0"
-  },
-  "node-circleci-autorelease": {
-    "machine": {
-      "node": {
-        "version": "4.2.3"
-      }
-    },
-    "config": {
-      "git-user-name": "CircleCI",
-      "git-user-email": "circleci@cureapp.jp",
-      "version-prefix": "v",
-      "create-branch": false,
-      "create-gh-pages": true,
-      "gh-pages-dir": "doc"
-    }
   }
 }

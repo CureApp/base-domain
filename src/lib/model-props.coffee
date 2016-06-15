@@ -90,9 +90,6 @@ class ModelProps
             when 'MODEL'
                 @parseSubModelProp(prop, typeInfo, modl)
 
-            when 'ENUM'
-                @parseEnumProp(prop, typeInfo, modl)
-
         return
 
 
@@ -125,43 +122,6 @@ class ModelProps
 
             idTypeInfo = TYPES.SUB_ID modelProp: prop, entity: typeInfo.model, omit: typeInfo.omit
             @parseProp(typeInfo.idPropName, idTypeInfo, modl)
-
-        return
-
-
-    ###*
-    parse enum prop
-
-    @method parseEnumProp
-    @private
-    ###
-    parseEnumProp: (prop, typeInfo, modl) ->
-
-        { values } = typeInfo
-
-        if not Array.isArray values
-            throw new Error("Invalid definition of ENUM '#{prop}' in model '#{@modelName}'. Values must be an array.")
-
-        numsByValue = {}
-
-        for value, i in values
-            if typeof value isnt 'string'
-                throw new Error("Invalid definition of ENUM '#{prop}' in model '#{@modelName}'. Values must be an array of string.")
-
-            if numsByValue[value]?
-                throw new Error("Invalid definition of ENUM '#{prop}' in model '#{@modelName}'. Value '#{value}' is duplicated.")
-
-            numsByValue[value] = i
-
-        if typeof typeInfo.default is 'string'
-            if not numsByValue[typeInfo.default]?
-                throw new Error("Invalid default value '#{typeInfo.default}' of ENUM '#{prop}' in model '#{@modelName}'.")
-            typeInfo.default = numsByValue[typeInfo.default]
-
-        if typeInfo.default? and not values[typeInfo.default]?
-            throw new Error("Invalid default value '#{typeInfo.default}' of ENUM '#{prop}' in model '#{@modelName}'.")
-
-        typeInfo.numsByValue = numsByValue
 
         return
 

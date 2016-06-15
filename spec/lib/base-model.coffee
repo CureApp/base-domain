@@ -76,6 +76,7 @@ describe 'BaseModel', ->
         hospital = new Hospital(id: 123, state: 'UNAVAILABLE', f)
 
         assert hospital.state is hospital.enum('state').UNAVAILABLE
+        assert hospital.state is Hospital.enum('state').UNAVAILABLE
 
 
     describe 'when invalid ENUM value is passed', ->

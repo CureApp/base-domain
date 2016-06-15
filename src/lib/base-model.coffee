@@ -83,6 +83,16 @@ class BaseModel extends Base
     ###*
     @method enum
     @public
+    @return {Object([key: String => Number])}
+    ###
+    @enum: (prop) ->
+        # TODO Object.assign()
+        @properties?[prop]?.numsByValue
+
+
+    ###*
+    @method enum
+    @public
     @return {Object}
     ###
     enum: (prop) ->

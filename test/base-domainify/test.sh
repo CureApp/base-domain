@@ -4,6 +4,8 @@ dirname=${0%/*}
 
 run_test () {
 
+    cd $dirname
+
     preparation
 
     run_browserify

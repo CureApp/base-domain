@@ -7,7 +7,7 @@ require('coffee-script/register')
 
 Path.isAbsolute ?= (str) -> str.charAt(0) is '/'
 
-Facade = require './lib/facade'
+Facade = require './main'
 MasterDataResource = require './master-data-resource'
 
 class BaseDomainify

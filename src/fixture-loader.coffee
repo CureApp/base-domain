@@ -1,9 +1,7 @@
 'use strict'
 
-fs = require 'fs'
 EntityPool = require './entity-pool'
 DomainError = require './lib/domain-error'
-{ normalize } = require('path')
 { isPromise } = require('./util')
 
 debug = require('debug')('base-domain:fixture-loader')
@@ -32,6 +30,8 @@ class FixtureLoader
     @return {EntityPool|Promise(EntityPool)}
     ###
     load: (options = {}) ->
+        { fs } = @facade.constructor # only defined in Node.js
+
         try
 
             modelNames = []
@@ -209,6 +209,7 @@ class FixtureLoader
     @private
     ###
     readTSV: (fixtureDir, file) ->
+        { fs } = @facade.constructor # only defined in Node.js
 
         objs = {}
 

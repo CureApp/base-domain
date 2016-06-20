@@ -2,7 +2,10 @@
   "name": "base-domain",
   "version": "4.3.6",
   "description": "simple module to help build Domain-Driven Design",
-  "main": "dist/lib/facade.js",
+  "main": "dist/main",
+  "browser": {
+    "dist/main": "dist/main-browser"
+  },
   "directories": {
     "test": "spec/"
   },

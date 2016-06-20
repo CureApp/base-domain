@@ -104,8 +104,7 @@ class MasterDataResource
         FixtureLoader = require './fixture-loader'
 
         new FixtureLoader(@facade, @masterDirPath).load()
-
-        fs = require 'fs'
+        { fs } = @facade.constructor # only defined in Node.js
         fs.writeFileSync @masterJSONPath, JSON.stringify @toPlainObject(), null, 1
 
 

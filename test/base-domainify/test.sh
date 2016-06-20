@@ -39,7 +39,7 @@ remove_generated_js () {
 evaluate_result () {
     result="$*"
 
-    expected="device name is iPhone6S, count is 100 and url.value is localhost:4157"
+    expected="device name is iPhone6S, count is 100, url.value is localhost:4157 and fs is not found"
 
     if [[ $result == $expected ]]; then
         echo 'base-domain/ify succeeded!'

@@ -326,7 +326,9 @@ class Facade
         fullName   = @fullName(modFullName)
 
         if not @nonExistingClassNames[modFullName] # avoid searching non-existing files many times
-            klass = @getModule(moduleName).requireOwn(fullName)
+            mod = @getModule(moduleName)
+            throw @error('moduleNotFound', "module '#{moduleName}' is not found") if not mod?
+            klass = mod.requireOwn(fullName)
 
         if not klass?
             @nonExistingClassNames[modFullName] = true

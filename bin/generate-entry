@@ -2,23 +2,39 @@
 
 var fs = require('fs')
 var Path = require('path')
+var program = require('commander')
 var NonNodeFacadeGenerator = require('../dist/non-node-facade-generator')
 
-function main(facadePath, dirname, outfile) {
+
+function main() {
+
+    program
+        .arguments('<facade-file>')
+        .arguments('<domain-directory>')
+        .option('-o, --outfile', 'out file = (facadeDir/entry.js)')
+        .option('-c, --compiler <compiler-module-name>', 'compiler (e.g. babel-register)')
+        .parse(process.argv)
+
+    var facadePath = program.args[0]
+    var dirname = program.args[1]
+    var outfile = program.outfile
+
     if (!facadePath || !dirname) {
-        return showHelp()
+        return program.help()
     }
     if (!outfile) {
         outfile = Path.dirname(facadePath) + '/entry.js'
+    }
+
+    if (program.compiler) {
+        console.log(program.compiler)
+        require(program.compiler)
+        console.log(program.compiler)
     }
 
     new NonNodeFacadeGenerator().generate(facadePath, dirname, outfile)
     console.log(outfile, 'is successfully generated!')
 }
 
-function showHelp() {
-    console.log('[Usage]')
-    console.log('bd-generate-entry <facade file> <domain directory> [out file=(facadeDir)/entry.js]')
-}
 
-main(process.argv[2], process.argv[3], process.argv[4])
+if (require.main === module) main()

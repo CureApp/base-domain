@@ -89,7 +89,7 @@ class NonNodeFacadeGenerator
             .filter (subDirPath) ->
                 fs.readdirSync(subDirPath).some (filename) ->
                     klass = require Path.join(subDirPath, filename)
-                    (klass::) instanceof Base
+                    klass.isBaseDomainClass
             .map (subDirPath) -> Path.basename(subDirPath)
 
 

@@ -15,6 +15,7 @@ gives them @getFacade() method.
 @module base-domain
 ###
 class Base
+    @isBaseDomainClass: true
 
     ###*
     Hyphenized name.

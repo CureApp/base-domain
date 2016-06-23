@@ -27,9 +27,7 @@ function main() {
     }
 
     if (program.compiler) {
-        console.log(program.compiler)
         require(program.compiler)
-        console.log(program.compiler)
     }
 
     new NonNodeFacadeGenerator().generate(facadePath, dirname, outfile)

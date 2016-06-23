@@ -112,8 +112,22 @@ class Facade
         @master?.init()
 
 
-    # for base-domainify. keep it empty
+    # for base-domainify and non-node-facade-generator. keep it empty
     init: ->
+
+    # for base-domainify. keep it empty
+    initWithPacked: (packed) ->
+        { masterData, core, modules } = packed
+
+        @master?.loadFromJSON = -> masterData
+        for klassName, klass of core
+            this.addClass(klassName, klass)
+
+        for moduleName, klasses of modules
+            for klassName, klass of klasses
+                this.addClass(moduleName + '/' + klassName, klass)
+
+        return @
 
 
     ###*

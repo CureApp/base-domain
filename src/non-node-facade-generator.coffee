@@ -1,8 +1,6 @@
 'use strict'
 fs      = require 'fs'
 Path    = require 'path'
-coffee  = require 'coffee-script'
-require('coffee-script/register')
 
 Path.isAbsolute ?= (str) -> str.charAt(0) is '/'
 
@@ -11,24 +9,41 @@ Facade = require './main'
 
 MasterDataResource = require './master-data-resource'
 
-class DomainPacker
+class NonNodeFacadeGenerator
 
-    pack: (dirname) ->
+    generate: (facadePath, dirname, outfile) ->
+        absFacadePath = @absolutePath(facadePath)
         absDirname = @absolutePath(dirname)
-        @validate(absDirname)
-        console.log @getJSCode(absDirname)
+        outfilePath = @absolutePath(outfile)
+
+        @validate(facadePath, absDirname, outfilePath)
+
+        cwd = Path.dirname(outfilePath)
+
+        code = @getPackedDataCode(absDirname, cwd) + '\n'
+        code += """
+        const Facade = require('#{@relativePath(absFacadePath, cwd)}')
+        Facade.prototype.init = function() { return this.initWithPacked(packedData) }
+        module.exports = Facade
+        """
+
+        fs.writeFileSync(outfilePath, code)
 
 
-    validate: (dirname) ->
-        throw new Error("dirname: '#{dirname}' is not found.") if not fs.existsSync(dirname)
+    validate: (absFacadePath, absDirname, outfilePath) ->
+        throw new Error("'#{absFacadePath}' is not found.") if not fs.existsSync(absFacadePath)
+        throw new Error("dirname: '#{absDirname}' is not found.") if not fs.existsSync(absDirname)
+
+        outDir = Path.dirname(outfilePath)
+        throw new Error("output directory: '#{outDir}' is not found.") if not fs.existsSync(outDir)
 
 
-    getJSCode: (dirname) ->
+    getPackedDataCode: (dirname, cwd) ->
         propCodes = []
-        propCodes.push @getMasterProp(dirname)
-        propCodes.push @getCoreProp(dirname)
-        propCodes.push @getModulesProp(dirname)
-        return "module.exports = {\n#{propCodes.join(',\n')}\n}"
+        propCodes.push @getMasterProp(dirname, cwd)
+        propCodes.push @getCoreProp(dirname, cwd)
+        propCodes.push @getModulesProp(dirname, cwd)
+        return "const packedData = {\n#{propCodes.join(',\n')}\n}"
 
 
     getMasterProp: (dirname) ->
@@ -38,23 +53,23 @@ class DomainPacker
             return "  masterData: {}"
 
 
-    getCoreProp: (dirname) ->
+    getCoreProp: (dirname, cwd) ->
 
         coreCodes = for filename in @getClassFiles(dirname)
             name = filename.split('.')[0]
-            path = @relativePath(dirname) + '/' + name
+            path = @relativePath(dirname, cwd) + '/' + name
             "    '#{name}': require('#{path}')"
 
         return "  core: {\n#{coreCodes.join(',\n')}\n  }"
 
 
-    getModulesProp: (dirname) ->
+    getModulesProp: (dirname, cwd) ->
 
         modulesCode = for moduleName in @getModuleNames(dirname)
             modulePath = Path.join(dirname, moduleName)
             moduleCodes = for filename in @getClassFiles(modulePath)
                 name = filename.split('.')[0]
-                path = @relativePath(modulePath) + '/' + name
+                path = @relativePath(modulePath, cwd) + '/' + name
                 "      #{name}': require('#{path}')"
 
             "    #{moduleName}: {\n#{moduleCodes.join(',\n')}\n    }"
@@ -83,7 +98,7 @@ class DomainPacker
     @private
     @return {String} path
     ###
-    getMasterJSONPath: (dirname) ->
+    getMasterJSONPath: (dirname, cwd) ->
 
         try
             facade = Facade.createInstance(dirname: @absolutePath(dirname), master: true)
@@ -92,7 +107,7 @@ class DomainPacker
 
             return '' if not fs.existsSync(masterJSONPath)
 
-            relPath = MasterDataResource.getJSONPath(@relativePath(dirname))
+            relPath = MasterDataResource.getJSONPath(@relativePath(dirname, cwd))
             return relPath
 
         catch e
@@ -138,10 +153,9 @@ class DomainPacker
         return files
 
 
-    relativePath: (path) ->
+    relativePath: (path, cwd) ->
         # dir = Path.dirname(@file)
-        dir = process.cwd()
-        relPath = Path.relative(dir, path)
+        relPath = Path.relative(cwd, path)
 
         if relPath.charAt(0) isnt '.'
             relPath = './' + relPath
@@ -154,6 +168,4 @@ class DomainPacker
         return process.cwd() + '/' + path
 
 
-module.exports = DomainPacker
-
-new DomainPacker().pack(process.argv[2])
+module.exports = NonNodeFacadeGenerator

@@ -10,7 +10,7 @@ machine:
     - git config --global user.name "CircleCI"
     - git config --global user.email "circleci@example.com"
   node:
-    version: 4.4.5
+    version: 6.2.2
 dependencies:
   post:
     - nca run nca notice update-modules

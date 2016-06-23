@@ -1,6 +1,6 @@
 {
   "name": "base-domain",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "description": "simple module to help build Domain-Driven Design",
   "main": "dist/main",
   "browser": {

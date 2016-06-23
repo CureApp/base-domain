@@ -29,3 +29,5 @@ all.json
 test/base-domainify/packed.js
 !test/uglify-js/node_modules
 test/uglify-js/build
+!test/generate-entry/node_modules
+test/generate-entry/src/entry.js

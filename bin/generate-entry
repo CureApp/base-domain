@@ -1,19 +1,24 @@
 #!/usr/bin/env node
 
 var fs = require('fs')
+var Path = require('path')
 var NonNodeFacadeGenerator = require('../dist/non-node-facade-generator')
 
 function main(facadePath, dirname, outfile) {
-    if (!facadePath || !dirname || !outfile) {
+    if (!facadePath || !dirname) {
         return showHelp()
     }
+    if (!outfile) {
+        outfile = Path.dirname(facadePath) + '/entry.js'
+    }
+
     new NonNodeFacadeGenerator().generate(facadePath, dirname, outfile)
     console.log(outfile, 'is successfully generated!')
 }
 
 function showHelp() {
     console.log('[Usage]')
-    console.log('bd-generate-entry <facade file> <domain directory> <out file>')
+    console.log('bd-generate-entry <facade file> <domain directory> [out file=(facadeDir)/entry.js]')
 }
 
 main(process.argv[2], process.argv[3], process.argv[4])

@@ -10,14 +10,16 @@
     "test": "spec/"
   },
   "bin": {
-    "bd-create-master": "bin/create-master-json"
+    "bd-create-master": "bin/create-master-json",
+    "bd-generate-entry": "bin/generate-entry"
   },
   "scripts": {
     "mocha": "mocha -r spec/global.js spec/util.coffee spec/master-data-resource.coffee spec/fixture.coffee spec/lib/*.coffee",
     "single": "mocha -r spec/global.js",
-    "test": "gulp build && DIST=1 npm run mocha && npm run base-domainify-test && npm run uglify-js-test",
+    "test": "gulp build && DIST=1 npm run mocha && npm run base-domainify-test && npm run uglify-js-test && npm run generate-entry-test",
     "base-domainify-test": "test/base-domainify/test.sh",
-    "uglify-js-test": "rm -rf test/uglify-js/build && gulp uglify-test && node test/uglify-js/build/index.js"
+    "uglify-js-test": "rm -rf test/uglify-js/build && gulp uglify-test && node test/uglify-js/build/index.js",
+    "generate-entry-test": "test/generate-entry/test.sh"
   },
   "engines": {
     "node": ">=0.12"

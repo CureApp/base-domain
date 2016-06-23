@@ -46,11 +46,11 @@ class NonNodeFacadeGenerator
         return "const packedData = {\n#{propCodes.join(',\n')}\n}"
 
 
-    getMasterProp: (dirname) ->
-        if masterJSONPath = @getMasterJSONPath(dirname)
+    getMasterProp: (dirname, cwd) ->
+        if masterJSONPath = @getMasterJSONPath(dirname, cwd)
             return "  masterData: require('#{masterJSONPath}')"
         else
-            return "  masterData: {}"
+            return "  masterData: null"
 
 
     getCoreProp: (dirname, cwd) ->
@@ -70,7 +70,7 @@ class NonNodeFacadeGenerator
             moduleCodes = for filename in @getClassFiles(modulePath)
                 name = filename.split('.')[0]
                 path = @relativePath(modulePath, cwd) + '/' + name
-                "      #{name}': require('#{path}')"
+                "      '#{name}': require('#{path}')"
 
             "    #{moduleName}: {\n#{moduleCodes.join(',\n')}\n    }"
 
@@ -100,8 +100,15 @@ class NonNodeFacadeGenerator
     ###
     getMasterJSONPath: (dirname, cwd) ->
 
+        allModules = {}
+        for moduleName in @getModuleNames(dirname)
+            allModules[moduleName] = Path.join(dirname, moduleName)
+
         try
-            facade = Facade.createInstance(dirname: @absolutePath(dirname), master: true)
+            facade = Facade.createInstance
+                dirname: @absolutePath(dirname)
+                modules: allModules
+                master: true
 
             { masterJSONPath } = facade.master
 

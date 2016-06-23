@@ -119,7 +119,11 @@ class Facade
     initWithPacked: (packed) ->
         { masterData, core, modules } = packed
 
-        @master?.loadFromJSON = -> masterData
+        if masterData and not @master?
+            @master = new MasterDataResource(@)
+
+        @master?.init = -> @initWithData(masterData)
+
         for klassName, klass of core
             this.addClass(klassName, klass)
 

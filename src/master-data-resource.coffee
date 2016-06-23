@@ -66,6 +66,13 @@ class MasterDataResource
         @
 
 
+    initWithData: (data) ->
+        for modelName, plainMemory of data
+            @memories[modelName] = MemoryResource.restore(plainMemory)
+
+        @
+
+
     ###*
     load data from JSON file
     This implementation is mainly for Titanium.

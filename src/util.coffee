@@ -126,7 +126,8 @@ class Util
     ###
     @requireFile: (file) ->
         if not Ti?
-            return require file
+            ret = require file
+            return if ret.default then ret.default else ret
 
         # in Titanium
         path = file + '.js'

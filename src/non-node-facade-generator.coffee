@@ -1,8 +1,8 @@
 'use strict'
 fs      = require 'fs'
 Path    = require 'path'
-
 Path.isAbsolute ?= (str) -> str.charAt(0) is '/'
+{ requireFile } = require './util'
 
 Facade = require './main'
 {Base} = Facade
@@ -20,9 +20,10 @@ class NonNodeFacadeGenerator
 
         cwd = Path.dirname(outfilePath)
 
-        code = @getPackedDataCode(absDirname, cwd) + '\n'
+        code = "function __(m) { return m.default? m.default : m }\n"
+        code += @getPackedDataCode(absDirname, cwd) + '\n'
         code += """
-        const Facade = require('#{@relativePath(absFacadePath, cwd)}')
+        const Facade = __(require('#{@relativePath(absFacadePath, cwd)}'))
         Facade.prototype.init = function() { return this.initWithPacked(packedData) }
         module.exports = Facade
         """
@@ -58,7 +59,7 @@ class NonNodeFacadeGenerator
         coreCodes = for filename in @getClassFiles(dirname)
             name = filename.split('.')[0]
             path = @relativePath(dirname, cwd) + '/' + name
-            "    '#{name}': require('#{path}')"
+            "    '#{name}': __(require('#{path}'))"
 
         return "  core: {\n#{coreCodes.join(',\n')}\n  }"
 
@@ -70,7 +71,7 @@ class NonNodeFacadeGenerator
             moduleCodes = for filename in @getClassFiles(modulePath)
                 name = filename.split('.')[0]
                 path = @relativePath(modulePath, cwd) + '/' + name
-                "      '#{name}': require('#{path}')"
+                "      '#{name}': __(require('#{path}'))"
 
             "    #{moduleName}: {\n#{moduleCodes.join(',\n')}\n    }"
 
@@ -88,7 +89,7 @@ class NonNodeFacadeGenerator
             .filter (subDirPath) -> fs.statSync(subDirPath).isDirectory()
             .filter (subDirPath) ->
                 fs.readdirSync(subDirPath).some (filename) ->
-                    klass = require Path.join(subDirPath, filename)
+                    klass = requireFile Path.join(subDirPath, filename)
                     klass.isBaseDomainClass
             .map (subDirPath) -> Path.basename(subDirPath)
 
@@ -118,6 +119,7 @@ class NonNodeFacadeGenerator
             return relPath
 
         catch e
+            console.error e
             return ''
 
 
@@ -139,7 +141,7 @@ class NonNodeFacadeGenerator
             [ name, ext ] = filename.split('.')
             continue if ext not in ['js', 'coffee']
 
-            klass = require path + '/' + filename
+            klass = requireFile path + '/' + filename
 
             fileInfoDict[name] = filename: filename, klass: klass
 

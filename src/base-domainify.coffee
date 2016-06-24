@@ -5,6 +5,8 @@ Path    = require 'path'
 coffee  = require 'coffee-script'
 require('coffee-script/register')
 
+{ requireFile } = require './util'
+
 Path.isAbsolute ?= (str) -> str.charAt(0) is '/'
 
 Facade = require './main'
@@ -81,7 +83,8 @@ class BaseDomainify
         _ = ' ' # spacer for indent
 
         coffeeCode = """
-            Facade = require '#{@moduleName}'
+            __ = (m) -> if m.default then m.default else m
+            Facade = __ require '#{@moduleName}'
 
             Facade::init = ->
             #{_}return unless @dirname.match '#{basename}'\n
@@ -113,7 +116,7 @@ class BaseDomainify
             path = @relativePath(dirname) + '/' + name
 
             coffeeCode += """
-                #{_}@addClass '#{name}', require('#{path}')\n
+                #{_}@addClass '#{name}', __ require('#{path}')\n
             """
         return coffeeCode
 
@@ -132,7 +135,7 @@ class BaseDomainify
             path = @relativePath(moduleDirname) + '/' + name
 
             coffeeCode += """
-                #{_}#{_}@addClass '#{moduleName}/#{name}', require('#{path}')\n
+                #{_}#{_}@addClass '#{moduleName}/#{name}', __ require('#{path}')\n
             """
         return coffeeCode
 
@@ -179,7 +182,7 @@ class BaseDomainify
             [ name, ext ] = filename.split('.')
             continue if ext not in ['js', 'coffee']
 
-            klass = require path + '/' + filename
+            klass = requireFile path + '/' + filename
 
             fileInfoDict[name] = filename: filename, klass: klass
 

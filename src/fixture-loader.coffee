@@ -2,7 +2,7 @@
 
 EntityPool = require './entity-pool'
 DomainError = require './lib/domain-error'
-{ isPromise } = require('./util')
+Util = require './util'
 
 debug = require('debug')('base-domain:fixture-loader')
 
@@ -41,7 +41,7 @@ class FixtureLoader
                     [ modelName, ext ] = file.split('.')
                     continue if ext not in ['coffee', 'js', 'json']
                     path = fixtureDir + '/data/' + file
-                    fx = require(path)
+                    fx = Util.requireFile(path)
                     fx.path = path
                     fx.fixtureDir = fixtureDir
                     @fixturesByModel[modelName] = fx
@@ -121,7 +121,7 @@ class FixtureLoader
                 obj.id = id
                 @saveModel(repo, obj)
 
-            if isPromise results[0]
+            if Util.isPromise results[0]
                 Promise.all(results).then =>
                     saveModelsByPortion()
             else
@@ -137,7 +137,7 @@ class FixtureLoader
             include:
                 entityPool: @entityPool
 
-        if isPromise result
+        if Util.isPromise result
             result.then (entity) =>
                 @entityPool.set entity
 

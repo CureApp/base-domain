@@ -3,7 +3,7 @@
 var fs = require('fs')
 var Path = require('path')
 var program = require('commander')
-var NonNodeFacadeGenerator = require('../dist/non-node-facade-generator')
+var EntryGenerator = require('../dist/entry-generator')
 
 
 function main() {
@@ -13,6 +13,7 @@ function main() {
         .arguments('<domain-directory>')
         .option('-o, --outfile', 'out file = (facadeDir/entry.js)')
         .option('-c, --compiler <compiler-module-name>', 'compiler (e.g. babel-register)')
+        .option('--esmodule', 'output as ES Module format')
         .parse(process.argv)
 
     var facadePath = program.args[0]
@@ -30,7 +31,7 @@ function main() {
         require(program.compiler)
     }
 
-    new NonNodeFacadeGenerator().generate(facadePath, dirname, outfile)
+    EntryGenerator.generate(facadePath, dirname, outfile, program.esmodule)
     console.log(outfile, 'is successfully generated!')
 }
 

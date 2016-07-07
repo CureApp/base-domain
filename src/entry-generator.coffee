@@ -284,7 +284,7 @@ class ESCodeGenerator extends EntryGenerator
     getPragmas: ->
         """
         // @flow
-        /* eslint quote-props: 0 */
+        /* eslint quote-props: 0, max-len: 0 */
         """
 
 

@@ -117,7 +117,7 @@ class Facade
 
     # for base-domainify. keep it empty
     initWithPacked: (packed) ->
-        { masterData, core, modules } = packed
+        { masterData, core, modules, factories } = packed
 
         if masterData and not @master?
             @master = new MasterDataResource(@)
@@ -130,6 +130,10 @@ class Facade
         for moduleName, klasses of modules
             for klassName, klass of klasses
                 this.addClass(moduleName + '/' + klassName, klass)
+
+        for modelName, factoryName of (factories ? {})
+            if not factoryName?
+                @nonExistingClassNames[modelName + '-factory'] = true
 
         return @
 
@@ -208,7 +212,25 @@ class Facade
         while params.length < ClassWithConstructor.length - 1
             params.push undefined
 
-        return new Class(params..., root ? @)
+        # return new Class(params..., root ? @)
+        # workaround for ES6 classes, which cannot be invoked without "new"
+        switch params.length
+            when 0
+                return new Class(root ? @)
+            when 1
+                return new Class(params[0], root ? @)
+            when 2
+                return new Class(params[0], params[1], root ? @)
+            when 3
+                return new Class(params[0], params[1], params[2], root ? @)
+            when 4
+                return new Class(params[0], params[1], params[2], params[3], root ? @)
+            when 5
+                return new Class(params[0], params[1], params[2], params[3], params[4], root ? @)
+            when 6
+                return new Class(params[0], params[1], params[2], params[3], params[4], params[5], root ? @)
+            else
+                return new Class(params..., root ? @)
 
 
     ###*
@@ -319,7 +341,6 @@ class Facade
     require: (modFullName_o) ->
 
         modFullName = @getModule().normalizeName(modFullName_o)
-
         return @classes[modFullName] if @classes[modFullName]?
 
         moduleName = @moduleName(modFullName)

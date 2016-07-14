@@ -4,12 +4,23 @@ Path.isAbsolute ?= (str) -> str.charAt(0) is '/'
 { requireFile, camelize } = require './util'
 
 Facade = require './main'
-{ Base } = Facade
+{ Base, BaseModel } = Facade
 MasterDataResource = require './master-data-resource'
 
 
 class ClassInfo
-    constructor: (@name, @relPath, @className, @prefix) ->
+    constructor: (@name, @relPath, @className, @moduleName) ->
+
+    Object.defineProperties @::,
+        modFullName: get: ->
+            if @moduleName
+                @moduleName + '/' + @name
+            else
+                @name
+
+        fullClassName: get: ->
+            camelize(@moduleName) + @className
+
 
 
 class EntryGeneratorInput
@@ -24,14 +35,28 @@ class EntryGeneratorInput
         @facadePath  = @relativePath(facadePath)
         @coreClasses = @getClassInfoList(@absDirname)
         @modules = @getModulesClasses()
-        @masterJSONStr = JSON.stringify @getMasterJSON()
         @facadeClassName = requireFile(@absolutePath(facadePath)).name
+        @facade = @createFacade()
+        @masterJSONStr = JSON.stringify @getMasterJSON()
+        @factories = @getPreferredFactoryNames()
+
+
+    createFacade: ->
+        allModules = {}
+        for moduleName in @getModuleNames()
+            allModules[moduleName] = Path.join(@absDirname, moduleName)
+
+        return Facade.createInstance
+            dirname: @absDirname
+            modules: allModules
+            master: true
+
 
 
     ###*
     @return {Array(ClassInfo)}
     ###
-    getClassInfoList: (dirPath, prefix = '') ->
+    getClassInfoList: (dirPath, moduleName = '') ->
 
         relDirname = @relativePath(dirPath)
 
@@ -39,7 +64,7 @@ class EntryGeneratorInput
             name = filename.split('.')[0]
             relPath = relDirname + '/' + name
             className = requireFile(Path.resolve dirPath, name).name
-            new ClassInfo(name, relPath, className, prefix)
+            new ClassInfo(name, relPath, className, moduleName)
 
 
     ###*
@@ -51,8 +76,7 @@ class EntryGeneratorInput
 
         for moduleName in @getModuleNames()
             modulePath = Path.join(@absDirname, moduleName)
-            moduleNameCamelized = camelize(moduleName)
-            modules[moduleName] = @getClassInfoList(modulePath, moduleNameCamelized)
+            modules[moduleName] = @getClassInfoList(modulePath, moduleName)
 
         return modules
 
@@ -64,17 +88,8 @@ class EntryGeneratorInput
     ###
     getMasterJSON: ->
 
-        allModules = {}
-        for moduleName in @getModuleNames()
-            allModules[moduleName] = Path.join(@absDirname, moduleName)
-
         try
-            facade = Facade.createInstance
-                dirname: @absDirname
-                modules: allModules
-                master: true
-
-            { masterJSONPath } = facade.master
+            { masterJSONPath } = @facade.master
 
             return null if not fs.existsSync(masterJSONPath)
 
@@ -139,6 +154,34 @@ class EntryGeneratorInput
 
 
     ###*
+    get entities with no factory
+    ###
+    getPreferredFactoryNames: ->
+        factories = {}
+
+        for classInfo in @coreClasses
+            factories[classInfo.modFullName] = @getPreferredFactoryName(classInfo)
+
+        for modName, classes of @modules
+            for classInfo in classes
+                factories[classInfo.modFullName] = @getPreferredFactoryName(classInfo)
+
+        delete factories[k] for k, v of factories when not v?
+        return factories
+
+
+    getPreferredFactoryName: (classInfo) ->
+        ModelClass = @facade.require(classInfo.modFullName)
+        return if (ModelClass::) not instanceof BaseModel
+        try
+            factory = @facade.createPreferredFactory(classInfo.modFullName)
+            return "'#{factory.constructor.className}'"
+        catch e
+            return 'null'
+
+
+
+    ###*
     validate input data
     ###
     validate: (facadePath, dirname, outfile) ->
@@ -199,7 +242,7 @@ class EntryGenerator
 
     getPackedData: ->
 
-        { coreClasses, modules, masterJSONStr, facadeClassName } = @input
+        { factories, coreClasses, modules, masterJSONStr, facadeClassName } = @input
 
         """
         const packedData = {
@@ -210,6 +253,9 @@ class EntryGenerator
             },
             modules: {
         #{@getModulesPackedData(modules)}
+            },
+            factories: {
+        #{@getFactoriesPackedData(factories, 2)}
             }
         }
         #{facadeClassName}.prototype.init = function init() { return this.initWithPacked(packedData) }
@@ -219,7 +265,7 @@ class EntryGenerator
         spaces = [0...indent * 4].map((x) -> ' ').join('')
 
         spaces + classes.map (classInfo) ->
-            "'#{classInfo.name}': #{classInfo.prefix}#{classInfo.className}"
+            "'#{classInfo.name}': #{classInfo.fullClassName}"
         .join(',\n' + spaces)
 
 
@@ -233,6 +279,14 @@ class EntryGenerator
             #{_}}
             """
         .join(',\n')
+
+    getFactoriesPackedData: (factories, indent) ->
+        spaces = [0...indent * 4].map((x) -> ' ').join('')
+
+        spaces + Object.keys(factories).map (modelName) =>
+            factoryName = factories[modelName]
+            return "'#{modelName}': #{factoryName}"
+        .join(',\n' + spaces)
 
 class JSCodeGenerator extends EntryGenerator
 
@@ -250,7 +304,7 @@ class JSCodeGenerator extends EntryGenerator
         code = @getRequireStatement(facadeClassName, facadePath)
         code += @getRequireStatement(classInfo.className, classInfo.relPath) for classInfo in coreClasses
         for modName, modClasses of modules
-            code += @getRequireStatement(classInfo.prefix + classInfo.className, classInfo.relPath) for classInfo in modClasses
+            code += @getRequireStatement(classInfo.fullClassName, classInfo.relPath) for classInfo in modClasses
 
         return code
 
@@ -261,7 +315,7 @@ class JSCodeGenerator extends EntryGenerator
 
         classNames = coreClasses.map((coreClass) -> coreClass.className)
         for modName, modClasses of modules
-            classNames = classNames.concat modClasses.map (modClass) -> modClass.prefix + modClass.className
+            classNames = classNames.concat modClasses.map (modClass) -> modClass.fullClassName
 
         keyValues = classNames.map (className) ->
             "#{className}: #{className}"
@@ -295,7 +349,7 @@ class ESCodeGenerator extends EntryGenerator
         code = @getImportStatement(facadeClassName, facadePath)
         code += @getImportStatement(classInfo.className, classInfo.relPath) for classInfo in coreClasses
         for modName, modClasses of modules
-            code += @getImportStatement(classInfo.prefix + classInfo.className, classInfo.relPath) for classInfo in modClasses
+            code += @getImportStatement(classInfo.fullClassName, classInfo.relPath) for classInfo in modClasses
         return code
 
 
@@ -306,7 +360,7 @@ class ESCodeGenerator extends EntryGenerator
 
         classNames = coreClasses.map((coreClass) -> coreClass.className)
         for modName, modClasses of modules
-            classNames = classNames.concat modClasses.map (modClass) -> modClass.prefix + modClass.className
+            classNames = classNames.concat modClasses.map (modClass) -> modClass.fullClassName
 
 
         return """

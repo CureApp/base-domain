@@ -357,6 +357,29 @@ class Collection extends ValueObject
 
 
     ###*
+    create plain array.
+
+    @method toPlainArray
+    @return {Array} plainArray
+    ###
+    toPlainArray: ->
+
+        if @isItemEntity
+            return @ids.slice()
+
+        else if @loaded()
+            items = []
+            for key, item of @items
+                if typeof item.toPlainObject is 'function'
+                    items.push item.toPlainObject()
+                else
+                    items.push item
+            return items
+        else
+            return []
+
+
+    ###*
     clone the model as a plain object
 
     @method clone

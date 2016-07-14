@@ -445,3 +445,60 @@ describe 'BaseDict', ->
 
             assert hobbyDict.toPlainObject().ids?
             assert hobbyDict.toPlainObject().annualCost?
+
+
+    describe 'toPlainArray', ->
+
+        it 'returns an empty array when dict has no items', ->
+
+            class HobbyDict extends BaseDict
+                @className: 'hobby-dict'
+                @itemModelName: 'hobby'
+
+            hobbyDict = new HobbyDict({}, @facade)
+            plain = hobbyDict.toPlainArray()
+            newHobbyDict = new HobbyDict(plain, @facade)
+
+            assert.deepEqual plain, []
+
+        it 'returns an empty array when dict has no items (non-entity-dict)', ->
+
+            class NonEntityDict extends BaseDict
+                @className: 'hobby-dict'
+                @itemModelName: 'non-entity'
+
+            nonEntityDict = new NonEntityDict({}, @facade)
+            plain = nonEntityDict.toPlainArray()
+
+            assert.deepEqual plain, []
+
+        it 'returns array<string> when item is entity', ->
+
+            class HobbyDict extends BaseDict
+                @className: 'hobby-dict'
+                @itemModelName: 'hobby'
+
+            hobbyDict = new HobbyDict(items: @hobbies, @facade)
+            plain = hobbyDict.toPlainArray()
+
+            assert.deepEqual plain, [1, 2, 3]
+
+
+        it 'returns array<object> when item is non-entity', ->
+
+            class NonEntityDict extends BaseDict
+                @className: 'hobby-dict'
+                @itemModelName: 'non-entity'
+
+            nonEntities = (for name, i in ['keyboard', 'jogging', 'cycling']
+                @facade.createModel 'non-entity', id: 3 - i, name: name
+            )
+
+            nonEntityDict = new NonEntityDict(items: nonEntities, @facade)
+            plain = nonEntityDict.toPlainArray()
+
+            assert.deepEqual plain, [
+                { id: 1, name: 'cycling' }
+                { id: 2, name: 'jogging' }
+                { id: 3, name: 'keyboard' }
+            ]

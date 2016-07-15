@@ -10,7 +10,7 @@ Base repository class of DDD pattern.
 Responsible for perpetuation of models.
 BaseRepository has a client, which access to data resource (RDB, NoSQL, memory, etc...)
 
-the parent "Base" class just simply gives a @getFacade() method.
+the parent "Base" class just simply gives `this.facade` property
 
 @class BaseRepository
 @extends Base
@@ -300,7 +300,7 @@ class BaseRepository extends Base
     @return {Object} data
     ###
     appendTimeStamp: (data, isUpdate = false) ->
-        modelProps = @getFacade().getModelProps(@getModelName())
+        modelProps = @facade.getModelProps(@getModelName())
 
         propCreatedAt = modelProps.createdAt
         propUpdatedAt = modelProps.updatedAt

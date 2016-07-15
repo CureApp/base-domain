@@ -5,7 +5,7 @@ Base = require './base'
 ###*
 Base service class of DDD pattern.
 
-the parent "Base" class just simply gives a @getFacade() method.
+the parent "Base" class just simply gives `this.facade` property
 
 @class BaseService
 @extends Base

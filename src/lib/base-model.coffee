@@ -106,7 +106,7 @@ class BaseModel extends Base
     ###
     getModelProps: ->
         if @root?
-            @getFacade().getModelProps(@constructor.getName())
+            @facade.getModelProps(@constructor.getName())
 
         else
             new ModelProps(@constructor.getName(), @constructor.properties, null)
@@ -293,7 +293,7 @@ class BaseModel extends Base
         plainObject = @plainClone()
         modelProps = @getModelProps()
 
-        return @getFacade().createModel modelProps.modelName, plainObject
+        return @facade.createModel modelProps.modelName, plainObject
 
 
 

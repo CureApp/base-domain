@@ -30,6 +30,11 @@ class RootInterface
     ###
 
     ###*
+    facade instance
+    @property {Facade} facade
+    ###
+
+    ###*
     create a factory instance
     2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory
 
@@ -54,13 +59,6 @@ class RootInterface
     @method createService
     @param {String} name
     @return {BaseRepository}
-    ###
-
-    ###*
-    get facade
-
-    @method getFacade
-    @return {Facade}
     ###
 
     ###*

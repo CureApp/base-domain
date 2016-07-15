@@ -38,5 +38,4 @@ describe 'Base', ->
 
             instance = facade.create(SomeClass)
             assert instance.facade is facade
-            assert instance.getFacade() is facade
             assert facade.facade is facade

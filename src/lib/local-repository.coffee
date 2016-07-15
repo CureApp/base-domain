@@ -26,7 +26,7 @@ class LocalRepository extends BaseSyncRepository
                 #{@constructor.getName()} must define its static property '@aggregateRoot'.
             """
 
-        Root = @getFacade().getModel @constructor.aggregateRoot
+        Root = @facade.getModel @constructor.aggregateRoot
 
         if (Root::) not instanceof AggregateRoot
             throw @error 'invalidAggregateRoot', """

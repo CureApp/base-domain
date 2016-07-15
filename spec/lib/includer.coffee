@@ -71,7 +71,7 @@ describe 'Includer', ->
             class SubItemRepository extends BaseAsyncRepository
                 @modelName: 'sub-item'
                 get: (id) ->
-                    item = @getFacade().createModel('sub-item', {id: id, name: 'mock'})
+                    item = @facade.createModel('sub-item', {id: id, name: 'mock'})
                     return Promise.resolve item
 
 

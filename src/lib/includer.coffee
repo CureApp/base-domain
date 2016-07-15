@@ -30,7 +30,7 @@ class Includer
 
         @options.async ?= true
 
-        @facade = @model.getFacade()
+        @facade = @model.facade
 
         @ModelClass = @model.constructor
         @modelProps = @facade.getModelProps(@ModelClass.getName())

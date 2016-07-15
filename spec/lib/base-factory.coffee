@@ -167,8 +167,6 @@ describe 'BaseFactory', ->
         it 'creates list', ->
 
             class SuperDiaryList extends BaseList
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'diary'
 
             facade.addClass 'super-diary-list', SuperDiaryList
@@ -184,8 +182,6 @@ describe 'BaseFactory', ->
         it 'creates dict', ->
 
             class SuperDiaryDict extends BaseDict
-                @getFacade: -> facade
-                getFacade:  -> facade
                 @itemModelName: 'diary'
 
             facade.addClass 'super-diary-dict', SuperDiaryDict

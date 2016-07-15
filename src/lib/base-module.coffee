@@ -24,6 +24,7 @@ class BaseModule
     ###*
     Get facade
 
+    @deprecated just call facade property
     @method getFacade
     @return {Facade}
     @chainable

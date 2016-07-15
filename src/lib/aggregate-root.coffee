@@ -42,7 +42,7 @@ class AggregateRoot extends Entity
     ###
     createFactory: (modFirstName, params...) ->
 
-        @getFacade().__create(modFirstName, 'factory', params, @)
+        @facade.__create(modFirstName, 'factory', params, @)
 
 
     ###*
@@ -55,7 +55,7 @@ class AggregateRoot extends Entity
     ###
     createRepository: (modFirstName, params...) ->
 
-        @getFacade().__create(modFirstName, 'repository', params, @)
+        @facade.__create(modFirstName, 'repository', params, @)
 
 
     ###*
@@ -70,7 +70,7 @@ class AggregateRoot extends Entity
     ###
     createModel: (modFirstName, obj, options) ->
 
-        @getFacade().createModel modFirstName, obj, options, @
+        @facade.createModel modFirstName, obj, options, @
 
 
     ###*
@@ -83,7 +83,7 @@ class AggregateRoot extends Entity
     ###
     createService: (modFirstName, params...) ->
 
-        @getFacade().__create(modFirstName, 'service', params, @)
+        @facade.__create(modFirstName, 'service', params, @)
 
 
     ###*
@@ -98,7 +98,7 @@ class AggregateRoot extends Entity
     ###
     createPreferredRepository: (firstName, options, params...) ->
 
-        @getFacade().createPreferred(firstName, 'repository', options, params, @)
+        @facade.createPreferred(firstName, 'repository', options, params, @)
 
 
     ###*
@@ -115,7 +115,7 @@ class AggregateRoot extends Entity
 
         options.noParent ?= true
 
-        @getFacade().createPreferred(firstName, 'factory', options, params, @)
+        @facade.createPreferred(firstName, 'factory', options, params, @)
 
 
     ###*
@@ -132,7 +132,7 @@ class AggregateRoot extends Entity
 
         options.noParent ?= true
 
-        @getFacade().createPreferred(firstName, 'service', options, params, @)
+        @facade.createPreferred(firstName, 'service', options, params, @)
 
 
     ###*

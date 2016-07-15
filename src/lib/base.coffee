@@ -7,9 +7,9 @@ DomainError = require './domain-error'
 getProto = Object.getPrototypeOf ? (obj) -> obj.__proto__
 
 ###*
-parent class of model, factory and repository.
+parent class of model, factory, repository and service
 
-gives them @getFacade() method.
+gives them `this.facade` property
 
 @class Base
 @module base-domain
@@ -38,7 +38,7 @@ class Base
 
         # add class to facade, if not registered.
         if @root
-            facade = @getFacade()
+            facade = @facade
             if @constructor.className and not facade.hasClass @constructor.className
                 facade.addClass @constructor.className, @constructor
 
@@ -65,7 +65,7 @@ class Base
                 root = latestInstance
 
             else
-                console.error("""@root, @getFacade() is unavailable.""")
+                console.error("""@root, @facade is unavailable.""")
                 root = null
 
             console.error new Error().stack
@@ -81,6 +81,7 @@ class Base
     ###*
     Get facade
 
+    @deprecated just use this.facade
     @method getFacade
     @return {Facade}
     ###
@@ -90,7 +91,7 @@ class Base
             Give it via constructor or create instance via Facade.
             """
 
-        @root.getFacade()
+        @root.facade
 
     ###*
     Get module which this class belongs to
@@ -99,7 +100,7 @@ class Base
     @return {BaseModule}
     ###
     getModule: ->
-        @getFacade().getModule(@constructor.moduleName)
+        @facade.getModule(@constructor.moduleName)
 
 
     ###*

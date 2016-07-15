@@ -60,7 +60,7 @@ class Collection extends ValueObject
             throw @error 'base-domain:itemModelNameRequired', "@itemModelName is not set, in class #{@constructor.name}"
 
         _itemFactory = null
-        isItemEntity = @getFacade().getModel(@constructor.itemModelName).isEntity
+        isItemEntity = @facade.getModel(@constructor.itemModelName).isEntity
 
         Object.defineProperties @,
 
@@ -414,7 +414,7 @@ class Collection extends ValueObject
     @return {Function}
     ###
     getItemModelClass: ->
-        @getFacade().getModel(@constructor.itemModelName)
+        @facade.getModel(@constructor.itemModelName)
 
 
 

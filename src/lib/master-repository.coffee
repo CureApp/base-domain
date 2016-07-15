@@ -30,7 +30,7 @@ class MasterRepository extends BaseSyncRepository
 
         super
 
-        { master } =  @getFacade()
+        { master } =  @facade
 
         if not master?
             throw @error('masterNotFound', """

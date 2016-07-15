@@ -76,7 +76,7 @@ class GeneralFactory
     @param {RootInterface} root
     ###
     constructor: (@modelName, @root) ->
-        @facade = @root.getFacade()
+        @facade = @root.facade
         @modelProps = @facade.getModelProps(@root.getModule().normalizeName @modelName)
 
 

@@ -3,11 +3,11 @@
 class ClientPhotoUploadService extends BaseService
 
     getEmptyDiary: ->
-        return @getFacade().createModel('diary')
+        return @facade.createModel('diary')
 
 
     getPreferredFactoryInstance: ->
-        return @getFacade().createPreferredFactory('diary')
+        return @facade.createPreferredFactory('diary')
 
 
     getFactoryInstanceInModule: ->

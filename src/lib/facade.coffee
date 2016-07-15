@@ -32,6 +32,7 @@ class Facade
     ###*
     Get facade
 
+    @deprecated just use this.facade
     @method getFacade
     @return {Facade}
     @chainable

@@ -5,6 +5,7 @@ Util = require '../util'
 GeneralFactory = require './general-factory'
 MasterDataResource = require '../master-data-resource'
 ModelProps = require './model-props'
+BaseModel  = require './base-model'
 BaseModule = require './base-module'
 CoreModule = require './core-module'
 
@@ -147,6 +148,47 @@ class Facade
     ###
     getModel: (firstName) ->
         return @require(firstName)
+
+
+    ###*
+    Create instance of given Class.
+
+    @method create
+    @param {Function|Class} Class
+    @return {Base}
+    ###
+    create: (Class, params...) ->
+        if (Class::) instanceof BaseModel
+            return @createModel(Class.className, params...)
+
+        ClassWithConstructor = Class
+
+        while ClassWithConstructor.length is 0 and ClassWithConstructor isnt Object
+            ClassWithConstructor = Util.getProto(ClassWithConstructor::).constructor
+
+        while params.length < ClassWithConstructor.length - 1
+            params.push undefined
+
+        # return new Class(params..., root ? @)
+        # workaround for ES6 classes, which cannot be invoked without "new"
+        switch params.length
+            when 0
+                return new Class(@)
+            when 1
+                return new Class(params[0], @)
+            when 2
+                return new Class(params[0], params[1], @)
+            when 3
+                return new Class(params[0], params[1], params[2], @)
+            when 4
+                return new Class(params[0], params[1], params[2], params[3], @)
+            when 5
+                return new Class(params[0], params[1], params[2], params[3], params[4], @)
+            when 6
+                return new Class(params[0], params[1], params[2], params[3], params[4], params[5], @)
+            else
+                return new Class(params..., @)
+
 
 
     ###*

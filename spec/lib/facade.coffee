@@ -18,6 +18,83 @@ describe 'Facade', ->
             assert f instanceof Facade
             assert f instanceof ChildFacade
 
+    describe 'create', ->
+
+        beforeEach ->
+            @f = Facade.createInstance()
+            class Hobby extends Facade.Entity
+            @f.addClass('hobby', Hobby)
+            @Hobby = Hobby
+
+        it 'creates instance of BaseModel', ->
+            hobby = @f.create(@Hobby, id: 123, title: 'skiing')
+            assert hobby instanceof @Hobby
+            assert hobby.id is 123
+            assert hobby.title is 'skiing'
+
+        it 'creates instance of BaseModel using factory', ->
+            class HobbyFactory  extends Facade.BaseFactory
+                @modelName: 'hobby'
+                createFromObject: (obj) ->
+                    ret = super
+                    ret.fromObj = true
+                    return ret
+
+            @f.addClass('hobby-factory', HobbyFactory)
+
+            hobby = @f.create(@Hobby, id: 123, title: 'skiing')
+            assert hobby instanceof @Hobby
+            assert hobby.id is 123
+            assert hobby.title is 'skiing'
+            assert hobby.fromObj is true
+
+
+        it 'creates instance of BaseFactory', ->
+            class HobbyFactory  extends Facade.BaseFactory
+                @modelName: 'hobby'
+            @f.addClass('hobby-factory', HobbyFactory)
+
+            factory = @f.create(HobbyFactory)
+            assert factory instanceof HobbyFactory
+            hobby = factory.createFromObject(id: 11)
+            assert hobby instanceof @Hobby
+
+
+        it 'creates instance of BaseRepository', ->
+            class HobbyRepository extends Facade.BaseRepository
+                @modelName: 'hobby'
+            @f.addClass('hobby-repository', HobbyRepository)
+
+            repo = @f.create(HobbyRepository)
+            assert repo instanceof HobbyRepository
+
+
+        it 'creates instance of BaseService', ->
+            class AbcService extends Facade.BaseService
+            @f.addClass('abc-service', AbcService)
+
+            service = @f.create(AbcService)
+            assert service instanceof AbcService
+
+
+        it 'creates instance of BaseModel in module', ->
+            class SpecialHobby extends Facade.ValueObject
+            @f.addClass('specials/special-hobby', SpecialHobby)
+
+            spHobby = @f.create(SpecialHobby, name: 'shogi')
+            assert spHobby instanceof SpecialHobby
+            assert spHobby.name is 'shogi'
+
+        it 'creates instance of BaseFactory in module', ->
+            class SpecialHobbyFactory extends Facade.BaseFactory
+                @modelName: 'hobby'
+            @f.addClass('specials/hobby-factory', SpecialHobbyFactory)
+
+            factory = @f.create(SpecialHobbyFactory)
+            assert factory instanceof SpecialHobbyFactory
+            hobby = factory.createFromObject(id: 11)
+            assert hobby instanceof @Hobby
+
 
     describe 'addClass', ->
 

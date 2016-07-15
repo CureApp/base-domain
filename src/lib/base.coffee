@@ -15,6 +15,8 @@ gives them @getFacade() method.
 @module base-domain
 ###
 class Base
+    Object.defineProperty @::, 'facade', get: -> @root.facade
+
     @isBaseDomainClass: true
 
     ###*

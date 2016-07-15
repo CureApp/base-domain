@@ -27,3 +27,16 @@ describe 'Base', ->
 
             instance.foo()
 
+
+    describe 'facade', ->
+
+        it 'returns domain facade', ->
+
+            class SomeClass extends Base
+
+            facade.addClass('some-class', SomeClass)
+
+            instance = facade.create(SomeClass)
+            assert instance.facade is facade
+            assert instance.getFacade() is facade
+            assert facade.facade is facade

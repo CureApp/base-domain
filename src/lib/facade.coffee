@@ -80,6 +80,7 @@ class Facade
     constructor: (options = {}) ->
 
         Object.defineProperties @,
+            facade: value: @
             nonExistingClassNames: value: {}
             classes   : value: {}
             modelProps: value: {}

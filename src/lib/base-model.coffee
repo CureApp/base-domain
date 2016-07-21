@@ -303,6 +303,35 @@ class BaseModel extends Base
         return @facade.createModel modelProps.modelName, plainObject
 
 
+    ###*
+    shallow copy the model with props
+
+    @method copyWith
+    @return {BaseModel}
+    ###
+    copyWith: (props = {})->
+
+        modelProps = @getModelProps()
+
+        obj = {}
+
+        for own prop, value of @
+            obj[prop] = value
+
+        for own prop, value of props
+            obj[prop] = value
+
+        for entityProp in modelProps.getEntityProps()
+            entity = obj[entityProp]
+            subIdProp = modelProps.getIdPropByEntityProp(entityProp)
+            subId = obj[subIdProp]
+            if entity? and entity.id isnt subId
+                obj[subIdProp] = entity.id
+
+
+        modelProps = @getModelProps()
+        return @facade.createModel modelProps.modelName, obj
+
 
 
     ###*

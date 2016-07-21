@@ -337,7 +337,95 @@ describe 'BaseModel', ->
 
             list2 = list.clone()
 
-            console.log "list.items", list.items
-            console.log "list2.items", list2.items
-
             assert.deepEqual list, list2
+
+
+    describe 'copyWith', ->
+
+        it 'shallow-copies the model', ->
+
+            mem = @facade.createModel 'member',
+                id: 11
+                hobbies: [
+                    { id: 1, name: 'keyboard' }
+                    { id: 2, name: 'ingress' }
+                    { id: 3, name: 'Shogi' }
+                ]
+                age: 30
+
+            diary = @facade.createModel 'diary',
+                id: '2015/1/12'
+                comment: 'sample'
+                author: mem
+
+            diary2 = diary.copyWith()
+
+            assert.deepEqual diary, diary2
+            assert diary2 instanceof @facade.getModel 'diary'
+            assert diary2.author is mem
+
+
+        it 'overwrites the given props', ->
+
+            mem = @facade.createModel 'member',
+                id: 11
+                hobbies: []
+                age: 30
+
+            diary = @facade.createModel 'diary',
+                id: '2015/1/12'
+                comment: 'sample'
+                author: mem
+
+            diary2 = diary.copyWith(comment: 'copied', extra: true)
+
+            assert diary2.id is '2015/1/12'
+            assert diary2.comment is 'copied'
+            assert diary2.author is mem
+            assert diary2.extra is true
+
+
+        it 'replaces id of sub-entity', ->
+
+            mem = @facade.createModel 'member',
+                id: 11
+                hobbies: []
+                age: 30
+
+            mem2 = @facade.createModel 'member',
+                id: 22
+                hobbies: []
+                age: 22
+
+            diary = @facade.createModel 'diary',
+                id: '2015/1/12'
+                comment: 'sample'
+                author: mem
+
+            diary2 = diary.copyWith(author: mem2)
+            diary2.author is mem2
+            diary2.memberId is 22
+
+
+        it 'copies items of collection', ->
+            class ValObj extends @facade.constructor.ValueObject
+                @properties:
+                    name: @TYPES.STRING
+
+            class ValObjList extends @facade.constructor.BaseList
+                @itemModelName: 'val-obj'
+                @properties:
+                    title: @TYPES.STRING
+
+            @facade.addClass('val-obj', ValObj)
+            @facade.addClass('val-obj-list', ValObjList)
+
+            list = @facade.createModel 'val-obj-list', [
+                { name: 'val1' }
+                { name: 'val2' }
+            ]
+
+            list2 = list.copyWith(title: 'xxx')
+
+            assert.deepEqual list2.items, list.items
+            assert list2.title is 'xxx'

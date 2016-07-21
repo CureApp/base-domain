@@ -17,6 +17,13 @@ class BaseModel extends Base
     @isEntity: false
 
     ###*
+    Flag of the model's immutablity
+    @static
+    @property {Boolean} isImmutable
+    ###
+    @isImmutable: false
+
+    ###*
     key-value pair representing typeName - type
 
     use for definition of @properties for each extender

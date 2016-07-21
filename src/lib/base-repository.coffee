@@ -129,7 +129,10 @@ class BaseRepository extends Base
         @resolve client[method](data), (obj) ->
 
             newEntity = @createFromResult(obj, options)
-            entity.inherit newEntity
+            if @getModelClass().isImmutable
+                return newEntity
+            else
+                return entity.inherit newEntity
 
 
     ###*

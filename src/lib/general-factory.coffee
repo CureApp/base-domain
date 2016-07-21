@@ -167,6 +167,10 @@ class GeneralFactory
         if options.include isnt null # skip @include when null is set. By default it's undefined, so @include will be executed
             @include(model, options.include)
 
+        # immutability
+        if model.constructor.isImmutable
+            return Object.freeze(model)
+
         return model
 
 

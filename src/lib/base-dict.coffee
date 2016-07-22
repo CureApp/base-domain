@@ -93,6 +93,23 @@ class BaseDict extends Collection
 
 
     ###*
+    turn on/off the value and create a new model
+
+    @method toggle
+    @param {BaseModel} item
+    @return {BaseDict} newDict
+    ###
+    $toggle: (item) ->
+        throw @error('NotLoaded') if not @loaded()
+
+        key = @constructor.key item
+        if @has key
+            @$remove item
+        else
+            @$add item
+
+
+    ###*
     return submodel of the given key
 
     @method get
@@ -153,6 +170,7 @@ class BaseDict extends Collection
     @method $remove
     @public
     @param {BaseModel|String|Number} item
+    @return {BaseDict} newDict
     ###
     $remove: (args...) ->
 

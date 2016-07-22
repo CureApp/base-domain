@@ -329,7 +329,7 @@ describe 'BaseDict', ->
             @hobbyDict.remove('xxx')
 
 
-    describe.only '$remove', ->
+    describe '$remove', ->
 
         beforeEach ->
             class HobbyDict extends BaseDict
@@ -434,10 +434,6 @@ describe 'BaseDict', ->
             hobbyDict.toggle h
             assert hobbyDict.has 'skiing'
 
-
-
-
-
         it 'adds if not exist', ->
 
             h = @facade.createModel 'hobby', name: 'skiing'
@@ -454,6 +450,35 @@ describe 'BaseDict', ->
             @hobbyDict.add h
             @hobbyDict.toggle h
             assert @hobbyDict.has('skiing') is false
+
+
+    describe '$toggle', ->
+
+        beforeEach ->
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
+                @className: 'hobby-dict'
+                @key: (item) -> item.name
+
+            @hobbyDict = new HobbyDict(items: @hobbies, @facade)
+
+        it 'adds if not exist', ->
+
+            h = @facade.createModel 'hobby', name: 'skiing'
+
+            newDict = @hobbyDict.$toggle h
+
+            assert newDict.has 'skiing'
+            assert @hobbyDict.has('skiing') is false
+
+
+        it 'removes if exists', ->
+
+            h = @facade.createModel 'hobby', name: 'skiing'
+            @hobbyDict.add h
+            newDict = @hobbyDict.$toggle h
+            assert newDict.has('skiing') is false
+            assert @hobbyDict.has('skiing')
 
 
     describe 'toPlainObject', ->

@@ -241,6 +241,24 @@ describe 'BaseModel', ->
             assert not diary.memberId?
 
 
+    describe '$unset', ->
+
+        it 'unset props and submodel\'s id, and create a new model', ->
+
+            diary = @facade.createModel 'diary',
+                title : 'crazy about room335'
+                comment: 'progression of room335 is wonderful'
+                date  : new Date()
+                author : @member
+
+            newDiary = diary.$unset('author')
+
+            assert not newDiary.author?
+            assert not newDiary.memberId?
+
+            assert diary.author?
+            assert diary.memberId?
+
     describe 'include', ->
 
         it 'includes all submodels', ->

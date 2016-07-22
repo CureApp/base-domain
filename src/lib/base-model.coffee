@@ -166,6 +166,7 @@ class BaseModel extends Base
 
     ###*
     set value to prop and create a new model
+    @method $set
     @return {BaseModel} this
     ###
     $set: (prop, value) ->
@@ -222,6 +223,26 @@ class BaseModel extends Base
             @[subIdProp] = undefined
 
         return @
+
+
+    ###*
+    unset property and create a new model
+
+    @method $unset
+    @param {String} prop property name
+    @return {BaseModel} this
+    ###
+    $unset: (prop) ->
+        props = {}
+        props[prop] = null
+
+        modelProps = @getModelProps()
+
+        if modelProps.isEntity(prop)
+            subIdProp = modelProps.getIdPropByEntityProp(prop)
+            props[subIdProp] = null
+
+        return @copyWith(props)
 
 
     ###*
@@ -332,7 +353,10 @@ class BaseModel extends Base
             obj[prop] = value
 
         for own prop, value of props
-            obj[prop] = value
+            if value?
+                obj[prop] = value
+            else
+                delete obj[prop]
 
         for entityProp in modelProps.getEntityProps()
             entity = obj[entityProp]

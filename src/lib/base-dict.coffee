@@ -146,6 +146,31 @@ class BaseDict extends Collection
 
         return
 
+    ###*
+    remove submodel and create a new dict
+    both acceptable, keys and submodels
+
+    @method $remove
+    @public
+    @param {BaseModel|String|Number} item
+    ###
+    $remove: (args...) ->
+
+        throw @error('NotLoaded') if not @loaded()
+
+        ItemClass = @getItemModelClass()
+
+        newItems = @toObject()
+
+        for arg in args
+            if arg instanceof ItemClass
+                key = @constructor.key(arg)
+            else
+                key = arg
+            delete newItems[key]
+
+        return @copyWith(items: newItems)
+
 
     ###*
     export models to Array
@@ -182,6 +207,19 @@ class BaseDict extends Collection
         return if typeof fn isnt 'function' or not @loaded()
         fn.call(_this, key, item) for key, item of @items
         return
+
+
+    ###*
+    to key-value object
+
+    @method toObject
+    @public
+    ###
+    toObject: ->
+        obj = {}
+        for k, v of @items
+            obj[k] = v
+        return obj
 
 
 module.exports = BaseDict

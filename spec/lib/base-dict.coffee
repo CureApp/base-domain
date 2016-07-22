@@ -329,6 +329,43 @@ describe 'BaseDict', ->
             @hobbyDict.remove('xxx')
 
 
+    describe.only '$remove', ->
+
+        beforeEach ->
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
+                @key: (item) -> item.name
+
+            @facade.addClass 'hobby-dict', HobbyDict
+            @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
+
+
+        it 'removes by key and creates a new model', ->
+
+
+            newDict = @hobbyDict.$remove('keyboard')
+
+            assert newDict.length is 2
+            assert not newDict.items.keyboard?
+            assert newDict.items.jogging
+            assert 3 not in newDict.ids
+
+            assert @hobbyDict.length is 3
+            assert @hobbyDict.items.keyboard?
+
+
+        it 'removes by item and creates a new model', ->
+
+            newDict = @hobbyDict.$remove(@hobbies[0])
+
+            assert newDict.length is 2
+            assert not newDict.items.keyboard?
+            assert newDict.items.jogging
+            assert 3 not in newDict.ids
+
+            assert @hobbyDict.length is 3
+            assert @hobbyDict.items.keyboard?
+
 
     describe 'clear', ->
 

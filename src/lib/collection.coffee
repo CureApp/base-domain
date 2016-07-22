@@ -125,6 +125,19 @@ class Collection extends ValueObject
 
 
     ###*
+    add submodels and create new collection
+
+    @method add
+    @public
+    @param {BaseModel|Object} ...items
+    @return {Collection}
+    ###
+    $add: (items...) ->
+        newItems = @toArray().concat(items)
+        return @copyWith(items: newItems)
+
+
+    ###*
     @method addItems
     @param {Object|Array(BaseModel|Object)} items
     @protected

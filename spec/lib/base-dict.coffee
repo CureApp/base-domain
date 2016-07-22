@@ -257,6 +257,34 @@ describe 'BaseDict', ->
             assert @hobbyDict.items.yyyy instanceof @facade.getModel 'hobby'
 
 
+    describe '$add', ->
+
+        beforeEach ->
+            class HobbyDict extends BaseDict
+                @properties:
+                    title: @TYPES.STRING
+                @itemModelName: 'hobby'
+                @key: (item) -> item.name
+
+            @facade.addClass 'hobby-dict', HobbyDict
+            @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies, title: 'TITLE')
+
+
+        it 'add item model and create a new model', ->
+            newHobby = @facade.createModel('hobby', id: 4, name: 'xxx')
+            newDict = @hobbyDict.$add(newHobby)
+            assert newDict.items.xxx instanceof @facade.getModel 'hobby'
+            assert newDict.length is 4 # @hobbies.length + 1
+            assert newDict.title is 'TITLE'
+
+        it 'add non-item model and create a new model', ->
+            newHobby = id: 4, name: 'yyyy'
+            newDict = @hobbyDict.$add(newHobby)
+            assert newDict.items.yyyy instanceof @facade.getModel 'hobby'
+            assert newDict.length is 4 # @hobbies.length + 1
+            assert newDict.title is 'TITLE'
+
+
     describe 'remove', ->
 
         beforeEach ->

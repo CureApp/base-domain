@@ -326,6 +326,20 @@ class Collection extends ValueObject
         ]).then => @
 
 
+    ###*
+    freeze the model
+    ###
+    freeze: ->
+        throw @error('FreezeMutableModel', 'Cannot freeze mutable model.') if not @constructor.isImmutable
+        if @loaded
+            Object.freeze(@items)
+            return Object.freeze(@)
+        else
+            return @include().then =>
+                Object.freeze(@items)
+                return Object.freeze(@)
+
+
 
     ###*
     create plain object.

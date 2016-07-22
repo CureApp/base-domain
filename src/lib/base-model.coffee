@@ -333,6 +333,12 @@ class BaseModel extends Base
         return @facade.createModel modelProps.modelName, obj
 
 
+    ###*
+    freeze the model
+    ###
+    freeze: ->
+        throw @error('FreezeMutableModel', 'Cannot freeze mutable model.') if not @constructor.isImmutable
+        return Object.freeze(@)
 
     ###*
     include all relational models if not set

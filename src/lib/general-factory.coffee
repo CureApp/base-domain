@@ -165,11 +165,15 @@ class GeneralFactory
 
         # loading entities by id
         if options.include isnt null # skip @include when null is set. By default it's undefined, so @include will be executed
-            @include(model, options.include)
+            @include(model, options.include).then (model) =>
+                if model.constructor.isImmutable
+                    return model.freeze()
+                else
+                    return model
 
         # immutability
-        if model.constructor.isImmutable
-            return Object.freeze(model)
+        else if model.constructor.isImmutable
+            return model.freeze()
 
         return model
 
@@ -189,9 +193,9 @@ class GeneralFactory
 
         includeOptions.async ?= false
 
-        return if not includeOptions
+        return Promise.resolve(model) if not includeOptions
 
-        model.include includeOptions
+        return model.include includeOptions
 
 
     ###*

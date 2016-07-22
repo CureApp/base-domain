@@ -205,3 +205,41 @@ describe 'GeneralFactory', ->
                         assert dict.items['123'] instanceof @facade.getModel 'b'
                         done()
                     , 0
+
+
+            it 'creates dict from array(string), as ids. Loaded with AsyncRepository with async option, even when it\'s immutable', (done) ->
+
+                class ImmutableBDict extends BaseDict
+                    @isImmutable: true
+                    @itemModelName: 'b'
+
+                class BRepository extends BaseAsyncRepository
+                    @modelName: 'b'
+                    client: new MemoryResource
+
+                @facade.addClass 'b-repository', BRepository
+                @facade.addClass 'immutable-b-dict', ImmutableBDict
+
+                Promise.all([
+                    @facade.createRepository('b').save(id: '123', name: 'satake')
+                    @facade.createRepository('b').save(id: '456', name: 'shin')
+
+                ]).then =>
+
+                    factory = new GeneralFactory('b', @facade)
+
+                    dict = factory.createDict('immutable-b-dict', [ '123', '456' ], include: async: true)
+
+                    assert dict.ids.length is 2
+                    assert dict.length is 2
+                    assert dict.itemLength is 0
+                    assert Object.isFrozen(dict) is false
+
+                    setTimeout =>
+                        assert Object.isFrozen(dict) is true
+                        assert Object.isFrozen(dict.items) is true
+                        assert dict.length is 2
+                        assert dict.itemLength is 2
+                        assert dict.items['123'] instanceof @facade.getModel 'b'
+                        done()
+                    , 0

@@ -318,3 +318,25 @@ describe 'BaseList', ->
 
             assert.deepEqual hobbyList.ids, [3, 1]
 
+
+    describe '$remove', ->
+
+        it 'removes an item by index and create a new list', ->
+
+            class HobbyList extends BaseList
+                @className: 'hobby-list'
+                @itemModelName: 'hobby'
+
+            hobbyList = new HobbyList(items: @hobbies, @facade)
+
+            assert hobbyList.length is 3
+
+            newList = hobbyList.$remove(1)
+
+            assert newList.length is 2
+            assert newList.ids.length is 2
+            assert.deepEqual newList.ids, [3, 1]
+
+            assert hobbyList.length is 3
+            assert hobbyList.ids.length is 3
+

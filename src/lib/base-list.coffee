@@ -89,6 +89,21 @@ class BaseList extends Collection
         @ids.splice(index, 1) if @isItemEntity
 
 
+    ###*
+    remove item by index and create a new model
+
+    @method $remove
+    @param {Number} index
+    @return {Baselist} newList
+    ###
+    $remove: (index) ->
+
+        throw @error('NotLoaded') if not @loaded()
+
+        newItems = @toArray()
+        newItems.splice(index, 1)
+        return @copyWith(items: newItems)
+
 
     ###*
     sort items in constructor

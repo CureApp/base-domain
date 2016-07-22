@@ -206,6 +206,14 @@ class Collection extends ValueObject
         if @isItemEntity
             @ids = []
 
+    ###*
+    removes all items and create a new collection
+
+    @method clear
+    ###
+    $clear: ->
+        @copyWith(items: [])
+
 
     ###*
     export items to Array

@@ -277,6 +277,9 @@ describe 'BaseDict', ->
             assert newDict.length is 4 # @hobbies.length + 1
             assert newDict.title is 'TITLE'
 
+            assert @hobbyDict.items.xxx is undefined
+            assert @hobbyDict.length is 3
+
         it 'add non-item model and create a new model', ->
             newHobby = id: 4, name: 'yyyy'
             newDict = @hobbyDict.$add(newHobby)
@@ -284,6 +287,8 @@ describe 'BaseDict', ->
             assert newDict.length is 4 # @hobbies.length + 1
             assert newDict.title is 'TITLE'
 
+            assert @hobbyDict.items.yyyy is undefined
+            assert @hobbyDict.length is 3
 
     describe 'remove', ->
 
@@ -347,6 +352,23 @@ describe 'BaseDict', ->
 
             assert hobbyDict.length is 0
             assert hobbyDict.ids.length is 0
+
+
+    describe '$clear', ->
+
+        it 'removes all items and create a new dict', ->
+
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
+                @className: 'hobby-dict'
+
+            hobbyDict = new HobbyDict(items: @hobbies, @facade)
+
+            newDict = hobbyDict.$clear()
+
+            assert hobbyDict.length is 3
+            assert newDict.length is 0
+            assert newDict.ids.length is 0
 
 
 

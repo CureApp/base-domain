@@ -165,6 +165,19 @@ class BaseModel extends Base
         return @
 
     ###*
+    set value to prop and create a new model
+    @return {BaseModel} this
+    ###
+    $set: (prop, value) ->
+        if typeof prop is 'object'
+            return @copyWith(prop)
+
+        props = {}
+        props[prop] = value
+        return @copyWith(props)
+
+
+    ###*
     set enum value
 
     @method setEnum

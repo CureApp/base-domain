@@ -195,6 +195,35 @@ describe 'BaseModel', ->
             assert diary.coauthorId is 12
 
 
+    describe '$set', ->
+
+        it 'set props and create new model', ->
+
+            diary = @facade.createModel 'diary',
+                title : 'crazy about room335'
+                comment: 'progression of room335 is wonderful'
+                date  : new Date()
+
+            newDiary = diary.$set('coauthor', @member)
+
+            assert newDiary.coauthor is @member
+            assert newDiary.coauthorId is 12
+            assert not diary.coauthor?
+
+        it 'set props and create new model when object is given', ->
+
+            diary = @facade.createModel 'diary',
+                title : 'crazy about room335'
+                comment: 'progression of room335 is wonderful'
+                date  : new Date()
+
+            newDiary = diary.$set(coauthor: @member)
+
+            assert newDiary.coauthor is @member
+            assert newDiary.coauthorId is 12
+            assert not diary.coauthor?
+
+
 
     describe 'unset', ->
 

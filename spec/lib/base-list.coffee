@@ -133,6 +133,22 @@ describe 'BaseList', ->
             assert hobbyList.getByIndex(2) is @hobbies[2]
 
 
+    describe 'getItem', ->
+
+        it 'returns items at the given index', ->
+
+            class HobbyList extends BaseList
+                @itemModelName: 'hobby'
+                @className: 'hobby-list'
+
+            hobbyList = new HobbyList(items: @hobbies, @facade)
+
+            assert hobbyList.getItem(0) is @hobbies[0]
+            assert hobbyList.getItem(1) is @hobbies[1]
+            assert hobbyList.getItem(2) is @hobbies[2]
+            assert.throws(=> hobbyList.getItem(3))
+
+
     describe 'toArray', ->
 
         it 'returns deeply-equal array to items', ->

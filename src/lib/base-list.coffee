@@ -149,6 +149,14 @@ class BaseList extends Collection
         return undefined if not @loaded()
         @items[idx]
 
+    ###*
+    get item by index
+
+    @method getItem
+    @public
+    ###
+    getItem: (idx) ->
+        @items[idx] || throw @error('IndexNotFound')
 
 
     ###*

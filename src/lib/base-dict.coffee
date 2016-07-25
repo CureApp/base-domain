@@ -122,6 +122,19 @@ class BaseDict extends Collection
         @items[key]
 
     ###*
+    return submodel of the given key
+    throw error when not found.
+
+    @method getItem
+    @public
+    @param {String|Number} key
+    @return {BaseModel}
+    ###
+    getItem: (key) ->
+        throw @error('KeyNotFound') if not @has(key)
+        return @items[key]
+
+    ###*
     add item to @items
 
     @method addItem

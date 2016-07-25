@@ -233,6 +233,22 @@ describe 'BaseDict', ->
             assert @hobbyDict.get('xxx') is undefined
 
 
+    describe 'getItem', ->
+
+        beforeEach ->
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
+                @key: (item) -> item.name
+
+            @facade.addClass 'hobby-dict', HobbyDict
+            @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
+
+        it 'returns submodel when key exists', ->
+            assert @hobbyDict.getItem('keyboard') instanceof @facade.getModel('hobby')
+
+        it 'throws error when key does not exist', ->
+            assert.throws(=> @hobbyDict.getItem('xxx'))
+
 
     describe 'add', ->
 

@@ -28,7 +28,12 @@ function main() {
     }
 
     if (program.compiler) {
-        require(program.compiler)
+        if (program.compiler.charAt(0) === '.') {
+            require(process.cwd() + '/' + program.compiler)
+        }
+        else {
+            require(program.compiler)
+        }
     }
 
     EntryGenerator.generate(facadePath, dirname, outfile, program.esmodule)

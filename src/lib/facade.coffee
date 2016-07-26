@@ -161,7 +161,10 @@ class Facade
     ###
     create: (Class, params...) ->
         if (Class::) instanceof BaseModel
-            return @createModel(Class.className, params...)
+            try
+                return @createModel(Class.className, params...)
+            catch e
+                throw @error(e.message) # to avoid deeper stack
 
         ClassWithConstructor = Class
 

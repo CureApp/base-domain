@@ -1,5 +1,5 @@
 ---
-version: 4.7.3
+version: 4.7.4
 commit: Bump to version v%.%.%
 files:
   package.json: '"version": "%.%.%",'

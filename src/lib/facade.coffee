@@ -164,7 +164,7 @@ class Facade
             try
                 return @createModel(Class.className, params...)
             catch e
-                throw @error(e.message) # to avoid deeper stack
+                throw @error(e.reason, e.message) # to avoid deeper stack
 
         ClassWithConstructor = Class
 

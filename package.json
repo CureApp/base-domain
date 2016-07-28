@@ -4,7 +4,8 @@
   "description": "simple module to help build Domain-Driven Design",
   "main": "dist/main",
   "browser": {
-    "dist/main": "dist/main-browser"
+    "dist/main": "dist/main-browser",
+    "fs": false
   },
   "directories": {
     "test": "spec/"

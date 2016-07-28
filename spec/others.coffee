@@ -6,7 +6,6 @@ module.exports =
     MemoryResource     : require(path + '/memory-resource')
     EntityPool         : require(path + '/entity-pool')
     Util               : require(path + '/util')
-    BaseDomainify      : require(path + '/base-domainify')
     FixtureLoader      : require(path + '/fixture-loader')
     GeneralFactory     : require(path + '/lib/general-factory')
     Includer           : require(path + '/lib/includer')

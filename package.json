@@ -16,8 +16,7 @@
   "scripts": {
     "mocha": "mocha -r spec/global.js spec/util.coffee spec/master-data-resource.coffee spec/fixture.coffee spec/lib/*.coffee",
     "single": "mocha -r spec/global.js",
-    "test": "gulp build && DIST=1 npm run mocha && npm run base-domainify-test && npm run uglify-js-test && npm run generate-entry-test",
-    "base-domainify-test": "test/base-domainify/test.sh",
+    "test": "gulp build && DIST=1 npm run mocha && npm run uglify-js-test && npm run generate-entry-test",
     "uglify-js-test": "rm -rf test/uglify-js/build && gulp uglify-test && node test/uglify-js/build/index.js",
     "generate-entry-test": "test/generate-entry/test.sh"
   },
@@ -41,15 +40,12 @@
   "license": "MIT",
   "dependencies": {
     "clone": "^1.0.2",
-    "coffee-script": "^1.8.0",
     "commander": "^2.9.0",
     "debug": "^2.2.0",
-    "deep-eql": "^0.1.3",
-    "through": "^2.3.7"
+    "deep-eql": "^0.1.3"
   },
   "devDependencies": {
-    "browserify": "^13.0.1",
-    "coffeeify": "^2.0.1",
+    "coffee-script": "^1.8.0",
     "espower-coffee": "^1.0.0",
     "gulp": "^3.9.1",
     "gulp-coffee": "^2.3.1",

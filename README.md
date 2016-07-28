@@ -222,18 +222,3 @@ class HospitalDict extends require('base-domain').BaseDict
 
 module.exports = HospitalDict
 ```
-
-
-# use in browser with browserify
-[browserify](http://browserify.org/) is a tool for packing a js project into one file for web browsers
-
-To enable base-domain's requiring system in browsers, use 'base-domain/ify' transformer.
-
-```bash
-browserify -t [ base-domain/ify --dirname /path/to/domain/dir ] <entry-file>
-```
-## include modules
-
-```bash
-browserify -t [ base-domain/ify --dirname /path/to/domain/dir --modules foo:/path/to/foo,bar:/path/to/bar ] <entry-file>
-```

@@ -115,10 +115,9 @@ class Facade
         @master?.init()
 
 
-    # for base-domainify and non-node-facade-generator. keep it empty
+    # for entry-generator, keep it empty
     init: ->
 
-    # for base-domainify. keep it empty
     initWithPacked: (packed) ->
         { masterData, core, modules, factories } = packed
 

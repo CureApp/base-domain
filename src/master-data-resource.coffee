@@ -75,8 +75,6 @@ class MasterDataResource
 
     ###*
     load data from JSON file
-    This implementation is mainly for Titanium.
-    Overwritten by base-domainify when browserify packs into one package.
 
     @method loadFromJSON
     @private

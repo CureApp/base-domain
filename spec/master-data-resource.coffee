@@ -32,10 +32,10 @@ describe 'MasterDataResource', ->
             getGlobal().Ti = {}
             assert Ti?
             fs.unlinkSync @allJSON
-            @UtilRequireJSON = Util.requireJSON
-            @UtilRequireFile = Util.requireFile
-            Util.requireJSON = (file) -> require file
-            Util.requireFile = (file) -> require file
+            @FacadeRequireJSON = Facade.requireJSON
+            @FacadeRequireFile = Facade.requireFile
+            Facade.requireJSON = (file) -> require file
+            Facade.requireFile = (file) -> require file
 
             @consoleError = console.error
             console.error = ->
@@ -58,8 +58,8 @@ describe 'MasterDataResource', ->
         after ->
             getGlobal().Ti = undefined
             assert not Ti?
-            Util.requireJSON = @UtilRequireJSON
-            Util.requireFile = @UtilRequireFile
+            Facade.requireJSON = @FacadeRequireJSON
+            Facade.requireFile = @FacadeRequireFile
             console.error = @consoleError
 
 

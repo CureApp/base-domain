@@ -1,9 +1,10 @@
 fs = require 'fs'
 Path = require 'path'
 Path.isAbsolute ?= (str) -> str.charAt(0) is '/'
-{ requireFile, camelize } = require './util'
+{ camelize } = require './util'
 
 Facade = require './main'
+{ requireFile } = Facade
 { Base, BaseModel } = Facade
 MasterDataResource = require './master-data-resource'
 

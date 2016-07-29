@@ -1,6 +1,5 @@
 'use strict'
 
-Util = require './util'
 MemoryResource = require './memory-resource'
 
 ###*
@@ -81,8 +80,10 @@ class MasterDataResource
     ###
     loadFromJSON: ->
 
+        { requireJSON } = @facade.constructor # only defined in Node.js
+
         try
-            return Util.requireJSON @masterJSONPath
+            return requireJSON @masterJSONPath
 
         catch e
             console.error("""

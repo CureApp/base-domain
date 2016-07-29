@@ -4,8 +4,8 @@
   "description": "simple module to help build Domain-Driven Design",
   "main": "dist/main",
   "browser": {
-    "dist/main": "dist/main-browser",
-    "fs": false
+    "./dist/main.js": "./dist/main-browser.js",
+    "./dist/entry-generator.js": false
   },
   "directories": {
     "test": "spec/"
@@ -17,9 +17,10 @@
   "scripts": {
     "mocha": "mocha -r spec/global.js spec/util.coffee spec/master-data-resource.coffee spec/fixture.coffee spec/lib/*.coffee",
     "single": "mocha -r spec/global.js",
-    "test": "gulp build && DIST=1 npm run mocha && npm run uglify-js-test && npm run generate-entry-test",
+    "test": "gulp build && DIST=1 npm run mocha && npm run uglify-js-test && npm run generate-entry-test && npm run wp",
     "uglify-js-test": "rm -rf test/uglify-js/build && gulp uglify-test && node test/uglify-js/build/index.js",
-    "generate-entry-test": "test/generate-entry/test.sh"
+    "generate-entry-test": "test/generate-entry/test.sh",
+    "wp": "webpack --config webpack-test/webpack.config.js"
   },
   "engines": {
     "node": ">=0.12"
@@ -54,6 +55,7 @@
     "gulp-yuidoc": "^0.1.2",
     "mocha": "^2.3.3",
     "node-circleci-autorelease": "^2.1.7",
-    "power-assert": "^1.1.0"
+    "power-assert": "^1.1.0",
+    "webpack": "^1.13.1"
   }
 }

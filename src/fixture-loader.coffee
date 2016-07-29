@@ -30,7 +30,7 @@ class FixtureLoader
     @return {EntityPool|Promise(EntityPool)}
     ###
     load: (options = {}) ->
-        { fs } = @facade.constructor # only defined in Node.js
+        { fs, requireFile } = @facade.constructor # only defined in Node.js
 
         try
 
@@ -41,7 +41,7 @@ class FixtureLoader
                     [ modelName, ext ] = file.split('.')
                     continue if ext not in ['coffee', 'js', 'json']
                     path = fixtureDir + '/data/' + file
-                    fx = Util.requireFile(path)
+                    fx = requireFile(path)
                     fx.path = path
                     fx.fixtureDir = fixtureDir
                     @fixturesByModel[modelName] = fx

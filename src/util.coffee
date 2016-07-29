@@ -110,62 +110,6 @@ class Util
                 ret[key] = restore(value) for key, value of val
                 return ret
 
-
-
-    ###*
-    requires js file
-    in Titanium, file-not-found-like-exception occurred in require function cannot be caught.
-    Thus, before require function is called, check the existence of the file.
-    Only in iOS this check occurs.
-    File extension must be '.js' in Titanium.
-
-    @method requireFile
-    @static
-    @param {String} file name without extension
-    @return {any} required value
-    ###
-    @requireFile: (file) ->
-        if not Ti?
-            ret = require file
-            return if ret.default then ret.default else ret
-
-        # in Titanium
-        path = file + '.js'
-
-        if Ti.Platform.name is 'android'
-            return require file
-
-        fileInfo = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, path)
-
-        if fileInfo.exists()
-            return require file
-        else
-            throw new Error("#{path}: no such file.")
-
-
-
-    ###*
-    Parse a file as JSON format.
-    In Titanium, requiring JSON does not work.
-
-    @method requireJSON
-    @static
-    @param {String} path
-    @return {any} required value
-    ###
-    @requireJSON: (path) ->
-        if not Ti?
-            return require path
-
-        fileInfo = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, path)
-
-        if fileInfo.exists()
-            return JSON.parse fileInfo.read().getText()
-        else
-            throw new Error("#{path}: no such file.")
-
-
-
     ###*
     in Titanium, "A instanceof B" sometimes fails.
     this is the alternative.

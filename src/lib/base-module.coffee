@@ -175,8 +175,9 @@ class BaseModule
     ###
     requireOwn: (fullName) ->
 
+        { requireFile } = @facade.constructor
         try
-            return Util.requireFile(@path + '/' + fullName)
+            return requireFile(@path + '/' + fullName)
         catch e
             return null # FIXME: no information of e is returned.
 

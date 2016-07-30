@@ -201,24 +201,22 @@ class FixtureLoader
 
         return sortedNames
 
-
-    ###*
+    ###
     read TSV, returns model data
 
     @method readTSV
     @private
     ###
-    readTSV: (fixtureDir, file) ->
-        { fs } = @facade.constructor # only defined in Node.js
+    readTSVContent: (txt) ->
 
-        objs = {}
+        { csvParse } = @facade.constructor # only defined in Node.js
 
-        lines = fs.readFileSync(fixtureDir + '/tsvs/' + file, 'utf8').split('\n')
-
-        tsv = (line.split('\t') for line in lines)
+        tsv = csvParse(txt, delimiter: '\t')
 
         names = tsv.shift() # first line is title
         names.shift() # first column is id
+
+        objs = {}
 
         for data in tsv
             obj = {}
@@ -236,6 +234,20 @@ class FixtureLoader
             objs[obj.id] = obj
 
         return objs
+
+
+    ###*
+    read TSV, returns model data
+
+    @method readTSV
+    @private
+    ###
+    readTSV: (fixtureDir, file) ->
+
+        { fs } = @facade.constructor # only defined in Node.js
+
+        return @readTSVContent(fs.readFileSync(fixtureDir + '/tsvs/' + file, 'utf8'))
+
 
 
 ###*

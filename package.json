@@ -4,7 +4,7 @@
   "description": "simple module to help build Domain-Driven Design",
   "main": "dist/main",
   "browser": {
-    "dist/main": "dist/main-browser"
+    "./dist/main.js": "./dist/main-browser.js"
   },
   "directories": {
     "test": "spec/"
@@ -14,7 +14,7 @@
     "bd-generate-entry": "bin/generate-entry"
   },
   "scripts": {
-    "mocha": "mocha -r spec/global.js spec/util.coffee spec/master-data-resource.coffee spec/fixture.coffee spec/lib/*.coffee",
+    "mocha": "mocha -r spec/global.js spec/util.coffee spec/fixture-loader.coffee spec/master-data-resource.coffee spec/fixture.coffee spec/lib/*.coffee",
     "single": "mocha -r spec/global.js",
     "test": "gulp build && DIST=1 npm run mocha && npm run base-domainify-test && npm run uglify-js-test && npm run generate-entry-test",
     "base-domainify-test": "test/base-domainify/test.sh",
@@ -43,6 +43,7 @@
     "clone": "^1.0.2",
     "coffee-script": "^1.8.0",
     "commander": "^2.9.0",
+    "csv-parse": "^1.1.7",
     "debug": "^2.2.0",
     "deep-eql": "^0.1.3",
     "through": "^2.3.7"

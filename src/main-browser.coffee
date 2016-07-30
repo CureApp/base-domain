@@ -13,4 +13,6 @@ Facade.requireFile = (file) ->
 Facade.requireJSON = (file) ->
     throw new Error("requireJSON is suppressed in non-node environment. file: #{file}")
 
+Facade.csvParse = null
+
 module.exports = Facade

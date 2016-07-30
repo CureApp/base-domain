@@ -1,6 +1,7 @@
 Facade = require('./lib/facade')
 
 Facade.fs = require('fs')
+Facade.csvParse = require('csv-parse/lib/sync')
 
 
 ###*

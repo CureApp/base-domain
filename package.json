@@ -15,7 +15,7 @@
     "bd-generate-entry": "bin/generate-entry"
   },
   "scripts": {
-    "mocha": "mocha -r spec/global.js spec/util.coffee spec/master-data-resource.coffee spec/fixture.coffee spec/lib/*.coffee",
+    "mocha": "mocha -r spec/global.js spec/util.coffee spec/fixture-loader.coffee spec/master-data-resource.coffee spec/fixture.coffee spec/lib/*.coffee",
     "single": "mocha -r spec/global.js",
     "test": "gulp build && DIST=1 npm run mocha && npm run uglify-js-test && npm run generate-entry-test && npm run wp",
     "uglify-js-test": "rm -rf test/uglify-js/build && gulp uglify-test && node test/uglify-js/build/index.js",
@@ -43,6 +43,7 @@
   "dependencies": {
     "clone": "^1.0.2",
     "commander": "^2.9.0",
+    "csv-parse": "^1.1.7",
     "debug": "^2.2.0",
     "deep-eql": "^0.1.3"
   },

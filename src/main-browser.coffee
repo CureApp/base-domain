@@ -7,4 +7,6 @@ Facade.fs =
     readFileSync: fsNotFound
     writeFileSync: fsNotFound
 
+Facade.csvParse = null
+
 module.exports = Facade

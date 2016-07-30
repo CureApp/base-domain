@@ -18,3 +18,8 @@ circle:
   machine:
     node:
       version: 6.2.2
+  deployment:
+    create_release_branch:
+      branch:
+        - master
+        - v4

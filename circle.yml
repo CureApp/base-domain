@@ -18,7 +18,6 @@ deployment:
   create_release_branch:
     branch:
       - master
-      - v4
     commands:
       - nca run gulp build
       - nca release --prefix v

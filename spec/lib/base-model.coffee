@@ -1,5 +1,5 @@
 
-{ BaseModel, Entity, BaseList, BaseSyncRepository } = Facade = require('../base-domain')
+{ BaseModel, Entity, BaseList, BaseSyncRepository, BaseAsyncRepository } = Facade = require('../base-domain')
 
 describe 'BaseModel', ->
 
@@ -267,7 +267,7 @@ describe 'BaseModel', ->
                 id: 11
                 hobbies: [1,2,3]
 
-            mem.include(recursive: true).then (model) ->
+            mem.include().then (model) ->
                 assert mem is model
                 assert mem.hobbies
                 assert mem.hobbies instanceof BaseList
@@ -292,18 +292,61 @@ describe 'BaseModel', ->
             @f.addClass 'a', A
             @f.addClass 'a-repository', ARepository
 
-            @f.createRepository('a').save(id: '1', name: 'a1', aId: '2')
-            @f.createRepository('a').save(id: '2', name: 'a2', aId: '3')
-            @f.createRepository('a').save(id: '3', name: 'a3', aId: '1')
+            repo = @f.createRepository('a')
+
+            repo.save(id: '1', name: 'a1', aId: '2')
+            repo.save(id: '2', name: 'a2', aId: '3')
+            repo.save(id: '3', name: 'a3', aId: '1')
+            assert repo.getAll().length is 3
 
 
-        it 'can load models recursively with circular references', ->
+        it 'can load models with circular references', ->
 
-            a = @f.createModel('a', { name: 'main', aId: '1' }, { include: recursive: true })
+            a = @f.createModel('a', { name: 'main', aId: '1' })
 
             assert a.a is a.a.a.a.a
             assert a.a.a is a.a.a.a.a.a
             assert a.a.a.a is a.a.a.a.a.a.a
+
+
+    describe '$include', ->
+
+        before ->
+            { MemoryResource } = require '../others'
+
+            class A extends Entity
+                @isImmutable: true
+                @properties:
+                    name: @TYPES.STRING
+                    a: @TYPES.MODEL 'a'
+
+            class ARepository extends BaseAsyncRepository
+                @modelName: 'a'
+                client: new MemoryResource()
+
+            @f = require('../create-facade').create()
+
+            @f.addClass 'a', A
+            @f.addClass 'a-repository', ARepository
+
+            repo = @f.createRepository('a')
+
+            Promise.all([
+                repo.save(id: '1', name: 'a1', aId: '2')
+                repo.save(id: '2', name: 'a2', aId: '3')
+                repo.save(id: '3', name: 'a3', aId: '1')
+            ])
+
+
+        it 'includes model', ->
+            a = @f.createModel('a', { name: 'main', aId: '1' })
+
+            a.$include().then (newA) =>
+                assert a isnt newA
+                assert newA.a
+                assert newA.a.a
+                # assert newA.a.a.a # TODO
+
 
 
     describe 'inherit', ->

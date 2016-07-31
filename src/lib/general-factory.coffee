@@ -47,7 +47,6 @@ class GeneralFactory
     @param {Object} [options]
     @param {Object} [options.include] options to pass to Includer
     @param {Object} [options.include.async=false] include sub-entities asynchronously if true.
-    @param {Boolean} [options.include.recursive=false] recursively include or not
     @param {Array(String)} [options.include.props] include sub-entities of given props
     @param {RootInterface} root
     @return {BaseModel}
@@ -110,7 +109,6 @@ class GeneralFactory
     @param {Object} [options={}]
     @param {Object} [options.include] options to pass to Includer
     @param {Object} [options.include.async=false] include sub-entities asynchronously if true.
-    @param {Boolean} [options.include.recursive=false] recursively include or not
     @param {Array(String)} [options.include.props] include sub-entities of given props
     @return {BaseModel} model
     ###
@@ -186,7 +184,6 @@ class GeneralFactory
     @param {BaseModel} model
     @param {Object} [includeOptions]
     @param {Object} [includeOptions.async=false] include submodels asynchronously
-    @param {Boolean} [options.include.recursive=false] recursively include or not
     @param {Array(String)} [includeOptions.props] include submodels of given props
     ###
     include: (model, includeOptions = {}) ->
@@ -208,7 +205,6 @@ class GeneralFactory
     @param {Object} [options]
     @param {Object} [options.include] options to pass to Includer
     @param {Object} [options.include.async=false] include sub-entities asynchronously if true.
-    @param {Boolean} [options.include.recursive=false] recursively include or not
     @param {Array(String)} [options.include.props] include sub-entities of given props
     @return {BaseList} list
     ###
@@ -225,7 +221,6 @@ class GeneralFactory
     @param {Object} [options]
     @param {Object} [options.include] options to pass to Includer
     @param {Object} [options.include.async=false] include sub-entities asynchronously if true.
-    @param {Boolean} [options.include.recursive=false] recursively include or not
     @param {Array(String)} [options.include.props] include sub-entities of given props
     @return {BaseDict} dict
     ###

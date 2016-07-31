@@ -308,7 +308,6 @@ class Collection extends ValueObject
 
     @method include
     @param {Object} [options]
-    @param {Boolean} [options.recursive] recursively include models or not
     @param {Boolean} [options.async=true] get async values
     @param {Array(String)} [options.props] include only given props
     @return {Promise(BaseModel)} self
@@ -319,22 +318,9 @@ class Collection extends ValueObject
 
         superResult = super(options)
 
-        if not @isItemEntity
-            @includeVOItems(options, superResult)
+        return superResult if not @isItemEntity
 
-        else
-            @includeEntityItems(options, superResult)
-
-
-    includeVOItems: (options, superResult) ->
-
-        return superResult if not options.recursive
-
-        Promise.all([
-            superResult
-            Promise.all @map (item) -> item.include(options)
-        ]).then => @
-
+        return @includeEntityItems(options, superResult)
 
 
     includeEntityItems: (options, superResult) ->

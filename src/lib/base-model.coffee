@@ -382,7 +382,6 @@ class BaseModel extends Base
 
     @method include
     @param {Object} [options]
-    @param {Boolean} [options.recursive] recursively include models or not
     @param {Boolean} [options.async=true] get async values
     @param {Array(String)} [options.props] include only given props
     @return {Promise(BaseModel)} self
@@ -392,6 +391,23 @@ class BaseModel extends Base
         Includer = require './includer'
 
         new Includer(@, options).include().then => @
+
+
+    ###*
+    include all relational models and returns new model
+
+    @method $include
+    @param {Object} [options]
+    @param {Boolean} [options.async=true] get async values
+    @param {Array(String)} [options.props] include only given props
+    @return {Promise(BaseModel)} new model
+    ###
+    $include: (options = {}) ->
+
+        Includer = require './includer'
+
+        new Includer(@, options).include(createNew = true)
+
 
     ###*
     Check if all subentities are included.

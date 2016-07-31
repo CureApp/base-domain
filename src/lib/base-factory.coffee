@@ -68,7 +68,6 @@ class BaseFactory extends Base
     @param {Object} [options={}]
     @param {Object} [options.include] options to pass to Includer
     @param {Object} [options.include.async=false] include submodels asynchronously
-    @param {Boolean} [options.include.recursive=false] recursively include or not
     @param {Array(String)} [options.include.props] include submodels of given props
     @return {BaseModel} model
     ###
@@ -85,7 +84,6 @@ class BaseFactory extends Base
     @param {Object} [options={}]
     @param {Object} [options.include] options to pass to Includer
     @param {Object} [options.include.async=false] include submodels asynchronously
-    @param {Boolean} [options.include.recursive=false] recursively include or not
     @param {Array(String)} [options.include.props] include submodels of given props
     @return {BaseList} list
     ###
@@ -102,7 +100,6 @@ class BaseFactory extends Base
     @param {Object} [options={}]
     @param {Object} [options.include] options to pass to Includer
     @param {Object} [options.include.async=false] include submodels asynchronously
-    @param {Boolean} [options.include.recursive=false] recursively include or not
     @param {Array(String)} [options.include.props] include submodels of given props
     @return {BaseDict} dict
     ###

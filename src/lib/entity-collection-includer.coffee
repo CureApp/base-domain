@@ -13,7 +13,7 @@ class EntityCollectionIncluder extends Includer
 
     constructor: ->
         super
-        { @itemModelName } = @ModelClass
+        { @itemModelName } = @model.constructor
 
     include: ->
 

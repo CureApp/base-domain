@@ -15,7 +15,6 @@ class Includer
     @constructor
     @param {Object} options
     @param {Boolean} [options.async=true] get async values
-    @param {Boolean} [options.recursive=false] recursively include or not
     @param {Boolean} [options.entityPool] entityPool, to detect circular references
     @param {Array(String)} [options.noParentRepos] array of modelNames which needs "noParent" option when calling root.createPreferredRepository()
     @param {Array(String)} [options.props] include only given props
@@ -30,14 +29,32 @@ class Includer
 
         @options.async ?= true
 
-        @facade = @model.facade
+        ModelClass = @model.constructor
+        @modelProps = @model.facade.getModelProps(ModelClass.getName())
 
-        @ModelClass = @model.constructor
-        @modelProps = @facade.getModelProps(@ModelClass.getName())
+        { @syncs, @asyncs, @repos } = @splitEntityProps()
 
-        { @root } = @model
 
-        @entityPool.set(@model) if @ModelClass.isEntity
+    splitEntityProps: ->
+        repos = {}
+        syncs = []
+        asyncs = []
+
+        entityProps = @modelProps.getEntityProps()
+        if @options.props
+            entityProps = (p for p in entityProps when p in @options.props)
+
+        for entityProp in entityProps when @isNotIncludedProp(entityProp)
+            subModelName = @modelProps.getSubModelName(entityProp)
+            repo = @createPreferredRepository(subModelName)
+            repos[entityProp] = repo
+            if repo.constructor.isSync
+                syncs.push entityProp
+            else
+                asyncs.push entityProp
+
+        return { syncs: syncs, asyncs: asyncs, repos: repos }
+
 
 
     ###*
@@ -47,96 +64,65 @@ class Includer
     @public
     @return {Promise}
     ###
-    include: ->
+    include: (createNew = false) ->
+        if @model.constructor.isEntity
+            modelName = @model.constructor.getName()
+            if @entityPool.get(modelName, @model.id)
+                return Promise.resolve(@model)
+            @entityPool.set(@model)
 
-        entityProps = @modelProps.getEntityProps()
+        model = @includeSync(createNew)
+        if not @options.async or @asyncs.length is 0
+            return Promise.resolve(model)
 
-        if @options.props
-            entityProps = (p for p in entityProps when p in @options.props)
+        # if already frozen
+        if @model.constructor.isImmutable and not createNew and Object.isFrozen(@model)
+            console.error('frozen model.')
+            return Promise.resolve(model)
 
+        newAsyncProps = {}
+        promises = @asyncs.map (prop) =>
+            @getSubModel(prop, true).then (subModel) =>
+                return if not subModel?
+                @entityPool.set(subModel)
+                newAsyncProps[prop] = subModel
 
-        promises = []
-
-        for entityProp in entityProps when not @model[entityProp]?
-
-            subModelPromise = @setSubEntity(entityProp)
-
-            promises.push subModelPromise if subModelPromise
-
-        Promise.all(promises).then =>
-
-            if @options.recursive
-                return @doRecursively()
-
-            if @entityPoolCreated
-                @entityPool.clear()
-
-            return @model
-
-
-    ###*
-    run include for each submodel
-
-    @method doRecursively
-    @private
-    @return {Promise}
-    ###
-    doRecursively: ->
-
-        promises = []
-
-        for modelProp in @modelProps.getSubModelProps()
-
-            subModel = @model[modelProp]
-
-            continue if subModel not instanceof BaseModel
-            continue if subModel.included()
-
-            promises.push subModel.include(@options)
-
-        return Promise.all(promises).then =>
-            if @entityPoolCreated
-                @entityPool.clear()
-            return @model
+        return Promise.all(promises).then => @applyNewProps(newAsyncProps, createNew)
 
 
-    ###*
-    load entity by entityProp and set it to @model
-
-    @method setSubEntity
-    @private
-    @param {String} entityProp
-    @return {Promise}
-    ###
-    setSubEntity: (entityProp) ->
-
-        subIdProp = @modelProps.getIdPropByEntityProp(entityProp)
-
+    getSubModel: (prop, isAsync) ->
+        subIdProp = @modelProps.getIdPropByEntityProp(prop)
+        subModelName = @modelProps.getSubModelName(prop)
         subId = @model[subIdProp]
 
-        return if not subId?
-
-        subModelName = @modelProps.getSubModelName(entityProp)
-
         if subModel = @entityPool.get(subModelName, subId)
-            @model.set(entityProp, subModel)
-            return
+            return if isAsync then Promise.resolve(subModel) else subModel
 
-        repo = @createPreferredRepository(subModelName)
+        return @repos[prop].get(@model[subIdProp], include: @options)
 
-        return if not repo?
 
-        if repo.constructor.isSync
-            subModel = repo.get(subId, include: @options)
-            @model.set(entityProp, subModel) if subModel?
-            return Promise.resolve subModel
+    includeSync: (createNew = false) ->
+        newProps = {}
+        @syncs.forEach (prop) =>
+            subModel = @getSubModel(prop, false)
+            return if not subModel?
+            @entityPool.set(subModel)
+            newProps[prop] = subModel
 
+        return @applyNewProps(newProps, createNew)
+
+
+    isNotIncludedProp: (entityProp) ->
+        subIdProp = @modelProps.getIdPropByEntityProp(entityProp)
+        return not @model[entityProp]? && @model[subIdProp]?
+
+
+
+    applyNewProps: (newProps, createNew) ->
+        if createNew
+            return @model.$set(newProps)
         else
-            return unless @options.async
-
-            return repo.get(subId, include: @options).then (subModel) =>
-                @model.set(entityProp, subModel)
-            .catch (e) ->
+            return @model.set(newProps)
 
 
     createPreferredRepository: (modelName) ->
@@ -147,7 +133,7 @@ class Includer
             options.noParent ?= true
 
         try
-            return @root.createPreferredRepository(modelName, options)
+            return @model.root.createPreferredRepository(modelName, options)
         catch e
             return null
 

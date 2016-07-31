@@ -4,8 +4,8 @@
   "description": "simple module to help build Domain-Driven Design",
   "main": "dist/main",
   "browser": {
-    "./dist/main.js": "./dist/main-browser.js",
-    "./dist/entry-generator.js": false
+    "dist/main.js": "./dist/main-browser.js",
+    "dist/entry-generator.js": false
   },
   "directories": {
     "test": "spec/"

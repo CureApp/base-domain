@@ -2,9 +2,9 @@
   "name": "base-domain",
   "version": "4.7.6",
   "description": "simple module to help build Domain-Driven Design",
-  "main": "dist/main",
+  "main": "dist/main.js",
   "browser": {
-    "./dist/main.js": "./dist/main-browser.js"
+    "dist/main.js": "./dist/main-browser.js"
   },
   "directories": {
     "test": "spec/"
@@ -49,7 +49,7 @@
     "through": "^2.3.7"
   },
   "devDependencies": {
-    "browserify": "^13.0.1",
+    "browserify": "^13.1.0",
     "coffeeify": "^2.0.1",
     "espower-coffee": "^1.0.0",
     "gulp": "^3.9.1",

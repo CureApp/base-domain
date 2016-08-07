@@ -519,3 +519,373 @@ describe 'BaseModel', ->
 
             assert.deepEqual list2.items, list.items
             assert list2.title is 'xxx'
+
+
+
+    describe 'getDiffProps', ->
+
+        beforeEach ->
+            { TYPES } = @facade.constructor.BaseModel
+            properties =
+                str: TYPES.STRING
+                num: TYPES.NUMBER
+                bool: TYPES.BOOLEAN
+                obj: TYPES.OBJECT
+                arr: TYPES.ARRAY
+                date: TYPES.DATE
+                en: TYPES.ENUM(['A', 'B', 'C'])
+
+            class E extends @facade.constructor.Entity
+                @properties: properties
+
+            class V extends @facade.constructor.ValueObject
+                @properties: properties
+
+            class EL extends @facade.constructor.BaseList
+                @itemModelName: 'e'
+                @properties: properties
+
+            class ED extends @facade.constructor.BaseDict
+                @itemModelName: 'e'
+                @properties: properties
+                @key: (item) -> item.num
+
+            class VL extends @facade.constructor.BaseList
+                @itemModelName: 'v'
+                @properties: properties
+
+            class VD extends @facade.constructor.BaseDict
+                @itemModelName: 'v'
+                @properties: properties
+                @key: (item) -> item.num
+
+            @facade.addClass('e', E)
+            @facade.addClass('v', V)
+            @facade.addClass('el', EL)
+            @facade.addClass('ed', ED)
+            @facade.addClass('vl', VL)
+            @facade.addClass('vd', VD)
+
+
+        it 'regards as the same value to the plain object generated from toPlainObject()', ->
+
+            model = @facade.createModel 'e',
+                id: 'b89d'
+                str: '123'
+                num: 1192
+                bool: true
+                obj: { shinout: is: a: maintainer: true }
+                arr: [ { name: 123 }, { obj: key: 'string' } ]
+                date: new Date()
+                en: 'A'
+
+            assert model.isDifferentFrom(model) is false
+
+            plain = model.toPlainObject()
+            assert model.getDiffProps(plain).length is 0
+            assert model.isDifferentFrom(plain) is false
+            assert model.isDifferentFrom(JSON.parse JSON.stringify(plain)) is false
+
+        it 'detects difference of string, number and boolean', ->
+
+            model = @facade.createModel 'e',
+                id: 'b89d'
+                str: '123'
+                num: 1192
+                bool: true
+                obj: { shinout: is: a: maintainer: true }
+                arr: [ { name: 123 }, { obj: key: 'string' } ]
+                date: new Date()
+                en: 'A'
+
+            assert model.isDifferentFrom(model) is false
+
+            plain = model.toPlainObject()
+            plain.str = 'xxx'
+            plain.bool = false
+            plain.num = 1129
+            assert.deepEqual model.getDiffProps(plain), ['str', 'num', 'bool']
+
+
+        it 'enums can be number or string', ->
+
+            model = @facade.createModel 'v',
+                str: '123'
+                num: 1192
+                bool: true
+                obj: { shinout: is: a: maintainer: true }
+                arr: [ { name: 123 }, { obj: key: 'string' } ]
+                date: new Date()
+                en: 'A'
+
+            plain = model.toPlainObject()
+            plain.en = 0
+            assert model.isDifferentFrom(plain) is false
+
+            plain.en = 1
+            assert.deepEqual model.getDiffProps(plain), ['en']
+
+            plain.en = 'A'
+            assert model.isDifferentFrom(plain) is false
+
+        it 'date can be string or date', ->
+
+            model = @facade.createModel 'v',
+                str: '123'
+                num: 1192
+                bool: true
+                obj: { shinout: is: a: maintainer: true }
+                arr: [ { name: 123 }, { obj: key: 'string' } ]
+                date: new Date()
+                en: 'A'
+
+            plain = model.toPlainObject()
+            plain.date = model.date.toISOString()
+            assert model.isDifferentFrom(plain) is false
+
+        it 'property of obj is checked deeply', ->
+
+            model = @facade.createModel 'v',
+                str: '123'
+                num: 1192
+                bool: true
+                obj: { shinout: is: a: maintainer: true }
+                arr: [ { name: 123 }, { obj: key: 'string' } ]
+                date: new Date()
+                en: 'A'
+
+            plain = model.toPlainObject()
+            plain.obj = { shinout: is: a: maintainer: true, carLicense: true }
+            assert.deepEqual model.getDiffProps(plain), ['obj']
+
+        it 'property of arr is checked deeply', ->
+
+            model = @facade.createModel 'v',
+                str: '123'
+                num: 1192
+                bool: true
+                obj: { shinout: is: a: maintainer: true }
+                arr: [ { name: 123 }, { obj: key: 'string' } ]
+                date: new Date()
+                en: 'A'
+
+            plain = model.toPlainObject()
+            plain.arr = [ { name: 123 }, { obj: key: 'string', key2: 10 } ]
+            assert.deepEqual model.getDiffProps(plain), ['arr']
+
+        it 'property of arr is checked deeply', ->
+
+            model = @facade.createModel 'v',
+                str: '123'
+                bool: true
+                obj: { shinout: is: a: maintainer: true }
+                arr: [ { name: 123 }, { obj: key: 'string' } ]
+                date: new Date()
+                en: 'A'
+
+            plain = model.toPlainObject()
+            plain.arr = [ { name: 123 }, { obj: key: 'string', key2: 10 } ]
+            assert.deepEqual model.getDiffProps(plain), ['arr']
+
+
+        context 'when models contain submodels', ->
+
+            beforeEach ->
+
+                class ComplexModel extends @facade.constructor.Entity
+                    @properties:
+                        name: @TYPES.STRING
+                        e: @TYPES.MODEL('e', 'exId')
+                        v: @TYPES.MODEL('v')
+                @facade.addClass('complex-model', ComplexModel)
+
+                @complexModel = @facade.createModel 'complex-model',
+                    name: 'hi'
+                    e:
+                        id: 'eb1b'
+                        str: '123'
+                        num: 1192
+                        bool: true
+                        obj: { shinout: is: a: maintainer: true }
+                        arr: [ { name: 123 }, { obj: key: 'string' } ]
+                        date: new Date()
+                        en: 'A'
+                    v:
+                        str: '123'
+                        num: 1192
+                        bool: true
+                        obj: { shinout: is: a: maintainer: true }
+                        arr: [ { name: 123 }, { obj: key: 'string' } ]
+                        date: new Date()
+                        en: 'A'
+
+            it 'checks difference of VO', ->
+                plain = @complexModel.toPlainObject()
+                plain.v.arr = [ { name: 123 }, { obj: key: 'string' }, 'xxx' ]
+                assert.deepEqual @complexModel.getDiffProps(plain), ['v']
+
+            it 'regards as the same value when a model is build by empty object', ->
+                model = @facade.createModel('complex-model')
+                plain = model.toPlainObject()
+                assert model.isDifferentFrom(plain) is false
+                assert model.v?
+                assert not model.e?
+
+            it 'regards as different between default VO and undefined value', ->
+
+                model = @facade.createModel('complex-model')
+                plain = model.toPlainObject()
+                delete plain.v
+                assert.deepEqual model.getDiffProps(plain), ['v']
+
+            it 'regards as the same value when plain object contains no subEntity but id is the same', ->
+                plain = @complexModel.toPlainObject()
+                assert plain.exId is 'eb1b'
+
+                assert not plain.e?
+                assert @complexModel.e?
+
+                assert @complexModel.isDifferentFrom(plain) is false
+
+            it 'regards as the same value when plain object contains subEntity and id', ->
+                plain = @complexModel.toPlainObject()
+                plain.e = @complexModel.e.toPlainObject()
+                assert @complexModel.isDifferentFrom(plain) is false
+
+
+            it 'regards as different when plain object contains no subEntity and id is different', ->
+                plain = @complexModel.toPlainObject()
+                plain.exId = '1293'
+
+                assert not plain.e?
+                assert @complexModel.e?
+
+                assert.deepEqual @complexModel.getDiffProps(plain), ['exId', 'e']
+
+
+            it 'regards as different when plain object contains subEntity but id is different', ->
+                plain = @complexModel.toPlainObject()
+                plainE = @complexModel.e.toPlainObject()
+                plain.e = plainE
+                plain.exId = 'xxx'
+                plain.e.id = 'xxx'
+                assert.deepEqual @complexModel.getDiffProps(plain), ['exId', 'e']
+
+
+        context 'when models contain VO Collection', ->
+
+            beforeEach ->
+                class ComplexModel extends @facade.constructor.Entity
+                    @properties:
+                        name: @TYPES.STRING
+                        vl: @TYPES.MODEL('vl')
+                        vd: @TYPES.MODEL('vd')
+                @facade.addClass('complex-model', ComplexModel)
+
+                date = new Date().toISOString()
+
+                @getPlain = (num) ->
+                    str: '123'
+                    num: num ? 1192
+                    bool: true
+                    obj: { shinout: is: a: maintainer: true }
+                    arr: [ { name: 123 }, { obj: key: 'string' } ]
+                    date: date
+                    en: 'A'
+
+            it 'regards as the same value to the plain object generated from toPlainObject()', ->
+                model = @facade.createModel 'complex-model',
+                    name: 'xyz'
+                    vl: [ @getPlain(1), @getPlain(2) ]
+                    vd: [ @getPlain(3), @getPlain(4) ]
+
+                plain = model.toPlainObject()
+
+                assert model.isDifferentFrom(plain) is false
+                assert model.isDifferentFrom(JSON.parse JSON.stringify(plain)) is false
+
+
+            it 'regards as the same value when plain collections are array', ->
+                model = @facade.createModel 'complex-model',
+                    name: 'xyz'
+                    vl: [ @getPlain(1), @getPlain(2) ]
+                    vd: [ @getPlain(3), @getPlain(4) ]
+
+                plain =
+                    name: 'xyz'
+                    vl: [ @getPlain(1), @getPlain(2) ]
+                    vd: [ @getPlain(3), @getPlain(4) ]
+
+                assert model.isDifferentFrom(plain) is false
+
+            it 'regards as the same value when items are empty', ->
+                model = @facade.createModel 'complex-model'
+                plain = model.toPlainObject()
+                assert model.isDifferentFrom(plain) is false
+
+            it 'regards as the different value when compared with undefined submodel', ->
+                model = @facade.createModel 'complex-model'
+                plain = {}
+                assert.deepEqual model.getDiffProps(plain), ['vl', 'vd']
+
+
+
+        context 'when models contain Entity Collection', ->
+
+            beforeEach ->
+                class ComplexModel extends @facade.constructor.Entity
+                    @properties:
+                        name: @TYPES.STRING
+                        el: @TYPES.MODEL('el')
+                        ed: @TYPES.MODEL('ed')
+                @facade.addClass('complex-model', ComplexModel)
+
+                date = new Date().toISOString()
+
+                @getPlain = (num) ->
+                    id: if not num? then '1192' else num.toString()
+                    str: '123'
+                    num: num ? 1192
+                    bool: true
+                    obj: { shinout: is: a: maintainer: true }
+                    arr: [ { name: 123 }, { obj: key: 'string' } ]
+                    date: date
+                    en: 'A'
+
+            it 'regards as the same value to the plain object generated from toPlainObject()', ->
+                model = @facade.createModel 'complex-model',
+                    name: 'xyz'
+                    el: [ @getPlain(1), @getPlain(2) ]
+                    ed: [ @getPlain(3), @getPlain(4) ]
+
+                plain = model.toPlainObject()
+                assert model.isDifferentFrom(plain) is false
+                assert model.isDifferentFrom(JSON.parse JSON.stringify(plain)) is false
+
+
+            it 'regards as the same value when plain collections are array', ->
+                model = @facade.createModel 'complex-model',
+                    name: 'xyz'
+                    el: [ @getPlain(1), @getPlain(2) ]
+                    ed: [ @getPlain(3), @getPlain(4) ]
+
+                plain =
+                    name: 'xyz'
+                    el: [ @getPlain(1), @getPlain(2) ]
+                    ed: [ @getPlain(3), @getPlain(4) ]
+
+                assert model.isDifferentFrom(plain) is false
+
+            it 'regards as the same value when items are empty', ->
+                model = @facade.createModel 'complex-model'
+                plain = model.toPlainObject()
+                assert model.isDifferentFrom(plain) is false
+
+            it 'regards as the different value when compared with undefined submodel', ->
+                model = @facade.createModel 'complex-model'
+                plain = {}
+                assert.deepEqual model.getDiffProps(plain), ['el', 'ed']
+
+
+
+

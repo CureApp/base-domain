@@ -32,23 +32,23 @@ class ModelProps
         ###
         @updatedAt = null
 
-        ###*
-        properties whose type is DATE, CREATED_AT and UPDATED_AT
-        @property {Array(String)} dates
-        @public
-        @readonly
-        ###
-        @dates = []
-
         # private
         @subModelProps = []
         @typeInfoDic = {}
         @entityDic = {}
         @enumDic = {}
+        @dateDic = {}
 
 
         @parse properties, modl
 
+    ###*
+    properties whose type is DATE, CREATED_AT and UPDATED_AT
+    @property {Array(String)} dates
+    @public
+    @readonly
+    ###
+    Object.defineProperty @::, 'dates', get: -> Object.keys(@dateDic)
 
     ###*
     parse props by type
@@ -77,15 +77,15 @@ class ModelProps
         switch typeInfo.typeName
 
             when 'DATE'
-                @dates.push prop
+                @dateDic[prop] = true
 
             when 'CREATED_AT'
                 @createdAt = prop
-                @dates.push prop
+                @dateDic[prop] = true
 
             when 'UPDATED_AT'
                 @updatedAt = prop
-                @dates.push prop
+                @dateDic[prop] = true
 
             when 'MODEL'
                 @parseSubModelProp(prop, typeInfo, modl)
@@ -194,6 +194,17 @@ class ModelProps
     ###
     isId: (prop) ->
         @typeInfoDic[prop]?.typeName is 'SUB_ID'
+
+    ###*
+    check if the given prop is date
+
+    @method isDate
+    @public
+    @param {String} prop
+    @return {Boolean}
+    ###
+    isDate: (prop) ->
+        @dateDic[prop]?
 
 
     ###*

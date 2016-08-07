@@ -371,6 +371,100 @@ class BaseModel extends Base
 
 
     ###*
+    Get diff prop values
+
+    @method getDiff
+    @public
+    @param {any} plainObj
+    @return {Object}
+    ###
+    getDiff: (plainObj = {}) ->
+        @getDiffProps(plainObj).reduce (obj, prop) ->
+            obj[prop] = plainObj[prop]
+        , {}
+
+    ###*
+    Get diff props
+
+    @method diff
+    @public
+    @param {any} plainObj
+    @return {Array(String)}
+    ###
+    getDiffProps: (plainObj = {}) ->
+
+        return Object.keys(@) if not plainObj? or typeof plainObj isnt 'object'
+
+        diffProps = []
+        modelProps = @getModelProps()
+
+        for prop in modelProps.getAllProps() when not modelProps.isEntity(prop)
+            thisValue = @[prop]
+            thatValue = plainObj[prop]
+
+            if not thisValue?
+                continue if not thatValue?
+
+            if not thatValue?
+                diffProps.push(prop)
+                continue
+
+            continue if thisValue is thatValue
+
+            # if
+            continue if modelProps.isEntity(prop) and thisValue[prop]? and not thatValue?
+
+            if modelProps.isId(prop)
+                entityProp = modelProps.getEntityPropByIdProp(prop)
+                if thisValue isnt thatValue
+                    diffProps.push(prop, entityProp)
+                    continue
+                thisEntityValue = @[entityProp]
+                thatEntityValue = plainObj[entityProp]
+
+                if not thisEntityValue?
+                    diffProps.push(entityProp) if thatEntityValue?
+                    continue
+
+                else if typeof thisEntityValue.isDifferentFrom is 'function'
+                    diffProps.push(entityProp) if thisEntityValue.isDifferentFrom(thatEntityValue)
+                    continue
+                else
+                    diffProps.push(entityProp) # rare case when value of entity prop isn't entity
+
+            else if modelProps.isDate(prop)
+                thisISOValue = if typeof thisValue.toISOString is 'function' then thisValue.toISOString() else thisValue
+                thatISOValue = if typeof thatValue.toISOString is 'function' then thatValue.toISOString() else thatValue
+                continue if thisISOValue is thatISOValue
+
+            else if modelProps.isEnum(prop)
+                thatEnumValue = if typeof thatValue is 'string' then @enum(prop)[thatValue] else thatValue
+                continue if thisValue is thatEnumValue
+
+            else if typeof thisValue.isDifferentFrom is 'function'
+                continue if not thisValue.isDifferentFrom(thatValue)
+
+            else
+                continue if Util.deepEqual(thisValue, thatValue)
+
+            diffProps.push(prop)
+
+        return diffProps
+
+
+    ###*
+    Get difference props
+
+    @method diff
+    @public
+    @param {any} plainObj
+    @return {Array(String)}
+    ###
+    isDifferentFrom: (val) ->
+        return @getDiffProps(val).length > 0
+
+
+    ###*
     freeze the model
     ###
     freeze: ->

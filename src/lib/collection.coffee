@@ -3,6 +3,7 @@
 ValueObject = require './value-object'
 EntityPool = require '../entity-pool'
 BaseModel = require './base-model'
+Util = require '../util'
 
 ###*
 collection model of one model
@@ -399,7 +400,6 @@ class Collection extends ValueObject
         else
             return []
 
-
     ###*
     clone the model as a plain object
 
@@ -420,7 +420,6 @@ class Collection extends ValueObject
         return plain
 
 
-
     ###*
     @method loaded
     @public
@@ -438,5 +437,44 @@ class Collection extends ValueObject
         @facade.getModel(@constructor.itemModelName)
 
 
+    getDiffProps: (plainObj = {}) ->
+        thatObj = {}
+
+        if Array.isArray(plainObj)
+            if plainObj.length is 0
+                thatObj.items = []
+            else if typeof plainObj[0] is 'object'
+                thatObj.items = plainObj
+            else
+                thatObj.ids = plainObj
+        else
+            thatObj = plainObj
+
+        ret = super(thatObj)
+
+        if @isItemEntity and thatObj.ids
+            ret.push('ids') if @isIdsDifferent(thatObj.ids)
+            return ret
+
+        else if @isItemsDifferent(thatObj.items)
+            ret.push('items')
+            return ret
+
+        return ret
+
+
+    isItemsDifferent: (items) ->
+        return @itemLength > 0 if not Array.isArray(items)
+        return true if @itemLength isnt items.length
+
+        return @some (item, i) ->
+            if typeof item.isDifferentFrom is 'function'
+                item.isDifferentFrom(items[i])
+            else
+                not Util.deepEqual(item, items[i])
+
+    isIdsDifferent: (ids) ->
+        return @length > 0 if not Array.isArray(ids)
+        return not Util.deepEqual(@ids, ids)
 
 module.exports = Collection

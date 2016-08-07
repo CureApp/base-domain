@@ -74,6 +74,17 @@ class BaseSyncRepository extends BaseRepository
     ###
 
     ###*
+    get diff from perpetuation layer
+
+    @method getDiff
+    @public
+    @param {Entity} entity
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
+    @return {Object} diff
+    ###
+
+    ###*
     get all entities
 
     @method getAll

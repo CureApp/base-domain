@@ -162,3 +162,14 @@ describe 'BaseRepository', ->
                 assert.deepEqual results, {}
 
 
+     describe 'getDiff', ->
+
+        repo = facade.createRepository('hobby')
+
+        before ->
+            repo.save(id: 'primitive-tech', name: 'primitive technology').then (@tech) =>
+
+        it 'returns diff props', ->
+            @tech.name = 'abcde'
+            repo.getDiff(@tech).then (results) =>
+                assert.deepEqual results, {name: 'primitive technology'}

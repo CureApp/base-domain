@@ -156,6 +156,29 @@ class BaseRepository extends Base
 
 
     ###*
+    get diff from perpetuation layer
+
+    @method getDiff
+    @public
+    @param {Entity} entity
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
+    @return {Object|Promise(Object)} diff
+    ###
+    getDiff: (entity, options = {}) ->
+
+        id = entity.id
+        throw @error('EntityMustContainId') if not id?
+
+        { client } = options
+        delete options.client
+
+        client ?= @client
+        @resolve client.findById(id), (obj) ->
+            entity.getDiff(obj)
+
+
+    ###*
     alias for get()
 
     @method getById
@@ -300,7 +323,7 @@ class BaseRepository extends Base
     @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
     @param {Object} [options]
     @param {ResourceClientInterface} [options.client=@client]
-    @return {Object} updated props
+    @return {Promise(Object)|Object} updated props
     ###
     updateProps: (entity, props = {}, options = {}) ->
         id = entity.id

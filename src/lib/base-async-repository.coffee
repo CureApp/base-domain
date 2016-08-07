@@ -74,6 +74,17 @@ class BaseAsyncRepository extends BaseRepository
     ###
 
     ###*
+    get diff from perpetuation layer
+
+    @method getDiff
+    @public
+    @param {Entity} entity
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
+    @return {Promise(Object)} diff
+    ###
+
+    ###*
     get all entities
 
     @method getAll
@@ -133,6 +144,6 @@ class BaseAsyncRepository extends BaseRepository
     @param {Object} props key-value pair to update (notice: this must not be instance of Entity)
     @param {Object} [options]
     @param {ResourceClientInterface} [options.client=@client]
-    @return {Object} updated props
+    @return {Promise(Object)} updated props
     ###
 module.exports = BaseAsyncRepository

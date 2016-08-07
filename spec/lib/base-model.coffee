@@ -606,6 +606,24 @@ describe 'BaseModel', ->
             plain.num = 1129
             assert.deepEqual model.getDiffProps(plain), ['str', 'num', 'bool']
 
+        it 'ignores checking props when options.ignores is given', ->
+
+            model = @facade.createModel 'e',
+                id: 'b89d'
+                str: '123'
+                num: 1192
+                bool: true
+                obj: { shinout: is: a: maintainer: true }
+                arr: [ { name: 123 }, { obj: key: 'string' } ]
+                date: new Date()
+                en: 'A'
+
+            plain = model.toPlainObject()
+            plain.str = 'xxx'
+            plain.bool = false
+            plain.num = 1129
+            assert.deepEqual model.getDiffProps(plain, ignores: ['num', 'bool']), ['str']
+
 
         it 'enums can be number or string', ->
 

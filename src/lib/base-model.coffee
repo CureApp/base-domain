@@ -376,10 +376,13 @@ class BaseModel extends Base
     @method getDiff
     @public
     @param {any} plainObj
+    @param {Object} [options]
+    @param {Array(String)} [options.ignores] prop names to skip checking diff
     @return {Object}
     ###
-    getDiff: (plainObj = {}) ->
-        @getDiffProps(plainObj).reduce (obj, prop) ->
+    getDiff: (plainObj = {}, options = {}) ->
+
+        @getDiffProps(plainObj, options).reduce (obj, prop) ->
             obj[prop] = plainObj[prop]
         , {}
 
@@ -389,16 +392,24 @@ class BaseModel extends Base
     @method diff
     @public
     @param {any} plainObj
+    @param {Object} [options]
+    @param {Array(String)} [options.ignores] prop names to skip checking diff
     @return {Array(String)}
     ###
-    getDiffProps: (plainObj = {}) ->
+    getDiffProps: (plainObj = {}, options = {}) ->
 
         return Object.keys(@) if not plainObj? or typeof plainObj isnt 'object'
 
         diffProps = []
         modelProps = @getModelProps()
 
-        for prop in modelProps.getAllProps() when not modelProps.isEntity(prop)
+        ignores = {}
+        ignores[prop] = true for prop in options.ignores if Array.isArray(options.ignores)
+
+        propsToCheck = modelProps.getAllProps().filter (prop) ->
+            not ignores[prop] and not modelProps.isEntity(prop)
+
+        for prop in propsToCheck
             thisValue = @[prop]
             thatValue = plainObj[prop]
 

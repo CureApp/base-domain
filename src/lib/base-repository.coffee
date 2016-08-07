@@ -292,6 +292,29 @@ class BaseRepository extends Base
 
 
     ###*
+    Update set of attributes and returns newly-updated props (other than `props`)
+
+    @method updateProps
+    @public
+    @param {Entity} entity
+    @param {Object} data key-value pair to update (notice: this must not be instance of Entity)
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
+    @return {Object} updated props
+    ###
+    updateProps: (entity, props = {}, options = {}) ->
+        id = entity.id
+        throw @error('EntityMustContainId') if not id?
+
+        { client } = options
+        delete options.client
+        client ?= @client
+        @appendTimeStamp(props, isUpdate = true)
+
+        @resolve client.updateAttributes(id, props), (obj) ->
+            return entity.getDiff(obj, ignores: Object.keys(props))
+
+    ###*
     add createdAt, updatedAt to given data
     - createdAt will not be overriden if already set.
     - updatedAt will be overriden for each time

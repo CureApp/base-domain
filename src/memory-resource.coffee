@@ -148,9 +148,10 @@ class MemoryResource
     ###
     updateAttributes: (id, data) ->
         pooledData = @pool[id]
-        throw new Error("id #{id} is not found") if pooledData
-            for k, v of data
-                pooledData[k] = v
+        throw new Error("id #{id} is not found") if not pooledData?
+
+        for k, v of data
+            pooledData[k] = v
 
         @pool[id] = pooledData
 

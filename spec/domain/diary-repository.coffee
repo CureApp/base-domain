@@ -1,5 +1,6 @@
 
 { BaseAsyncRepository } = require('../base-domain')
+{ MemoryResource } = require '../others'
 
 ###*
 repository of diary
@@ -18,5 +19,7 @@ class DiaryRepository extends BaseAsyncRepository
     @type String
     ###
     @modelName: 'diary'
+
+    client: new MemoryResource()
 
 module.exports = DiaryRepository

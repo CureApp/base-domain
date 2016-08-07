@@ -123,5 +123,16 @@ class BaseSyncRepository extends BaseRepository
     @param {ResourceClientInterface} [options.client=@client]
     @return {Entity} updated entity
     ###
+    ###*
+    Update set of attributes and returns newly-updated props (other than `props`)
+
+    @method updateProps
+    @public
+    @param {Entity} entity
+    @param {Object} props key-value pair to update (notice: this must not be instance of Entity)
+    @param {Object} [options]
+    @param {ResourceClientInterface} [options.client=@client]
+    @return {Object} updated props
+    ###
 
 module.exports = BaseSyncRepository

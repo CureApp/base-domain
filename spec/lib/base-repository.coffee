@@ -3,7 +3,7 @@ facade = require('../create-facade').create('domain')
 
 Hobby = facade.getModel 'hobby'
 
-xdescribe 'BaseRepository', ->
+describe 'BaseRepository', ->
 
     describe 'factory', ->
 
@@ -26,30 +26,30 @@ xdescribe 'BaseRepository', ->
 
             memberRepo = facade.createRepository('member')
 
-            memberRepo.save(firstName: 'Shin').then (model) =>
-                assert model.mCreatedAt?
-                assert model.mUpdatedAt?
-                assert new Date(model.mCreatedAt) instanceof Date
-                assert new Date(model.mUpdatedAt) instanceof Date
+            model = memberRepo.save(firstName: 'Shin')
+            assert model.mCreatedAt?
+            assert model.mUpdatedAt?
+            assert new Date(model.mCreatedAt) instanceof Date
+            assert new Date(model.mUpdatedAt) instanceof Date
 
         it 'createdAt stays original', ->
 
             memberRepo = facade.createRepository('member')
             now = new Date()
 
-            memberRepo.save(firstName: 'Shin', mCreatedAt: now).then (model) =>
-                assert model.mCreatedAt?
-                assert model.mCreatedAt is now
+            model = memberRepo.save(firstName: 'Shin', mCreatedAt: now)
+            assert model.mCreatedAt?
+            assert.deepEqual model.mCreatedAt, now
 
         it 'createdAt is newly set even when model has id', ->
 
             memberRepo = facade.createRepository('member')
             now = new Date()
 
-            memberRepo.save(firstName: 'Shin', id: 'shin').then (model) =>
-                assert model.mCreatedAt?
-                assert new Date(model.mCreatedAt) instanceof Date
-                assert new Date(model.mUpdatedAt) instanceof Date
+            model = memberRepo.save(firstName: 'Shin', id: 'shin')
+            assert model.mCreatedAt?
+            assert new Date(model.mCreatedAt) instanceof Date
+            assert new Date(model.mUpdatedAt) instanceof Date
 
 
         it 'updatedAt changes for each saving', ->
@@ -57,11 +57,9 @@ xdescribe 'BaseRepository', ->
             memberRepo = facade.createRepository('member')
             now = new Date()
 
-            memberRepo.save(firstName: 'Shin', mUpdatedAt: now).then (model) =>
-                assert model.mCreatedAt?
-                assert model.mUpdatedAt isnt now
-
-
+            model = memberRepo.save(firstName: 'Shin', mUpdatedAt: now)
+            assert model.mCreatedAt?
+            assert model.mUpdatedAt isnt now
 
         it 'returns instance of Model with relation ids', ->
 
@@ -132,6 +130,12 @@ xdescribe 'BaseRepository', ->
 
      describe 'update', ->
         repo = facade.createRepository('hobby')
+        memberRepo = facade.createRepository('member')
+
+        before ->
+            memberRepo.save(id: '123', firstName: 'shin')
+            repo.save(id: '123', name: 'tennis').then (entity) =>
+                @tennis = entity
 
         it 'returns instance of Model', ->
 
@@ -141,10 +145,20 @@ xdescribe 'BaseRepository', ->
 
         it 'returns instance of Model with updatedAt when configured as such', ->
 
-            memberRepo = facade.createRepository('member')
+            model = memberRepo.update('123', firstName: 'Shin')
+            assert new Date(model.mUpdatedAt) instanceof Date
 
-            memberRepo.update('123', firstName: 'Shin').then (model) =>
-                arg2 = model.arg2 # mock prop
-                assert not arg2.mCreatedAt?
-                assert arg2.mUpdatedAt?
-                assert new Date(arg2.mUpdatedAt) instanceof Date
+
+     describe 'updateProps', ->
+
+        repo = facade.createRepository('hobby')
+
+        before ->
+            repo.save(id: 'xyz', name: 'tennis').then (entity) =>
+                @tennis = entity
+
+        it 'returns diff props', ->
+            repo.updateProps(@tennis, { name: 'xxx' }).then (results) =>
+                assert.deepEqual results, {}
+
+

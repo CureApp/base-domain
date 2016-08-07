@@ -905,5 +905,36 @@ describe 'BaseModel', ->
                 assert.deepEqual model.getDiffProps(plain), ['el', 'ed']
 
 
+    describe 'getDiff', ->
 
+        it 'returns different prop values', ->
 
+            { TYPES } = @facade.constructor.BaseModel
+            class E extends @facade.constructor.BaseModel
+                @properties:
+                    str: TYPES.STRING
+                    num: TYPES.NUMBER
+                    bool: TYPES.BOOLEAN
+                    obj: TYPES.OBJECT
+                    arr: TYPES.ARRAY
+                    date: TYPES.DATE
+                    en: TYPES.ENUM(['A', 'B', 'C'])
+
+            @facade.addClass('e', E)
+
+            model = @facade.createModel 'e',
+                id: 'b89d'
+                str: '123'
+                num: 1192
+                bool: true
+                obj: { shinout: is: a: maintainer: true }
+                arr: [ { name: 123 }, { obj: key: 'string' } ]
+                date: new Date()
+                en: 'A'
+
+            plain = model.toPlainObject()
+
+            plain.str = 'xxxx'
+            plain.bool = false
+
+            assert.deepEqual model.getDiff(plain), { str: 'xxxx', bool: false }

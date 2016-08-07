@@ -384,6 +384,7 @@ class BaseModel extends Base
 
         @getDiffProps(plainObj, options).reduce (obj, prop) ->
             obj[prop] = plainObj[prop]
+            return obj
         , {}
 
     ###*

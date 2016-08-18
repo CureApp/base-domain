@@ -1,4 +1,5 @@
-const { VendingMachineFacade, Drink, FundamentalsPrice } = require('./src/entry')
+const { Drink, FundamentalsPrice } = require('./src/entry')
+const VendingMachineFacade = require('./src/entry').default
 const domain = VendingMachineFacade.createInstance()
 console.assert(domain.nonExistingClassNames['drink-factory'])
 console.assert(domain.nonExistingClassNames['coin-factory'] === undefined)

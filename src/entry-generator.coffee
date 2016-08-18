@@ -324,6 +324,7 @@ class JSCodeGenerator extends EntryGenerator
 
         return """
         module.exports = {
+            "default": #{facadeClassName},
             #{facadeClassName}: #{facadeClassName},
             #{keyValues.join(',\n    ')}
         }

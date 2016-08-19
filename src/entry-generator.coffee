@@ -246,7 +246,7 @@ class EntryGenerator
         { factories, coreClasses, modules, masterJSONStr, facadeClassName } = @input
 
         """
-        const packedData = {
+        var packedData = {
             // eslint-disable-next-line quotes, key-spacing, object-curly-spacing, comma-spacing
             masterData : #{masterJSONStr},
             core: {
@@ -294,7 +294,7 @@ class JSCodeGenerator extends EntryGenerator
     getPragmas: ->
         """
         /* eslint quote-props: 0, object-shorthand: 0, no-underscore-dangle: 0 */
-        const __ = function __(m) { return m.default ? m.default : m }
+        var __ = function __(m) { return m.default ? m.default : m }
         """
 
     getImportStatements: ->
@@ -331,7 +331,7 @@ class JSCodeGenerator extends EntryGenerator
         """
 
     getRequireStatement: (className, path) ->
-        return "const #{className} = __(require('#{path}'))\n"
+        return "var #{className} = __(require('#{path}'))\n"
 
 
 

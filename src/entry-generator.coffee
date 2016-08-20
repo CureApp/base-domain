@@ -217,14 +217,14 @@ class EntryGenerator
         input = new EntryGeneratorInput(facadePath, dirname, outfile)
 
         if esCode
-            generator = new ESCodeGenerator(input)
+            generator = new ESCodeGenerator(input, 'const')
         else
-            generator = new JSCodeGenerator(input)
+            generator = new JSCodeGenerator(input, 'var')
 
         generator.generate()
 
 
-    constructor: (@input) ->
+    constructor: (@input, @declaration) ->
 
 
     generate: ->
@@ -246,7 +246,7 @@ class EntryGenerator
         { factories, coreClasses, modules, masterJSONStr, facadeClassName } = @input
 
         """
-        var packedData = {
+        #{@declaration} packedData = {
             // eslint-disable-next-line quotes, key-spacing, object-curly-spacing, comma-spacing
             masterData : #{masterJSONStr},
             core: {
@@ -294,7 +294,7 @@ class JSCodeGenerator extends EntryGenerator
     getPragmas: ->
         """
         /* eslint quote-props: 0, object-shorthand: 0, no-underscore-dangle: 0 */
-        var __ = function __(m) { return m.default ? m.default : m }
+        #{@declaration} __ = function __(m) { return m.default ? m.default : m }
         """
 
     getImportStatements: ->
@@ -331,7 +331,7 @@ class JSCodeGenerator extends EntryGenerator
         """
 
     getRequireStatement: (className, path) ->
-        return "var #{className} = __(require('#{path}'))\n"
+        return "#{@declaration} #{className} = __(require('#{path}'))\n"
 
 
 

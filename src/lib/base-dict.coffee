@@ -218,6 +218,21 @@ class BaseDict extends Collection
         newItems[key] = item
         return @copyWith(items: newItems)
 
+    ###*
+    replace or add item and return a new dict
+
+    @method $append
+    @public
+    @param {BaseModel} item
+    @return {BaseDict} newDict
+    ###
+    $append: (item) ->
+        key = @constructor.key(item)
+        throw new Error('InvalidItem') if not key?
+        if @has(key)
+            return @$replace(item)
+
+        return @$add(item)
 
     ###*
     export models to Array

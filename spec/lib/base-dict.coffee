@@ -411,6 +411,35 @@ describe 'BaseDict', ->
             newHobby = {name: 'xyz'}
             assert.throws(=> @hobbyDict.$replace(newHobby))
 
+    describe '$append', ->
+
+        beforeEach ->
+            class HobbyDict extends BaseDict
+                @itemModelName: 'hobby'
+                @key: (item) -> item.name
+
+            @facade.addClass 'hobby-dict', HobbyDict
+            @hobbyDict = @facade.createModel('hobby-dict', items: @hobbies)
+
+
+        it 'replaces an item and creates a new model when the same key exists', ->
+
+            newHobby = @hobbies[0].$set(abc: 123)
+            newDict = @hobbyDict.$append(newHobby)
+
+            assert newDict.length is 3
+            assert newDict.items.keyboard?
+            assert newDict.items.keyboard.abc is 123
+
+        it 'throw new Error if no key is calculated', ->
+            newHobby = {}
+            assert.throws(=> @hobbyDict.$append(newHobby))
+
+        it 'adds an item when the key is not found', ->
+            newHobby = {name: 'xyz'}
+            newDict = @hobbyDict.$append(newHobby)
+            assert newDict.length is 4
+
 
     describe 'clear', ->
 

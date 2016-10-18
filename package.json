@@ -45,7 +45,7 @@
     "commander": "^2.9.0",
     "csv-parse": "^1.1.7",
     "debug": "^2.2.0",
-    "deep-eql": "^0.1.3"
+    "deep-eql": "^1.0.1"
   },
   "devDependencies": {
     "coffee-script": "^1.8.0",

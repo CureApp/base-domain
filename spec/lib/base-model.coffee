@@ -586,6 +586,24 @@ describe 'BaseModel', ->
             assert model.isDifferentFrom(plain) is false
             assert model.isDifferentFrom(JSON.parse JSON.stringify(plain)) is false
 
+        it 'regards as different when plain object\'s prop is non-null but model\'s prop is null', ->
+            model = @facade.createModel 'e',
+                id: 'b89d'
+                str: null
+                num: undefined
+                bool: null
+                date: null
+
+            assert model.isDifferentFrom(model) is false
+
+            plain = model.toPlainObject()
+            plain.str = 'abc'
+            plain.num = 123
+            plain.bool = true
+            plain.date = new Date()
+            assert.deepEqual model.getDiffProps(plain), ['str', 'num', 'bool', 'date']
+
+
         it 'detects difference of string, number and boolean', ->
 
             model = @facade.createModel 'e',

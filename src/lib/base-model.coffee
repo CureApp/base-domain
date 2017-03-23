@@ -417,7 +417,7 @@ class BaseModel extends Base
             if not thisValue?
                 continue if not thatValue?
 
-            if not thatValue?
+            if not thatValue? or not thisValue?
                 diffProps.push(prop)
                 continue
 

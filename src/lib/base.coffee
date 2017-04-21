@@ -167,7 +167,7 @@ class Base
     deprecated: (methodName, message) ->
         try
             line = new Error().stack.split('\n')[3]
-            console.error("Deprecated method: '#{methodName}'. #{message if message}\n", line)
+            console.warn("Deprecated method: '#{methodName}'. #{message if message}\n", line)
         catch e
 
 module.exports = Base

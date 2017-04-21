@@ -7,10 +7,10 @@ describe 'Base', ->
     describe 'deprecated', ->
 
         before ->
-            @consoleError = console.error
+            @consoleWarn = console.warn
 
         after ->
-            console.error = @consoleError
+            console.error = @consoleWarn
 
 
         it 'shows message about deprecation', (done) ->
@@ -21,7 +21,7 @@ describe 'Base', ->
 
             instance = new SomeClass(facade)
 
-            console.error = (str) ->
+            console.warn = (str) ->
                 assert str.match /Deprecated method: 'SomeClass#foo\(\)'\. Call "bar" instead\./
                 done()
 

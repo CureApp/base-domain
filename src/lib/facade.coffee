@@ -401,7 +401,7 @@ class Facade
             @nonExistingClassNames[modFullName] = true
 
             modFullName = fullName # strip module name
-            klass = @getModule().requireOwn(fullName)
+            klass = @classes[fullName] or @getModule().requireOwn(fullName)
 
         if not klass?
             @nonExistingClassNames[fullName] = true

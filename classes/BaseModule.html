@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>BaseModule - base-domain</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="base-domain"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/AggregateRoot.html">AggregateRoot</a></li>
+            
+                <li><a href="../classes/Base.html">Base</a></li>
+            
+                <li><a href="../classes/BaseAsyncRepository.html">BaseAsyncRepository</a></li>
+            
+                <li><a href="../classes/BaseDict.html">BaseDict</a></li>
+            
+                <li><a href="../classes/BaseFactory.html">BaseFactory</a></li>
+            
+                <li><a href="../classes/BaseList.html">BaseList</a></li>
+            
+                <li><a href="../classes/BaseModel.html">BaseModel</a></li>
+            
+                <li><a href="../classes/BaseModule.html">BaseModule</a></li>
+            
+                <li><a href="../classes/BaseRepository.html">BaseRepository</a></li>
+            
+                <li><a href="../classes/BaseService.html">BaseService</a></li>
+            
+                <li><a href="../classes/BaseSyncRepository.html">BaseSyncRepository</a></li>
+            
+                <li><a href="../classes/Collection.html">Collection</a></li>
+            
+                <li><a href="../classes/DomainError.html">DomainError</a></li>
+            
+                <li><a href="../classes/Entity.html">Entity</a></li>
+            
+                <li><a href="../classes/EntityCollectionIncluder.html">EntityCollectionIncluder</a></li>
+            
+                <li><a href="../classes/EntityPool.html">EntityPool</a></li>
+            
+                <li><a href="../classes/Facade.html">Facade</a></li>
+            
+                <li><a href="../classes/FactoryInterface.html">FactoryInterface</a></li>
+            
+                <li><a href="../classes/Fixture.html">Fixture</a></li>
+            
+                <li><a href="../classes/FixtureLoader.html">FixtureLoader</a></li>
+            
+                <li><a href="../classes/GeneralFactory.html">GeneralFactory</a></li>
+            
+                <li><a href="../classes/Includer.html">Includer</a></li>
+            
+                <li><a href="../classes/LocalRepository.html">LocalRepository</a></li>
+            
+                <li><a href="../classes/MasterDataResource.html">MasterDataResource</a></li>
+            
+                <li><a href="../classes/MasterRepository.html">MasterRepository</a></li>
+            
+                <li><a href="../classes/MemoryResource.html">MemoryResource</a></li>
+            
+                <li><a href="../classes/ModelProps.html">ModelProps</a></li>
+            
+                <li><a href="../classes/ResourceClientInterface.html">ResourceClientInterface</a></li>
+            
+                <li><a href="../classes/RootInterface.html">RootInterface</a></li>
+            
+                <li><a href="../classes/Scope.html">Scope</a></li>
+            
+                <li><a href="../classes/TypeInfo.html">TypeInfo</a></li>
+            
+                <li><a href="../classes/ValueObject.html">ValueObject</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/base-domain.html">base-domain</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>BaseModule Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l5"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:5</code></a>
+        </div>
+    
+
+    
+        
+            Module: <a href="../modules/base-domain.html">base-domain</a>
+        
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>Module of DDD pattern.</p>
+
+</div>
+
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_createFactory">createFactory</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createModel">createModel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createPreferredFactory">createPreferredFactory</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createPreferredRepository">createPreferredRepository</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createPreferredService">createPreferredService</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createRepository">createRepository</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_createService">createService</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method deprecated">
+                                <a href="#method_getFacade">getFacade</a>
+
+                                
+                                
+                                    <span class="flag deprecated">deprecated</span>
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getModel">getModel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getModule">getModule</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method_require">require</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property">
+                                <a href="#property_isRoot">isRoot</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_createFactory" class="method item">
+    <h3 class="name"><code>createFactory</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>modFirstName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/BaseFactory.html" class="crosslink">BaseFactory</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l84"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:84</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>create a factory instance
+2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">modFirstName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/BaseFactory.html" class="crosslink">BaseFactory</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_createModel" class="method item">
+    <h3 class="name"><code>createModel</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>modFirstName</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>obj</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[options]</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[root]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l68"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:68</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>create an instance of the given modFirstName using obj
+if obj is null or undefined, empty object will be created.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">modFirstName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">obj</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[root]</code>
+                        <span class="type"><a href="../classes/RootInterface.html" class="crosslink">RootInterface</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/BaseModel.html" class="crosslink">BaseModel</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_createPreferredFactory" class="method item">
+    <h3 class="name"><code>createPreferredFactory</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>modFirstName</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[options]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/BaseFactory.html" class="crosslink">BaseFactory</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l138"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:138</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>create a preferred factory instance
+3rd, 4th ... arguments are the params to pass to the constructor of the factory</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">modFirstName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name optional">[noParent=true]</code>
+                                    <span class="type">Object</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                
+
+                                <div class="param-description">
+                                    <p>if true, stop requiring parent class</p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/BaseFactory.html" class="crosslink">BaseFactory</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_createPreferredRepository" class="method item">
+    <h3 class="name"><code>createPreferredRepository</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>modFirstName</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[options]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/BaseRepository.html" class="crosslink">BaseRepository</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l123"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:123</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>create a preferred repository instance
+3rd, 4th ... arguments are the params to pass to the constructor of the repository</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">modFirstName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name optional">[noParent]</code>
+                                    <span class="type">Object</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                
+
+                                <div class="param-description">
+                                    <p>if true, stop requiring parent class</p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/BaseRepository.html" class="crosslink">BaseRepository</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_createPreferredService" class="method item">
+    <h3 class="name"><code>createPreferredService</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>modFirstName</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[options]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/BaseService.html" class="crosslink">BaseService</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l153"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:153</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>create a preferred service instance
+2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the factory</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">modFirstName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name optional">[noParent=true]</code>
+                                    <span class="type">Object</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+                                
+
+                                <div class="param-description">
+                                    <p>if true, stop requiring parent class</p>
+
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/BaseService.html" class="crosslink">BaseService</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_createRepository" class="method item">
+    <h3 class="name"><code>createRepository</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>modFirstName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/BaseRepository.html" class="crosslink">BaseRepository</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l97"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:97</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>create a repository instance
+2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the repository</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">modFirstName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/BaseRepository.html" class="crosslink">BaseRepository</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_createService" class="method item">
+    <h3 class="name"><code>createService</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>modFirstName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/BaseService.html" class="crosslink">BaseService</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l110"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:110</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>create a service instance
+2nd, 3rd, 4th ... arguments are the params to pass to the constructor of the service</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">modFirstName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/BaseService.html" class="crosslink">BaseService</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getFacade" class="method item deprecated">
+    <h3 class="name"><code>getFacade</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Facade.html" class="crosslink">Facade</a></span>
+        </span>
+    
+
+    
+        <span class="flag deprecated" title="just call facade property">deprecated</span>
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l24"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:24</code></a>
+        
+        </p>
+
+
+        
+            <p>Deprecated: just call facade property</p>
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get facade</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/Facade.html" class="crosslink">Facade</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getModel" class="method item">
+    <h3 class="name"><code>getModel</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>firstName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l58"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:58</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>get a model class in the module</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">firstName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Function</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getModule" class="method item">
+    <h3 class="name"><code>getModule</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/BaseModule.html" class="crosslink">BaseModule</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l35"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:35</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get module</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/BaseModule.html" class="crosslink">BaseModule</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_require" class="method item private">
+    <h3 class="name"><code>require</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>modFullName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l168"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:168</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>read a file and returns class</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">modFullName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Function</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property_isRoot" class="property item">
+    <h3 class="name"><code>isRoot</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/_home_ubuntu_base-domain_src_lib_base-module.coffee.html#l16"><code>&#x2F;home&#x2F;ubuntu&#x2F;base-domain&#x2F;src&#x2F;lib&#x2F;base-module.coffee:16</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>is root (to identify RootInterface)</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>/home/ubuntu/base-domain/src/entry-generator.coffee - base-domain</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="base-domain"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/AggregateRoot.html">AggregateRoot</a></li>
+            
+                <li><a href="../classes/Base.html">Base</a></li>
+            
+                <li><a href="../classes/BaseAsyncRepository.html">BaseAsyncRepository</a></li>
+            
+                <li><a href="../classes/BaseDict.html">BaseDict</a></li>
+            
+                <li><a href="../classes/BaseFactory.html">BaseFactory</a></li>
+            
+                <li><a href="../classes/BaseList.html">BaseList</a></li>
+            
+                <li><a href="../classes/BaseModel.html">BaseModel</a></li>
+            
+                <li><a href="../classes/BaseModule.html">BaseModule</a></li>
+            
+                <li><a href="../classes/BaseRepository.html">BaseRepository</a></li>
+            
+                <li><a href="../classes/BaseService.html">BaseService</a></li>
+            
+                <li><a href="../classes/BaseSyncRepository.html">BaseSyncRepository</a></li>
+            
+                <li><a href="../classes/Collection.html">Collection</a></li>
+            
+                <li><a href="../classes/DomainError.html">DomainError</a></li>
+            
+                <li><a href="../classes/Entity.html">Entity</a></li>
+            
+                <li><a href="../classes/EntityCollectionIncluder.html">EntityCollectionIncluder</a></li>
+            
+                <li><a href="../classes/EntityPool.html">EntityPool</a></li>
+            
+                <li><a href="../classes/Facade.html">Facade</a></li>
+            
+                <li><a href="../classes/FactoryInterface.html">FactoryInterface</a></li>
+            
+                <li><a href="../classes/Fixture.html">Fixture</a></li>
+            
+                <li><a href="../classes/FixtureLoader.html">FixtureLoader</a></li>
+            
+                <li><a href="../classes/GeneralFactory.html">GeneralFactory</a></li>
+            
+                <li><a href="../classes/Includer.html">Includer</a></li>
+            
+                <li><a href="../classes/LocalRepository.html">LocalRepository</a></li>
+            
+                <li><a href="../classes/MasterDataResource.html">MasterDataResource</a></li>
+            
+                <li><a href="../classes/MasterRepository.html">MasterRepository</a></li>
+            
+                <li><a href="../classes/MemoryResource.html">MemoryResource</a></li>
+            
+                <li><a href="../classes/ModelProps.html">ModelProps</a></li>
+            
+                <li><a href="../classes/ResourceClientInterface.html">ResourceClientInterface</a></li>
+            
+                <li><a href="../classes/RootInterface.html">RootInterface</a></li>
+            
+                <li><a href="../classes/Scope.html">Scope</a></li>
+            
+                <li><a href="../classes/TypeInfo.html">TypeInfo</a></li>
+            
+                <li><a href="../classes/ValueObject.html">ValueObject</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/base-domain.html">base-domain</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: /home/ubuntu/base-domain/src/entry-generator.coffee</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+fs = require &#x27;fs&#x27;
+Path = require &#x27;path&#x27;
+Path.isAbsolute ?= (str) -&gt; str.charAt(0) is &#x27;/&#x27;
+{ camelize } = require &#x27;./util&#x27;
+
+Facade = require &#x27;./main&#x27;
+{ requireFile } = Facade
+{ Base, BaseModel } = Facade
+MasterDataResource = require &#x27;./master-data-resource&#x27;
+
+
+class ClassInfo
+    constructor: (@name, @relPath, @className, @moduleName) -&gt;
+
+    Object.defineProperties @::,
+        modFullName: get: -&gt;
+            if @moduleName
+                @moduleName + &#x27;/&#x27; + @name
+            else
+                @name
+
+        fullClassName: get: -&gt;
+            camelize(@moduleName) + @className
+
+
+
+class EntryGeneratorInput
+
+    constructor: (facadePath, dirname, outfile) -&gt;
+        @validate(facadePath, dirname, outfile)
+
+        @absDirname = @absolutePath(dirname)
+
+        # public data
+        @absOutfilePath = @absolutePath(outfile)
+        @facadePath  = @relativePath(facadePath)
+        @coreClasses = @getClassInfoList(@absDirname)
+        @modules = @getModulesClasses()
+        @facadeClassName = requireFile(@absolutePath(facadePath)).name
+        @facade = @createFacade()
+        @masterJSONStr = JSON.stringify @getMasterJSON()
+        @factories = @getPreferredFactoryNames()
+
+
+    createFacade: -&gt;
+        allModules = {}
+        for moduleName in @getModuleNames()
+            allModules[moduleName] = Path.join(@absDirname, moduleName)
+
+        return Facade.createInstance
+            dirname: @absDirname
+            modules: allModules
+            master: true
+
+
+
+    ###*
+    @return {Array(ClassInfo)}
+    ###
+    getClassInfoList: (dirPath, moduleName = &#x27;&#x27;) -&gt;
+
+        relDirname = @relativePath(dirPath)
+
+        for filename in @getClassFiles(dirPath)
+            name = filename.split(&#x27;.&#x27;)[0]
+            relPath = relDirname + &#x27;/&#x27; + name
+            className = requireFile(Path.resolve dirPath, name).name
+            new ClassInfo(name, relPath, className, moduleName)
+
+
+    ###*
+    @return {{[string]: Array(ClassInfo)}}
+    ###
+    getModulesClasses: -&gt;
+
+        modules = {}
+
+        for moduleName in @getModuleNames()
+            modulePath = Path.join(@absDirname, moduleName)
+            modules[moduleName] = @getClassInfoList(modulePath, moduleName)
+
+        return modules
+
+
+    ###*
+    @method getMasterJSON
+    @private
+    @return {Object} master data
+    ###
+    getMasterJSON: -&gt;
+
+        try
+            { masterJSONPath } = @facade.master
+
+            return null if not fs.existsSync(masterJSONPath)
+
+            return require(masterJSONPath)
+
+        catch e
+            return null
+
+
+    ###*
+    @return {Array(string)} array of module names
+    ###
+    getModuleNames: -&gt;
+
+        fs.readdirSync(@absDirname)
+            .filter (subDirName) -&gt; subDirName isnt &#x27;master-data&#x27;
+            .filter (subDirName) -&gt; subDirName isnt &#x27;custom-roles&#x27;
+            .map (subDirname) =&gt; Path.join @absDirname, subDirname
+            .filter (subDirPath) -&gt; fs.statSync(subDirPath).isDirectory()
+            .filter (subDirPath) -&gt;
+                fs.readdirSync(subDirPath).some (filename) -&gt;
+                    klass = requireFile Path.join(subDirPath, filename)
+                    klass.isBaseDomainClass
+            .map (subDirPath) -&gt; Path.basename(subDirPath)
+
+
+    ###*
+    get domain files to load
+
+    @method getClassFiles
+    @private
+    @return {Array(string)} filenames
+    ###
+    getClassFiles: (path) -&gt;
+
+        fileInfoDict = {}
+
+        for filename in fs.readdirSync(path)
+
+            [ name, ext ] = filename.split(&#x27;.&#x27;)
+            continue if ext not in [&#x27;js&#x27;, &#x27;coffee&#x27;]
+
+            klass = requireFile path + &#x27;/&#x27; + filename
+
+            fileInfoDict[name] = filename: filename, klass: klass
+
+        files = []
+        for name, fileInfo of fileInfoDict
+
+            { klass, filename } = fileInfo
+            continue if filename in files
+
+            ParentClass = Object.getPrototypeOf(klass::).constructor
+
+            if ParentClass.className and pntFileName = fileInfoDict[ParentClass.getName()]?.filename
+
+                files.push pntFileName unless pntFileName in files
+
+            files.push filename
+
+        return files
+
+
+    ###*
+    get entities with no factory
+    ###
+    getPreferredFactoryNames: -&gt;
+        factories = {}
+
+        for classInfo in @coreClasses
+            factories[classInfo.modFullName] = @getPreferredFactoryName(classInfo)
+
+        for modName, classes of @modules
+            for classInfo in classes
+                factories[classInfo.modFullName] = @getPreferredFactoryName(classInfo)
+
+        delete factories[k] for k, v of factories when not v?
+        return factories
+
+
+    getPreferredFactoryName: (classInfo) -&gt;
+        ModelClass = @facade.require(classInfo.modFullName)
+        return if (ModelClass::) not instanceof BaseModel
+        try
+            factory = @facade.createPreferredFactory(classInfo.modFullName)
+            return &quot;&#x27;#{factory.constructor.className}&#x27;&quot;
+        catch e
+            return &#x27;null&#x27;
+
+
+
+    ###*
+    validate input data
+    ###
+    validate: (facadePath, dirname, outfile) -&gt;
+        absFacadePath = @absolutePath facadePath
+        absDirname = @absolutePath dirname
+        outDir = Path.dirname(@absolutePath outfile)
+
+        throw new Error(&quot;&#x27;#{absFacadePath}&#x27; is not found.&quot;) if not fs.existsSync(absFacadePath)
+        throw new Error(&quot;dirname: &#x27;#{absDirname}&#x27; is not found.&quot;) if not fs.existsSync(absDirname)
+        throw new Error(&quot;output directory: &#x27;#{outDir}&#x27; is not found.&quot;) if not fs.existsSync(outDir)
+
+
+    absolutePath: (path) -&gt;
+        return Path.resolve(path) if Path.isAbsolute path
+        return Path.resolve process.cwd(), path
+
+
+    relativePath: (path) -&gt;
+        relPath = Path.relative(Path.dirname(@absOutfilePath), path)
+
+        if relPath.charAt(0) isnt &#x27;.&#x27;
+            relPath = &#x27;./&#x27; + relPath
+
+        return relPath
+
+
+
+class EntryGenerator
+
+    @generate: (facadePath, dirname, outfile, esCode = false) -&gt;
+
+        input = new EntryGeneratorInput(facadePath, dirname, outfile)
+
+        if esCode
+            generator = new ESCodeGenerator(input, &#x27;const&#x27;)
+        else
+            generator = new JSCodeGenerator(input, &#x27;var&#x27;)
+
+        generator.generate()
+
+
+    constructor: (@input, @declaration) -&gt;
+
+
+    generate: -&gt;
+
+        code = [
+            @getPragmas()
+            @getImportStatements()
+            @getPackedData()
+            @getExportStatements()
+        ].join(&#x27;\n&#x27;) + &#x27;\n&#x27;
+
+        fs.writeFileSync(@input.absOutfilePath, code)
+
+    getPragmas: -&gt; &#x27;&#x27;
+
+
+    getPackedData: -&gt;
+
+        { factories, coreClasses, modules, masterJSONStr, facadeClassName } = @input
+
+        &quot;&quot;&quot;
+        #{@declaration} packedData = {
+            // eslint-disable-next-line quotes, key-spacing, object-curly-spacing, comma-spacing
+            masterData : #{masterJSONStr},
+            core: {
+        #{@getPackedCode(coreClasses, 2)},
+            },
+            modules: {
+        #{@getModulesPackedData(modules)}
+            },
+            factories: {
+        #{@getFactoriesPackedData(factories, 2)}
+            }
+        }
+        #{facadeClassName}.prototype.init = function init() { return this.initWithPacked(packedData) }
+        &quot;&quot;&quot;
+
+    getPackedCode: (classes, indent) -&gt;
+        spaces = [0...indent * 4].map((x) -&gt; &#x27; &#x27;).join(&#x27;&#x27;)
+
+        spaces + classes.map (classInfo) -&gt;
+            &quot;&#x27;#{classInfo.name}&#x27;: #{classInfo.fullClassName}&quot;
+        .join(&#x27;,\n&#x27; + spaces)
+
+
+    getModulesPackedData: (modules) -&gt;
+        _ = &#x27;        &#x27;
+        Object.keys(modules).map (modName) =&gt;
+            modClasses = modules[modName]
+            &quot;&quot;&quot;
+            #{_}&#x27;#{modName}&#x27;: {
+            #{@getPackedCode(modClasses, 3)}
+            #{_}}
+            &quot;&quot;&quot;
+        .join(&#x27;,\n&#x27;)
+
+    getFactoriesPackedData: (factories, indent) -&gt;
+        spaces = [0...indent * 4].map((x) -&gt; &#x27; &#x27;).join(&#x27;&#x27;)
+
+        spaces + Object.keys(factories).map (modelName) =&gt;
+            factoryName = factories[modelName]
+            return &quot;&#x27;#{modelName}&#x27;: #{factoryName}&quot;
+        .join(&#x27;,\n&#x27; + spaces)
+
+class JSCodeGenerator extends EntryGenerator
+
+    getPragmas: -&gt;
+        &quot;&quot;&quot;
+        /* eslint quote-props: 0, object-shorthand: 0, no-underscore-dangle: 0 */
+        #{@declaration} __ = function __(m) { return m.default ? m.default : m }
+        &quot;&quot;&quot;
+
+    getImportStatements: -&gt;
+
+        { coreClasses, modules, facadePath, facadeClassName } = @input
+
+        # importing modules
+        code = @getRequireStatement(facadeClassName, facadePath)
+        code += @getRequireStatement(classInfo.className, classInfo.relPath) for classInfo in coreClasses
+        for modName, modClasses of modules
+            code += @getRequireStatement(classInfo.fullClassName, classInfo.relPath) for classInfo in modClasses
+
+        return code
+
+
+    getExportStatements: -&gt;
+
+        { coreClasses, modules, facadeClassName } = @input
+
+        classNames = coreClasses.map((coreClass) -&gt; coreClass.className)
+        for modName, modClasses of modules
+            classNames = classNames.concat modClasses.map (modClass) -&gt; modClass.fullClassName
+
+        keyValues = classNames.map (className) -&gt;
+            &quot;#{className}: #{className}&quot;
+
+
+        return &quot;&quot;&quot;
+        module.exports = {
+            &quot;default&quot;: #{facadeClassName},
+            #{facadeClassName}: #{facadeClassName},
+            #{keyValues.join(&#x27;,\n    &#x27;)}
+        }
+        &quot;&quot;&quot;
+
+    getRequireStatement: (className, path) -&gt;
+        return &quot;#{@declaration} #{className} = __(require(&#x27;#{path}&#x27;))\n&quot;
+
+
+
+class ESCodeGenerator extends EntryGenerator
+
+    getPragmas: -&gt;
+        &quot;&quot;&quot;
+        // @flow
+        /* eslint quote-props: 0, max-len: 0 */
+        &quot;&quot;&quot;
+
+
+    getImportStatements: -&gt;
+
+        { coreClasses, modules, facadePath, facadeClassName } = @input
+
+        code = @getImportStatement(facadeClassName, facadePath)
+        code += @getImportStatement(classInfo.className, classInfo.relPath) for classInfo in coreClasses
+        for modName, modClasses of modules
+            code += @getImportStatement(classInfo.fullClassName, classInfo.relPath) for classInfo in modClasses
+        return code
+
+
+
+    getExportStatements: -&gt;
+
+        { coreClasses, modules, facadeClassName } = @input
+
+        classNames = coreClasses.map((coreClass) -&gt; coreClass.className)
+        for modName, modClasses of modules
+            classNames = classNames.concat modClasses.map (modClass) -&gt; modClass.fullClassName
+
+
+        return &quot;&quot;&quot;
+        export default #{facadeClassName}
+        export {
+            #{facadeClassName},
+            #{classNames.join(&#x27;,\n    &#x27;)}
+        }
+        &quot;&quot;&quot;
+
+    ###*
+    get import statement from className and path
+    ###
+    getImportStatement: (className, path) -&gt;
+        return &quot;import #{className} from &#x27;#{path}&#x27;\n&quot;
+
+
+module.exports = EntryGenerator
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

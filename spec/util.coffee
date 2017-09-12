@@ -196,6 +196,22 @@ describe 'Util', ->
 
             assert Util.serialize(diary1) is JSON.stringify { id: 'abc', p1: 123, p2: 'str', d: { id: 'def', p1: 123, p2: 'str' }, __className__: 'diary' }
 
+        it 'converts value to ISOString when it has toISOString method', ->
+            class Diary extends Entity
+            facade.addClass('diary', Diary)
+            today = new Date()
+            todayStr = today.toISOString()
+            diary1 = facade.createModel('diary', { id: 'abc', date: today, p1: 123, p2: 'str' })
+            diary2 = facade.createModel('diary', { id: 'def', date: today, p1: 123, p2: 'str' })
+            diary1.d = diary2
+
+            expectedObject = { id: 'abc', date: todayStr, p1: 123, p2: 'str', d: { id: 'def', date: todayStr, p1: 123, p2: 'str' }, __className__: 'diary' }
+
+            expectedStr = JSON.stringify expectedObject
+            console.log(diary1)
+
+            assert Util.serialize(diary1) is expectedStr
+
 
     describe 'deserialize', ->
 

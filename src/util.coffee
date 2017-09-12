@@ -60,11 +60,24 @@ class Util
         cameled.replace(/([A-Z])/g, (st)-> '-' + st.charAt(0).toLowerCase()).slice(1)
 
 
+    ###*
+    converts instans with toISOString method to ISOString
+
+    @method modifyDate
+    @static
+    @param {Entity|Object}
+    @return {String} ISOString
+    ###
+    @modifyDate: (data) ->
+
     @serialize: (v) ->
 
         JSON.stringify do attachClassName = (val = v, inModel = false) ->
 
             return val if not val? or typeof val isnt 'object'
+
+            if val.toISOString
+                return val.toISOString()
 
             if Array.isArray val
                 return (attachClassName(item, inModel) for item in val)

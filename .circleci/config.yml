@@ -1,0 +1,48 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: 'circleci/node:6.2.2'
+    working_directory: ~/repo
+    steps:
+      - run: 'echo ''export PATH=./node_modules/.bin:$PATH'' >> $BASH_ENV'
+      - checkout
+      - run: git config --global user.name "CircleCI"
+      - run: git config --global user.email "circleci@example.com"
+      - run: npm install
+      - run: nca run nca notice update-modules
+      - run: npm test
+  deploy:
+    docker:
+      - image: 'circleci/node:6.2.2'
+    working_directory: ~/repo
+    steps:
+      - run: 'echo ''export PATH=./node_modules/.bin:$PATH'' >> $BASH_ENV'
+      - checkout
+      - run: git config --global user.name "CircleCI"
+      - run: git config --global user.email "circleci@example.com"
+      - run: npm install
+      - run: nca run nca notice update-modules
+      - run: npm test
+      - run: npm install
+      - run: nca run gulp build
+      - run: nca release --prefix v
+      - run: nca run gulp yuidoc
+      - run: nca run nca gh-pages --dir doc
+workflows:
+  version: 2
+  test_deploy:
+    jobs:
+      test:
+        filters:
+          branches:
+            ignore:
+              - gh-pages
+              - /release.*/
+      deploy:
+        filters:
+          branches:
+            only:
+              - master
+        requires:
+          - test

@@ -33,16 +33,16 @@ workflows:
   version: 2
   test_deploy:
     jobs:
-      test:
-        filters:
-          branches:
-            ignore:
-              - gh-pages
-              - /release.*/
-      deploy:
-        filters:
-          branches:
-            only:
-              - master
-        requires:
-          - test
+      - test:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+                - /release.*/
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - test
